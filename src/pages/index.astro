@@ -31,6 +31,18 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     </div>
   </section>
 
+  {/* ヒーロー直下の番号付き導線（伊藤塾参考・PC/SP共通） */}
+  <nav class="wf-indexnav">
+    <div class="inner">
+      <a href="#reason"><span class="num">01</span>選ばれる理由</a>
+      <a href="#choose"><span class="num">02</span>塾の選び方</a>
+      <a href="#method"><span class="num">03</span>指導方針</a>
+      <a href="#price"><span class="num">04</span>料金</a>
+      <a href="#results"><span class="num">05</span>保護者の声</a>
+      <a href="#classrooms"><span class="num">06</span>教室一覧</a>
+    </div>
+  </nav>
+
   {/* こんな悩みありませんか？（3つまで） */}
   <Section eyebrow="CHECK" title="こんなお悩みありませんか？">
     <ul class="wf-check">
@@ -75,7 +87,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   {/* 指導方針 */}
-  <Section eyebrow="METHOD" title="指導方針">
+  <Section id="method" eyebrow="METHOD" title="指導方針">
     <div class="wf-cols">
       <Box label="指導イメージ" h={220} />
       <div>

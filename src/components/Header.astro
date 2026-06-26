@@ -7,26 +7,19 @@ const nav = [
   { href: '/results', label: '保護者の声' },
   { href: '/classrooms', label: '教室一覧' },
   { href: '/faq', label: 'よくある質問' },
+  { href: '/company', label: '会社概要' },
 ];
 const TEL = '0120-000-000'; // ダミー（各教室直通に差し替え予定）
 ---
 <header class="wf-header">
   <a class="wf-logo" href="/">ロゴ</a>
-  <nav class="wf-nav">
-    {nav.map((n) => <a href={n.href}>{n.label}</a>)}
-  </nav>
-  <div class="wf-header-cta">
-    <a class="wf-btn wf-btn-ghost" href="/classrooms">教室を探す</a>
-  </div>
-
-  {/* スマホ用：電話導線＋ハンバーガー（開閉はチェックボックス） */}
   <input type="checkbox" id="wf-menu" class="wf-menu-toggle" hidden />
-  <div class="wf-mobile-actions">
-    <a class="wf-tel" href={`tel:${TEL.replace(/-/g, '')}`} aria-label="電話">電話</a>
+  <div class="wf-header-right">
+    <a class="wf-btn wf-btn-primary" href="/contact#document">資料請求</a>
     <label for="wf-menu" class="wf-hamburger" aria-label="メニュー"><span></span><span></span><span></span></label>
   </div>
 
-  {/* 右からスライドインするドロワー＋背景 */}
+  {/* 右からスライドインするドロワー（PC・SP共通）＋背景 */}
   <label for="wf-menu" class="wf-backdrop" aria-hidden="true"></label>
   <nav class="wf-mobile-menu">
     <label for="wf-menu" class="wf-menu-close" aria-label="閉じる">×</label>

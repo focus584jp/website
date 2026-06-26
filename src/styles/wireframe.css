@@ -156,11 +156,28 @@ img { max-width: 100%; display: block; }
 /* --- エリアチップ（教室） --- */
 .wf-region-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
-/* --- ハンバーガー／スマホメニュー（既定は非表示。スマホで表示） --- */
-.wf-hamburger,
-.wf-mobile-actions,
-.wf-mobile-menu,
+/* --- ヘッダー右側＋ハンバーガーメニュー（PC・SP共通：ロゴ＋資料請求＋メニュー） --- */
+.wf-header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+.wf-hamburger { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 6px; width: 30px; height: 30px; cursor: pointer; }
+.wf-hamburger span { display: block; width: 100%; height: 2.5px; background: var(--wf-ink); border-radius: 2px; }
+
+/* 右からスライドインするドロワー（全幅対応） */
+.wf-mobile-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; height: 100vh; width: 320px; max-width: 86%; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.18); transform: translateX(100%); transition: transform .25s ease; z-index: 70; padding: 60px 22px 24px; overflow-y: auto; }
+.wf-menu-toggle:checked ~ .wf-mobile-menu { transform: translateX(0); }
+.wf-mobile-menu > a { padding: 14px 4px; border-bottom: 1px solid var(--wf-line); color: var(--wf-ink); text-decoration: none; font-size: 15px; }
+.wf-menu-close { position: absolute; top: 12px; right: 18px; font-size: 28px; line-height: 1; color: var(--wf-ink); cursor: pointer; text-decoration: none; }
+.wf-mobile-cta { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+.wf-mobile-cta .wf-btn { width: 100%; }
 .wf-backdrop { display: none; }
+.wf-menu-toggle:checked ~ .wf-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 65; }
+
+/* --- ヒーロー下の番号付き導線（伊藤塾参考・PC/SP共通） --- */
+.wf-indexnav { background: #fff; }
+.wf-indexnav .inner { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(6, 1fr); border: 1px solid var(--wf-line); }
+.wf-indexnav a { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 18px 8px; text-decoration: none; color: var(--wf-ink); font-size: 13px; border-left: 1px solid var(--wf-line); }
+.wf-indexnav a:first-child { border-left: none; }
+.wf-indexnav a:hover { background: var(--wf-bg-alt); }
+.wf-indexnav .num { font-size: 11px; letter-spacing: .12em; color: var(--navy-logo); font-weight: 700; }
 
 /* --- レスポンシブ（スマホ） --- */
 @media (max-width: 760px) {
@@ -171,25 +188,10 @@ img { max-width: 100%; display: block; }
   .wf-grid-3, .wf-steps { grid-template-columns: 1fr; }
   .wf-footer .cols { grid-template-columns: 1fr; }
   .wf-hero h1 { font-size: 30px; }
-  .wf-nav { display: none; }
-  .wf-header-cta { display: none; }
 
-  /* スマホは ロゴ（左）＋ 電話・ハンバーガー（右） */
-  .wf-mobile-actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
-  .wf-tel { font-size: 12px; color: var(--navy-logo); border: 1px solid var(--navy-logo); border-radius: 6px; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
-
-  /* ハンバーガー（3本線） */
-  .wf-hamburger { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 6px; width: 30px; height: 30px; cursor: pointer; }
-  .wf-hamburger span { display: block; width: 100%; height: 2.5px; background: var(--wf-ink); border-radius: 2px; }
-
-  /* 右からスライドインするドロワー */
-  .wf-mobile-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; height: 100vh; width: 82%; max-width: 320px; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.18); transform: translateX(100%); transition: transform .25s ease; z-index: 70; padding: 60px 22px 24px; overflow-y: auto; }
-  .wf-menu-toggle:checked ~ .wf-mobile-menu { transform: translateX(0); }
-  .wf-mobile-menu > a { padding: 14px 4px; border-bottom: 1px solid var(--wf-line); color: var(--wf-ink); text-decoration: none; font-size: 15px; }
-  .wf-menu-close { position: absolute; top: 12px; right: 18px; font-size: 28px; line-height: 1; color: var(--wf-ink); cursor: pointer; }
-  .wf-mobile-cta { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
-  .wf-mobile-cta .wf-btn { width: 100%; }
-
-  /* 背景オーバーレイ（タップで閉じる） */
-  .wf-menu-toggle:checked ~ .wf-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 65; }
+  /* 番号付き導線：スマホは2列グリッド */
+  .wf-indexnav .inner { grid-template-columns: repeat(2, 1fr); }
+  .wf-indexnav a { border-top: 1px solid var(--wf-line); }
+  .wf-indexnav a:nth-child(2n+1) { border-left: none; }
+  .wf-indexnav a:nth-child(-n+2) { border-top: none; }
 }
