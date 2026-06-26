@@ -41,6 +41,8 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
         </div>
       </div>
     </div>
+    <button class="hero-arrow hero-prev" id="heroPrev" type="button" aria-label="前のスライド">‹</button>
+    <button class="hero-arrow hero-next" id="heroNext" type="button" aria-label="次のスライド">›</button>
     <div class="hero-dots" id="heroDots">
       <button class="dot is-active" type="button" aria-label="スライド1"></button>
       <button class="dot" type="button" aria-label="スライド2"></button>
@@ -49,16 +51,22 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   <script>
     const c = document.getElementById('heroCarousel');
     const dots = Array.from(document.querySelectorAll('#heroDots .dot'));
+    const prev = document.getElementById('heroPrev');
+    const next = document.getElementById('heroNext');
     if (c && dots.length) {
       let i = 0;
       const n = dots.length;
+      let auto;
       const update = () => dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
       const go = (k) => { i = (k + n) % n; c.scrollTo({ left: c.clientWidth * i, behavior: 'smooth' }); update(); };
-      dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+      const stopAuto = () => clearInterval(auto);
+      dots.forEach((d, k) => d.addEventListener('click', () => { stopAuto(); go(k); }));
+      prev && prev.addEventListener('click', () => { stopAuto(); go(i - 1); });
+      next && next.addEventListener('click', () => { stopAuto(); go(i + 1); });
       let t;
       c.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => { i = Math.round(c.scrollLeft / c.clientWidth); update(); }, 120); });
-      let auto = setInterval(() => go(i + 1), 4500);
-      c.addEventListener('pointerdown', () => clearInterval(auto));
+      c.addEventListener('pointerdown', stopAuto);
+      auto = setInterval(() => go(i + 1), 4500);
     }
   </script>
 
