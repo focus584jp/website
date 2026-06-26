@@ -5,8 +5,6 @@ const { size } = Astro.props;
 const lg = size === 'lg' ? ' lg' : '';
 ---
 <div class="wf-cta-group">
-  <a class={`wf-btn wf-btn-primary${lg}`} href="/contact#document">資料請求</a>
-  <a class={`wf-btn wf-btn-secondary${lg}`} href="/contact#consult">無料相談</a>
-  <a class={`wf-btn wf-btn-tel${lg}`} href="/contact#tel">電話</a>
-  {/* LINE相談は保留：採用時はここに差し込む */}
+  <a class={`wf-btn wf-btn-primary${lg}`} href="/document">資料請求</a>
+  <a class={`wf-btn wf-btn-secondary${lg}`} href="/consult">無料相談</a>
 </div>

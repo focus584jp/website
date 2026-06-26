@@ -10,91 +10,21 @@ import { classrooms } from '../data/classrooms';
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
 <BaseLayout title="トップ">
-  {/* ヒーロー：横スクロールのカルーセル（個別指導キャンパス参考）。数秒ごとに自動で横送り＋スワイプ可 */}
+  {/* ヒーロー（1枚固定） */}
   <section class="heroB">
-    <div class="hero-viewport">
-      <div class="hero-track" id="heroTrack">
-        {/* スライド1：メインメッセージ */}
-        <div class="hero-slide">
-          <div class="wrap">
-            <div>
-              <h1>勉強が苦手な<br />中学生専門の塾。</h1>
-              <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
-              <div class="pricecard">
-                <span class="lbl">1教科 月</span>
-                <span class="big">5,980</span>
-                <span class="unit">円〜（税抜）</span>
-              </div>
-            </div>
-            <div class="photo">写真（先生と生徒）プレースホルダー</div>
-          </div>
-        </div>
-        {/* スライド2：塾の選び方（相性診断） */}
-        <div class="hero-slide">
-          <div class="wrap">
-            <div>
-              <p class="lead">GUIDE</p>
-              <h1>塾の選び方。</h1>
-              <p class="sub">お子さまに合う塾か、相性診断でチェックできます。</p>
-              <a class="btn btn-secondary" href="/choose">相性診断をしてみる</a>
-            </div>
-            <div class="photo">診断図/比較イメージ プレースホルダー</div>
-          </div>
+    <div class="wrap">
+      <div>
+        <h1>勉強が苦手な<br />中学生専門の塾。</h1>
+        <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
+        <div class="pricecard">
+          <span class="lbl">1教科 月</span>
+          <span class="big">5,980</span>
+          <span class="unit">円〜（税抜）</span>
         </div>
       </div>
-    </div>
-    <button class="hero-arrow hero-prev" id="heroPrev" type="button" aria-label="前のスライド">‹</button>
-    <button class="hero-arrow hero-next" id="heroNext" type="button" aria-label="次のスライド">›</button>
-    <div class="hero-dots" id="heroDots">
-      <button class="dot is-active" type="button" aria-label="スライド1"></button>
-      <button class="dot" type="button" aria-label="スライド2"></button>
+      <div class="photo">写真（先生と生徒）プレースホルダー</div>
     </div>
   </section>
-  <script>
-    const vp = document.querySelector('.hero-viewport');
-    const track = document.getElementById('heroTrack');
-    const dots = Array.from(document.querySelectorAll('#heroDots .dot'));
-    const prevBtn = document.getElementById('heroPrev');
-    const nextBtn = document.getElementById('heroNext');
-    if (vp && track && dots.length) {
-      const n = dots.length;
-      const reals = Array.from(track.children);
-      // 前後にクローンを足して無限ループ（前進で1枚目に戻る）
-      track.appendChild(reals[0].cloneNode(true));
-      track.insertBefore(reals[n - 1].cloneNode(true), reals[0]);
-      let pos = 1; // 本物の先頭（先頭クローンの次）
-      let auto;
-      const w = () => vp.clientWidth;
-      const setX = (animate) => {
-        track.style.transition = animate ? 'transform .5s ease' : 'none';
-        track.style.transform = `translateX(${-pos * w()}px)`;
-      };
-      const update = () => {
-        const real = ((pos - 1) % n + n) % n;
-        dots.forEach((d, k) => d.classList.toggle('is-active', k === real));
-      };
-      const go = (dir) => { pos += dir; setX(true); update(); };
-      track.addEventListener('transitionend', () => {
-        if (pos === n + 1) { pos = 1; setX(false); }       // 末尾クローン→本物の1枚目へ瞬間移動
-        else if (pos === 0) { pos = n; setX(false); }       // 先頭クローン→本物の最終へ
-      });
-      const stopAuto = () => clearInterval(auto);
-      nextBtn && nextBtn.addEventListener('click', () => { stopAuto(); go(1); });
-      prevBtn && prevBtn.addEventListener('click', () => { stopAuto(); go(-1); });
-      dots.forEach((d, k) => d.addEventListener('click', () => { stopAuto(); pos = k + 1; setX(true); update(); }));
-      // 簡易スワイプ
-      let x0 = null;
-      vp.addEventListener('pointerdown', (e) => { x0 = e.clientX; stopAuto(); });
-      vp.addEventListener('pointerup', (e) => {
-        if (x0 === null) return;
-        const dx = e.clientX - x0; x0 = null;
-        if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
-      });
-      window.addEventListener('resize', () => setX(false));
-      setX(false);
-      auto = setInterval(() => go(1), 4500);
-    }
-  </script>
 
   {/* ヒーロー直下の番号付き導線（伊藤塾参考・PC/SP共通） */}
   <nav class="wf-indexnav">
@@ -115,6 +45,31 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <li>テキストが入ります（例：平均点が取れない）</li>
     </ul>
   </Section>
+
+  {/* 塾の選び方（相性診断）＝中央ポップアップ（モーダル）で出す */}
+  <section class="wf-guideband">
+    <div class="wf-container">
+      <span class="wf-eyebrow">GUIDE</span>
+      <h2>塾選び、迷っていませんか？</h2>
+      <p>かんたんな質問で、お子さまに合う塾のタイプが分かります。</p>
+      <label for="diag" class="wf-btn wf-btn-secondary">相性診断をしてみる（無料）</label>
+    </div>
+    <input type="checkbox" id="diag" class="wf-modal-toggle" hidden />
+    <div class="wf-modal">
+      <label for="diag" class="wf-modal-backdrop" aria-hidden="true"></label>
+      <div class="wf-modal-box">
+        <label for="diag" class="wf-modal-close" aria-label="閉じる">×</label>
+        <span class="wf-eyebrow">GUIDE</span>
+        <h2 style="margin:4px 0 6px;color:var(--navy-logo)">相性診断</h2>
+        <p class="wf-note">お子さまに合う塾のタイプが分かります（テキストが入ります）</p>
+        <div class="wf-diag-q">Q1. 通信教育・自学で続けられそう？（プレースホルダー）</div>
+        <div class="wf-diag-q">Q2. 学校の定期テストで平均点を超えている？</div>
+        <div class="wf-diag-q">Q3. 苦手は1〜2科目？ それとも全体的？</div>
+        <div class="wf-diag-q">Q4. 受験に向けて5教科やりたい？</div>
+        <p style="margin-top:16px"><a class="wf-btn wf-btn-secondary" href="/consult">診断結果について無料相談する</a></p>
+      </div>
+    </div>
+  </section>
 
   {/* 選ばれる理由 3本柱 */}
   <Section id="reason" eyebrow="REASON" title="選ばれる理由" alt={true}>

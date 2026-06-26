@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import { classrooms } from '../data/classrooms';
+---
+<BaseLayout title="無料相談">
+  <PageHero eyebrow="CONSULT" title="無料相談（来塾1時間・無料）" />
+
+  <Section>
+    <p style="text-align:center;color:var(--wf-muted);margin:0 0 24px">お子さまの状況をお聞きし、勉強の悩みの解決方法を一緒に考えます。無理な勧誘はいたしません。</p>
+    <form class="wf-form" onsubmit="return false">
+      <label class="wf-field"><span>保護者さまのお名前<em>必須</em></span><input type="text" placeholder="例：佐藤 由美" /></label>
+      <label class="wf-field"><span>携帯電話番号<em>必須</em></span><input type="tel" placeholder="090-0000-0000" inputmode="numeric" /></label>
+      <label class="wf-field"><span>メールアドレス（任意）</span><input type="email" placeholder="example@email.com" /></label>
+      <label class="wf-field">
+        <span>希望教室<em>必須</em></span>
+        <select>
+          <option>選択してください</option>
+          {classrooms.map((c) => <option>{c.name}</option>)}
+        </select>
+      </label>
+      <label class="wf-field">
+        <span>お子さまの学年</span>
+        <select>
+          <option>選択してください</option>
+          <option>小5</option><option>小6</option>
+          <option>中1</option><option>中2</option><option>中3</option>
+          <option>高校生</option>
+        </select>
+      </label>
+      <label class="wf-field"><span>ご希望の日時（任意）</span><input type="text" placeholder="例：平日17時以降 / 土曜午前 など" /></label>
+      <label class="wf-field"><span>ご相談内容（任意）</span><textarea rows="3" placeholder="例：数学が苦手で…"></textarea></label>
+      <button type="submit" class="wf-btn wf-btn-primary lg" style="width:100%;margin-top:8px">この内容で無料相談を申し込む</button>
+      <p class="wf-note" style="text-align:center;margin-top:12px">送信後、教室よりご連絡し、日時を確定します。</p>
+    </form>
+  </Section>
+</BaseLayout>
