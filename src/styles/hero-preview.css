@@ -1,0 +1,58 @@
+/* ヒーロー検討用スタイル（コノ塾寄り：手書き＋大きな数字／文字少なめ）。
+   ヒーローは design 要素として先行検討。ブランド色（紺/橙）＋手書きフォント(Klee One)を使用。 */
+@import url("https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap");
+
+.hero-note { max-width: 1080px; margin: 0 auto; padding: 10px 24px; font-size: 12px; color: var(--wf-muted); }
+
+/* ============ 案A：紺パネル＋写真の左右分割 ============ */
+.heroA { display: grid; grid-template-columns: 1.05fr 0.95fr; background: var(--navy-logo); color: #fff; }
+.heroA .txt { padding: 60px 48px; display: flex; flex-direction: column; justify-content: center; }
+.heroA .lead { font-size: 14px; opacity: .92; margin: 0 0 16px; }
+.heroA h1 { font-family: "Klee One", var(--font-base); font-weight: 600; font-size: 54px; line-height: 1.4; margin: 0 0 18px; }
+.heroA .sub { font-size: 16px; line-height: 1.9; opacity: .95; margin: 0 0 24px; }
+.heroA .badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 22px; }
+.heroA .badge { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.45); border-radius: 999px; padding: 6px 14px; font-size: 12px; }
+.heroA .price { display: flex; align-items: baseline; gap: 6px; margin: 0 0 26px; }
+.heroA .price .lbl { font-size: 14px; opacity: .9; }
+.heroA .price .big { font-family: "Klee One", var(--font-base); font-size: 52px; font-weight: 600; color: #ffb877; line-height: 1; }
+.heroA .price .unit { font-size: 16px; opacity: .9; }
+.heroA .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.heroA .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: 15px 24px; font-size: 15px; text-decoration: none; font-weight: 600; }
+.heroA .btn-primary { background: var(--orange-logo); color: #fff; }
+.heroA .btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.7); }
+.heroA .photo { background: #cfd6e2; display: flex; align-items: center; justify-content: center; color: #5b6b85; min-height: 520px; font-size: 14px; }
+
+@media (max-width: 760px) {
+  .heroA { grid-template-columns: 1fr; }
+  .heroA .photo { min-height: 230px; order: -1; }
+  .heroA .txt { padding: 30px 22px 34px; }
+  .heroA h1 { font-size: 34px; }
+  .heroA .price .big { font-size: 40px; }
+  .heroA .cta { flex-direction: column; }
+  .heroA .btn { width: 100%; }
+}
+
+/* ============ 案B：淡い背景＋手書き大見出し＋数字カード ============ */
+.heroB { background: var(--navy-bg); }
+.heroB .wrap { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; padding: 56px 24px; }
+.heroB .lead { font-size: 14px; color: var(--navy-logo); margin: 0 0 14px; font-weight: 600; }
+.heroB h1 { font-family: "Klee One", var(--font-base); font-weight: 600; font-size: 50px; line-height: 1.4; color: var(--navy-logo); margin: 0 0 18px; }
+.heroB .sub { font-size: 16px; line-height: 1.9; color: var(--ink); margin: 0 0 22px; }
+.heroB .pricecard { display: inline-flex; align-items: baseline; gap: 6px; background: #fff; border-radius: 14px; padding: 14px 22px; box-shadow: var(--shadow-soft); margin: 0 0 24px; }
+.heroB .pricecard .lbl { font-size: 13px; color: var(--muted); }
+.heroB .pricecard .big { font-size: 44px; font-weight: 700; color: var(--orange-text); line-height: 1; }
+.heroB .pricecard .unit { font-size: 14px; color: var(--muted); }
+.heroB .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+.heroB .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; padding: 15px 24px; font-size: 15px; text-decoration: none; font-weight: 600; }
+.heroB .btn-primary { background: var(--orange-logo); color: #fff; }
+.heroB .btn-secondary { background: var(--navy-logo); color: #fff; }
+.heroB .photo { background: #fff; border-radius: 16px; min-height: 360px; display: flex; align-items: center; justify-content: center; color: #8a97ad; font-size: 14px; }
+
+@media (max-width: 760px) {
+  .heroB .wrap { grid-template-columns: 1fr; gap: 22px; padding: 28px 22px 32px; }
+  .heroB .photo { min-height: 220px; order: -1; }
+  .heroB h1 { font-size: 33px; }
+  .heroB .pricecard .big { font-size: 36px; }
+  .heroB .cta { flex-direction: column; }
+  .heroB .btn { width: 100%; }
+}
