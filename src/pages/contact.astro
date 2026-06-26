@@ -1,10 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Lines from '../components/Lines.astro';
 ---
 <BaseLayout title="資料請求・無料相談・お問い合わせ">
-  <Wf tag="資料請求（デジタルパンフをメール即送付）" id="document"><p class="wf-note">[フォームプレースホルダー]</p></Wf>
-  <Wf tag="無料相談（来塾1時間）予約" id="consult"><p class="wf-note">[予約フォームプレースホルダー]</p></Wf>
-  <Wf tag="電話（各教室直通）" id="tel"><p class="wf-note">[電話番号プレースホルダー]</p></Wf>
-  <Wf tag="LINE相談（保留：採用時に差し込む）"><p class="wf-note">FOCUS LINE公式へ送る導線。Phase 1では主CVに含めない</p></Wf>
+  <PageHero eyebrow="CONTACT" title="資料請求・無料相談・お問い合わせ" />
+
+  <Section id="document" eyebrow="STEP 1（おすすめ）" title="資料請求（デジタルパンフをメール即送付）">
+    <div class="wf-cols">
+      <div class="wf-card">
+        <div class="wf-subhead"></div>
+        <Lines n={5} />
+        <p style="margin-top:14px"><span class="wf-btn wf-btn-primary lg">送信（フォーム）</span></p>
+      </div>
+      <Lines n={4} head={true} />
+    </div>
+  </Section>
+
+  <Section id="consult" eyebrow="STEP 2" title="無料相談（来塾1時間）を予約" alt={true}>
+    <div class="wf-card">
+      <div class="wf-subhead"></div>
+      <Lines n={4} />
+      <p style="margin-top:14px"><span class="wf-btn wf-btn-secondary lg">予約（フォーム）</span></p>
+    </div>
+  </Section>
+
+  <Section id="tel" title="電話（各教室直通）">
+    <div class="wf-cols">
+      <div class="wf-card" style="text-align:center"><div class="wf-bignum" style="font-size:30px">000-0000-0000</div><Lines n={1} /></div>
+      <Lines n={3} head={true} />
+    </div>
+  </Section>
+
+  <Section title="LINEで相談（保留：採用時に差し込む）" alt={true}>
+    <Lines n={2} />
+  </Section>
 </BaseLayout>

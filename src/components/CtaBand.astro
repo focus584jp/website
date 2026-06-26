@@ -1,0 +1,12 @@
+---
+// ページ下部の共通CTA帯。
+import CtaGroup from './CtaGroup.astro';
+const { title = 'まずは教室の雰囲気を見に来てください', sub = 'テキストが入ります（資料請求・無料相談への後押し）' } = Astro.props;
+---
+<section class="wf-band">
+  <div class="wf-container">
+    <h2>{title}</h2>
+    <p class="sub">{sub}</p>
+    <CtaGroup size="lg" />
+  </div>
+</section>

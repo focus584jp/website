@@ -1,19 +1,29 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Wf from '../../components/Wf.astro';
-import CtaGroup from '../../components/CtaGroup.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/Section.astro';
+import Box from '../../components/Box.astro';
+import CtaBand from '../../components/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
 ---
-<BaseLayout title="教室一覧（千葉市中心10校舎）">
-  <Wf tag="教室マップ（千葉市に10校舎プロット予定）">
-    <p class="wf-note">[マッププレースホルダー]</p>
-  </Wf>
-  <Wf tag="教室リスト（10校舎）">
-    <ul class="wf-list">
-      {classrooms.map((c) => <li><a href={`/classrooms/${c.slug}`}>{c.name}（{c.area} / {c.nearestStation}）</a></li>)}
-    </ul>
-  </Wf>
-  <Wf tag="CV">
-    <CtaGroup />
-  </Wf>
+<BaseLayout title="教室一覧">
+  <PageHero eyebrow="CLASSROOMS" title="教室一覧（千葉市中心10校舎）" />
+
+  <Section title="エリアマップ">
+    <Box label="千葉市マップ（10校舎プロット）" h={220} />
+  </Section>
+
+  <Section title="教室一覧" alt={true}>
+    <div class="wf-grid-3">
+      {classrooms.map((c) => (
+        <a class="wf-card" href={`/classrooms/${c.slug}`} style="text-decoration:none;color:inherit">
+          <Box label="教室写真" h={120} />
+          <div style="font-weight:600;margin-top:12px">{c.name}</div>
+          <div style="color:var(--wf-muted);font-size:13px">{c.area} / {c.nearestStation}</div>
+        </a>
+      ))}
+    </div>
+  </Section>
+
+  <CtaBand title="お近くの教室で無料相談ができます" />
 </BaseLayout>

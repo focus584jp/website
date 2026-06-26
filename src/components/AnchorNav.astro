@@ -1,6 +1,7 @@
 ---
+// トップのページ内アンカーナビ。items: { id, label }[]
 const { items } = Astro.props;
 ---
-<nav class="wf-anchor-nav">
+<nav class="wf-anchor">
   {items.map((i) => <a href={`#${i.id}`}>{i.label}</a>)}
 </nav>

@@ -1,14 +1,48 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
-import CtaGroup from '../components/CtaGroup.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Box from '../components/Box.astro';
+import Lines from '../components/Lines.astro';
+import CtaBand from '../components/CtaBand.astro';
 ---
 <BaseLayout title="授業料">
-  <Wf tag="通常授業料（1講座5,980円・3講座＝週3の例）"><p class="wf-note">大きな数字で提示</p></Wf>
-  <Wf tag="5教科でも集団塾並み（3〜3.5万）"><p class="wf-note">総額比較で安さを語る</p></Wf>
-  <Wf tag="講習（夏冬春：各講座+4回／料金は2倍タイミング）"><p class="wf-note">年3回</p></Wf>
-  <Wf tag="諸経費（入会金・管理費なし／教材費＋システム料 月1,250円のみ）"><p class="wf-note">明朗会計</p></Wf>
-  <Wf tag="柔軟な受け方（苦手科目を週2回／テスト前ピンポイント）"><p class="wf-note">週4回勉強体制</p></Wf>
-  <Wf tag="他塾比較（大手の約半額）"><p class="wf-note">[比較プレースホルダー]</p></Wf>
-  <Wf tag="CV（資料請求＝デジパン即送付）"><CtaGroup /></Wf>
+  <PageHero eyebrow="PRICE" title="授業料" />
+
+  <Section eyebrow="PRICE" title="通常授業料">
+    <div class="wf-cols">
+      <div>
+        <div class="wf-bignum">5,980円</div>
+        <p style="color:var(--wf-muted);margin:4px 0 16px">1講座あたり（税抜・テキストが入ります）</p>
+        <Lines n={3} />
+      </div>
+      <Box label="授業料イメージ" h={200} />
+    </div>
+  </Section>
+
+  <Section title="5教科でも集団塾並み" alt={true}>
+    <table class="wf-table">
+      <thead><tr><th>受講数</th><th>月額（目安）</th><th>備考</th></tr></thead>
+      <tbody>
+        <tr><td>3講座</td><td>—</td><td>テキスト</td></tr>
+        <tr><td>5講座</td><td>—</td><td>テキスト</td></tr>
+      </tbody>
+    </table>
+  </Section>
+
+  <Section title="講習・諸経費（明朗会計）">
+    <div class="wf-cols">
+      <div class="wf-card"><div class="wf-subhead"></div><Lines n={3} /></div>
+      <div class="wf-card"><div class="wf-subhead"></div><Lines n={3} /></div>
+    </div>
+  </Section>
+
+  <Section title="柔軟な受け方 / 他塾比較" alt={true}>
+    <div class="wf-cols">
+      <Box label="比較イメージ" h={200} />
+      <Lines n={5} head={true} />
+    </div>
+  </Section>
+
+  <CtaBand title="資料請求でデジタルパンフをすぐお送りします" />
 </BaseLayout>

@@ -1,17 +1,21 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
-import CtaGroup from '../components/CtaGroup.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import CtaBand from '../components/CtaBand.astro';
 const faqs = ['1対4で大丈夫？', '部活と両立できる？', '途中入塾でも追いつける？', '先生は選べる？', '料金以外に費用は？'];
 ---
 <BaseLayout title="よくあるご質問">
-  <Wf tag="FAQ（アコーディオン＝details/summaryで実装予定）">
+  <PageHero eyebrow="FAQ" title="よくあるご質問" />
+
+  <Section>
     {faqs.map((q) => (
-      <details>
-        <summary>{q}</summary>
-        <p class="wf-note">[回答プレースホルダー]</p>
+      <details style="border:1px solid var(--wf-line);border-radius:6px;padding:14px 18px;margin-bottom:12px">
+        <summary style="cursor:pointer;font-size:14px">{q}</summary>
+        <div style="margin-top:12px"><div class="wf-lines"><span style="width:100%"></span><span style="width:90%"></span><span style="width:70%"></span></div></div>
       </details>
     ))}
-  </Wf>
-  <Wf tag="CV"><CtaGroup /></Wf>
+  </Section>
+
+  <CtaBand />
 </BaseLayout>

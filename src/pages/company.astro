@@ -1,11 +1,36 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Box from '../components/Box.astro';
+import Lines from '../components/Lines.astro';
 ---
 <BaseLayout title="会社概要">
-  <Wf tag="会社情報（運営会社・所在地・設立）"><p class="wf-note">[情報プレースホルダー]</p></Wf>
-  <Wf tag="代表挨拶"><p class="wf-note">[挨拶プレースホルダー]</p></Wf>
-  <Wf tag="講師採用方針（千葉大生のみ）"><p class="wf-note">信頼に転用</p></Wf>
-  <Wf tag="プライバシーポリシー"><p class="wf-note">[ポリシープレースホルダー]</p></Wf>
-  <Wf tag="特定商取引法に基づく表記"><p class="wf-note">[表記プレースホルダー]</p></Wf>
+  <PageHero eyebrow="COMPANY" title="会社概要" />
+
+  <Section title="会社情報">
+    <table class="wf-table">
+      <tbody>
+        <tr><th style="width:160px">運営会社</th><td>—</td></tr>
+        <tr><th>所在地</th><td>—</td></tr>
+        <tr><th>設立</th><td>—</td></tr>
+        <tr><th>事業内容</th><td>—</td></tr>
+      </tbody>
+    </table>
+  </Section>
+
+  <Section title="代表挨拶" alt={true}>
+    <div class="wf-cols">
+      <Box label="代表写真" h={200} />
+      <Lines n={6} head={true} />
+    </div>
+  </Section>
+
+  <Section title="講師採用方針（千葉大生のみ）">
+    <Lines n={4} />
+  </Section>
+
+  <Section title="プライバシーポリシー / 特定商取引法に基づく表記" alt={true}>
+    <Lines n={5} />
+  </Section>
 </BaseLayout>

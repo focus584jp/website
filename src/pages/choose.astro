@@ -1,14 +1,39 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
-import CtaGroup from '../components/CtaGroup.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Box from '../components/Box.astro';
+import Lines from '../components/Lines.astro';
+import CtaBand from '../components/CtaBand.astro';
 ---
-<BaseLayout title="塾の選び方（お子様に合う塾は？）">
-  <Wf tag="導入：売り込みでなく&quot;合う塾を一緒に考える&quot;"><p class="wf-note">警戒心を解く</p></Wf>
-  <Wf tag="選択肢1：通信教育・自学（自分で続けられるか）"><p class="wf-note">継続の難しさ</p></Wf>
-  <Wf tag="選択肢2：集団塾（平均点を超えているか）"><p class="wf-note">基礎がないと厳しい</p></Wf>
-  <Wf tag="選択肢3：個別1対1/1対2（1教科月2万円前後）"><p class="wf-note">苦手1科目ならアリ</p></Wf>
-  <Wf tag="だから：個別1対4（広く苦手・複数科目に最適）"><p class="wf-note">FOCUSの解</p></Wf>
-  <Wf tag="比較表（通信／集団／1対2／1対4）"><p class="wf-note">[比較表プレースホルダー]</p></Wf>
-  <Wf tag="CV（無料相談）"><CtaGroup /></Wf>
+<BaseLayout title="塾の選び方（相性診断）">
+  <PageHero eyebrow="GUIDE" title="塾の選び方（お子様に合う塾は？）" />
+
+  <Section title="はじめに">
+    <Lines n={3} />
+  </Section>
+
+  <Section eyebrow="STEP" title="選択肢を一緒に絞り込みます" alt={true}>
+    <div class="wf-steps">
+      <div class="wf-step"><div class="num">1</div><div class="wf-subhead" style="margin:0 auto 10px;width:80%"></div><Lines n={2} /></div>
+      <div class="wf-step"><div class="num">2</div><div class="wf-subhead" style="margin:0 auto 10px;width:80%"></div><Lines n={2} /></div>
+      <div class="wf-step"><div class="num">3</div><div class="wf-subhead" style="margin:0 auto 10px;width:80%"></div><Lines n={2} /></div>
+      <div class="wf-step"><div class="num">4</div><div class="wf-subhead" style="margin:0 auto 10px;width:80%"></div><Lines n={2} /></div>
+    </div>
+  </Section>
+
+  <Section eyebrow="COMPARE" title="比較表（通信／集団／個別1対2／1対4）">
+    <table class="wf-table">
+      <thead>
+        <tr><th>　</th><th>通信教育</th><th>集団塾</th><th>個別1対2</th><th>個別1対4</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>項目（テキスト）</td><td>—</td><td>—</td><td>—</td><td>◎</td></tr>
+        <tr><td>項目（テキスト）</td><td>—</td><td>—</td><td>—</td><td>◎</td></tr>
+        <tr><td>項目（テキスト）</td><td>—</td><td>—</td><td>—</td><td>◎</td></tr>
+      </tbody>
+    </table>
+  </Section>
+
+  <CtaBand title="どの選び方が合うか、無料相談で一緒に考えます" />
 </BaseLayout>

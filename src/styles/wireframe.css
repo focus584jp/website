@@ -1,25 +1,144 @@
-/* 色・書体は design-system のトークンを参照（同期コピー）。本フェーズはワイヤー用の最小スタイルのみ。 */
+/* ============================================================
+   FOCUS HP ワイヤーフレーム用スタイル（Phase 1）
+   方針: 基本はグレースケール（構造・レイアウトを示す）。
+         CTAボタンのみブランド色（資料請求=橙 / 無料相談=紺 / 電話=グレー）。
+   ブランド色トークンは tokens.css（design-systemからの同期コピー）を参照。
+   実デザインは Phase 3 で当てる。
+   ============================================================ */
 @import "./tokens.css";
 
+:root {
+  --wf-ink: #3a3a3a;      /* 見出し・本文プレースホルダの濃いグレー */
+  --wf-muted: #8a8a8a;    /* 補足グレー */
+  --wf-line: #d3d3d3;     /* 罫線 */
+  --wf-box: #dcdcdc;      /* 画像プレースホルダの地色 */
+  --wf-box-ink: #777;     /* 画像プレースホルダの文字 */
+  --wf-bar: #e4e4e4;      /* テキスト線プレースホルダ */
+  --wf-bg: #ffffff;
+  --wf-bg-alt: #f4f4f4;   /* 交互セクション背景 */
+  --wf-band: #9a9a9a;     /* Contact帯のグレー */
+  --wf-footer: #5f5f5f;   /* フッターのグレー */
+}
+
 * { box-sizing: border-box; }
-body { font-family: var(--font-base); margin: 0; color: var(--ink); background: var(--bg-base); padding-bottom: 72px; }
-.wf-main { max-width: var(--content-width); margin: 0 auto; padding: 16px 20px 40px; }
-.wf-h1 { font-size: 20px; color: var(--navy-logo); border-bottom: 2px solid var(--navy-line); padding-bottom: 8px; }
-.wf-section { border: 1px dashed var(--navy-line); border-radius: 6px; margin: 10px 0; padding: 14px 16px; background: var(--bg-base); }
-.wf-section > .wf-tag { display: inline-block; font: 600 11px/1.4 ui-monospace, monospace; color: var(--navy-logo); background: var(--navy-bg); padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; }
-.wf-note { color: var(--muted); font-size: 13px; margin: 4px 0; }
-.wf-list { margin: 4px 0; padding-left: 20px; }
-.wf-cta-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.wf-cta { display: inline-block; border: 1.5px solid var(--navy-logo); border-radius: var(--radius-button); padding: 8px 14px; font-size: 13px; text-decoration: none; color: var(--navy-logo); background: var(--bg-base); }
-.wf-cta.primary { background: var(--orange-logo); border-color: var(--orange-logo); color: #fff; }
-.wf-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--bg-base); }
-.wf-nav { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
-.wf-nav a { color: var(--navy-logo); text-decoration: none; }
-.wf-header-cta { display: flex; gap: 8px; margin-left: auto; align-items: center; }
-.wf-logo { font-weight: 700; color: var(--navy-logo); text-decoration: none; }
-.wf-icon { font-size: 12px; color: var(--muted); text-decoration: none; }
-.wf-footer { background: var(--navy-logo); color: #fff; padding: 16px 20px; margin-top: 24px; }
-.wf-footer a { color: #fff; margin-right: 12px; font-size: 13px; }
-.wf-anchor-nav { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; }
-.wf-anchor-nav a { color: var(--navy-logo); }
-.wf-sticky { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 8px; justify-content: center; background: var(--bg-base); border-top: 1px solid var(--border); padding: 10px; z-index: 50; }
+body { margin: 0; font-family: var(--font-base); color: var(--wf-ink); background: var(--wf-bg); padding-bottom: 76px; }
+img { max-width: 100%; display: block; }
+
+.wf-container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+/* --- ボタン（CTAのみブランド色） --- */
+.wf-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--wf-line); background: #fff; color: var(--wf-ink);
+  border-radius: var(--radius-button); padding: 10px 16px; font-size: 13px; text-decoration: none; white-space: nowrap; }
+.wf-btn.lg { padding: 14px 24px; font-size: 15px; }
+.wf-btn-primary { background: var(--orange-logo); border-color: var(--orange-logo); color: #fff; }   /* 資料請求 */
+.wf-btn-secondary { background: var(--navy-logo); border-color: var(--navy-logo); color: #fff; }      /* 無料相談 */
+.wf-btn-tel { background: var(--muted); border-color: var(--muted); color: #fff; }                    /* 電話 */
+.wf-btn-ghost { background: #fff; color: var(--navy-logo); border-color: var(--navy-logo); }
+.wf-cta-group { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* --- ヘッダー --- */
+.wf-header { position: sticky; top: 0; z-index: 40; display: flex; align-items: center; gap: 20px;
+  padding: 12px 24px; background: #fff; border-bottom: 1px solid var(--wf-line); }
+.wf-logo { width: 104px; height: 34px; background: var(--wf-box); color: var(--wf-box-ink);
+  display: flex; align-items: center; justify-content: center; font-size: 11px; text-decoration: none; border-radius: 2px; }
+.wf-nav { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; }
+.wf-nav a { color: var(--wf-ink); text-decoration: none; }
+.wf-header-cta { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+/* --- ヒーロー --- */
+.wf-hero { background: var(--wf-bg-alt); border-bottom: 1px solid var(--wf-line); }
+.wf-hero-inner { max-width: 1080px; margin: 0 auto; padding: 76px 24px; text-align: center; }
+.wf-hero h1 { font-size: 40px; line-height: 1.3; margin: 0 0 14px; color: var(--wf-ink); letter-spacing: .02em; }
+.wf-hero .hero-sub { color: var(--wf-muted); font-size: 14px; margin: 0 0 24px; }
+.wf-hero .wf-cta-group { justify-content: center; }
+.wf-hero.page { } /* 下層用：高さ控えめはインラインで調整 */
+
+/* --- セクション --- */
+.wf-section { padding: 64px 0; }
+.wf-section.alt { background: var(--wf-bg-alt); }
+.wf-section-head { text-align: center; margin-bottom: 36px; }
+.wf-eyebrow { display: block; font-size: 11px; letter-spacing: .2em; color: var(--wf-muted); margin-bottom: 6px; text-transform: uppercase; }
+.wf-section-head h2 { font-size: 24px; margin: 0; color: var(--wf-ink); }
+
+/* --- 2カラム --- */
+.wf-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+.wf-cols.reverse > :first-child { order: 2; }
+
+/* --- 画像プレースホルダ --- */
+.wf-box { background: var(--wf-box); border: 1px solid var(--wf-line); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; color: var(--wf-box-ink); font-size: 13px; min-height: 180px; }
+
+/* --- テキスト線プレースホルダ --- */
+.wf-lines { display: flex; flex-direction: column; gap: 10px; }
+.wf-lines span { height: 10px; background: var(--wf-bar); border-radius: 3px; display: block; }
+.wf-subhead { height: 16px; width: 55%; background: #cfcfcf; border-radius: 3px; margin: 0 0 14px; }
+
+/* --- 3カラムカード --- */
+.wf-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.wf-card { border: 1px solid var(--wf-line); border-radius: 6px; padding: 20px; background: #fff; }
+.wf-card .wf-box { min-height: 120px; margin-bottom: 14px; }
+
+/* --- 教室グリッド --- */
+.wf-grid-classrooms { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.wf-chip { border: 1px solid var(--wf-line); border-radius: 6px; padding: 14px 10px; text-align: center; font-size: 13px; color: var(--wf-ink); text-decoration: none; background: #fff; }
+
+/* --- ニュース/FAQ 行 --- */
+.wf-rows { border-top: 1px solid var(--wf-line); }
+.wf-row { display: flex; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--wf-line); font-size: 14px; }
+.wf-row .date { color: var(--wf-muted); width: 96px; flex: none; font-size: 13px; }
+.wf-row .bar { height: 10px; background: var(--wf-bar); border-radius: 3px; flex: 1; }
+.wf-row .plus { margin-left: auto; color: var(--wf-muted); }
+
+/* --- アンカーナビ --- */
+.wf-anchor { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; font-size: 13px;
+  padding: 14px 0; border-bottom: 1px solid var(--wf-line); background: #fff; position: sticky; top: 59px; z-index: 30; }
+.wf-anchor a { color: var(--wf-ink); text-decoration: none; }
+
+/* --- 悩みチェックリスト --- */
+.wf-check { max-width: 640px; margin: 0 auto; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.wf-check li { display: flex; gap: 12px; align-items: center; border: 1px solid var(--wf-line); border-radius: 6px; padding: 14px 18px; font-size: 14px; }
+.wf-check li::before { content: ""; width: 18px; height: 18px; border: 2px solid var(--wf-muted); border-radius: 4px; flex: none; }
+
+/* --- ステップ（入塾の流れ） --- */
+.wf-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.wf-step { text-align: center; }
+.wf-step .num { width: 42px; height: 42px; border-radius: 50%; background: var(--wf-box); color: var(--wf-box-ink);
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-weight: 600; }
+
+/* --- 料金テーブル --- */
+.wf-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.wf-table th, .wf-table td { border: 1px solid var(--wf-line); padding: 12px; text-align: left; }
+.wf-table th { background: var(--wf-bg-alt); }
+.wf-bignum { font-size: 44px; font-weight: 700; color: var(--wf-ink); }
+
+/* --- Contact帯 --- */
+.wf-band { background: var(--wf-band); color: #fff; padding: 56px 0; text-align: center; }
+.wf-band h2 { margin: 0 0 8px; font-size: 24px; }
+.wf-band .sub { opacity: .9; font-size: 13px; margin: 0 0 24px; }
+.wf-band .wf-cta-group { justify-content: center; }
+.wf-band .wf-btn { border-color: transparent; }
+
+/* --- フッター --- */
+.wf-footer { background: var(--wf-footer); color: #fff; padding: 40px 0 24px; margin-top: 0; }
+.wf-footer .cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 24px; }
+.wf-footer a { color: #fff; opacity: .9; text-decoration: none; font-size: 13px; display: block; margin: 8px 0; }
+.wf-footer .wf-logo { background: #7a7a7a; color: #eee; margin-bottom: 14px; }
+.wf-footer .copy { margin-top: 28px; font-size: 12px; opacity: .7; }
+
+/* --- 追従CTA --- */
+.wf-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; gap: 10px; justify-content: center;
+  background: #fff; border-top: 1px solid var(--wf-line); padding: 10px; }
+
+/* --- レスポンシブ（スマホ） --- */
+@media (max-width: 760px) {
+  .wf-cols { grid-template-columns: 1fr; }
+  .wf-cols.reverse > :first-child { order: 0; }
+  .wf-grid-3, .wf-steps { grid-template-columns: 1fr; }
+  .wf-grid-classrooms { grid-template-columns: repeat(2, 1fr); }
+  .wf-footer .cols { grid-template-columns: 1fr; }
+  .wf-hero h1 { font-size: 30px; }
+  .wf-nav { display: none; }
+  .wf-header-cta .wf-btn-ghost { display: none; }
+  .wf-anchor { display: none; }
+}

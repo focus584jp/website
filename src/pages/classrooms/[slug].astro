@@ -1,7 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Wf from '../../components/Wf.astro';
-import CtaGroup from '../../components/CtaGroup.astro';
+import PageHero from '../../components/PageHero.astro';
+import Section from '../../components/Section.astro';
+import Box from '../../components/Box.astro';
+import Lines from '../../components/Lines.astro';
+import CtaBand from '../../components/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
 
 export function getStaticPaths() {
@@ -10,25 +13,39 @@ export function getStaticPaths() {
 const { classroom } = Astro.props;
 ---
 <BaseLayout title={classroom.name}>
-  <Wf tag="教室基本情報">
-    <p class="wf-note">{classroom.area} / {classroom.nearestStation} / {classroom.address} / TEL {classroom.tel}</p>
-  </Wf>
-  <Wf tag="地図（Googleマップ埋め込み予定）">
-    <p class="wf-note">[地図プレースホルダー]</p>
-  </Wf>
-  <Wf tag="対応中学校（ローカルSEOの要）">
-    <p class="wf-note">{classroom.schools.join(' / ')}</p>
-  </Wf>
-  <Wf tag="教室責任者（顔写真・ひとこと）">
-    <p class="wf-note">{classroom.managerName}</p>
-  </Wf>
-  <Wf tag="教室写真（複数）">
-    <p class="wf-note">[写真プレースホルダー]</p>
-  </Wf>
-  <Wf tag="開校時間・対応学年・空き状況">
-    <p class="wf-note">{classroom.hours}</p>
-  </Wf>
-  <Wf tag="CV（この教室で相談・電話）">
-    <CtaGroup />
-  </Wf>
+  <PageHero eyebrow="CLASSROOM" title={classroom.name} />
+
+  <Section title="基本情報">
+    <table class="wf-table">
+      <tbody>
+        <tr><th style="width:140px">エリア</th><td>{classroom.area}</td></tr>
+        <tr><th>最寄駅</th><td>{classroom.nearestStation}</td></tr>
+        <tr><th>住所</th><td>{classroom.address}</td></tr>
+        <tr><th>電話</th><td>{classroom.tel}</td></tr>
+        <tr><th>開校時間</th><td>{classroom.hours}</td></tr>
+      </tbody>
+    </table>
+  </Section>
+
+  <Section title="アクセス（地図）" alt={true}>
+    <Box label="Googleマップ（埋め込み予定）" h={240} />
+  </Section>
+
+  <Section title="対応中学校（ローカルSEOの要）">
+    <p style="color:var(--wf-muted)">{classroom.schools.join(' / ')}</p>
+  </Section>
+
+  <Section title="教室責任者 / 教室写真" alt={true}>
+    <div class="wf-cols">
+      <Box label="責任者の顔写真" h={200} />
+      <Lines n={5} head={true} />
+    </div>
+    <div class="wf-grid-3" style="margin-top:20px">
+      <Box label="教室写真" h={120} />
+      <Box label="教室写真" h={120} />
+      <Box label="教室写真" h={120} />
+    </div>
+  </Section>
+
+  <CtaBand title={`${classroom.name}で無料相談・体験を受け付けています`} />
 </BaseLayout>

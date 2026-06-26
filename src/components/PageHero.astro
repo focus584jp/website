@@ -1,0 +1,10 @@
+---
+// 下層ページ用の小さめヒーロー（ページタイトル帯）。
+const { title, eyebrow } = Astro.props;
+---
+<section class="wf-hero page">
+  <div class="wf-hero-inner" style="padding:48px 24px">
+    {eyebrow && <span class="wf-eyebrow">{eyebrow}</span>}
+    <h1 style="font-size:30px;margin:0">{title}</h1>
+  </div>
+</section>

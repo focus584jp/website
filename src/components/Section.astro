@@ -1,0 +1,16 @@
+---
+// セクション枠（ワイヤー用）。中央寄せの見出しブロック＋コンテナ＋slot。
+// alt=true で背景をグレーに、id でアンカー対象。
+const { id, eyebrow, title, alt = false } = Astro.props;
+---
+<section class={alt ? 'wf-section alt' : 'wf-section'} id={id}>
+  <div class="wf-container">
+    {(eyebrow || title) && (
+      <div class="wf-section-head">
+        {eyebrow && <span class="wf-eyebrow">{eyebrow}</span>}
+        {title && <h2>{title}</h2>}
+      </div>
+    )}
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,5 @@
+---
+// 画像プレースホルダ（ワイヤー用）。label と高さ h(px) を受ける。
+const { label = 'イメージ画像', h = 180 } = Astro.props;
+---
+<div class="wf-box" style={`min-height:${h}px`}>{label}</div>

@@ -1,11 +1,34 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Wf from '../components/Wf.astro';
-import CtaGroup from '../components/CtaGroup.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import Box from '../components/Box.astro';
+import Lines from '../components/Lines.astro';
+import CtaBand from '../components/CtaBand.astro';
 ---
 <BaseLayout title="指導方針">
-  <Wf tag="Teaching vs Coaching（解き方でなく&quot;勉強のやり方&quot;を教える）"><p class="wf-note">図解予定</p></Wf>
-  <Wf tag="1対4だからこそ：教わる時間と自分で考える時間"><p class="wf-note">自立する力</p></Wf>
-  <Wf tag="基礎から積み上げ（中1最初の単元から抜け漏れなく）"><p class="wf-note">何年生から入っても</p></Wf>
-  <Wf tag="CV"><CtaGroup /></Wf>
+  <PageHero eyebrow="METHOD" title="指導方針" />
+
+  <Section eyebrow="TEACHING vs COACHING" title="“勉強のやり方”を教えます">
+    <div class="wf-cols">
+      <div class="wf-card"><div class="wf-subhead"></div><Lines n={4} /></div>
+      <div class="wf-card"><div class="wf-subhead"></div><Lines n={4} /></div>
+    </div>
+  </Section>
+
+  <Section title="1対4だからこそ自立する力がつく" alt={true}>
+    <div class="wf-cols reverse">
+      <Box label="図解イメージ" h={220} />
+      <Lines n={5} head={true} />
+    </div>
+  </Section>
+
+  <Section title="基礎から積み上げる">
+    <div class="wf-cols">
+      <Box label="図解イメージ" h={220} />
+      <Lines n={5} head={true} />
+    </div>
+  </Section>
+
+  <CtaBand />
 </BaseLayout>
