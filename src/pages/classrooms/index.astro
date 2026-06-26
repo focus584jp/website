@@ -5,24 +5,32 @@ import Section from '../../components/Section.astro';
 import Box from '../../components/Box.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
+
+// エリア（市）ごとにグルーピング。教室が20・30と増えても見出し＋グリッドで整理できる構成。
+const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
 <BaseLayout title="教室一覧">
-  <PageHero eyebrow="CLASSROOMS" title="教室一覧（千葉市中心10校舎）" />
+  <PageHero eyebrow="CLASSROOMS" title="教室一覧" />
 
   <Section title="エリアマップ">
-    <Box label="千葉市マップ（10校舎プロット）" h={220} />
+    <Box label="エリアマップ（教室をプロット）" h={220} />
   </Section>
 
-  <Section title="教室一覧" alt={true}>
-    <div class="wf-grid-3">
-      {classrooms.map((c) => (
-        <a class="wf-card" href={`/classrooms/${c.slug}`} style="text-decoration:none;color:inherit">
-          <Box label="教室写真" h={120} />
-          <div style="font-weight:600;margin-top:12px">{c.name}</div>
-          <div style="color:var(--wf-muted);font-size:13px">{c.area} / {c.nearestStation}</div>
-        </a>
-      ))}
-    </div>
+  <Section title="エリアから探す" alt={true}>
+    {regions.map((r) => (
+      <div style="margin-bottom:30px">
+        <h3 style="font-size:18px;color:var(--wf-ink);border-left:4px solid var(--navy-logo);padding-left:10px;margin:0 0 14px">{r}</h3>
+        <div class="wf-grid-3">
+          {classrooms.filter((c) => c.region === r).map((c) => (
+            <a class="wf-card" href={`/classrooms/${c.slug}`} style="text-decoration:none;color:inherit">
+              <Box label="教室写真" h={110} />
+              <div style="font-weight:600;margin-top:10px">{c.name}</div>
+              <div style="color:var(--wf-muted);font-size:13px">{c.nearestStation}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
   </Section>
 
   <CtaBand title="お近くの教室で無料相談ができます" />

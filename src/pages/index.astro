@@ -4,38 +4,40 @@ import Section from '../components/Section.astro';
 import Box from '../components/Box.astro';
 import Lines from '../components/Lines.astro';
 import CtaGroup from '../components/CtaGroup.astro';
-import AnchorNav from '../components/AnchorNav.astro';
+import CtaBand from '../components/CtaBand.astro';
+import '../styles/hero-preview.css';
 import { classrooms } from '../data/classrooms';
 
-const anchors = [
-  { id: 'reason', label: '選ばれる理由' },
-  { id: 'choose', label: '塾の選び方' },
-  { id: 'price', label: '料金' },
-  { id: 'results', label: '実績・声' },
-  { id: 'classrooms', label: '教室' },
-];
+const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
 <BaseLayout title="トップ">
-  {/* ヒーロー（苦手専門の宣言＋母親への語りかけ／斜め大型キャッチ・写真orイラストは Phase3） */}
-  <section class="wf-hero">
-    <div class="wf-hero-inner">
-      <span class="wf-eyebrow">勉強が苦手な中学生のための個別指導塾</span>
-      <h1>キャッチコピー（大）</h1>
-      <p class="hero-sub">サブキャッチ（母親への語りかけ）が入ります</p>
-      <CtaGroup size="lg" />
+  {/* ヒーロー（案B方向：勉強が苦手な中学生専門の塾。手書き＋大きな数字＋CTA） */}
+  <section class="heroB">
+    <div class="wrap">
+      <div>
+        <p class="lead">千葉市中心・最大1対4の個別指導</p>
+        <h1>勉強が苦手な<br />中学生専門の塾。</h1>
+        <p class="sub">“わからない”から、千葉大生の先生がやさしく伴走します。</p>
+        <div class="pricecard">
+          <span class="lbl">1教科 月</span>
+          <span class="big">5,980</span>
+          <span class="unit">円〜（税抜）</span>
+        </div>
+        <div class="cta">
+          <a class="btn btn-primary" href="/contact#document">資料請求</a>
+          <a class="btn btn-secondary" href="/contact#consult">無料相談</a>
+        </div>
+      </div>
+      <div class="photo">写真（先生と生徒）プレースホルダー</div>
     </div>
   </section>
 
-  {/* ページ内アンカーナビ */}
-  <AnchorNav items={anchors} />
-
-  {/* こんな悩みありませんか？（自分ごと化） */}
+  {/* こんな悩みありませんか？（3つまで） */}
   <Section eyebrow="CHECK" title="こんなお悩みありませんか？">
     <ul class="wf-check">
       <li>テキストが入ります（例：家で勉強しない）</li>
       <li>テキストが入ります（例：勉強のやり方が分からない）</li>
       <li>テキストが入ります（例：平均点が取れない）</li>
-      <li>テキストが入ります（例：塾は高くて続けられるか不安）</li>
     </ul>
   </Section>
 
@@ -49,31 +51,31 @@ const anchors = [
     <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/reason">選ばれる理由をもっと見る</a></p>
   </Section>
 
-  {/* 塾の選び方（相性診断）ダイジェスト */}
-  <Section id="choose" eyebrow="GUIDE" title="塾の選び方（相性診断）">
+  {/* 塾の選び方 */}
+  <Section id="choose" eyebrow="GUIDE" title="塾の選び方">
     <div class="wf-cols">
       <Box label="診断図/比較イメージ" h={240} />
       <div>
         <Lines n={5} head={true} />
-        <p style="margin-top:18px"><a class="wf-btn wf-btn-ghost" href="/choose">診断を見る</a></p>
+        <p style="margin-top:18px"><a class="wf-btn wf-btn-ghost" href="/choose">相性診断をしてみる</a></p>
       </div>
     </div>
   </Section>
 
-  {/* 料金ダイジェスト（大きな数字） */}
+  {/* 料金（指導方針と同じレイアウト：詳細ページへ誘導。資料請求ボタンは置かない） */}
   <Section id="price" eyebrow="PRICE" title="料金" alt={true}>
     <div class="wf-cols">
       <div>
         <div class="wf-bignum">5,980円〜</div>
-        <p style="color:var(--wf-muted);margin:4px 0 16px">1教科あたり（テキストが入ります）</p>
+        <p style="color:var(--wf-muted);margin:4px 0 14px">1教科あたり（テキストが入ります）</p>
         <Lines n={3} />
-        <div style="margin-top:18px"><CtaGroup /></div>
+        <p style="margin-top:18px"><a class="wf-btn wf-btn-ghost" href="/price">料金を見る</a></p>
       </div>
       <Box label="料金イメージ/比較" h={220} />
     </div>
   </Section>
 
-  {/* 指導方針ダイジェスト */}
+  {/* 指導方針 */}
   <Section eyebrow="METHOD" title="指導方針">
     <div class="wf-cols reverse">
       <Box label="指導イメージ" h={220} />
@@ -84,26 +86,27 @@ const anchors = [
     </div>
   </Section>
 
-  {/* 合格実績・声 */}
-  <Section id="results" eyebrow="RESULTS" title="合格実績・生徒の声" alt={true}>
+  {/* 体験された保護者の声（合格実績は載せない／タイトルは仮） */}
+  <Section id="results" eyebrow="VOICE" title="体験された保護者の声（仮）" alt={true}>
     <div class="wf-grid-3">
-      <div class="wf-card"><div class="wf-bignum" style="font-size:32px">＋20点</div><Lines n={2} /></div>
-      <div class="wf-card"><Box label="声/写真" h={100} /><Lines n={2} /></div>
-      <div class="wf-card"><Box label="声/写真" h={100} /><Lines n={2} /></div>
+      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
     </div>
-    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/results">実績・声をもっと見る</a></p>
+    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/results">保護者の声をもっと見る</a></p>
   </Section>
 
-  {/* 教室マップ＋一覧 */}
-  <Section id="classrooms" eyebrow="CLASSROOMS" title="教室一覧（千葉市中心10校舎）">
-    <Box label="千葉市マップ（10校舎プロット）" h={200} />
-    <div class="wf-grid-classrooms" style="margin-top:20px">
-      {classrooms.map((c) => <a class="wf-chip" href={`/classrooms/${c.slug}`}>{c.name}</a>)}
+  {/* 教室（エリアから探す：教室数が増えても崩れない構成） */}
+  <Section id="classrooms" eyebrow="CLASSROOMS" title="教室一覧">
+    <Box label="エリアマップ（教室をプロット）" h={200} />
+    <div class="wf-region-chips" style="margin-top:20px">
+      {regions.map((r) => <a class="wf-chip" href="/classrooms">{r}</a>)}
     </div>
+    <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href="/classrooms">教室一覧を見る</a></p>
   </Section>
 
   {/* 入塾までの流れ */}
-  <Section eyebrow="FLOW" title="入塾までの流れ" alt={true}>
+  <Section eyebrow="FLOW" title="入塾までの流れ">
     <div class="wf-steps">
       <div class="wf-step"><div class="num">1</div><div class="wf-subhead" style="margin:0 auto 10px;width:70%"></div><Lines n={2} /></div>
       <div class="wf-step"><div class="num">2</div><div class="wf-subhead" style="margin:0 auto 10px;width:70%"></div><Lines n={2} /></div>
@@ -113,7 +116,7 @@ const anchors = [
   </Section>
 
   {/* FAQ抜粋 */}
-  <Section eyebrow="FAQ" title="よくあるご質問">
+  <Section eyebrow="FAQ" title="よくあるご質問" alt={true}>
     <div class="wf-rows">
       <div class="wf-row"><span class="bar"></span><span class="plus">＋</span></div>
       <div class="wf-row"><span class="bar"></span><span class="plus">＋</span></div>
@@ -122,12 +125,5 @@ const anchors = [
     <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href="/faq">よくある質問をすべて見る</a></p>
   </Section>
 
-  {/* CTA帯 */}
-  <section class="wf-band">
-    <div class="wf-container">
-      <h2>まずは教室の雰囲気を見に来てください</h2>
-      <p class="sub">テキストが入ります（資料請求・無料相談への後押し）</p>
-      <CtaGroup size="lg" />
-    </div>
-  </section>
+  <CtaBand />
 </BaseLayout>

@@ -4,7 +4,7 @@ const nav = [
   { href: '/choose', label: '塾の選び方' },
   { href: '/method', label: '指導方針' },
   { href: '/price', label: '料金' },
-  { href: '/results', label: '実績・声' },
+  { href: '/results', label: '保護者の声' },
   { href: '/classrooms', label: '教室一覧' },
   { href: '/faq', label: 'よくある質問' },
 ];
@@ -18,5 +18,16 @@ const nav = [
     <a class="wf-btn wf-btn-ghost" href="/classrooms">教室を探す</a>
     <a class="wf-btn wf-btn-primary" href="/contact#document">資料請求</a>
     <a class="wf-btn wf-btn-secondary" href="/contact#consult">無料相談</a>
+  </div>
+
+  {/* スマホ用ハンバーガーメニュー（チェックボックスで開閉） */}
+  <input type="checkbox" id="wf-menu" class="wf-menu-toggle" hidden />
+  <label for="wf-menu" class="wf-hamburger" aria-label="メニュー"><span></span><span></span><span></span></label>
+  <div class="wf-mobile-menu">
+    {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    <div class="wf-mobile-cta">
+      <a class="wf-btn wf-btn-primary" href="/contact#document">資料請求</a>
+      <a class="wf-btn wf-btn-secondary" href="/contact#consult">無料相談</a>
+    </div>
   </div>
 </header>
