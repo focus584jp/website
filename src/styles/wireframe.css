@@ -144,7 +144,7 @@ img { max-width: 100%; display: block; }
 .wf-shine::after { content: ""; position: absolute; top: -25%; left: 0; width: 38%; height: 150%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
   transform: translateX(-160%) rotate(18deg); opacity: 0;
-  animation: wf-shine 5s ease-in-out infinite; pointer-events: none; }
+  animation: wf-shine 3s ease-in-out infinite; pointer-events: none; }
 @keyframes wf-shine {
   0%   { transform: translateX(-160%) rotate(18deg); opacity: 0; }
   6%   { opacity: 1; }
