@@ -3,7 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Section from '../components/Section.astro';
 import Box from '../components/Box.astro';
 import Lines from '../components/Lines.astro';
-import CtaGroup from '../components/CtaGroup.astro';
 import CtaBand from '../components/CtaBand.astro';
 import '../styles/hero-preview.css';
 import { classrooms } from '../data/classrooms';
@@ -11,32 +10,66 @@ import { classrooms } from '../data/classrooms';
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
 <BaseLayout title="トップ">
-  {/* ヒーロー（案B方向：勉強が苦手な中学生専門の塾。手書き＋大きな数字＋CTA） */}
+  {/* ヒーロー：横スクロールのカルーセル（個別指導キャンパス参考）。数秒ごとに自動で横送り＋スワイプ可 */}
   <section class="heroB">
-    <div class="wrap">
-      <div>
-        <h1>勉強が苦手な<br />中学生専門の塾。</h1>
-        <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
-        <div class="pricecard">
-          <span class="lbl">1教科 月</span>
-          <span class="big">5,980</span>
-          <span class="unit">円〜（税抜）</span>
+    <div class="hero-carousel" id="heroCarousel">
+      {/* スライド1：メインメッセージ */}
+      <div class="hero-slide">
+        <div class="wrap">
+          <div>
+            <h1>勉強が苦手な<br />中学生専門の塾。</h1>
+            <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
+            <div class="pricecard">
+              <span class="lbl">1教科 月</span>
+              <span class="big">5,980</span>
+              <span class="unit">円〜（税抜）</span>
+            </div>
+          </div>
+          <div class="photo">写真（先生と生徒）プレースホルダー</div>
         </div>
-        {/* ヒーローのCTAボタンは廃止（CTAは右サイド/下部固定・SPヘッダーに集約） */}
       </div>
-      <div class="photo">写真（先生と生徒）プレースホルダー</div>
+      {/* スライド2：塾の選び方（相性診断） */}
+      <div class="hero-slide">
+        <div class="wrap">
+          <div>
+            <p class="lead">GUIDE</p>
+            <h1>塾の選び方。</h1>
+            <p class="sub">お子さまに合う塾か、相性診断でチェックできます。</p>
+            <a class="btn btn-secondary" href="/choose">相性診断をしてみる</a>
+          </div>
+          <div class="photo">診断図/比較イメージ プレースホルダー</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-dots" id="heroDots">
+      <button class="dot is-active" type="button" aria-label="スライド1"></button>
+      <button class="dot" type="button" aria-label="スライド2"></button>
     </div>
   </section>
+  <script>
+    const c = document.getElementById('heroCarousel');
+    const dots = Array.from(document.querySelectorAll('#heroDots .dot'));
+    if (c && dots.length) {
+      let i = 0;
+      const n = dots.length;
+      const update = () => dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+      const go = (k) => { i = (k + n) % n; c.scrollTo({ left: c.clientWidth * i, behavior: 'smooth' }); update(); };
+      dots.forEach((d, k) => d.addEventListener('click', () => go(k)));
+      let t;
+      c.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => { i = Math.round(c.scrollLeft / c.clientWidth); update(); }, 120); });
+      let auto = setInterval(() => go(i + 1), 4500);
+      c.addEventListener('pointerdown', () => clearInterval(auto));
+    }
+  </script>
 
   {/* ヒーロー直下の番号付き導線（伊藤塾参考・PC/SP共通） */}
   <nav class="wf-indexnav">
     <div class="inner">
       <a href="#reason"><span class="num">01</span>選ばれる理由</a>
-      <a href="#choose"><span class="num">02</span>塾の選び方</a>
-      <a href="#method"><span class="num">03</span>指導方針</a>
-      <a href="#price"><span class="num">04</span>料金</a>
-      <a href="#results"><span class="num">05</span>保護者の声</a>
-      <a href="#classrooms"><span class="num">06</span>教室一覧</a>
+      <a href="#method"><span class="num">02</span>指導方針</a>
+      <a href="#price"><span class="num">03</span>料金</a>
+      <a href="#results"><span class="num">04</span>保護者の声</a>
+      <a href="#classrooms"><span class="num">05</span>教室一覧</a>
     </div>
   </nav>
 
@@ -57,17 +90,6 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <div class="wf-card"><Box label="アイコン/画像" h={120} /><div class="wf-subhead"></div><Lines n={3} /></div>
     </div>
     <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/reason">詳しく見る</a></p>
-  </Section>
-
-  {/* 塾の選び方 */}
-  <Section id="choose" eyebrow="GUIDE" title="塾の選び方">
-    <div class="wf-cols">
-      <Box label="診断図/比較イメージ" h={240} />
-      <div>
-        <Lines n={5} head={true} />
-        <p style="margin-top:18px;text-align:center"><a class="wf-btn wf-btn-ghost" href="/choose">相性診断をしてみる</a></p>
-      </div>
-    </div>
   </Section>
 
   {/* 料金（指導方針と同じレイアウト：詳細ページへ誘導。資料請求ボタンは置かない） */}
