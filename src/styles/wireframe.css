@@ -135,6 +135,8 @@ img { max-width: 100%; display: block; }
 
 /* --- PC右側固定の縦型CTA（森塾参考。資料請求＝定期的に光る） --- */
 .wf-siderail { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 55; display: flex; flex-direction: column; gap: 10px; }
+/* メニューを開いている間は右サイド固定CTAを隠す */
+body:has(.wf-menu-toggle:checked) .wf-siderail { display: none; }
 .wf-rail-btn { writing-mode: vertical-rl; padding: 22px 13px; font-size: 15px; font-weight: 600; color: #fff; text-decoration: none;
   border-radius: 8px 0 0 8px; letter-spacing: .14em; box-shadow: -2px 2px 10px rgba(0,0,0,.18); position: relative; overflow: hidden; }
 .wf-rail-primary { background: var(--orange-logo); }
@@ -190,10 +192,12 @@ img { max-width: 100%; display: block; }
   .wf-grid-3, .wf-steps { grid-template-columns: 1fr; }
   .wf-footer .cols { grid-template-columns: 1fr; }
   .wf-hero h1 { font-size: 30px; }
-  /* SPヘッダーは ロゴ＋教室を探す＋資料請求＋メニュー。詰めて収める */
+  /* SPヘッダーは ロゴ＋教室を探す＋メニュー。詰めて収める */
   .wf-header { gap: 10px; padding: 10px 16px; }
   .wf-header-right { gap: 8px; }
   .wf-header-right .wf-btn { padding: 7px 10px; font-size: 12px; }
+  /* スマホのドロワーはフルサイズ（横から） */
+  .wf-mobile-menu { width: 100%; max-width: 100%; }
 
   /* 番号付き導線：スマホは2列。先頭（選ばれる理由）は全幅で大きく */
   .wf-indexnav .inner { grid-template-columns: repeat(2, 1fr); }

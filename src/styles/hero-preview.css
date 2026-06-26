@@ -35,10 +35,10 @@
 /* ============ 案B：淡い背景＋手書き大見出し＋数字カード ============ */
 .heroB { background: var(--navy-bg); position: relative; }
 
-/* 横スクロールのカルーセル（スワイプ可・自動送りはJS） */
-.hero-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-.hero-carousel::-webkit-scrollbar { display: none; }
-.hero-slide { flex: 0 0 100%; scroll-snap-align: start; }
+/* カルーセル（transform方式・クローンで前進ループ。矢印/ドット/自動送り/簡易スワイプはJS） */
+.hero-viewport { overflow: hidden; }
+.hero-track { display: flex; will-change: transform; }
+.hero-slide { flex: 0 0 100%; }
 .hero-dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; gap: 8px; justify-content: center; z-index: 2; }
 .hero-dots .dot { width: 9px; height: 9px; border-radius: 50%; border: none; background: rgba(20,55,120,.25); cursor: pointer; padding: 0; }
 .hero-dots .dot.is-active { background: var(--navy-logo); }

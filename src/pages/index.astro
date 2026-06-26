@@ -12,32 +12,34 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
 <BaseLayout title="トップ">
   {/* ヒーロー：横スクロールのカルーセル（個別指導キャンパス参考）。数秒ごとに自動で横送り＋スワイプ可 */}
   <section class="heroB">
-    <div class="hero-carousel" id="heroCarousel">
-      {/* スライド1：メインメッセージ */}
-      <div class="hero-slide">
-        <div class="wrap">
-          <div>
-            <h1>勉強が苦手な<br />中学生専門の塾。</h1>
-            <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
-            <div class="pricecard">
-              <span class="lbl">1教科 月</span>
-              <span class="big">5,980</span>
-              <span class="unit">円〜（税抜）</span>
+    <div class="hero-viewport">
+      <div class="hero-track" id="heroTrack">
+        {/* スライド1：メインメッセージ */}
+        <div class="hero-slide">
+          <div class="wrap">
+            <div>
+              <h1>勉強が苦手な<br />中学生専門の塾。</h1>
+              <p class="sub">「どこが分からないかも分からない」、そんな子に寄り添います。</p>
+              <div class="pricecard">
+                <span class="lbl">1教科 月</span>
+                <span class="big">5,980</span>
+                <span class="unit">円〜（税抜）</span>
+              </div>
             </div>
+            <div class="photo">写真（先生と生徒）プレースホルダー</div>
           </div>
-          <div class="photo">写真（先生と生徒）プレースホルダー</div>
         </div>
-      </div>
-      {/* スライド2：塾の選び方（相性診断） */}
-      <div class="hero-slide">
-        <div class="wrap">
-          <div>
-            <p class="lead">GUIDE</p>
-            <h1>塾の選び方。</h1>
-            <p class="sub">お子さまに合う塾か、相性診断でチェックできます。</p>
-            <a class="btn btn-secondary" href="/choose">相性診断をしてみる</a>
+        {/* スライド2：塾の選び方（相性診断） */}
+        <div class="hero-slide">
+          <div class="wrap">
+            <div>
+              <p class="lead">GUIDE</p>
+              <h1>塾の選び方。</h1>
+              <p class="sub">お子さまに合う塾か、相性診断でチェックできます。</p>
+              <a class="btn btn-secondary" href="/choose">相性診断をしてみる</a>
+            </div>
+            <div class="photo">診断図/比較イメージ プレースホルダー</div>
           </div>
-          <div class="photo">診断図/比較イメージ プレースホルダー</div>
         </div>
       </div>
     </div>
@@ -49,24 +51,48 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     </div>
   </section>
   <script>
-    const c = document.getElementById('heroCarousel');
+    const vp = document.querySelector('.hero-viewport');
+    const track = document.getElementById('heroTrack');
     const dots = Array.from(document.querySelectorAll('#heroDots .dot'));
-    const prev = document.getElementById('heroPrev');
-    const next = document.getElementById('heroNext');
-    if (c && dots.length) {
-      let i = 0;
+    const prevBtn = document.getElementById('heroPrev');
+    const nextBtn = document.getElementById('heroNext');
+    if (vp && track && dots.length) {
       const n = dots.length;
+      const reals = Array.from(track.children);
+      // 前後にクローンを足して無限ループ（前進で1枚目に戻る）
+      track.appendChild(reals[0].cloneNode(true));
+      track.insertBefore(reals[n - 1].cloneNode(true), reals[0]);
+      let pos = 1; // 本物の先頭（先頭クローンの次）
       let auto;
-      const update = () => dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
-      const go = (k) => { i = (k + n) % n; c.scrollTo({ left: c.clientWidth * i, behavior: 'smooth' }); update(); };
+      const w = () => vp.clientWidth;
+      const setX = (animate) => {
+        track.style.transition = animate ? 'transform .5s ease' : 'none';
+        track.style.transform = `translateX(${-pos * w()}px)`;
+      };
+      const update = () => {
+        const real = ((pos - 1) % n + n) % n;
+        dots.forEach((d, k) => d.classList.toggle('is-active', k === real));
+      };
+      const go = (dir) => { pos += dir; setX(true); update(); };
+      track.addEventListener('transitionend', () => {
+        if (pos === n + 1) { pos = 1; setX(false); }       // 末尾クローン→本物の1枚目へ瞬間移動
+        else if (pos === 0) { pos = n; setX(false); }       // 先頭クローン→本物の最終へ
+      });
       const stopAuto = () => clearInterval(auto);
-      dots.forEach((d, k) => d.addEventListener('click', () => { stopAuto(); go(k); }));
-      prev && prev.addEventListener('click', () => { stopAuto(); go(i - 1); });
-      next && next.addEventListener('click', () => { stopAuto(); go(i + 1); });
-      let t;
-      c.addEventListener('scroll', () => { clearTimeout(t); t = setTimeout(() => { i = Math.round(c.scrollLeft / c.clientWidth); update(); }, 120); });
-      c.addEventListener('pointerdown', stopAuto);
-      auto = setInterval(() => go(i + 1), 4500);
+      nextBtn && nextBtn.addEventListener('click', () => { stopAuto(); go(1); });
+      prevBtn && prevBtn.addEventListener('click', () => { stopAuto(); go(-1); });
+      dots.forEach((d, k) => d.addEventListener('click', () => { stopAuto(); pos = k + 1; setX(true); update(); }));
+      // 簡易スワイプ
+      let x0 = null;
+      vp.addEventListener('pointerdown', (e) => { x0 = e.clientX; stopAuto(); });
+      vp.addEventListener('pointerup', (e) => {
+        if (x0 === null) return;
+        const dx = e.clientX - x0; x0 = null;
+        if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+      });
+      window.addEventListener('resize', () => setX(false));
+      setX(false);
+      auto = setInterval(() => go(1), 4500);
     }
   </script>
 
@@ -76,7 +102,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <a href="#reason"><span class="num">01</span>選ばれる理由</a>
       <a href="#method"><span class="num">02</span>指導方針</a>
       <a href="#price"><span class="num">03</span>料金</a>
-      <a href="#results"><span class="num">04</span>保護者の声</a>
+      <a href="#results"><span class="num">04</span>保護者さまの声</a>
       <a href="#classrooms"><span class="num">05</span>教室一覧</a>
     </div>
   </nav>
@@ -124,14 +150,14 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     </div>
   </Section>
 
-  {/* 体験された保護者の声（合格実績は載せない／タイトルは仮） */}
-  <Section id="results" eyebrow="VOICE" title="体験された保護者の声（仮）" alt={true}>
+  {/* 保護者さまの声（合格実績は載せない） */}
+  <Section id="results" eyebrow="VOICE" title="保護者さまの声" alt={true}>
     <div class="wf-grid-3">
-      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
-      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
-      <div class="wf-card"><Box label="保護者の声/写真" h={100} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
     </div>
-    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/results">保護者の声をもっと見る</a></p>
+    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/results">保護者さまの声をもっと見る</a></p>
   </Section>
 
   {/* 教室（エリアから探す：教室数が増えても崩れない構成） */}
