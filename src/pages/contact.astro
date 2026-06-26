@@ -7,12 +7,13 @@ import Lines from '../components/Lines.astro';
 <BaseLayout title="資料請求・無料相談・お問い合わせ">
   <PageHero eyebrow="CONTACT" title="資料請求・無料相談・お問い合わせ" />
 
-  <Section id="document" eyebrow="STEP 1（おすすめ）" title="資料請求（デジタルパンフをメール即送付）">
+  <Section id="document" eyebrow="STEP 1（おすすめ）" title="資料請求（電話番号だけ／SMSで資料をお送りします）">
     <div class="wf-cols">
       <div class="wf-card">
-        <div class="wf-subhead"></div>
-        <Lines n={5} />
-        <p style="margin-top:14px"><span class="wf-btn wf-btn-primary lg">送信（フォーム）</span></p>
+        <label style="display:block;font-size:13px;color:var(--wf-muted);margin-bottom:6px">携帯電話番号</label>
+        <div style="border:1px solid var(--wf-line);border-radius:6px;height:42px;background:#fff;display:flex;align-items:center;padding:0 12px;color:var(--wf-muted);font-size:13px;max-width:320px">090 - 0000 - 0000</div>
+        <p style="margin-top:14px"><span class="wf-btn wf-btn-primary lg">資料を受け取る（SMSで送信）</span></p>
+        <p style="color:var(--wf-muted);font-size:12px;margin-top:10px">入力いただいた番号にSMSで、デジタルパンフ（PDF）のダウンロードリンクをお送りします。</p>
       </div>
       <Lines n={4} head={true} />
     </div>
