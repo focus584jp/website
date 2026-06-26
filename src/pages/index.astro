@@ -150,14 +150,16 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     </div>
   </Section>
 
-  {/* 保護者さまの声（合格実績は載せない） */}
+  {/* 保護者さまの声：横スクロールで複数件（ページ化はしない） */}
   <Section id="results" eyebrow="VOICE" title="保護者さまの声" alt={true}>
-    <div class="wf-grid-3">
-      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
-      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
-      <div class="wf-card"><Box label="保護者さまの声/写真" h={100} /><Lines n={3} /></div>
+    <div class="wf-hscroll">
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
+      <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
     </div>
-    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/results">保護者さまの声をもっと見る</a></p>
+    <p style="color:var(--wf-muted);font-size:13px;text-align:center;margin-top:14px">← 横にスクロールできます →</p>
   </Section>
 
   {/* 教室（エリアから探す：教室数が増えても崩れない構成） */}

@@ -81,6 +81,10 @@ img { max-width: 100%; display: block; }
 .wf-card { border: 1px solid var(--wf-line); border-radius: 6px; padding: 20px; background: #fff; }
 .wf-card .wf-box { min-height: 120px; margin-bottom: 14px; }
 
+/* --- 横スクロール（保護者さまの声など） --- */
+.wf-hscroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+.wf-hscroll > * { flex: 0 0 280px; scroll-snap-align: start; }
+
 /* --- 教室グリッド --- */
 .wf-grid-classrooms { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
 .wf-chip { border: 1px solid var(--wf-line); border-radius: 6px; padding: 14px 10px; text-align: center; font-size: 13px; color: var(--wf-ink); text-decoration: none; background: #fff; }
