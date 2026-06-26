@@ -22,7 +22,7 @@
 
 * { box-sizing: border-box; }
 html, body { overflow-x: hidden; }
-body { margin: 0; font-family: var(--font-base); color: var(--wf-ink); background: var(--wf-bg); padding-bottom: 76px; }
+body { margin: 0; font-family: var(--font-base); color: var(--wf-ink); background: var(--wf-bg); }
 img { max-width: 100%; display: block; }
 
 .wf-container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
@@ -127,9 +127,23 @@ img { max-width: 100%; display: block; }
 .wf-footer .wf-logo { background: #7a7a7a; color: #eee; margin-bottom: 14px; }
 .wf-footer .copy { margin-top: 28px; font-size: 12px; opacity: .7; }
 
-/* --- 追従CTA --- */
+/* --- 追従CTA（スマホ下部）。PCでは非表示で右サイドCTAを使う --- */
 .wf-sticky { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; gap: 10px; justify-content: center;
   background: #fff; border-top: 1px solid var(--wf-line); padding: 10px; }
+@media (min-width: 761px) { .wf-sticky { display: none; } }
+
+/* --- PC右側固定の縦型CTA（森塾参考。資料請求＝定期的に光る） --- */
+.wf-siderail { position: fixed; right: 0; top: 50%; transform: translateY(-50%); z-index: 55; display: flex; flex-direction: column; gap: 10px; }
+.wf-rail-btn { writing-mode: vertical-rl; padding: 22px 13px; font-size: 15px; font-weight: 600; color: #fff; text-decoration: none;
+  border-radius: 8px 0 0 8px; letter-spacing: .14em; box-shadow: -2px 2px 10px rgba(0,0,0,.18); position: relative; overflow: hidden; }
+.wf-rail-primary { background: var(--orange-logo); }
+.wf-rail-secondary { background: var(--navy-logo); }
+.wf-rail-btn:hover { opacity: .92; }
+.wf-shine::after { content: ""; position: absolute; top: -25%; left: -70%; width: 50%; height: 150%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.7), transparent); transform: rotate(18deg);
+  animation: wf-shine 3.6s ease-in-out infinite; }
+@keyframes wf-shine { 0% { left: -70%; } 22% { left: 140%; } 100% { left: 140%; } }
+@media (prefers-reduced-motion: reduce) { .wf-shine::after { animation: none; } }
 
 /* --- エリアチップ（教室） --- */
 .wf-region-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
@@ -142,6 +156,8 @@ img { max-width: 100%; display: block; }
 
 /* --- レスポンシブ（スマホ） --- */
 @media (max-width: 760px) {
+  body { padding-bottom: 76px; }            /* スマホは下部追従CTA分の余白 */
+  .wf-siderail { display: none; }            /* スマホでは右サイドCTAは出さない */
   .wf-cols { grid-template-columns: 1fr; }
   .wf-cols.reverse > :first-child { order: 0; }
   .wf-grid-3, .wf-steps { grid-template-columns: 1fr; }
