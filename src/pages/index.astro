@@ -1,5 +1,11 @@
-<!doctype html>
-<html lang="ja">
-  <head><meta charset="utf-8" /><title>FOCUS（仮）</title></head>
-  <body><h1>FOCUS scaffold OK</h1></body>
-</html>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Wf from '../components/Wf.astro';
+import CtaGroup from '../components/CtaGroup.astro';
+---
+<BaseLayout title="トップ（仮）">
+  <Wf tag="ヒーロー（仮）">
+    <p class="wf-note">レイアウト確認用プレースホルダー</p>
+    <CtaGroup />
+  </Wf>
+</BaseLayout>
