@@ -8,6 +8,7 @@ const nav = [
   { href: '/classrooms', label: '教室一覧' },
   { href: '/faq', label: 'よくある質問' },
 ];
+const TEL = '0120-000-000'; // ダミー（各教室直通に差し替え予定）
 ---
 <header class="wf-header">
   <a class="wf-logo" href="/">ロゴ</a>
@@ -20,14 +21,22 @@ const nav = [
     <a class="wf-btn wf-btn-secondary" href="/contact#consult">無料相談</a>
   </div>
 
-  {/* スマホ用ハンバーガーメニュー（チェックボックスで開閉） */}
+  {/* スマホ用：電話導線＋ハンバーガー（開閉はチェックボックス） */}
   <input type="checkbox" id="wf-menu" class="wf-menu-toggle" hidden />
-  <label for="wf-menu" class="wf-hamburger" aria-label="メニュー"><span></span><span></span><span></span></label>
-  <div class="wf-mobile-menu">
+  <div class="wf-mobile-actions">
+    <a class="wf-tel" href={`tel:${TEL.replace(/-/g, '')}`} aria-label="電話">電話</a>
+    <label for="wf-menu" class="wf-hamburger" aria-label="メニュー"><span></span><span></span><span></span></label>
+  </div>
+
+  {/* 右からスライドインするドロワー＋背景 */}
+  <label for="wf-menu" class="wf-backdrop" aria-hidden="true"></label>
+  <nav class="wf-mobile-menu">
+    <label for="wf-menu" class="wf-menu-close" aria-label="閉じる">×</label>
     {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+    <a href={`tel:${TEL.replace(/-/g, '')}`}>電話で問い合わせ（{TEL}）</a>
     <div class="wf-mobile-cta">
       <a class="wf-btn wf-btn-primary" href="/contact#document">資料請求</a>
       <a class="wf-btn wf-btn-secondary" href="/contact#consult">無料相談</a>
     </div>
-  </div>
+  </nav>
 </header>

@@ -135,8 +135,10 @@ img { max-width: 100%; display: block; }
 .wf-region-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
 
 /* --- ハンバーガー／スマホメニュー（既定は非表示。スマホで表示） --- */
-.wf-hamburger { display: none; }
-.wf-mobile-menu { display: none; }
+.wf-hamburger,
+.wf-mobile-actions,
+.wf-mobile-menu,
+.wf-backdrop { display: none; }
 
 /* --- レスポンシブ（スマホ） --- */
 @media (max-width: 760px) {
@@ -146,18 +148,24 @@ img { max-width: 100%; display: block; }
   .wf-footer .cols { grid-template-columns: 1fr; }
   .wf-hero h1 { font-size: 30px; }
   .wf-nav { display: none; }
-  /* スマホは ロゴ＋ハンバーガー に整理（資料請求等は追従CTAとメニュー内に集約） */
-  .wf-header { justify-content: space-between; }
   .wf-header-cta { display: none; }
 
-  /* ハンバーガー（3本線・ヘッダー右端。space-betweenで右寄せ） */
+  /* スマホは ロゴ（左）＋ 電話・ハンバーガー（右） */
+  .wf-mobile-actions { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+  .wf-tel { font-size: 12px; color: var(--navy-logo); border: 1px solid var(--navy-logo); border-radius: 6px; padding: 6px 12px; text-decoration: none; white-space: nowrap; }
+
+  /* ハンバーガー（3本線） */
   .wf-hamburger { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 6px; width: 30px; height: 30px; cursor: pointer; }
   .wf-hamburger span { display: block; width: 100%; height: 2.5px; background: var(--wf-ink); border-radius: 2px; }
 
-  /* 開いたメニュー */
-  .wf-mobile-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--wf-line); box-shadow: 0 8px 16px rgba(0,0,0,.08); padding: 8px 16px 16px; flex-direction: column; }
-  .wf-menu-toggle:checked ~ .wf-mobile-menu { display: flex; }
-  .wf-mobile-menu > a { padding: 12px 4px; border-bottom: 1px solid var(--wf-line); color: var(--wf-ink); text-decoration: none; font-size: 14px; }
-  .wf-mobile-cta { display: flex; gap: 8px; margin-top: 12px; }
-  .wf-mobile-cta .wf-btn { flex: 1; }
+  /* 右からスライドインするドロワー */
+  .wf-mobile-menu { display: flex; flex-direction: column; position: fixed; top: 0; right: 0; height: 100vh; width: 82%; max-width: 320px; background: #fff; box-shadow: -8px 0 24px rgba(0,0,0,.18); transform: translateX(100%); transition: transform .25s ease; z-index: 70; padding: 60px 22px 24px; overflow-y: auto; }
+  .wf-menu-toggle:checked ~ .wf-mobile-menu { transform: translateX(0); }
+  .wf-mobile-menu > a { padding: 14px 4px; border-bottom: 1px solid var(--wf-line); color: var(--wf-ink); text-decoration: none; font-size: 15px; }
+  .wf-menu-close { position: absolute; top: 12px; right: 18px; font-size: 28px; line-height: 1; color: var(--wf-ink); cursor: pointer; }
+  .wf-mobile-cta { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+  .wf-mobile-cta .wf-btn { width: 100%; }
+
+  /* 背景オーバーレイ（タップで閉じる） */
+  .wf-menu-toggle:checked ~ .wf-backdrop { display: block; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 65; }
 }
