@@ -140,11 +140,18 @@ img { max-width: 100%; display: block; }
 .wf-rail-secondary { background: var(--navy-logo); }
 .wf-rail-btn:hover { opacity: .92; }
 .wf-shine { position: relative; overflow: hidden; }   /* ボタン等にも光るアニメを付与可能に */
-.wf-shine::after { content: ""; position: absolute; top: -25%; left: -70%; width: 50%; height: 150%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,.7), transparent); transform: rotate(18deg);
-  animation: wf-shine 3.6s ease-in-out infinite; }
-@keyframes wf-shine { 0% { left: -70%; } 22% { left: 140%; } 100% { left: 140%; } }
-@media (prefers-reduced-motion: reduce) { .wf-shine::after { animation: none; } }
+/* 控えめな「きらっ」：待機中は完全に透明（残像なし）→ たまに一度だけ薄く流れる */
+.wf-shine::after { content: ""; position: absolute; top: -25%; left: 0; width: 38%; height: 150%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: translateX(-160%) rotate(18deg); opacity: 0;
+  animation: wf-shine 5s ease-in-out infinite; pointer-events: none; }
+@keyframes wf-shine {
+  0%   { transform: translateX(-160%) rotate(18deg); opacity: 0; }
+  6%   { opacity: 1; }
+  18%  { transform: translateX(380%) rotate(18deg); opacity: 1; }
+  20%, 100% { transform: translateX(380%) rotate(18deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .wf-shine::after { animation: none; opacity: 0; } }
 
 /* --- エリアチップ（教室） --- */
 .wf-region-chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
