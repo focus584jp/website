@@ -20,32 +20,26 @@ import CtaBand from '../components/CtaBand.astro';
     </div>
   </Section>
 
-  <Section title="5教科でも集団塾並み" alt={true}>
+  {/* 「5教科でも集団塾並み」と「他塾比較」を統合 */}
+  <Section title="他塾と比べても、集団塾並み" alt={true}>
     <table class="wf-table">
-      <thead><tr><th>受講数</th><th>月額（目安）</th><th>備考</th></tr></thead>
+      <thead><tr><th>受講数</th><th>フォーカス（月額）</th><th>他塾（個別）の目安</th></tr></thead>
       <tbody>
-        <tr><td>3講座</td><td>—</td><td>テキスト</td></tr>
-        <tr><td>5講座</td><td>—</td><td>テキスト</td></tr>
+        <tr><td>3講座</td><td>—</td><td>—</td></tr>
+        <tr><td>5講座（5教科）</td><td>—（集団塾並み）</td><td>—</td></tr>
       </tbody>
     </table>
+    <p style="color:var(--wf-muted);font-size:13px;margin-top:12px">※5教科受けても集団塾と同じくらい。一般的な個別指導より大幅に安い（テキストが入ります）</p>
   </Section>
 
-  <Section title="講習（夏・冬・春）">
-    <div class="wf-cols">
-      <div class="wf-card"><div class="wf-subhead"></div><Lines n={3} /></div>
-      <div class="wf-card"><div class="wf-subhead"></div><Lines n={3} /></div>
-    </div>
-    <p style="color:var(--wf-muted);font-size:13px;margin-top:12px">※夏期・冬期・春期講習があります（年3回／テキストが入ります）</p>
-  </Section>
-
-  <Section title="諸経費（明朗会計）" alt={true}>
-    <p style="margin:0 0 14px">入会金・設備管理費・維持費は<strong>一切いただきません。</strong>毎月の教材費とシステム利用料のみです。（金額のテキストが入ります）</p>
+  <Section title="諸経費（明朗会計）">
+    <p style="margin:0 0 14px">入会金・設備管理費・維持費は<strong>一切いただきません。</strong>他塾でかかりがちな諸経費がほとんどなく、毎月の教材費とシステム利用料のみです。（金額のテキストが入ります）</p>
     <Lines n={2} />
   </Section>
 
-  <Section title="柔軟な受け方 / 他塾比較">
+  <Section title="柔軟な受け方" alt={true}>
     <div class="wf-cols">
-      <Box label="比較イメージ" h={200} />
+      <Box label="受け方イメージ" h={200} />
       <Lines n={5} head={true} />
     </div>
   </Section>
