@@ -4,7 +4,7 @@
 
 **Goal:** FOCUS公式HPの全ページ構成（セクションの並び・役割・CV位置）と教室10ページの自動生成を、Astroのワイヤーフレームとして固める。
 
-**Architecture:** Astro静的サイト。共通レイアウト（ヘッダー／フッター／追従CTA）＋ワイヤー用部品（セクション枠・CTA群・アンカーナビ）でページを組む。教室10校舎はデータ配列＋動的ルート `[slug]` から生成。見た目はデザインせず、構造が判別できる最小ワイヤーCSSのみ。design-system（focus-ui.css）はPhase 3で当てるため本フェーズでは読み込まない。
+**Architecture:** Astro静的サイト。共通レイアウト（ヘッダー／フッター／追従CTA）＋ワイヤー用部品（セクション枠・CTA群・アンカーナビ）でページを組む。教室10校舎はデータ配列＋動的ルート `[slug]` から生成。見た目はデザインしないが、**最低限のブランド色・基本書体だけ先に当てる**：design-systemの正本 `tokens.css` をコピー同期して取り込み、ワイヤーCSSがその変数（色・font-baseのみ）を参照する。コンポーネントCSS（focus-ui.css）はPhase 3で当てるため本フェーズでは読み込まない。
 
 **Tech Stack:** Astro 5 / Node.js 22 / 素のHTML・CSS（ワイヤーCSS）。テストフレームワークは導入しない（YAGNI）。各タスクの検証は `npm run build` の成功と、生成物 `dist/` への `ls`/`grep` アサーション、必要箇所はヘッドレスChromeのスクショで行う。
 
@@ -12,7 +12,7 @@
 
 - Node.js 22 / Astro 5 系を使用。
 - **本フェーズはワイヤーフレーム**: 中身は見出し・プレースホルダーレベル。実コピー（Phase 2）・実デザイン（Phase 3）は作らない。
-- **design-system（focus-ui.css / tokens.css）は読み込まない**。ワイヤーCSS（`src/styles/wireframe.css`）のみ。
+- **最低限のブランド色・書体のみ先に当てる**: design-systemの `tokens.css` を `src/styles/tokens.css` にコピー同期し、ワイヤーCSSがその変数（`--navy-logo` 等の色・`--font-base`）を参照。**コンポーネントCSS（focus-ui.css）は読み込まない**（Phase 3で適用）。tokens.cssは正本（`design-system/tokens.css`）からの同期コピーである旨をコメントに残す。
 - **絵文字禁止**（design-systemルール）。アイコンは `[アイコン:〜]` のテキストプレースホルダーで表現。
 - 教室は10校舎・スラッグはASCII: `inage / myoden / nishi-chiba / tsuga / shin-kemigawa / inage-kaigan / soga / goi / yotsukaido / kamatori`（稲毛・妙典・西千葉・都賀・新検見川・稲毛海岸・蘇我・五井・四街道・鎌取）。
 - **CV導線の順序固定**: 資料請求（デジパン即送付）＞無料相談＞電話。**LINE相談は保留**（差し込み余地のコメントのみ残し、主CVに含めない）。
@@ -24,7 +24,8 @@
 ## File Structure（このフェーズで作るファイル）
 
 - `package.json` / `astro.config.mjs` / `tsconfig.json` — プロジェクト土台
-- `src/styles/wireframe.css` — ワイヤー用最小CSS
+- `src/styles/tokens.css` — design-system `tokens.css` のコピー同期（ブランド色・書体の変数）
+- `src/styles/wireframe.css` — ワイヤー用最小CSS（tokens.cssの変数を参照）
 - `src/layouts/BaseLayout.astro` — 全ページ共通の外枠（ヘッダー／main／フッター／追従CTA）
 - `src/components/Header.astro` / `Footer.astro` / `StickyCta.astro` — 共通パーツ
 - `src/components/Wf.astro` — セクション枠（ラベル付き）
@@ -121,7 +122,7 @@ git commit -m "chore: Astroプロジェクトの土台を作成"
 ### Task 2: 共通レイアウトとワイヤーCSS・共通パーツ
 
 **Files:**
-- Create: `src/styles/wireframe.css`, `src/components/Header.astro`, `src/components/Footer.astro`, `src/components/StickyCta.astro`, `src/components/CtaGroup.astro`, `src/components/Wf.astro`, `src/layouts/BaseLayout.astro`
+- Create: `src/styles/tokens.css`（design-systemから同期）, `src/styles/wireframe.css`, `src/components/Header.astro`, `src/components/Footer.astro`, `src/components/StickyCta.astro`, `src/components/CtaGroup.astro`, `src/components/Wf.astro`, `src/layouts/BaseLayout.astro`
 - Modify: `src/pages/index.astro`（レイアウト利用に置き換え）
 
 **Interfaces:**
@@ -130,33 +131,48 @@ git commit -m "chore: Astroプロジェクトの土台を作成"
   - `Wf.astro` — props `tag: string`（セクションのラベル）, `id?: string`。`<section class="wf-section" id={id}>` ＋ ラベル ＋ `<slot />`。
   - `CtaGroup.astro` — propsなし。資料請求（primary・`/contact#document`）＞無料相談（`/contact#consult`）＞電話（`/contact#tel`）の3リンク。
 
-- [ ] **Step 1: ワイヤーCSSを作成**
+- [ ] **Step 1a: design-systemのトークンをコピー同期**
 
-`src/styles/wireframe.css`:
+Run（`focus/website` リポジトリ直下で実行）:
+```bash
+mkdir -p src/styles
+cp ../../design-system/tokens.css src/styles/tokens.css
+```
+Expected: `src/styles/tokens.css` が作られる（`--navy-logo:#143778` 等のブランド変数を含む）。
+※これは正本 `design-system/tokens.css` からの**同期コピー**。色変更時は正本→ここへ同期する。
+
+Run: `grep -c "\-\-navy-logo" src/styles/tokens.css`
+Expected: `1`
+
+- [ ] **Step 1b: ワイヤーCSSを作成（tokensの変数を参照）**
+
+`src/styles/wireframe.css`（色・書体は `tokens.css` の変数を参照。最低限のブランド色のみ適用し、コンポーネントデザインはしない）:
 ```css
-:root { --wf-navy:#143778; --wf-navy-bg:#e3ecf8; --wf-orange:#e67832; --wf-muted:#5b6b85; --wf-line:#b9c9e8; }
+/* 色・書体は design-system のトークンを参照（同期コピー）。本フェーズはワイヤー用の最小スタイルのみ。 */
+@import "./tokens.css";
+
 * { box-sizing: border-box; }
-body { font-family: system-ui, "Hiragino Kaku Gothic ProN", sans-serif; margin: 0; color: #2b3242; padding-bottom: 72px; }
-.wf-main { max-width: 1080px; margin: 0 auto; padding: 16px 20px 40px; }
-.wf-h1 { font-size: 20px; color: var(--wf-navy); border-bottom: 2px solid var(--wf-line); padding-bottom: 8px; }
-.wf-section { border: 1px dashed var(--wf-line); border-radius: 6px; margin: 10px 0; padding: 14px 16px; }
-.wf-section > .wf-tag { display: inline-block; font: 600 11px/1.4 ui-monospace, monospace; color: var(--wf-navy); background: var(--wf-navy-bg); padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; }
-.wf-note { color: var(--wf-muted); font-size: 13px; margin: 4px 0; }
+body { font-family: var(--font-base); margin: 0; color: var(--ink); background: var(--bg-base); padding-bottom: 72px; }
+.wf-main { max-width: var(--content-width); margin: 0 auto; padding: 16px 20px 40px; }
+.wf-h1 { font-size: 20px; color: var(--navy-logo); border-bottom: 2px solid var(--navy-line); padding-bottom: 8px; }
+.wf-section { border: 1px dashed var(--navy-line); border-radius: 6px; margin: 10px 0; padding: 14px 16px; background: var(--bg-base); }
+.wf-section > .wf-tag { display: inline-block; font: 600 11px/1.4 ui-monospace, monospace; color: var(--navy-logo); background: var(--navy-bg); padding: 4px 8px; border-radius: 4px; margin-bottom: 8px; }
+.wf-note { color: var(--muted); font-size: 13px; margin: 4px 0; }
 .wf-list { margin: 4px 0; padding-left: 20px; }
 .wf-cta-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.wf-cta { display: inline-block; border: 1.5px solid var(--wf-navy); border-radius: 8px; padding: 8px 14px; font-size: 13px; text-decoration: none; color: var(--wf-navy); }
-.wf-cta.primary { background: var(--wf-orange); border-color: var(--wf-orange); color: #fff; }
-.wf-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 20px; border-bottom: 1px solid var(--wf-line); }
+.wf-cta { display: inline-block; border: 1.5px solid var(--navy-logo); border-radius: var(--radius-button); padding: 8px 14px; font-size: 13px; text-decoration: none; color: var(--navy-logo); background: var(--bg-base); }
+.wf-cta.primary { background: var(--orange-logo); border-color: var(--orange-logo); color: #fff; }
+.wf-header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 10px 20px; border-bottom: 1px solid var(--border); background: var(--bg-base); }
 .wf-nav { display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
-.wf-nav a { color: var(--wf-navy); text-decoration: none; }
+.wf-nav a { color: var(--navy-logo); text-decoration: none; }
 .wf-header-cta { display: flex; gap: 8px; margin-left: auto; align-items: center; }
-.wf-logo { font-weight: 700; color: var(--wf-navy); text-decoration: none; }
-.wf-icon { font-size: 12px; color: var(--wf-muted); text-decoration: none; }
-.wf-footer { background: var(--wf-navy); color: #fff; padding: 16px 20px; margin-top: 24px; }
+.wf-logo { font-weight: 700; color: var(--navy-logo); text-decoration: none; }
+.wf-icon { font-size: 12px; color: var(--muted); text-decoration: none; }
+.wf-footer { background: var(--navy-logo); color: #fff; padding: 16px 20px; margin-top: 24px; }
 .wf-footer a { color: #fff; margin-right: 12px; font-size: 13px; }
 .wf-anchor-nav { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; }
-.wf-anchor-nav a { color: var(--wf-navy); }
-.wf-sticky { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 8px; justify-content: center; background: #fff; border-top: 1px solid var(--wf-line); padding: 10px; z-index: 50; }
+.wf-anchor-nav a { color: var(--navy-logo); }
+.wf-sticky { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 8px; justify-content: center; background: var(--bg-base); border-top: 1px solid var(--border); padding: 10px; z-index: 50; }
 ```
 
 - [ ] **Step 2: CtaGroup を作成**
