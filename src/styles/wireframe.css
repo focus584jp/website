@@ -139,6 +139,7 @@ img { max-width: 100%; display: block; }
 .wf-rail-primary { background: var(--orange-logo); }
 .wf-rail-secondary { background: var(--navy-logo); }
 .wf-rail-btn:hover { opacity: .92; }
+.wf-shine { position: relative; overflow: hidden; }   /* ボタン等にも光るアニメを付与可能に */
 .wf-shine::after { content: ""; position: absolute; top: -25%; left: -70%; width: 50%; height: 150%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.7), transparent); transform: rotate(18deg);
   animation: wf-shine 3.6s ease-in-out infinite; }
