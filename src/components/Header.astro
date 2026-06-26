@@ -1,0 +1,22 @@
+---
+const nav = [
+  { href: '/reason', label: '選ばれる理由' },
+  { href: '/choose', label: '塾の選び方' },
+  { href: '/method', label: '指導方針' },
+  { href: '/price', label: '料金' },
+  { href: '/results', label: '実績・声' },
+  { href: '/classrooms', label: '教室一覧' },
+  { href: '/faq', label: 'よくある質問' },
+];
+---
+<header class="wf-header">
+  <a class="wf-logo" href="/">[FOCUSロゴ]</a>
+  <nav class="wf-nav">
+    {nav.map((n) => <a href={n.href}>{n.label}</a>)}
+  </nav>
+  <div class="wf-header-cta">
+    <a class="wf-icon" href="/classrooms" aria-label="教室を探す">[アイコン:教室を探す]</a>
+    <a class="wf-cta primary" href="/contact#document">資料請求</a>
+    <a class="wf-cta" href="/contact#consult">無料相談</a>
+  </div>
+</header>

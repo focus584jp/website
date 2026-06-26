@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Wf from '../../components/Wf.astro';
+import CtaGroup from '../../components/CtaGroup.astro';
+import { classrooms } from '../../data/classrooms';
+---
+<BaseLayout title="教室一覧（千葉市中心10校舎）">
+  <Wf tag="教室マップ（千葉市に10校舎プロット予定）">
+    <p class="wf-note">[マッププレースホルダー]</p>
+  </Wf>
+  <Wf tag="教室リスト（10校舎）">
+    <ul class="wf-list">
+      {classrooms.map((c) => <li><a href={`/classrooms/${c.slug}`}>{c.name}（{c.area} / {c.nearestStation}）</a></li>)}
+    </ul>
+  </Wf>
+  <Wf tag="CV">
+    <CtaGroup />
+  </Wf>
+</BaseLayout>

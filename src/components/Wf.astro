@@ -1,0 +1,7 @@
+---
+const { tag, id } = Astro.props;
+---
+<section class="wf-section" id={id}>
+  <span class="wf-tag">{tag}</span>
+  <slot />
+</section>

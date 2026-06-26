@@ -1,0 +1,79 @@
+/* ============================================================
+   FOCUS Design Tokens — 同期コピー
+   正本は design-system/tokens.css。ここを直接編集せず、正本→ここへ同期すること。
+   （色・書体の最低限のブランドトークンのみ参照。コンポーネントCSSは含めない）
+   ============================================================ */
+:root {
+  /* --- ブランド: 紺（--navy-logo はロゴ色） --- */
+  --navy-logo: #143778;
+  --navy-line: #B9C9E8;
+  --navy-bg: #E3ECF8;
+
+  /* --- ブランド: オレンジ（--orange-logo はロゴ色・--orange-text は文字用の濃色） --- */
+  --orange-text: #C75F1F;
+  --orange-logo: #E67832;
+  --orange-bg: #FDEEDF;
+
+  /* --- ニュートラル --- */
+  --ink: #2B3242;
+  --muted: #5B6B85;
+  --border: #C8D0DC;
+  --bg-section: #F5F7FA;
+  --bg-base: #FFFFFF;
+
+  /* --- セマンティック（text/bg ペア） --- */
+  --success-text: #2E7D4F;
+  --success-bg: #DFF0E5;
+  --warning-text: #9A6A12;
+  --warning-bg: #FCF3D7;
+  --error-text: #B71C1C;
+  --error-bg: #FDECEA;
+
+  /* --- 付箋・ソフト影 --- */
+  --sticky-yellow: #FFF9D9;
+  --shadow-soft: 2px 3px 8px rgba(20, 55, 120, 0.12);
+
+  /* --- マーカー（蛍光ペン） --- */
+  --marker-yellow: #FFE869;
+
+  /* --- 赤ペン（採点の赤。手書き波線・添削風アクセント用） --- */
+  --pen-red: #B23842;
+
+  /* --- 手書きアクセント用フォント（キャッチコピー添え書き限定） --- */
+  --font-hand: "Klee One", "Hiragino Kaku Gothic ProN", sans-serif;
+
+  /* --- タイポグラフィ --- */
+  --font-base: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  --fs-h1: 28px;   /* W6 / navy */
+  --fs-h2: 21px;   /* W4 / navy */
+  --fs-h3: 17px;   /* W4 / ink */
+  --fs-body: 15px; /* W3 / ink / line-height 1.9 */
+  --fs-small: 13px;/* W3 / muted */
+  --fw-normal: 300; /* W3 */
+  --fw-medium: 400; /* W4: 中見出し・強調・ボタン */
+  --fw-strong: 600; /* W6: ページ最上位見出しのみ */
+  --lh-body: 1.9;
+
+  /* --- 形状・影 --- */
+  --radius-button: 8px;
+  --radius-card: 14px;
+  --shadow-card-hover: 0 10px 24px rgba(20, 55, 120, 0.14);
+
+  /* --- レイアウト --- */
+  --content-width: 1080px; /* コンテンツの最大幅（.container） */
+  --section-space: 80px;   /* セクションの上下余白（スマホでは48pxに切り替わる） */
+  --space-unit: 8px;       /* 余白の刻み。余白・サイズは8pxの倍数で揃える */
+}
+
+/* スマホ: セクション余白を詰める */
+@media (max-width: 760px) {
+  :root { --section-space: 48px; }
+}
+
+/* マーカー（文字下55%に敷く蛍光ペン。1段落1〜2箇所まで） */
+.marker-yellow { background: linear-gradient(transparent 55%, var(--marker-yellow) 55%); }
+
+/* 本文強調用の赤波線（添削風）。見出しには使わない。色は --pen-red と同値（data URI内は変数不可のため直書き） */
+.em-wavy { display: inline-block; padding-bottom: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 8' width='28' height='8'%3E%3Cpath d='M0,4 Q7,0 14,4 T28,4' fill='none' stroke='%23B23842' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") left bottom repeat-x;
+  background-size: 28px 8px; }
