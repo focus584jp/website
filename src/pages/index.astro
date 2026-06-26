@@ -2,10 +2,54 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Wf from '../components/Wf.astro';
 import CtaGroup from '../components/CtaGroup.astro';
+import AnchorNav from '../components/AnchorNav.astro';
+import { classrooms } from '../data/classrooms';
+
+const anchors = [
+  { id: 'reason', label: '選ばれる理由' },
+  { id: 'choose', label: '塾の選び方' },
+  { id: 'price', label: '料金' },
+  { id: 'results', label: '実績・声' },
+  { id: 'classrooms', label: '教室' },
+];
 ---
-<BaseLayout title="トップ（仮）">
-  <Wf tag="ヒーロー（仮）">
-    <p class="wf-note">レイアウト確認用プレースホルダー</p>
+<BaseLayout title="トップ（広告着地点）">
+  <Wf tag="ヒーロー（苦手専門の宣言＋母親への添え書き／斜め大型キャッチ・写真orイラスト予定）" id="hero">
+    <p class="wf-note">大型キャッチ／手書き添え書き／資料請求・無料相談CTA</p>
+    <CtaGroup />
+  </Wf>
+  <Wf tag="ページ内アンカーナビ（伊藤塾LPの学び）">
+    <AnchorNav items={anchors} />
+  </Wf>
+  <Wf tag="こんな悩みありませんか？（チェックリストで自分ごと化／北斗LPの学び）">
+    <ul class="wf-list"><li>勉強しない</li><li>勉強のやり方が分からない</li><li>平均点が取れない</li></ul>
+  </Wf>
+  <Wf tag="選ばれる理由 3本柱（苦手専門→価格→千葉大生）" id="reason">
+    <p class="wf-note">3本柱ダイジェスト → /reason</p>
+  </Wf>
+  <Wf tag="塾の選び方（相性診断）ダイジェスト" id="choose">
+    <p class="wf-note">通信→集団→個別1対2→1対4 → /choose</p>
+  </Wf>
+  <Wf tag="料金ダイジェスト（5,980円を大きく／5教科でも集団塾並み）" id="price">
+    <p class="wf-note">大きな数字での提示 → /price</p>
+    <CtaGroup />
+  </Wf>
+  <Wf tag="指導方針ダイジェスト（勉強のやり方を教える＝自立）">
+    <p class="wf-note">→ /method</p>
+  </Wf>
+  <Wf tag="合格実績・生徒/保護者の声" id="results">
+    <p class="wf-note">定期テスト・内申UP事例／公立高合格 → /results</p>
+  </Wf>
+  <Wf tag="教室マップ＋一覧" id="classrooms">
+    <ul class="wf-list">{classrooms.map((c) => <li><a href={`/classrooms/${c.slug}`}>{c.name}（{c.nearestStation}）</a></li>)}</ul>
+  </Wf>
+  <Wf tag="入塾までの流れ（01→02→…）">
+    <p class="wf-note">資料請求/相談 → 体験授業 → 入塾</p>
+  </Wf>
+  <Wf tag="FAQ（抜粋）">
+    <p class="wf-note">→ /faq</p>
+  </Wf>
+  <Wf tag="CTAバンド（資料請求・無料相談・電話）">
     <CtaGroup />
   </Wf>
 </BaseLayout>
