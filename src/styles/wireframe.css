@@ -21,7 +21,8 @@
 }
 
 * { box-sizing: border-box; }
-html, body { overflow-x: hidden; }
+/* overflow-x は html のみに。body に付けると position:sticky のヘッダーが効かなくなる */
+html { overflow-x: hidden; }
 body { margin: 0; font-family: var(--font-base); color: var(--wf-ink); background: var(--wf-bg); }
 img { max-width: 100%; display: block; }
 
@@ -158,6 +159,8 @@ img { max-width: 100%; display: block; }
 
 /* --- ヘッダー右側＋ハンバーガーメニュー（PC・SP共通：ロゴ＋資料請求＋メニュー） --- */
 .wf-header-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+/* PCではヘッダーの資料請求は出さない（右サイド固定CTAに集約）。SPヘッダーには残す */
+@media (min-width: 761px) { .wf-header-right .wf-btn { display: none; } }
 .wf-hamburger { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 6px; width: 30px; height: 30px; cursor: pointer; }
 .wf-hamburger span { display: block; width: 100%; height: 2.5px; background: var(--wf-ink); border-radius: 2px; }
 
