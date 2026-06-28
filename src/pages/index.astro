@@ -58,7 +58,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   {/* 料金（指導方針と同じレイアウト：詳細ページへ誘導。資料請求ボタンは置かない） */}
-  <Section id="price" eyebrow="PRICE" title="料金" alt={true}>
+  <Section id="price" eyebrow="PRICE" title="料金">
     <div class="wf-cols">
       <div>
         <div class="wf-bignum">5,980円〜</div>
@@ -71,7 +71,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   {/* 指導方針 */}
-  <Section id="method" eyebrow="METHOD" title="指導方針">
+  <Section id="method" eyebrow="METHOD" title="指導方針" alt={true}>
     <div class="wf-cols">
       <Box label="指導イメージ" h={220} />
       <div>
@@ -82,7 +82,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   {/* 保護者さまの声：横スクロールで複数件（ページ化はしない） */}
-  <Section id="results" eyebrow="VOICE" title="保護者さまの声" alt={true}>
+  <Section id="results" eyebrow="VOICE" title="保護者さまの声">
     <div class="wf-hscroll">
       <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
       <div class="wf-card"><Box label="保護者さまの声/写真" h={120} /><Lines n={3} /></div>
@@ -94,7 +94,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   {/* 教室（エリアから探す：教室数が増えても崩れない構成） */}
-  <Section id="classrooms" eyebrow="CLASSROOMS" title="教室一覧">
+  <Section id="classrooms" eyebrow="CLASSROOMS" title="教室一覧" alt={true}>
     <Box label="エリアマップ（教室をプロット）" h={200} />
     <div class="wf-region-chips" style="margin-top:20px">
       {regions.map((r) => <a class="wf-chip" href={u('/classrooms')}>{r}</a>)}
