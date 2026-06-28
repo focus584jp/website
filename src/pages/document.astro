@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import Section from '../components/Section.astro';
+import { u } from '../lib/path';
 ---
 <BaseLayout title="資料請求">
   <PageHero eyebrow="DOCUMENT" title="資料請求（無料）" />
@@ -29,6 +30,6 @@ import Section from '../components/Section.astro';
 
   <Section title="直接お話を聞きたい方へ" alt={true}>
     <p>資料だけでなく、お子さまの状況を相談したい方は、無料相談（来塾1時間・無料）もどうぞ。</p>
-    <p style="margin-top:14px"><a class="wf-btn wf-btn-secondary" href="/consult">無料相談はこちら</a></p>
+    <p style="margin-top:14px"><a class="wf-btn wf-btn-secondary" href={u('/consult')}>無料相談はこちら</a></p>
   </Section>
 </BaseLayout>

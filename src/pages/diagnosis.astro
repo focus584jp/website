@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Section from '../components/Section.astro';
+import { u } from '../lib/path';
+
+// 相性診断（ワイヤー）。カードが1問ずつ切り替わる。
+// 回答をタップ＝次の質問へ（ラジオ＋:checkedのCSSステッパー）。中身はプレースホルダー。
+const questions = [
+  { q: 'お子さまは、家でひとりでも勉強を続けられそうですか？', opts: ['続けられそう', '正直むずかしい'] },
+  { q: '学校の定期テストで、平均点は取れていますか？', opts: ['取れている', '平均点は厳しい'] },
+  { q: '苦手なのは1〜2科目ですか？ 全体的ですか？', opts: ['1〜2科目', '全体的に苦手'] },
+  { q: '受験に向けて、5教科しっかりやりたいですか？', opts: ['5教科やりたい', 'まずは苦手から'] },
+];
+---
+<BaseLayout title="相性診断">
+  <PageHero eyebrow="DIAGNOSIS" title="うちの子に合う？ 相性診断" />
+
+  <Section>
+    <p style="text-align:center;color:var(--wf-muted);margin:0 0 28px">
+      かんたんな質問に答えるだけ。お子さまにFOCUSが合うかどうかが分かります（約30秒）。
+    </p>
+
+    {/* ステップ管理用ラジオ（カードより前に置く） */}
+    {questions.map((_, i) => (
+      <input type="radio" name="diag-step" id={`ds${i + 1}`} checked={i === 0} class="wf-diag-radio" hidden />
+    ))}
+    <input type="radio" name="diag-step" id="ds-result" class="wf-diag-radio" hidden />
+
+    <div class="wf-diag">
+      {questions.map((item, i) => (
+        <div class="card" data-step={i + 1}>
+          <div class="prog">Q{i + 1}<span> / {questions.length}</span></div>
+          <h2 class="q">{item.q}</h2>
+          <div class="opts">
+            {item.opts.map((o) => (
+              <label class="opt" for={i + 1 < questions.length ? `ds${i + 2}` : 'ds-result'}>{o}</label>
+            ))}
+          </div>
+          {i > 0 && <label class="back" for={`ds${i}`}>← 前の質問へ</label>}
+        </div>
+      ))}
+
+      {/* 結果（プレースホルダー） */}
+      <div class="card result" data-step="result">
+        <div class="prog">RESULT</div>
+        <h2 class="q">FOCUSが合うタイプです（結果テキストが入ります）</h2>
+        <p style="color:var(--wf-muted);margin:0 0 22px">診断結果の説明文がここに入ります。次のアクションへつなげます。</p>
+        <div class="result-cta">
+          <a class="wf-btn wf-btn-primary lg" href={u('/document')}>資料を受け取る</a>
+          <a class="wf-btn wf-btn-secondary lg" href={u('/consult')}>無料相談を申し込む</a>
+        </div>
+        <label class="back" for="ds1">← もう一度診断する</label>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>
+
+<style>
+  .wf-diag { max-width: 560px; margin: 0 auto; }
+  .wf-diag .card { display: none; border: 1px solid var(--wf-line); border-radius: 14px; padding: 32px 28px; text-align: center; }
+  /* 該当ステップのラジオがチェックされたカードだけ表示 */
+  #ds1:checked ~ .wf-diag .card[data-step="1"],
+  #ds2:checked ~ .wf-diag .card[data-step="2"],
+  #ds3:checked ~ .wf-diag .card[data-step="3"],
+  #ds4:checked ~ .wf-diag .card[data-step="4"],
+  #ds-result:checked ~ .wf-diag .card[data-step="result"] { display: block; }
+
+  .wf-diag .prog { font-size: 14px; font-weight: 700; color: var(--orange-logo); letter-spacing: .08em; }
+  .wf-diag .prog span { color: var(--wf-muted); font-weight: 400; }
+  .wf-diag .q { font-size: 20px; line-height: 1.5; margin: 14px 0 26px; color: var(--wf-ink); }
+  .wf-diag .opts { display: flex; flex-direction: column; gap: 12px; }
+  .wf-diag .opt { display: block; padding: 16px; border: 1.5px solid var(--navy-logo); border-radius: 10px;
+    color: var(--navy-logo); font-weight: 700; font-size: 16px; cursor: pointer; transition: background .15s, color .15s; }
+  .wf-diag .opt:hover { background: var(--navy-logo); color: #fff; }
+  .wf-diag .back { display: inline-block; margin-top: 22px; font-size: 13px; color: var(--wf-muted); cursor: pointer; }
+  .wf-diag .result-cta { display: flex; flex-direction: column; gap: 12px; }
+</style>

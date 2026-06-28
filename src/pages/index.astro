@@ -6,10 +6,11 @@ import Lines from '../components/Lines.astro';
 import CtaBand from '../components/CtaBand.astro';
 import '../styles/hero-preview.css';
 import { classrooms } from '../data/classrooms';
+import { u } from '../lib/path';
 
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
-<BaseLayout title="トップ">
+<BaseLayout title="トップ" diagPopup={true}>
   {/* ヒーロー（1枚固定） */}
   <section class="heroB">
     <div class="wrap">
@@ -37,39 +38,14 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     </div>
   </nav>
 
-  {/* こんな悩みありませんか？（3つまで） */}
-  <Section eyebrow="CHECK" title="こんなお悩みありませんか？">
-    <ul class="wf-check">
-      <li>テキストが入ります（例：家で勉強しない）</li>
-      <li>テキストが入ります（例：勉強のやり方が分からない）</li>
-      <li>テキストが入ります（例：平均点が取れない）</li>
-    </ul>
+  {/* こんなお悩み（文章を読まない層向け：アイコン＋短い一言の視覚版） */}
+  <Section eyebrow="CHECK" title="こんなお悩み、ありませんか？">
+    <div class="wf-worries">
+      <div class="wf-worry"><Box label="アイコン" h={72} /><p>家で<br />勉強しない</p></div>
+      <div class="wf-worry"><Box label="アイコン" h={72} /><p>やり方が<br />分からない</p></div>
+      <div class="wf-worry"><Box label="アイコン" h={72} /><p>平均点が<br />取れない</p></div>
+    </div>
   </Section>
-
-  {/* 塾の選び方（相性診断）＝中央ポップアップ（モーダル）で出す */}
-  <section class="wf-guideband">
-    <div class="wf-container">
-      <span class="wf-eyebrow">GUIDE</span>
-      <h2>塾選び、迷っていませんか？</h2>
-      <p>かんたんな質問で、お子さまに合う塾のタイプが分かります。</p>
-      <label for="diag" class="wf-btn wf-btn-secondary">相性診断をしてみる（無料）</label>
-    </div>
-    <input type="checkbox" id="diag" class="wf-modal-toggle" hidden />
-    <div class="wf-modal">
-      <label for="diag" class="wf-modal-backdrop" aria-hidden="true"></label>
-      <div class="wf-modal-box">
-        <label for="diag" class="wf-modal-close" aria-label="閉じる">×</label>
-        <span class="wf-eyebrow">GUIDE</span>
-        <h2 style="margin:4px 0 6px;color:var(--navy-logo)">相性診断</h2>
-        <p class="wf-note">お子さまに合う塾のタイプが分かります（テキストが入ります）</p>
-        <div class="wf-diag-q">Q1. 通信教育・自学で続けられそう？（プレースホルダー）</div>
-        <div class="wf-diag-q">Q2. 学校の定期テストで平均点を超えている？</div>
-        <div class="wf-diag-q">Q3. 苦手は1〜2科目？ それとも全体的？</div>
-        <div class="wf-diag-q">Q4. 受験に向けて5教科やりたい？</div>
-        <p style="margin-top:16px"><a class="wf-btn wf-btn-secondary" href="/consult">診断結果について無料相談する</a></p>
-      </div>
-    </div>
-  </section>
 
   {/* 選ばれる理由 3本柱 */}
   <Section id="reason" eyebrow="REASON" title="選ばれる理由" alt={true}>
@@ -78,7 +54,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <div class="wf-card"><Box label="アイコン/画像" h={120} /><div class="wf-subhead"></div><Lines n={3} /></div>
       <div class="wf-card"><Box label="アイコン/画像" h={120} /><div class="wf-subhead"></div><Lines n={3} /></div>
     </div>
-    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href="/reason">詳しく見る</a></p>
+    <p style="text-align:center;margin-top:28px"><a class="wf-btn wf-btn-ghost" href={u('/reason')}>詳しく見る</a></p>
   </Section>
 
   {/* 料金（指導方針と同じレイアウト：詳細ページへ誘導。資料請求ボタンは置かない） */}
@@ -88,7 +64,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
         <div class="wf-bignum">5,980円〜</div>
         <p style="color:var(--wf-muted);margin:4px 0 14px">1教科あたり（テキストが入ります）</p>
         <Lines n={3} />
-        <p style="margin-top:18px;text-align:center"><a class="wf-btn wf-btn-ghost" href="/price">詳しく見る</a></p>
+        <p style="margin-top:18px;text-align:center"><a class="wf-btn wf-btn-ghost" href={u('/price')}>詳しく見る</a></p>
       </div>
       <Box label="料金イメージ/比較" h={220} />
     </div>
@@ -100,7 +76,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <Box label="指導イメージ" h={220} />
       <div>
         <Lines n={5} head={true} />
-        <p style="margin-top:18px;text-align:center"><a class="wf-btn wf-btn-ghost" href="/method">詳しく見る</a></p>
+        <p style="margin-top:18px;text-align:center"><a class="wf-btn wf-btn-ghost" href={u('/method')}>詳しく見る</a></p>
       </div>
     </div>
   </Section>
@@ -121,9 +97,9 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   <Section id="classrooms" eyebrow="CLASSROOMS" title="教室一覧">
     <Box label="エリアマップ（教室をプロット）" h={200} />
     <div class="wf-region-chips" style="margin-top:20px">
-      {regions.map((r) => <a class="wf-chip" href="/classrooms">{r}</a>)}
+      {regions.map((r) => <a class="wf-chip" href={u('/classrooms')}>{r}</a>)}
     </div>
-    <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href="/classrooms">教室一覧を見る</a></p>
+    <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href={u('/classrooms')}>教室一覧を見る</a></p>
   </Section>
 
   {/* 入塾までの流れ */}
@@ -143,7 +119,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
       <div class="wf-row"><span class="bar"></span><span class="plus">＋</span></div>
       <div class="wf-row"><span class="bar"></span><span class="plus">＋</span></div>
     </div>
-    <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href="/faq">よくある質問をすべて見る</a></p>
+    <p style="text-align:center;margin-top:24px"><a class="wf-btn wf-btn-ghost" href={u('/faq')}>よくある質問をすべて見る</a></p>
   </Section>
 
   <CtaBand />

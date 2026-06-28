@@ -5,6 +5,7 @@ import Section from '../../components/Section.astro';
 import Box from '../../components/Box.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
+import { u } from '../../lib/path';
 
 // エリア（市）ごとにグルーピング。教室が20・30と増えても見出し＋グリッドで整理できる構成。
 const regions = [...new Set(classrooms.map((c) => c.region))];
@@ -22,7 +23,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
         <h3 style="font-size:18px;color:var(--wf-ink);border-left:4px solid var(--navy-logo);padding-left:10px;margin:0 0 14px">{r}</h3>
         <div class="wf-grid-3">
           {classrooms.filter((c) => c.region === r).map((c) => (
-            <a class="wf-card" href={`/classrooms/${c.slug}`} style="text-decoration:none;color:inherit">
+            <a class="wf-card" href={u(`/classrooms/${c.slug}`)} style="text-decoration:none;color:inherit">
               <Box label="教室写真" h={110} />
               <div style="font-weight:600;margin-top:10px">{c.name}</div>
               <div style="color:var(--wf-muted);font-size:13px">{c.nearestStation}</div>

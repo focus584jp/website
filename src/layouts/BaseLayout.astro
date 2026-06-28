@@ -4,13 +4,15 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import StickyCta from '../components/StickyCta.astro';
 import SideRail from '../components/SideRail.astro';
-const { title } = Astro.props;
+import DiagnosisPopup from '../components/DiagnosisPopup.astro';
+const { title, diagPopup = false } = Astro.props;
 ---
 <!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />{/* ワイヤー段階：検索インデックス除外 */}
     <title>{title} | FOCUS（仮）</title>
   </head>
   <body>
@@ -19,5 +21,6 @@ const { title } = Astro.props;
     <Footer />
     <StickyCta />
     <SideRail />
+    {diagPopup && <DiagnosisPopup />}
   </body>
 </html>
