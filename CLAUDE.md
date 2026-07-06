@@ -7,7 +7,11 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 
 - **トップページ（/）と全体の見た目はhifi実装済み**（`docs/design/トップページ.dc.html` が正）
 - **下層ページはワイヤーフレーム段階**（/reason /method /price /faq /classrooms /document /consult /company /diagnosis）
-- 次のタスク: 下層ページのhifi化（構造ガイドは `docs/design/ワイヤーフレーム.dc.html`、スタイルはトップのトークンを適用）と相性診断（`docs/design/相性診断.dc.html`、配点ロジック込み）のhifi化
+- 次のタスク:
+  - 下層ページのhifi化（構造ガイドは `docs/design/ワイヤーフレーム.dc.html`、スタイルはトップのトークンを適用）
+  - 相性診断（`docs/design/相性診断.dc.html`、配点ロジック込み）のhifi化
+  - **問い合わせフォームの実装予定あり**（資料請求=SMS配布・無料相談予約。送信バックエンドは未定）
+- 成果物の形: Astroビルドが `index.html`＋分離されたCSS/JSを出力する（メインページ=index.html、css/js別ファイルの要件はビルドで担保）
 
 ## 正本ドキュメント（docs/design/）
 
@@ -39,8 +43,6 @@ src/
     wireframe.css + tokens.css   ワイヤー用（tokens.cssはdesign-systemの旧同期コピー。凍結）
   data/             コンテンツデータ（classrooms.ts / home.ts）。文言・数値はここに集約
   assets/home/      画像（astro:assetsで最適化される）
-  fonts/            ローカル限定（gitignore済み。あんずもじ等）
-public/preview/     デザイン共有用のバンドル（デザイン確定・実装完了後に削除してよい）
 ```
 
 ## 規約

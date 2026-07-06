@@ -3,8 +3,5 @@ dist/
 .DS_Store
 .astro/
 
-# ローカル限定（あんずもじ等のフォント。再配布回避のためコミットしない）
-src/fonts/
-
 # セッション作業ファイル
 .superpowers/
