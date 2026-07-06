@@ -15,7 +15,7 @@ type Subject = keyof typeof subjectChip;
 
 const chip = (s: Subject, size: 'sm' | 'lg') =>
   `background:${subjectChip[s].bg};color:${subjectChip[s].color};` +
-  (size === 'sm' ? 'font-size:clamp(10.5px,1.4vw,14px);padding:3px 10px' : 'font-size:clamp(11.5px,1.6vw,15px);padding:4px 12px');
+  (size === 'sm' ? 'font-size:clamp(12px,1.4vw,14px);padding:3px 10px' : 'font-size:clamp(12px,1.6vw,15px);padding:4px 12px');
 ---
 <section id="price" class="price">
   <div class="container">
@@ -88,22 +88,22 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
   .focus-card { position: relative; border: 2px solid var(--navy); border-radius: 14px; overflow: hidden; box-shadow: 0 6px 16px rgba(20, 42, 84, .14); }
   .focus-card .card-head {
     background: var(--navy); color: #fff; text-align: center;
-    font-family: var(--font-round); font-weight: 900; font-size: clamp(14px, 1.8vw, 21px); padding: clamp(9px, 1.2vw, 13px) 4px;
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(14px, 1.8vw, 21px); padding: clamp(10px, 1.2vw, 13px) 4px;
   }
   .focus-card .card-body { text-align: center; padding: clamp(12px, 2vw, 18px) 4px clamp(8px, 1.5vw, 12px); background: #fff; }
-  .per { font-size: clamp(10px, 1.3vw, 15px); color: var(--muted); font-weight: 700; }
+  .per { font-size: clamp(12px, 1.3vw, 15px); color: var(--muted); font-weight: 700; }
   .amount { line-height: 1.1; margin-top: 3px; }
   .num { font-family: var(--font-round); font-weight: 900; font-size: clamp(26px, 3.6vw, 46px); color: var(--orange); }
-  .yen { font-size: clamp(11px, 1.5vw, 18px); font-weight: 800; color: var(--ink); margin-left: 4px; }
-  .tax { font-size: clamp(9px, 1.2vw, 13px); color: var(--gray-1); margin-top: 2px; }
+  .yen { font-size: clamp(12px, 1.5vw, 18px); font-weight: 800; color: var(--ink); margin-left: 4px; }
+  .tax { font-size: clamp(10px, 1.2vw, 13px); color: var(--gray-1); margin-top: 2px; }
 
   .other-card { border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; }
-  .card-head.other { background: var(--gray-1); color: #fff; text-align: center; font-weight: 800; font-size: clamp(11px, 1.4vw, 16px); padding: clamp(7px, 1vw, 10px) 2px; }
+  .card-head.other { background: var(--gray-1); color: #fff; text-align: center; font-weight: 800; font-size: clamp(12px, 1.4vw, 16px); padding: clamp(7px, 1vw, 10px) 2px; }
   .other-card .card-body { text-align: center; padding: clamp(10px, 1.6vw, 14px) 2px clamp(7px, 1.2vw, 10px); }
-  .other-per { font-size: clamp(9px, 1.2vw, 13px); color: var(--gray-1); }
+  .other-per { font-size: clamp(10px, 1.2vw, 13px); color: var(--gray-1); }
   .other-num { font-weight: 800; font-size: clamp(16px, 2.2vw, 28px); color: var(--muted); }
-  .other-yen { font-size: clamp(9px, 1.2vw, 14px); color: var(--muted); margin-left: 3px; }
-  .other-tax { font-size: clamp(8.5px, 1.1vw, 12px); color: var(--gray-1); }
+  .other-yen { font-size: clamp(10px, 1.2vw, 14px); color: var(--muted); margin-left: 3px; }
+  .other-tax { font-size: clamp(10px, 1.1vw, 12px); color: var(--gray-1); }
 
   .bubble-row { display: flex; justify-content: flex-start; margin-top: 8px; padding-left: 12px; position: relative; z-index: 1; }
   .bubble {
@@ -135,8 +135,8 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
     text-align: center; background: var(--panel); border-radius: 12px;
     padding: clamp(8px, 1.4vw, 16px) clamp(5px, 1vw, 14px); box-sizing: border-box; align-self: center;
   }
-  .band-other-title { font-size: clamp(11.5px, 1.5vw, 16px); font-weight: 800; color: var(--gray-1); }
-  .band-other-note { font-size: clamp(10px, 1.3vw, 14px); font-weight: 700; color: var(--gray-1); }
+  .band-other-title { font-size: clamp(12px, 1.5vw, 16px); font-weight: 800; color: var(--gray-1); }
+  .band-other-note { font-size: clamp(12px, 1.3vw, 14px); font-weight: 700; color: var(--gray-1); }
   .chips { display: flex; gap: clamp(5px, .7vw, 7px); justify-content: center; flex-wrap: wrap; }
   .chip { font-weight: 800; border-radius: 6px; }
   .arrow { display: flex; align-items: center; }
