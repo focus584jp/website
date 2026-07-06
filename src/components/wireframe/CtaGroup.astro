@@ -3,7 +3,7 @@
 // size="lg" で大きめ。LINE相談は保留（採用時にここへ差し込む）。
 const { size } = Astro.props;
 const lg = size === 'lg' ? ' lg' : '';
-import { u } from '../lib/path';
+import { u } from '../../lib/path';
 ---
 <div class="wf-cta-group">
   <a class={`wf-btn wf-btn-primary${lg}`} href={u('/document')}>資料請求</a>

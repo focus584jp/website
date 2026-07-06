@@ -1,16 +1,16 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PageHero from '../../components/PageHero.astro';
-import Section from '../../components/Section.astro';
-import Box from '../../components/Box.astro';
-import CtaBand from '../../components/CtaBand.astro';
+import WireframeLayout from '../../layouts/WireframeLayout.astro';
+import PageHero from '../../components/wireframe/PageHero.astro';
+import Section from '../../components/wireframe/Section.astro';
+import Box from '../../components/wireframe/Box.astro';
+import CtaBand from '../../components/wireframe/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
 import { u } from '../../lib/path';
 
 // エリア（市）ごとにグルーピング。教室が20・30と増えても見出し＋グリッドで整理できる構成。
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
-<BaseLayout title="教室一覧">
+<WireframeLayout title="教室一覧">
   <PageHero eyebrow="CLASSROOMS" title="教室一覧" />
 
   <Section title="エリアマップ">
@@ -35,4 +35,4 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   </Section>
 
   <CtaBand title="お近くの教室で無料相談ができます" />
-</BaseLayout>
+</WireframeLayout>

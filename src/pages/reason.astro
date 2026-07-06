@@ -1,12 +1,12 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
-import Section from '../components/Section.astro';
-import Box from '../components/Box.astro';
-import Lines from '../components/Lines.astro';
-import CtaBand from '../components/CtaBand.astro';
+import WireframeLayout from '../layouts/WireframeLayout.astro';
+import PageHero from '../components/wireframe/PageHero.astro';
+import Section from '../components/wireframe/Section.astro';
+import Box from '../components/wireframe/Box.astro';
+import Lines from '../components/wireframe/Lines.astro';
+import CtaBand from '../components/wireframe/CtaBand.astro';
 ---
-<BaseLayout title="選ばれる理由">
+<WireframeLayout title="選ばれる理由">
   <PageHero eyebrow="REASON" title="フォーカスが選ばれる理由" />
 
   <Section eyebrow="POINT 01" title="勉強が苦手な子“専門”">
@@ -31,4 +31,4 @@ import CtaBand from '../components/CtaBand.astro';
   </Section>
 
   <CtaBand />
-</BaseLayout>
+</WireframeLayout>

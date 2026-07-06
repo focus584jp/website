@@ -1,10 +1,10 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
-import Section from '../components/Section.astro';
+import WireframeLayout from '../layouts/WireframeLayout.astro';
+import PageHero from '../components/wireframe/PageHero.astro';
+import Section from '../components/wireframe/Section.astro';
 import { classrooms } from '../data/classrooms';
 ---
-<BaseLayout title="無料相談">
+<WireframeLayout title="無料相談">
   <PageHero eyebrow="CONSULT" title="無料相談（来塾1時間・無料）" />
 
   <Section>
@@ -35,4 +35,4 @@ import { classrooms } from '../data/classrooms';
       <p class="wf-note" style="text-align:center;margin-top:12px">送信後、教室よりご連絡し、日時を確定します。</p>
     </form>
   </Section>
-</BaseLayout>
+</WireframeLayout>

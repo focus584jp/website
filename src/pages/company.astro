@@ -1,11 +1,11 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageHero from '../components/PageHero.astro';
-import Section from '../components/Section.astro';
-import Box from '../components/Box.astro';
-import Lines from '../components/Lines.astro';
+import WireframeLayout from '../layouts/WireframeLayout.astro';
+import PageHero from '../components/wireframe/PageHero.astro';
+import Section from '../components/wireframe/Section.astro';
+import Box from '../components/wireframe/Box.astro';
+import Lines from '../components/wireframe/Lines.astro';
 ---
-<BaseLayout title="会社概要">
+<WireframeLayout title="会社概要">
   <PageHero eyebrow="COMPANY" title="会社概要" />
 
   <Section title="会社情報">
@@ -33,4 +33,4 @@ import Lines from '../components/Lines.astro';
   <Section title="プライバシーポリシー / 特定商取引法に基づく表記" alt={true}>
     <Lines n={5} />
   </Section>
-</BaseLayout>
+</WireframeLayout>

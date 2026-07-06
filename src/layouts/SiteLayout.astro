@@ -1,10 +1,10 @@
 ---
-// hifi化したページ用のレイアウト（ワイヤー用 BaseLayout とは別系統）
+// hifi化したページ用のレイアウト（ワイヤー用 WireframeLayout とは別系統）
 import '../styles/site.css';
-import HomeHeader from '../components/home/HomeHeader.astro';
-import HomeFooter from '../components/home/HomeFooter.astro';
-import FixedCta from '../components/home/FixedCta.astro';
-import DiagnosisPopupHifi from '../components/home/DiagnosisPopupHifi.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import FixedCta from '../components/site/FixedCta.astro';
+import DiagnosisPopup from '../components/site/DiagnosisPopup.astro';
 
 const { title, description = '' } = Astro.props;
 ---
@@ -21,11 +21,11 @@ const { title, description = '' } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <HomeHeader />
+    <SiteHeader />
     <main><slot /></main>
-    <HomeFooter />
+    <SiteFooter />
     <FixedCta />
-    <DiagnosisPopupHifi />
+    <DiagnosisPopup />
 
     <script>
       // ヒーロー通過判定 → body.past-hero（PC右端CTA・診断ポップアップの表示トリガー）

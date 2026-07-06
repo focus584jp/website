@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f0eee9;font-family:'Zen Maru Gothic',system-ui,sans-serif}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 sans-serif;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 sans-serif;color:rgba(0,0,0,.55)}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 sans-serif;color:rgba(0,0,0,.5)}
+.meta{font:10px/1.6 ui-monospace,Menlo,monospace;color:#777;margin:0;padding:0;list-style:none;max-width:320px}
+.meta b{color:#333}
+/* --- wireframe kit --- */
+.fr{width:320px;border:2px solid #333;border-radius:20px;background:#fff;overflow:hidden;position:relative}
+.frpc{width:760px;border:2px solid #333;border-radius:10px;background:#fff;overflow:hidden;position:relative}
+.mini{width:200px;border:1.5px solid #555;border-radius:12px;background:#fff;overflow:hidden}
+.mini .sec{padding:6px 8px}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1.5px solid #333;font-weight:900;font-size:13px;letter-spacing:.05em}
+.bar .tel{font-size:9px;font-weight:700;color:#555;border:1px solid #999;border-radius:6px;padding:2px 6px}
+.sec{padding:12px 14px;border-bottom:1px dashed #bbb;position:relative}
+.sec:last-child{border-bottom:none}
+.lab{font:700 8.5px ui-monospace,monospace;letter-spacing:.14em;color:#999;text-transform:uppercase;margin-bottom:4px}
+.lab::after{content:"";display:inline-block;width:26px;height:2px;background:linear-gradient(90deg,#E67832,transparent);margin-left:6px;vertical-align:middle}
+.h{font-size:13px;font-weight:900;line-height:1.45;color:#222;margin:0 0 6px}
+.p{font-size:9.5px;line-height:1.6;color:#555;margin:0}
+.s{font-size:8.5px;color:#999}
+.row{display:flex;gap:6px}
+.col{display:flex;flex-direction:column;gap:6px}
+.box{border:1.5px solid #999;border-radius:8px;padding:6px 7px;font-size:9.5px;line-height:1.5;color:#444;background:#fbfbfa;flex:1;min-width:0}
+.ph{background:repeating-linear-gradient(45deg,#f2f1ee 0 8px,#e5e3de 8px 16px);border:1.5px dashed #a9a49a;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#8a857c;font:9px ui-monospace,monospace;text-align:center;padding:4px;line-height:1.5}
+.bt{display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:10.5px;font-weight:700;padding:9px 8px;flex:1;text-align:center;line-height:1.3}
+.bo{background:#E67832;color:#fff}
+.bn{background:#143778;color:#fff}
+.bg{background:#f0f0f0;color:#444;border:1.5px solid #bbb}
+.bw{background:#fff;color:#143778;border:1.5px solid #143778}
+.hl{background:linear-gradient(transparent 58%,#FFE869 58% 94%,transparent 94%)}
+.tag{display:inline-block;font-size:8.5px;font-weight:700;color:#143778;border:1.5px solid #143778;border-radius:999px;padding:2px 8px;background:#fff}
+.chip{display:inline-block;font-size:8.5px;font-weight:700;background:#E3ECF8;color:#143778;border-radius:999px;padding:2px 8px}
+.badge{flex:1;border:1.5px solid #143778;border-radius:8px;padding:5px 4px;text-align:center;font-size:8.5px;font-weight:700;color:#143778;background:#fff}
+.num{width:16px;height:16px;border-radius:50%;background:#143778;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.ic{width:24px;height:24px;border:1.5px solid #555;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;font-size:8px;color:#777;font-family:ui-monospace,monospace}
+.stick{position:sticky;bottom:0;display:flex;gap:6px;padding:7px 10px;background:rgba(255,255,255,.95);border-top:1.5px solid #333}
+.note{font:9px ui-monospace,monospace;color:#2a78d6;line-height:1.5;margin-top:5px}
+.note::before{content:"※ "}
+.doodle{position:absolute;font-weight:900;color:#E67832;pointer-events:none}
+.arrow{text-align:center;color:#888;font-size:11px;line-height:1;padding:2px 0}
+.acc{border:1.5px solid #999;border-radius:8px;padding:6px 8px;font-size:9.5px;color:#444;display:flex;justify-content:space-between;align-items:center;background:#fff}
+.foot{background:#eceae5;padding:10px 14px;font-size:8.5px;color:#777;line-height:1.8}
+.pop{position:absolute;right:8px;bottom:64px;width:150px;border:1.5px solid #143778;border-radius:10px;background:#fff;padding:7px 8px;font-size:9px;font-weight:700;color:#143778;box-shadow:2px 3px 0 rgba(20,55,120,.2);transform:rotate(-2deg)}
+.inp{border:1.5px solid #999;border-radius:8px;padding:7px 8px;font-size:9px;color:#999;background:#fff}
+.tabrow{display:flex;gap:4px}
+.tab{flex:1;text-align:center;font-size:9px;font-weight:700;padding:5px 2px;border:1.5px solid #143778;border-radius:999px;color:#143778;background:#fff}
+.tab.on{background:#143778;color:#fff}
+.vrow{display:flex;gap:6px;overflow:hidden}
+.vcard{flex:none;width:120px;border:1.5px solid #999;border-radius:8px;padding:6px;font-size:8.5px;color:#555;background:#fff;line-height:1.5}
+</style>
+</helmet>
+
+<section class="dv-turn" id="t7">
+<div class="dv-thd"><a class="dv-tid" href="#t7">7</a><span class="dv-tname">手書き線・色鉛筆テクスチャの実装サンプル（実物のCSS/SVG）</span></div>
+<div class="dv-opts">
+<div class="dv-opt" id="7a">
+<div class="dv-olabel"><a class="dv-oid" href="#7a">7a</a>装飾キット — すべてコード実装（画像不要）</div>
+<div class="dv-card" style="padding:18px;width:380px;font-family:'Zen Maru Gothic',sans-serif">
+<svg width="0" height="0" style="position:absolute"><defs>
+<filter id="crayon"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="4"/><feComponentTransfer><feFuncA type="table" tableValues="0 .9 1"/></feComponentTransfer></filter>
+<filter id="wob"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3"/></filter>
+</defs></svg>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:0 0 8px">1. 波線アンダーライン（SVG 1本を伸縮）</p>
+<p style="font-size:15px;font-weight:900;color:#333;margin:0">勉強は<span style="display:inline-block;position:relative">楽しくなる！<svg viewBox="0 0 120 8" preserveAspectRatio="none" style="position:absolute;left:0;bottom:-7px;width:100%;height:8px"><path d="M2 4 Q 8 1 14 4 T 26 4 T 38 4 T 50 4 T 62 4 T 74 4 T 86 4 T 98 4 T 110 4 T 118 4" fill="none" stroke="#E67832" stroke-width="2.4" stroke-linecap="round"/></svg></span></p>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:16px 0 8px">2. 手書き風の直線・囲み（filterで揺らす）</p>
+<div class="row" style="align-items:center;gap:14px">
+<span style="font-size:12px;font-weight:700;color:#333;border-bottom:2.5px solid #143778;filter:url(#wob);padding-bottom:2px">ゆらぎ下線</span>
+<span style="font-size:12px;font-weight:700;color:#143778;border:2px dashed #4A7ACC;filter:url(#wob);padding:3px 10px;border-radius:4px">点線の囲み</span>
+</div>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:16px 0 8px">3. 色鉛筆ボタン（feTurbulence＝クレヨン質感）</p>
+<div style="position:relative;max-width:250px">
+<div style="position:absolute;inset:0;background:#E8590C;border-radius:12px;filter:url(#crayon)"></div>
+<div style="position:relative;text-align:center;padding:12px 8px;color:#fff;font-weight:900;font-size:12.5px;display:flex;align-items:center;justify-content:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+</div>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:16px 0 8px">4. クレヨン帯（結果バンド用）＋ラフ角ラベル</p>
+<div style="position:relative;max-width:300px;margin-top:10px">
+<span style="position:absolute;top:-9px;left:-6px;background:#E8590C;color:#fff;font-size:9px;font-weight:900;padding:3px 10px;border-radius:3px;transform:rotate(-3deg);filter:url(#crayon)">タイトルラベル</span>
+<div style="position:absolute;inset:0;background:#E8590C;border-radius:10px;filter:url(#crayon)"></div>
+<div style="position:relative;text-align:center;padding:16px 10px 10px;color:#fff;font-size:10.5px;font-weight:700">帯の中に<span style="background:linear-gradient(transparent 60%,#FFE869 60% 95%,transparent 95%)">合格実績</span>など</div>
+</div>
+<p class="note" style="margin-top:14px">全部SVGフィルタ＋CSSで実装可（画像なし・色変更自由）。ただし多用すると描画コストが上がるので、CTAボタン・結果帯・キャッチ下線など「ここぞ」に限定するのが推奨。波線/ゆらぎ線はどの色でも使えます</p>
+</div>
+</div>
+</div>
+<p class="dv-next">Try next: 「CTAボタンを全部この色鉛筆質感に」 · 「波線はキャッチだけに使って」 · 「<a class="dv-oid" href="#6a">6a</a>＋この装飾でハイファイへ」</p>
+</section>
+
+<section class="dv-turn" id="t6">
+<div class="dv-thd"><a class="dv-tid" href="#t6">6</a><span class="dv-tname">料金に表＋「詳しく見る」リンク・声5件スライド・タブの件数削除・FAQタイトル・全タイトルに蛍光マーカー</span></div>
+<div class="dv-opts">
+
+<!-- ============ 6a ============ -->
+<div class="dv-opt" id="6a">
+<div class="dv-olabel"><a class="dv-oid" href="#6a">6a</a>5a改 — 指摘6点を反映</div>
+<ul class="meta"><li><b>料金</b>：表を直置き＋「料金を詳しく見る」で/priceへ</li><li><b>声</b>：5件の横スライド＋ドット</li><li><b>タイトル</b>：全見出しに黄マーカー</li><li><b>固定CTA</b>：「資料をダウンロード」表記に統一</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="col" style="margin-top:8px;gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #b95a1e"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #0d2551">無料相談を申し込む<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(20,55,120,.06)">
+<div style="text-align:center;padding:10px 8px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<div style="font-size:10.5px;font-weight:700;color:#333;margin:3px 0">選ばれる理由</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">指導方針</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">料金</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">04</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">保護者さまの声</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">05</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">教室一覧</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<p class="h" style="font-size:15px;margin:3px 0 0"><span class="hl">選ばれる理由</span></p>
+</div>
+<div class="col" style="gap:8px">
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">「勉強が苦手」の専門塾</b>
+<p class="p" style="margin-top:3px">勉強が苦手な中学生だけが通う塾。「どこが分からないかも分からない」段階から、つまずきを一緒にほどいていきます。</p>
+</div>
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">通いやすい価格の個別指導</b>
+<p class="p" style="margin-top:3px">先生1人に生徒は最大4人まで。一人ひとりに目が届く個別指導を、1教科 月5,980円〜（税抜）で。</p>
+</div>
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">先生は全員、千葉大生</b>
+<p class="p" style="margin-top:3px">教えるのは全員、現役の千葉大生。勉強の「やり方」までかみくだいて教え、お子さまの一番近い目標になります。</p>
+</div>
+</div>
+<div class="bt bw" style="margin-top:8px;border-radius:8px;max-width:120px;margin-left:auto;margin-right:auto">詳しく見る</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div>
+<p class="h" style="font-size:15px;margin:3px 0 0"><span class="hl">指導方針</span></p>
+<p class="s">「分かる」を取り戻し、「自立」へ</p>
+</div>
+<div style="background:repeating-linear-gradient(#fff 0 24px,#eef2f7 24px 25px);border:1.5px solid #e3e8ef;border-radius:10px;padding:8px">
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#fff">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900;font-size:15px">→</span>
+<div class="box" style="text-align:center;background:#fff">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+</div>
+<div class="bt bw" style="margin-top:8px;border-radius:8px;max-width:120px;margin-left:auto;margin-right:auto">詳しく見る</div>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div>
+<p class="h" style="font-size:15px;margin:3px 0 0"><span class="hl">料金</span></p>
+</div>
+<div style="border:1px solid #dbe3ee;border-radius:10px;overflow:hidden">
+<div class="row" style="gap:0;background:#F4F8FC;border-bottom:1px solid #dbe3ee"><div style="flex:1;padding:6px;font-size:9px;font-weight:700;color:#5B6B85;text-align:center">教科数</div><div style="flex:1.4;padding:6px;font-size:9px;font-weight:700;color:#5B6B85;text-align:center;border-left:1px solid #dbe3ee">月額（税抜）</div></div>
+<div class="row" style="gap:0;border-bottom:1px solid #dbe3ee"><div style="flex:1;padding:6px;font-size:9.5px;text-align:center;color:#333">1教科</div><div style="flex:1.4;padding:6px;font-size:9.5px;text-align:center;border-left:1px solid #dbe3ee"><b style="color:#143778">5,980円</b> <span class="s">(税込6,578円)</span></div></div>
+<div class="row" style="gap:0;border-bottom:1px solid #dbe3ee"><div style="flex:1;padding:6px;font-size:9.5px;text-align:center;color:#333">2教科</div><div style="flex:1.4;padding:6px;font-size:9.5px;text-align:center;border-left:1px solid #dbe3ee">11,960円 <b style="color:#c00;font-size:8px">※仮</b></div></div>
+<div class="row" style="gap:0"><div style="flex:1;padding:6px;font-size:9.5px;text-align:center;color:#333">3教科</div><div style="flex:1.4;padding:6px;font-size:9.5px;text-align:center;border-left:1px solid #dbe3ee">17,940円 <b style="color:#c00;font-size:8px">※仮</b></div></div>
+</div>
+<div class="row" style="margin-top:6px"><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">入会金なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">諸経費なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">3年間据置</div></div>
+<div class="bt bw" style="margin-top:8px;border-radius:8px;max-width:140px;margin-left:auto;margin-right:auto">料金を詳しく見る →</div>
+<p class="note">表を直置きで一目化／ボタンは/priceへのリンクに変更（DLボタン廃止）</p>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">04</div>
+<p class="h" style="font-size:15px;margin:3px 0 0"><span class="hl">保護者さまの声</span></p>
+</div>
+<div class="vrow">
+<div class="vcard" style="border:1px solid #dbe3ee;background:#fff"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵</div>中2・母「点数より先に、机に向かうように」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:1px solid #dbe3ee;background:#fff"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵</div>中3・母「費用が続けられる」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:1px solid #dbe3ee;background:#fff;width:40px"><div class="ph" style="height:26px;margin-bottom:4px"></div>…</div>
+</div>
+<div style="text-align:center;font-size:9px;color:#143778;letter-spacing:.3em;margin-top:5px">●○○○○</div>
+<p class="note">5件・横スワイプ（見切れ＋ドットで続きを示唆）</p>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">05</div>
+<p class="h" style="font-size:15px;margin:3px 0 0"><span class="hl">教室一覧</span></p>
+<p class="s">千葉市を中心に全10教室</p>
+</div>
+<div class="tabrow"><span class="tab on">千葉市</span><span class="tab">千葉市以外</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+<div class="acc" style="color:#999">…全7教室</div>
+</div>
+<div class="bt bg" style="margin-top:6px;border-radius:999px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<p class="h" style="text-align:center;margin-bottom:8px"><span class="hl">入塾までの流れ</span></p>
+<div class="col" style="gap:2px">
+<div class="row" style="align-items:center"><span class="num">1</span><div class="box" style="background:#fff;border:none"><b>資料をダウンロード</b>（1分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">2</span><div class="box" style="background:#fff;border:none"><b>無料相談</b>（来塾60分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">3</span><div class="box" style="background:#fff;border:none"><b>体験授業</b> ※有無要確認</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">4</span><div class="box" style="background:#fff;border:none"><b>入塾</b></div></div>
+</div>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center;margin-bottom:8px"><span class="hl">よくある質問</span></p>
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px;border-radius:999px">すべての質問を見る →</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff;text-align:center"><span style="background:linear-gradient(transparent 58%,rgba(255,232,105,.45) 58% 94%,transparent 94%)">まずは、話を聞きに来ませんか？</span></p>
+<div class="col" style="gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt" style="background:#fff;color:#143778;gap:6px;border-radius:999px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px">お近くの教室へ電話する</div>
+</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span></div>
+<div class="stick"><div class="bt bo" style="gap:4px;border-radius:999px;font-size:9.5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div><div class="bt bn" style="border-radius:999px;font-size:9.5px">無料相談を申し込む →</div></div>
+</div></div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「<a class="dv-oid" href="#6a">6a</a>で確定、ハイファイへ」 · 「料金表は学年別の軸に変えて」 · 「マーカーの色をオレンジ寄りに」</p>
+</section>
+
+<section class="dv-turn" id="t5">
+<div class="dv-thd"><a class="dv-tid" href="#t5">5</a><span class="dv-tname">お悩み削除・見出し=目次と同一ワードでタイトル化・理由カードとPC固定CTAを参考画像準拠に</span></div>
+<div class="dv-opts">
+
+<!-- ============ 5a ============ -->
+<div class="dv-opt" id="5a">
+<div class="dv-olabel"><a class="dv-oid" href="#5a">5a</a>4a改 — 悩みセクションなし／センター型タイトル（番号+同一ワード）</div>
+<ul class="meta"><li><b>削除</b>：「こんなお悩み」→ 理由①の本文に吸収</li><li><b>見出し</b>：目次セルと同じ構造（番号上・タイトル下・センター）</li><li><b>02</b>：「指導方針」に統一（旧コピーはリード文へ）</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="col" style="margin-top:8px;gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #b95a1e"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #0d2551">無料相談を申し込む<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(20,55,120,.06)">
+<div style="text-align:center;padding:10px 8px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<div style="font-size:10.5px;font-weight:700;color:#333;margin:3px 0">選ばれる理由</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">指導方針</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">料金</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">04</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">保護者さまの声</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">05</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">教室一覧</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+</div>
+</div>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<p class="h" style="font-size:15px;margin:3px 0 0">選ばれる理由</p>
+</div>
+<div class="col" style="gap:8px">
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">「勉強が苦手」の専門塾</b>
+<p class="p" style="margin-top:3px">勉強が苦手な中学生だけが通う塾。「どこが分からないかも分からない」段階から、つまずきを一緒にほどいていきます。</p>
+</div>
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">通いやすい価格の個別指導</b>
+<p class="p" style="margin-top:3px">先生1人に生徒は最大4人まで。一人ひとりに目が届く個別指導を、1教科 月5,980円〜（税抜）で。</p>
+</div>
+<div style="border:1px solid #dbe3ee;border-radius:10px;padding:8px;background:#fff">
+<div style="height:40px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:6px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">先生は全員、千葉大生</b>
+<p class="p" style="margin-top:3px">教えるのは全員、現役の千葉大生。勉強の「やり方」までかみくだいて教え、お子さまの一番近い目標になります。</p>
+</div>
+</div>
+<div class="bt bw" style="margin-top:8px;border-radius:8px;max-width:120px;margin-left:auto;margin-right:auto">詳しく見る</div>
+<p class="note">悩み3つは削除→カード①の本文に吸収。カードは参考画像準拠</p>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div>
+<p class="h" style="font-size:15px;margin:3px 0 0">指導方針</p>
+<p class="s">「分かる」を取り戻し、「自立」へ</p>
+</div>
+<div style="background:repeating-linear-gradient(#fff 0 24px,#eef2f7 24px 25px);border:1.5px solid #e3e8ef;border-radius:10px;padding:8px">
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#fff">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900;font-size:15px">→</span>
+<div class="box" style="text-align:center;background:#fff">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+</div>
+<div class="bt bw" style="margin-top:8px;border-radius:8px;max-width:120px;margin-left:auto;margin-right:auto">詳しく見る</div>
+<p class="note">見出しは目次と同一ワード。旧コピーはリード文に降格</p>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div>
+<p class="h" style="font-size:15px;margin:3px 0 0">料金</p>
+</div>
+<p class="h" style="text-align:center">1教科 <span style="font-size:18px;color:#143778">月5,980</span>円（税抜）<span class="s" style="font-weight:400">税込6,578円</span></p>
+<div class="row" style="margin-top:6px"><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">入会金なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">諸経費なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">3年間据置</div></div>
+<div class="bt bo" style="margin-top:8px;gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>料金のくわしい資料をダウンロード</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">04</div>
+<p class="h" style="font-size:15px;margin:3px 0 0">保護者さまの声</p>
+</div>
+<div class="vrow">
+<div class="vcard" style="border:1px solid #dbe3ee"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中2・母「点数より先に、机に向かうように…」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:1px solid #dbe3ee"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中3・母<b style="color:#c00">※仮</b></div>
+</div>
+</div>
+<div class="sec">
+<div style="text-align:center;margin-bottom:8px">
+<div style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.25em">05</div>
+<p class="h" style="font-size:15px;margin:3px 0 0">教室一覧</p>
+<p class="s">千葉市中心に全10教室</p>
+</div>
+<div class="tabrow"><span class="tab on">千葉市（7教室）</span><span class="tab">千葉市以外（3教室）</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+<div class="acc" style="color:#999">…全7教室</div>
+</div>
+<div class="bt bg" style="margin-top:6px;border-radius:999px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<p class="h" style="text-align:center">入塾までの流れ</p>
+<div class="col" style="gap:2px">
+<div class="row" style="align-items:center"><span class="num">1</span><div class="box" style="background:#fff;border:none"><b>資料をダウンロード</b>（1分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">2</span><div class="box" style="background:#fff;border:none"><b>無料相談</b>（来塾60分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">3</span><div class="box" style="background:#fff;border:none"><b>体験授業</b> ※有無要確認</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">4</span><div class="box" style="background:#fff;border:none"><b>入塾</b></div></div>
+</div>
+</div>
+<div class="sec">
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px;border-radius:999px">すべての質問を見る →</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">まずは、話を聞きに来ませんか？</p>
+<div class="col" style="gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt" style="background:#fff;color:#143778;gap:6px;border-radius:999px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px">お近くの教室へ電話する</div>
+</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span></div>
+<div class="stick"><div class="bt bo" style="gap:4px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料DL</div><div class="bt bn" style="border-radius:999px">無料相談を申し込む →</div></div>
+</div></div>
+</div>
+
+<!-- ============ 5b PC 理由セクション+右固定CTA ============ -->
+<div class="dv-opt" id="5b">
+<div class="dv-olabel"><a class="dv-oid" href="#5b">5b</a>PC版 — 理由3カード横並び＋右端固定CTA（参考画像準拠）</div>
+<div class="dv-card" style="padding:0"><div class="frpc" style="border:none;border-radius:8px">
+<div class="bar">FOCUS <span class="row" style="gap:10px;font-size:9.5px;font-weight:500;align-items:center"><span>選ばれる理由</span><span>指導方針</span><span>料金</span><span>教室一覧</span><span>FAQ</span></span></div>
+<div class="sec" style="background:#F4F8FC;padding:22px 60px 22px 26px">
+<div style="text-align:center;margin-bottom:12px">
+<div style="font:900 12px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<p class="h" style="font-size:17px;margin:4px 0 0">選ばれる理由</p>
+</div>
+<div class="row" style="gap:12px;align-items:stretch">
+<div style="flex:1;border:1px solid #dbe3ee;border-radius:10px;padding:10px;background:#fff">
+<div style="height:52px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:8px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">「勉強が苦手」の専門塾</b>
+<p class="p" style="margin-top:4px">勉強が苦手な中学生だけが通う塾です。「どこが分からないかも分からない」段階から、つまずきを一緒にほどいていきます。</p>
+</div>
+<div style="flex:1;border:1px solid #dbe3ee;border-radius:10px;padding:10px;background:#fff">
+<div style="height:52px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:8px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">通いやすい価格の個別指導</b>
+<p class="p" style="margin-top:4px">先生1人に生徒は最大4人まで。一人ひとりに目が届く個別指導を、1教科 月5,980円〜（税抜）で受けられます。</p>
+</div>
+<div style="flex:1;border:1px solid #dbe3ee;border-radius:10px;padding:10px;background:#fff">
+<div style="height:52px;background:#E3ECF8;border-radius:6px;display:flex;align-items:center;justify-content:center;font:9px ui-monospace,monospace;color:#7A8FB5;margin-bottom:8px">アイコン/画像</div>
+<b style="font-size:11px;color:#333">先生は全員、千葉大生</b>
+<p class="p" style="margin-top:4px">教えるのは全員、現役の千葉大生。勉強の「やり方」までかみくだいて教え、お子さまの一番近い目標になります。</p>
+</div>
+</div>
+<div class="bt bw" style="margin:12px auto 0;border-radius:8px;max-width:110px">詳しく見る</div>
+</div>
+<div style="position:absolute;right:0;top:54px;width:40px;display:flex;flex-direction:column;gap:8px">
+<div class="bt bo" style="writing-mode:vertical-rl;padding:16px 5px;border-radius:8px 0 0 8px;font-size:10px;flex:none">資料請求はこちら</div>
+<div class="bt bn" style="writing-mode:vertical-rl;padding:16px 5px;border-radius:8px 0 0 8px;font-size:10px;flex:none">無料相談はこちら</div>
+</div>
+</div>
+<p class="note" style="margin:8px 14px 12px">右端固定=角丸は左のみ・オレンジ/ネイビー縦積み。全セクション共通でこのタイトル型（番号上・センター）を使用</p>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「<a class="dv-oid" href="#5a">5a</a>で確定、ハイファイへ」 · 「理由カードのアイコン部をもっと小さく」 · 「声セクションにもノート罫線を」</p>
+</section>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">背景=白⇔薄青で確定・目次をグリッド型に・見出し左に番号（<a class="dv-oid" href="#3c">3c</a>ハンバーガー採用）</span></div>
+<div class="dv-opts">
+
+<!-- ============ 4a 改訂トップ ============ -->
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>3a改 — グリッド目次＋番号つき見出し</div>
+<ul class="meta"><li><b>目次</b>：参考画像のグリッド型（01大＋2列）</li><li><b>見出し</b>：左に「01」ナンバリング＝目次と呼応</li><li><b>背景</b>：白⇔#F4F8FC＋締めネイビー（確定）</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="col" style="margin-top:8px;gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #b95a1e"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #0d2551">無料相談を申し込む<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(20,55,120,.06)">
+<div style="text-align:center;padding:10px 8px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">01</div>
+<div style="font-size:10.5px;font-weight:700;color:#333;margin:3px 0">選ばれる理由</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">指導方針</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-bottom:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">料金</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px;border-right:1px solid #dbe3ee">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">04</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">保護者さまの声</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+<div style="text-align:center;padding:9px 6px">
+<div style="font:900 10px ui-monospace,monospace;color:#143778;letter-spacing:.25em">05</div>
+<div style="font-size:10px;font-weight:700;color:#333;margin:3px 0">教室一覧</div>
+<svg width="11" height="7" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m1 1 5 5 5-5"/></svg>
+</div>
+</div>
+</div>
+<p class="note">「もくじ」の文字なし／01だけ全幅で主役扱い／タップで矢羽が小さく上下（工夫案は<a class="dv-oid" href="#4b">4b</a>）</p>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center">こんなお悩み、ありませんか？</p>
+<div class="col">
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#DDE7F7;border:none">ic</span><span class="p" style="color:#333;font-weight:700">家で全然勉強しない</span></div>
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#D7ECDD;border:none">ic</span><span class="p" style="color:#333;font-weight:700">勉強のやり方が分からない</span></div>
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#FFF59D;border:none">ic</span><span class="p" style="color:#333;font-weight:700">平均点が取れない</span></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<p class="h"><span style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.22em;margin-right:7px">01</span>フォーカスが選ばれる<span class="hl">3つの理由</span></p>
+<div class="col">
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>① 勉強が苦手な子の「専門」塾</b><br>偏差値45〜55の子だけに特化</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>② 通いやすい価格の個別指導</b><br>集団塾なみ・諸経費なし・3年据置</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>③ 講師は全員、現役の千葉大生</b><br>親の安心・子の憧れ</div>
+</div>
+<p class="note">見出し=左に目次と同じ書体の番号（英字ラベル廃止）</p>
+</div>
+<div class="sec">
+<p class="h"><span style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.22em;margin-right:7px">02</span>「分かる」から「自立」へ</p>
+<div style="background:repeating-linear-gradient(#fff 0 24px,#eef2f7 24px 25px);border:1.5px solid #e3e8ef;border-radius:10px;padding:8px">
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#fff">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900;font-size:15px">→</span>
+<div class="box" style="text-align:center;background:#fff">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<p class="h"><span style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.22em;margin-right:7px">03</span>1教科 <span style="font-size:18px;color:#143778">月5,980</span>円（税抜）</p>
+<p class="s">税込6,578円</p>
+<div class="row" style="margin-top:6px"><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">入会金なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">諸経費なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">3年間据置</div></div>
+<div class="bt bo" style="margin-top:8px;gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>料金のくわしい資料をダウンロード</div>
+</div>
+<div class="sec">
+<p class="h"><span style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.22em;margin-right:7px">04</span>保護者さまの声</p>
+<div class="vrow">
+<div class="vcard" style="border:1.5px solid #e3e8ef"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中2・母「点数より先に、机に向かうように…」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:1.5px solid #e3e8ef"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中3・母<b style="color:#c00">※仮</b></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<p class="h"><span style="font:900 11px ui-monospace,monospace;color:#143778;letter-spacing:.22em;margin-right:7px">05</span>千葉市中心に<span class="hl">全10教室</span></p>
+<div class="tabrow"><span class="tab on">千葉市（7教室）</span><span class="tab">千葉市以外（3教室）</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+<div class="acc" style="color:#999">…全7教室</div>
+</div>
+<div class="bt bg" style="margin-top:6px;border-radius:999px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center">入塾までの流れ</p>
+<div class="col" style="gap:2px">
+<div class="row" style="align-items:center"><span class="num">1</span><div class="box" style="background:#F4F8FC;border:none"><b>資料をダウンロード</b>（1分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">2</span><div class="box" style="background:#F4F8FC;border:none"><b>無料相談</b>（来塾60分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">3</span><div class="box" style="background:#F4F8FC;border:none"><b>体験授業</b> ※有無要確認</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">4</span><div class="box" style="background:#F4F8FC;border:none"><b>入塾</b></div></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px;border-radius:999px">すべての質問を見る →</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">まずは、話を聞きに来ませんか？</p>
+<div class="col" style="gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt" style="background:#fff;color:#143778;gap:6px;border-radius:999px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px">お近くの教室へ電話する</div>
+</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span></div>
+<div class="stick"><div class="bt bo" style="gap:4px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料DL</div><div class="bt bn" style="border-radius:999px">無料相談を申し込む →</div></div>
+</div></div>
+</div>
+
+<!-- ============ 4b 目次グリッドの工夫案 ============ -->
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>目次グリッドの工夫3案（<a class="dv-oid" href="#4a">4a</a>に差替可）</div>
+<div class="dv-card" style="padding:14px"><div class="col" style="gap:14px;width:300px">
+<div>
+<p class="s" style="font-weight:700;margin:0 0 4px">A：素直なグリッド（4a採用中）＋タップ時に矢羽がぴょこん</p>
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden">
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:8px;border-right:1px solid #dbe3ee"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">指導方針</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+<div style="text-align:center;padding:8px"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">料金</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+</div>
+</div>
+</div>
+<div>
+<p class="s" style="font-weight:700;margin:0 0 4px">B：番号にマーカー — 目次と見出しの呼応が強まる</p>
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden">
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:8px;border-right:1px solid #dbe3ee"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em"><span class="hl">02</span></div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">指導方針</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+<div style="text-align:center;padding:8px"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em"><span class="hl">03</span></div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">料金</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#7A8FB5" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+</div>
+</div>
+</div>
+<div>
+<p class="s" style="font-weight:700;margin:0 0 4px">C：セル境界を点線に — ノート目次（2c）の名残り</p>
+<div style="background:#fff;border:1px solid #dbe3ee;border-radius:10px;overflow:hidden">
+<div style="display:grid;grid-template-columns:1fr 1fr">
+<div style="text-align:center;padding:8px;border-right:2px dotted #c9d4e4"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em">02</div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">指導方針</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#E67832" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+<div style="text-align:center;padding:8px"><div style="font:900 9px ui-monospace,monospace;color:#143778;letter-spacing:.25em">03</div><div style="font-size:9px;font-weight:700;color:#333;margin:2px 0">料金</div><svg width="10" height="6" viewBox="0 0 12 7" fill="none" stroke="#E67832" stroke-width="2" stroke-linecap="round"><path d="m1 1 5 5 5-5"/></svg></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「目次は<a class="dv-oid" href="#4b">4b</a>のBで」 · 「<a class="dv-oid" href="#4a">4a</a>で確定、ハイファイへ進んで」 · 「PC版の目次の見え方も見たい」</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">背景を沈静化（交互リズム2案）＋ノート目次採用＋ハンバーガー挙動定義</span></div>
+<div class="dv-opts">
+
+<!-- ============ 3a 2a改・落ち着いた背景 ============ -->
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a>2a改 — 背景は白⇔ごく薄い青の交互、目次は<a class="dv-oid" href="#2c">2c</a>ノート風。パステルは小物だけに</div>
+<ul class="meta"><li><b>背景</b>：白⇔#F4F8FC 交互（グレー版は<a class="dv-oid" href="#3b">3b</a>で比較）</li><li><b>パステル</b>：バッジ・アイコン地など小面積のみ</li><li><b>罫線ノート</b>：目次＋指導方針の図解地に採用</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="col" style="margin-top:8px;gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #b95a1e"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #0d2551">無料相談を申し込む<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div style="background:repeating-linear-gradient(#fff 0 24px,#eef2f7 24px 25px);border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(20,55,120,.08)">
+<p style="font:700 10px 'Zen Maru Gothic';color:#333;margin:0 0 7px">— もくじ —</p>
+<div class="col" style="gap:6px">
+<div class="row" style="align-items:baseline;font-size:9.5px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">01</span>選ばれる理由<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:9.5px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">02</span>指導方針<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:9.5px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">03</span>料金<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:9.5px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">04</span>保護者の声<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:9.5px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">05</span>教室一覧<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+</div>
+</div>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center">こんなお悩み、ありませんか？</p>
+<div class="col">
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#DDE7F7;border:none">ic</span><span class="p" style="color:#333;font-weight:700">家で全然勉強しない</span></div>
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#D7ECDD;border:none">ic</span><span class="p" style="color:#333;font-weight:700">勉強のやり方が分からない</span></div>
+<div class="row" style="align-items:center;border:1.5px solid #e3e8ef;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#FFF59D;border:none">ic</span><span class="p" style="color:#333;font-weight:700">平均点が取れない</span></div>
+</div>
+<p class="note">パステルはアイコンの地色だけ＝小面積アクセント</p>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">01</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">REASON</span></div>
+<p class="h">フォーカスが選ばれる<span class="hl">3つの理由</span></p>
+<div class="col">
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>① 勉強が苦手な子の「専門」塾</b><br>偏差値45〜55の子だけに特化</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>② 通いやすい価格の個別指導</b><br>集団塾なみ・諸経費なし・3年据置</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>③ 講師は全員、現役の千葉大生</b><br>親の安心・子の憧れ</div>
+</div>
+</div>
+<div class="sec">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">02</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">METHOD</span></div>
+<p class="h">「分かる」から「自立」へ</p>
+<div style="background:repeating-linear-gradient(#fff 0 24px,#eef2f7 24px 25px);border:1.5px solid #e3e8ef;border-radius:10px;padding:8px">
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#fff">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900;font-size:15px">→</span>
+<div class="box" style="text-align:center;background:#fff">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+<p class="note" style="margin-top:6px">罫線ノート地＝図解の定位置（ラクガキ矢印・電球）</p>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">03</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">PRICE</span></div>
+<p class="h">1教科 <span style="font-size:18px;color:#143778">月5,980</span>円（税抜）</p>
+<p class="s">税込6,578円</p>
+<div class="row" style="margin-top:6px"><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">入会金なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">諸経費なし</div><div class="badge" style="background:#FFF59D;border-color:#e6d34a;color:#333">3年間据置</div></div>
+<div class="bt bo" style="margin-top:8px;gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>料金のくわしい資料をダウンロード</div>
+</div>
+<div class="sec">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">04</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">VOICE</span></div>
+<p class="h">保護者さまの声</p>
+<div class="vrow">
+<div class="vcard" style="border:1.5px solid #e3e8ef"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中2・母「点数より先に、机に向かうように…」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:1.5px solid #e3e8ef"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中3・母<b style="color:#c00">※仮</b></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">05</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">CLASSROOMS</span></div>
+<p class="h">千葉市中心に<span class="hl">全10教室</span></p>
+<div class="tabrow"><span class="tab on">千葉市（7教室）</span><span class="tab">千葉市以外（3教室）</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+<div class="acc" style="color:#999">…全7教室</div>
+</div>
+<div class="bt bg" style="margin-top:6px;border-radius:999px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center">入塾までの流れ</p>
+<div class="col" style="gap:2px">
+<div class="row" style="align-items:center"><span class="num">1</span><div class="box" style="background:#F4F8FC;border:none"><b>資料をダウンロード</b>（1分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">2</span><div class="box" style="background:#F4F8FC;border:none"><b>無料相談</b>（来塾60分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">3</span><div class="box" style="background:#F4F8FC;border:none"><b>体験授業</b> ※有無要確認</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">4</span><div class="box" style="background:#F4F8FC;border:none"><b>入塾</b></div></div>
+</div>
+</div>
+<div class="sec" style="background:#F4F8FC">
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px;border-radius:999px">すべての質問を見る →</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">まずは、話を聞きに来ませんか？</p>
+<div class="col" style="gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt" style="background:#fff;color:#143778;gap:6px;border-radius:999px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px">お近くの教室へ電話する</div>
+</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span></div>
+<div class="stick"><div class="bt bo" style="gap:4px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料DL</div><div class="bt bn" style="border-radius:999px">無料相談を申し込む →</div></div>
+</div></div>
+</div>
+
+<!-- ============ 3b 背景リズム比較 ============ -->
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>背景の交互リズム — 白⇔薄青 vs 白⇔ライトグレー</div>
+<div class="dv-card" style="padding:14px"><div class="row" style="gap:14px">
+<div style="width:130px">
+<p class="s" style="text-align:center;font-weight:700;margin:0 0 5px">A：白⇔#F4F8FC</p>
+<div style="border:1.5px solid #333;border-radius:10px;overflow:hidden">
+<div style="height:34px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">ヒーロー</div>
+<div style="height:28px;background:#F4F8FC;display:flex;align-items:center;justify-content:center" class="s">もくじ</div>
+<div style="height:28px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">お悩み</div>
+<div style="height:28px;background:#F4F8FC;display:flex;align-items:center;justify-content:center" class="s">理由</div>
+<div style="height:28px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">方針</div>
+<div style="height:28px;background:#F4F8FC;display:flex;align-items:center;justify-content:center" class="s">料金</div>
+<div style="height:22px;background:#143778;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px">CTAバンド</div>
+</div>
+<p class="s" style="margin-top:4px">ブランドのネイビーと調和・やわらかい</p>
+</div>
+<div style="width:130px">
+<p class="s" style="text-align:center;font-weight:700;margin:0 0 5px">B：白⇔#F2F4F7</p>
+<div style="border:1.5px solid #333;border-radius:10px;overflow:hidden">
+<div style="height:34px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">ヒーロー</div>
+<div style="height:28px;background:#F2F4F7;display:flex;align-items:center;justify-content:center" class="s">もくじ</div>
+<div style="height:28px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">お悩み</div>
+<div style="height:28px;background:#F2F4F7;display:flex;align-items:center;justify-content:center" class="s">理由</div>
+<div style="height:28px;background:#fff;display:flex;align-items:center;justify-content:center" class="s">方針</div>
+<div style="height:28px;background:#F2F4F7;display:flex;align-items:center;justify-content:center" class="s">料金</div>
+<div style="height:22px;background:#143778;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px">CTAバンド</div>
+</div>
+<p class="s" style="margin-top:4px">ニュートラル・イラストの色が映える</p>
+</div>
+</div>
+<p class="note" style="max-width:280px">どちらも交互2色＋締めのネイビーバンドのみ。<a class="dv-oid" href="#3a">3a</a>はA適用。パステルはバッジ等の小面積限定</p>
+</div>
+</div>
+
+<!-- ============ 3c ハンバーガー挙動 ============ -->
+<div class="dv-opt" id="3c">
+<div class="dv-olabel"><a class="dv-oid" href="#3c">3c</a>ハンバーガー挙動 — 上からリストが下りてくる</div>
+<div class="dv-card" style="padding:14px"><div class="row" style="gap:14px;align-items:flex-start">
+<div class="fr" style="width:190px">
+<div class="bar" style="font-size:11px">FOCUS <span>☰</span></div>
+<div class="sec"><div class="ph" style="height:60px">ページ内容</div></div>
+<p class="note" style="padding:0 10px 8px">タップ→上からスライドダウン（0.25s）・背景は薄暗く</p>
+</div>
+<div class="fr" style="width:190px">
+<div class="bar" style="font-size:11px;background:#fff">FOCUS <span style="font-weight:400">×</span></div>
+<div style="background:repeating-linear-gradient(#fff 0 26px,#eef2f7 26px 27px);border-bottom:1.5px solid #333;padding:10px 12px">
+<div class="col" style="gap:7px">
+<div class="row" style="align-items:baseline;font-size:10px;font-weight:700;color:#333">選ばれる理由<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">→</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;font-weight:700;color:#333">指導方針<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">→</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;font-weight:700;color:#333">料金<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">→</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;font-weight:700;color:#333">よくある質問<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">→</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;font-weight:700;color:#333">教室一覧<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">→</span></div>
+</div>
+<div class="col" style="gap:5px;margin-top:10px">
+<div class="bt bo" style="gap:5px;border-radius:999px;font-size:9.5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="border-radius:999px;font-size:9.5px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px;font-size:9.5px">教室へ電話する</div>
+</div>
+</div>
+<div style="height:46px;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#fff;font-size:8.5px">下は薄暗いオーバーレイ（タップで閉じる）</div>
+</div>
+<p class="note" style="width:130px">メニュー自体もノート罫線＋点線リーダー＝<a class="dv-oid" href="#2c">2c</a>の世界観を再利用。ドロワー(横80%)は廃止</p>
+</div></div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「背景は<a class="dv-oid" href="#3b">3b</a>のAで確定」 · 「<a class="dv-oid" href="#3a">3a</a>のこの構成でハイファイへ」 · 「罫線ノートを声セクションにも使って」</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname"><a class="dv-oid" href="#1a">1a</a>採用 — CTA文言・アイコン／千葉市⇔それ以外タブ／矢印フロー／パステル差し色。目次3案＋スタイルタイル付き</span></div>
+<div class="dv-opts">
+
+<!-- ============ 2a 1a改訂版 ============ -->
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>1a改 — ご指摘を全部反映したトップ（SP）</div>
+<ul class="meta"><li><b>CTA</b>：資料をダウンロード（DLアイコン）／無料相談を申し込む（→）</li><li><b>教室タブ</b>：千葉市(7)⇔千葉市以外(3)</li><li><b>差し色</b>：パステル3色をセクション背景に</li><li><b>写真なし</b>：イラスト＋塾らしいアイコンで統一</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="col" style="margin-top:8px;gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #b95a1e"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:6px;border-radius:999px;box-shadow:0 2px 0 #0d2551">無料相談を申し込む<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></div>
+</div>
+</div>
+<div class="sec" style="background:#F2F4F7">
+<p style="font:700 10px 'Zen Maru Gothic';color:#333;margin:0 0 6px">もくじ</p>
+<div class="row" style="flex-wrap:wrap;gap:5px">
+<span class="chip" style="background:#DDE7F7;color:#333">01 選ばれる理由 ↓</span><span class="chip" style="background:#D7ECDD;color:#333">02 指導方針 ↓</span><span class="chip" style="background:#FFF59D;color:#333">03 料金 ↓</span><span class="chip" style="background:#FBE4E4;color:#333">04 保護者の声 ↓</span><span class="chip" style="background:#DDE7F7;color:#333">05 教室一覧 ↓</span>
+</div>
+<p class="note">目次の別案 → 2b / 2c / 2d</p>
+</div>
+<div class="sec">
+<p class="h" style="text-align:center">こんなお悩み、ありませんか？</p>
+<div class="col">
+<div class="row" style="align-items:center;background:#DDE7F7;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#fff;border:none">ic</span><span class="p" style="color:#333;font-weight:700">家で全然勉強しない</span></div>
+<div class="row" style="align-items:center;background:#D7ECDD;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#fff;border:none">ic</span><span class="p" style="color:#333;font-weight:700">勉強のやり方が分からない</span></div>
+<div class="row" style="align-items:center;background:#FFF59D;border-radius:10px;padding:6px 8px"><span class="ic" style="background:#fff;border:none">ic</span><span class="p" style="color:#333;font-weight:700">平均点が取れない</span></div>
+</div>
+<p class="note">アイコン=鉛筆・ノート・テストの塾モチーフ線画</p>
+</div>
+<div class="sec" style="background:#DDE7F7">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">01</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">REASON</span></div>
+<p class="h">フォーカスが選ばれる<span class="hl">3つの理由</span></p>
+<div class="col">
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>① 勉強が苦手な子の「専門」塾</b><br>偏差値45〜55の子だけに特化</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>② 通いやすい価格の個別指導</b><br>集団塾なみ・諸経費なし・3年据置</div>
+<div class="box" style="background:#fff;border:none;box-shadow:0 1px 3px rgba(20,55,120,.1)"><b>③ 講師は全員、現役の千葉大生</b><br>親の安心・子の憧れ</div>
+</div>
+<p class="note">見出し=番号バッジ+英字。オレンジ線は廃止</p>
+</div>
+<div class="sec">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">02</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">METHOD</span></div>
+<p class="h">「分かる」から「自立」へ</p>
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#D7ECDD;border:none">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900;font-size:15px">→</span>
+<div class="box" style="text-align:center;background:#D7ECDD;border:none">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+<div class="ph" style="height:46px;margin-top:6px">手書き風の図解イラスト（矢印・電球）</div>
+</div>
+<div class="sec" style="background:#FFF9E0">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">03</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">PRICE</span></div>
+<p class="h">1教科 <span style="font-size:18px;color:#143778">月5,980</span>円（税抜）</p>
+<p class="s">税込6,578円</p>
+<div class="row" style="margin-top:6px"><div class="badge" style="background:#fff">入会金なし</div><div class="badge" style="background:#fff">諸経費なし</div><div class="badge" style="background:#fff">3年間据置</div></div>
+<div class="bt bo" style="margin-top:8px;gap:6px;border-radius:999px">料金のくわしい資料をダウンロード<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg></div>
+</div>
+<div class="sec" style="background:#FBE4E4">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">04</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">VOICE</span></div>
+<p class="h">保護者さまの声</p>
+<div class="vrow">
+<div class="vcard" style="border:none;box-shadow:0 1px 3px rgba(0,0,0,.1)"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中2・母「点数より先に、机に向かうように…」<b style="color:#c00">※仮</b></div>
+<div class="vcard" style="border:none;box-shadow:0 1px 3px rgba(0,0,0,.1)"><div class="ph" style="height:26px;margin-bottom:4px">似顔絵イラスト</div>中3・母<b style="color:#c00">※仮</b></div>
+</div>
+</div>
+<div class="sec">
+<div class="row" style="align-items:center;gap:6px;margin-bottom:4px"><span class="num" style="width:20px;height:20px;font-size:10px">05</span><span style="font:700 8.5px ui-monospace,monospace;color:#5B6B85;letter-spacing:.12em">CLASSROOMS</span></div>
+<p class="h">千葉市中心に<span class="hl">全10教室</span></p>
+<div class="tabrow"><span class="tab on">千葉市（7教室）</span><span class="tab">千葉市以外（3教室）</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+<div class="acc" style="color:#999">…全7教室</div>
+</div>
+<p class="note">「千葉市以外」タブ=市川1・市原1・四街道1を市名ラベル付きで表示</p>
+<div class="bt bg" style="margin-top:6px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec" style="background:#F2F4F7">
+<p class="h" style="text-align:center">入塾までの流れ</p>
+<div class="col" style="gap:2px">
+<div class="row" style="align-items:center"><span class="num">1</span><div class="box" style="background:#fff;border:none"><b>資料をダウンロード</b>（1分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">2</span><div class="box" style="background:#fff;border:none"><b>無料相談</b>（来塾60分）</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">3</span><div class="box" style="background:#fff;border:none"><b>体験授業</b> ※有無要確認</div></div>
+<div style="padding-left:7px;color:#E67832;font-weight:900;font-size:13px;line-height:1">↓</div>
+<div class="row" style="align-items:center"><span class="num">4</span><div class="box" style="background:#fff;border:none"><b>入塾</b></div></div>
+</div>
+<p class="note">縦フロー＋手書き風矢印（本番は曲線の矢印イラスト）</p>
+</div>
+<div class="sec">
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px;border-radius:999px">すべての質問を見る →</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">まずは、話を聞きに来ませんか？</p>
+<div class="col" style="gap:5px">
+<div class="bt bo" style="gap:6px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt" style="background:#fff;color:#143778;gap:6px;border-radius:999px">無料相談を申し込む →</div>
+<div class="bt bg" style="border-radius:999px">お近くの教室へ電話する</div>
+</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span></div>
+<div class="stick"><div class="bt bo" style="gap:4px;border-radius:999px"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料DL</div><div class="bt bn" style="border-radius:999px">無料相談を申し込む →</div></div>
+</div></div>
+</div>
+
+<!-- ============ 2b-2d 目次3案 ============ -->
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>目次案A — パステルタイル（タップで飛ぶカード）</div>
+<div class="dv-card" style="padding:14px;width:320px">
+<p style="font:700 11px 'Zen Maru Gothic';color:#333;margin:0 0 8px">もくじ</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<div style="background:#DDE7F7;border-radius:10px;padding:8px"><b style="font-size:15px;color:#143778">01</b><p class="p" style="color:#333;font-weight:700">選ばれる理由</p><span class="s">↓</span></div>
+<div style="background:#D7ECDD;border-radius:10px;padding:8px"><b style="font-size:15px;color:#143778">02</b><p class="p" style="color:#333;font-weight:700">指導方針</p><span class="s">↓</span></div>
+<div style="background:#FFF59D;border-radius:10px;padding:8px"><b style="font-size:15px;color:#143778">03</b><p class="p" style="color:#333;font-weight:700">料金</p><span class="s">↓</span></div>
+<div style="background:#FBE4E4;border-radius:10px;padding:8px"><b style="font-size:15px;color:#143778">04</b><p class="p" style="color:#333;font-weight:700">保護者の声</p><span class="s">↓</span></div>
+<div style="background:#F2F4F7;border-radius:10px;padding:8px;grid-column:1/-1"><b style="font-size:15px;color:#143778">05</b> <span class="p" style="color:#333;font-weight:700">教室一覧</span> <span class="s">↓</span></div>
+</div>
+</div>
+</div>
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>目次案B — ノートの目次風（点線リーダー）</div>
+<div class="dv-card" style="padding:14px;width:320px;background:repeating-linear-gradient(#fff 0 26px,#eef2f7 26px 27px)">
+<p style="font:700 11px 'Zen Maru Gothic';color:#333;margin:0 0 8px">— もくじ —</p>
+<div class="col" style="gap:7px">
+<div class="row" style="align-items:baseline;font-size:10px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">01</span>選ばれる理由<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">02</span>指導方針<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">03</span>料金<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">04</span>保護者の声<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+<div class="row" style="align-items:baseline;font-size:10px;color:#333;font-weight:700"><span style="color:#E67832;font-weight:900">05</span>教室一覧<span style="flex:1;border-bottom:2px dotted #bbb"></span><span style="color:#143778">↓</span></div>
+</div>
+<p class="note">罫線ノート背景＋ラクガキ矢印で「塾らしさ」</p>
+</div>
+</div>
+<div class="dv-opt" id="2d">
+<div class="dv-olabel"><a class="dv-oid" href="#2d">2d</a>目次案C — 丸バッジの横スクロールピル</div>
+<div class="dv-card" style="padding:14px;width:320px">
+<div class="vrow">
+<div class="row" style="flex:none;align-items:center;gap:5px;border:1.5px solid #143778;border-radius:999px;padding:5px 10px;background:#fff"><span class="num" style="font-size:8px">01</span><span style="font-size:9.5px;font-weight:700;color:#143778">選ばれる理由</span></div>
+<div class="row" style="flex:none;align-items:center;gap:5px;border:1.5px solid #143778;border-radius:999px;padding:5px 10px;background:#fff"><span class="num" style="font-size:8px">02</span><span style="font-size:9.5px;font-weight:700;color:#143778">指導方針</span></div>
+<div class="row" style="flex:none;align-items:center;gap:5px;border:1.5px solid #143778;border-radius:999px;padding:5px 10px;background:#fff"><span class="num" style="font-size:8px">03</span><span style="font-size:9.5px;font-weight:700;color:#143778">料金</span></div>
+<div class="row" style="flex:none;align-items:center;gap:5px;border:1.5px solid #143778;border-radius:999px;padding:5px 10px;background:#fff;opacity:.5"><span class="num" style="font-size:8px">04</span><span style="font-size:9.5px;font-weight:700;color:#143778">声</span></div>
+</div>
+<p class="note">横スクロール（見切れで続きを示唆）／追従ヘッダー化も可</p>
+</div>
+</div>
+
+<!-- ============ 2e スタイルタイル ============ -->
+<div class="dv-opt" id="2e">
+<div class="dv-olabel"><a class="dv-oid" href="#2e">2e</a>スタイルタイル — いま固める部品（ボタン・カラー・アイコン方針）</div>
+<div class="dv-card" style="padding:16px;width:360px">
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:0 0 8px">CTA BUTTONS（丸ピル＋下影＋アイコン）</p>
+<div class="col" style="gap:6px;max-width:280px">
+<div class="bt bo" style="gap:7px;border-radius:999px;padding:11px;box-shadow:0 3px 0 #b95a1e;font-size:11.5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>資料をダウンロード</div>
+<div class="bt bn" style="gap:7px;border-radius:999px;padding:11px;box-shadow:0 3px 0 #0d2551;font-size:11.5px">無料相談を申し込む<span style="width:16px;height:16px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="m13 6 6 6-6 6"/></svg></span></div>
+<div class="bt bg" style="border-radius:999px;padding:10px;font-size:11px">教室へ電話する</div>
+<div class="bt bw" style="border-radius:999px;padding:10px;font-size:11px">くわしく見る →（補助・白枠）</div>
+</div>
+<p class="note">押せる感=下側の濃色シャドウ。hoverで浮く/pressで沈む</p>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:14px 0 8px">COLORS</p>
+<div class="row" style="flex-wrap:wrap;gap:6px">
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#143778"></div><span class="s">#143778 主</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#E67832"></div><span class="s">#E67832 CTA</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#FFE869"></div><span class="s">#FFE869 マーカー</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#333333"></div><span class="s">#333 文字</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#DDE7F7"></div><span class="s">#DDE7F7</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#D7ECDD"></div><span class="s">#D7ECDD</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#FFF59D"></div><span class="s">#FFF59D</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#FBE4E4"></div><span class="s">#FBE4E4 薄赤</span></div>
+<div style="width:72px"><div style="height:34px;border-radius:8px;background:#F2F4F7;border:1px solid #e0e0e0"></div><span class="s">#F2F4F7</span></div>
+</div>
+<p class="note">パステル4色=セクション背景・タイル用（文字は#333で載せる）</p>
+<p style="font:700 10px ui-monospace,monospace;color:#999;letter-spacing:.12em;margin:14px 0 8px">ICON / ILLUST 方針</p>
+<div class="row" style="align-items:center">
+<div class="ic" style="width:30px;height:30px">鉛筆</div>
+<div class="ic" style="width:30px;height:30px">ノート</div>
+<div class="ic" style="width:30px;height:30px">電球</div>
+<div class="ic" style="width:30px;height:30px">花丸</div>
+<p class="p" style="flex:1;margin-left:4px">写真なし。塾モチーフの線画アイコン＋フラット人物イラスト＋手書き風の添え文字・矢印で統一</p>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「目次は<a class="dv-oid" href="#2b">2b</a>で確定、<a class="dv-oid" href="#2a">2a</a>に組み込んで」 · 「<a class="dv-oid" href="#2e">2e</a>のボタンで下層もOK、ハイファイへ」 · 「パステルの使い所をもっと控えめに」</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">トップページ5案（SP）＋ 下層一式・相性診断・PC骨格</span></div>
+<div class="dv-opts">
+
+<!-- ============ 1a 王道・要件順 ============ -->
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>王道LP型 — 要件定義書の順番そのまま</div>
+<ul class="meta"><li><b>コピー</b>：便益型・明るい</li><li><b>密度</b>：標準（全11セクション）</li><li><b>CTA</b>：下部固定W（資料請求＋無料相談）</li><li><b>ラクガキ</b>：中</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:8px;right:10px;transform:rotate(15deg)">＊</span>
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:17px;margin-top:8px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<p class="s" style="font-style:italic">小さな「できた」を、一緒に増やそう。</p>
+<div class="row" style="margin-top:8px;align-items:stretch">
+<div class="box" style="flex:1.1"><b style="font-size:12px;color:#143778">月5,980<span style="font-size:8px">円〜(税抜)</span></b><br>1教科・諸経費なし</div>
+<div class="ph" style="flex:1;height:64px">人物イラスト<br>先生+生徒</div>
+</div>
+<div class="row" style="margin-top:8px"><div class="bt bo">資料請求（無料）</div><div class="bt bn">無料相談</div></div>
+</div>
+<div class="sec">
+<div class="row" style="flex-wrap:wrap">
+<span class="chip">01 選ばれる理由 ↓</span><span class="chip">02 指導方針 ↓</span><span class="chip">03 料金 ↓</span><span class="chip">04 保護者の声 ↓</span><span class="chip">05 教室一覧 ↓</span>
+</div>
+</div>
+<div class="sec">
+<div class="lab">Nayami</div>
+<p class="h">こんなお悩み、ありませんか？</p>
+<div class="col">
+<div class="row" style="align-items:center"><span class="ic">ic</span><span class="p">家で全然勉強しない</span></div>
+<div class="row" style="align-items:center"><span class="ic">ic</span><span class="p">勉強のやり方が分からない</span></div>
+<div class="row" style="align-items:center"><span class="ic">ic</span><span class="p">平均点が取れない</span></div>
+</div>
+<p class="note">アイコン=Lucide線画</p>
+</div>
+<div class="sec">
+<div class="lab">Reason</div>
+<p class="h">フォーカスが選ばれる<span class="hl">3つの理由</span></p>
+<div class="col">
+<div class="box"><b>① 勉強が苦手な子の「専門」塾</b><br>偏差値45〜55の子だけに特化</div>
+<div class="box"><b>② 通いやすい価格の個別指導</b><br>集団塾なみ・諸経費なし・3年据置</div>
+<div class="box"><b>③ 講師は全員、現役の千葉大生</b><br>親の安心・子の憧れ</div>
+</div>
+<div class="bt bw" style="margin-top:6px">くわしく見る → /reason</div>
+</div>
+<div class="sec">
+<div class="lab">Method</div>
+<p class="h">「分かる」から「自立」へ</p>
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center">STEP1<br><b>基礎まで<br>さかのぼる</b></div>
+<span style="color:#E67832;font-weight:900">→</span>
+<div class="box" style="text-align:center">STEP2<br><b>勉強の仕方を<br>身につける</b></div>
+</div>
+<div class="ph" style="height:46px;margin-top:6px">ラクガキ図解（矢印・電球）</div>
+</div>
+<div class="sec">
+<div class="lab">Price</div>
+<p class="h">1教科 <span style="font-size:18px;color:#143778">月5,980</span>円（税抜）</p>
+<p class="s">税込6,578円</p>
+<div class="row" style="margin-top:6px"><div class="badge">入会金なし</div><div class="badge">諸経費なし</div><div class="badge">3年間据置</div></div>
+<div class="bt bo" style="margin-top:6px">料金くわしく → /price</div>
+</div>
+<div class="sec">
+<div class="lab">Voice</div>
+<p class="h">保護者さまの声</p>
+<div class="vrow">
+<div class="vcard"><div class="ph" style="height:26px;margin-bottom:4px">写真</div>中2・母<br>「点数より先に、机に向かうように…」<b style="color:#c00">※仮</b></div>
+<div class="vcard"><div class="ph" style="height:26px;margin-bottom:4px">写真</div>中3・母<br>「費用が続けられるのが…」<b style="color:#c00">※仮</b></div>
+<div class="vcard"><div class="ph" style="height:26px"></div></div>
+</div>
+<p class="note">横スクロール／公開前に実物差替</p>
+</div>
+<div class="sec">
+<div class="lab">Classrooms</div>
+<p class="h">千葉市中心に<span class="hl">全10教室</span></p>
+<div class="tabrow"><span class="tab on">千葉市</span><span class="tab">市川市</span><span class="tab">市原市</span><span class="tab">四街道市</span></div>
+<div class="col" style="margin-top:6px">
+<div class="acc">○○教室 — JR○○駅 徒歩5分 <span>→</span></div>
+<div class="acc">△△教室 — △△駅 徒歩3分 <span>→</span></div>
+</div>
+<div class="bt bg" style="margin-top:6px">現在地から最寄りの教室をさがす</div>
+</div>
+<div class="sec">
+<div class="lab">Flow</div>
+<p class="h">入塾までの流れ</p>
+<div class="row">
+<div class="box" style="text-align:center"><span class="num" style="margin:0 auto 3px">1</span>資料請求</div>
+<div class="box" style="text-align:center"><span class="num" style="margin:0 auto 3px">2</span>無料相談</div>
+<div class="box" style="text-align:center"><span class="num" style="margin:0 auto 3px">3</span>体験授業</div>
+<div class="box" style="text-align:center"><span class="num" style="margin:0 auto 3px">4</span>入塾</div>
+</div>
+<p class="note">体験授業の有無=要確認</p>
+</div>
+<div class="sec">
+<div class="lab">FAQ</div>
+<div class="col">
+<div class="acc">本当に諸経費はかかりませんか？ <b>＋</b></div>
+<div class="acc">勉強が本当に苦手でも大丈夫？ <b>＋</b></div>
+<div class="acc">講師は選べますか？ <b>＋</b></div>
+</div>
+<div class="bt bw" style="margin-top:6px">すべての質問を見る → /faq</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">まずは、話を聞きに来ませんか？</p>
+<div class="row"><div class="bt bo">資料請求</div><div class="bt bw">無料相談</div></div>
+<div class="bt bg" style="margin-top:6px">お近くの教室へ電話する</div>
+</div>
+<div class="foot">FOCUS ロゴ／サイトマップ／会社概要・プライバシー・特商法</div>
+<div class="pop">うちの子、フォーカスに合う？<br><span style="color:#E67832">30秒で相性診断 →</span><p class="note" style="margin:2px 0 0">スクロール後に出現</p></div>
+<div class="stick"><div class="bt bo">資料請求</div><div class="bt bn">無料相談</div></div>
+</div></div>
+</div>
+
+<!-- ============ 1b 共感ファースト ============ -->
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>共感ファースト — 悩みから入る</div>
+<ul class="meta"><li><b>コピー</b>：寄り添い・母親の声を代弁</li><li><b>密度</b>：標準（診断を前半に）</li><li><b>CTA</b>：下部固定は資料請求1本＋ヘッダー電話</li><li><b>ラクガキ</b>：控えめ</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span class="row" style="gap:6px;align-items:center"><span class="tel">TEL</span><span>☰</span></span></div>
+<div class="sec">
+<div class="box" style="background:#FFFBF2;border-color:#E67832">
+<p class="p" style="font-weight:700;color:#333">☑ 家で全然、勉強しない<br>☑ 「どこが分からないか」も分からない<br>☑ このままで高校、大丈夫…？</p>
+</div>
+<p class="h" style="font-size:15px;margin-top:8px">その悩み、<span class="hl">「勉強が苦手な子専門」</span>の塾なら、解決できます。</p>
+<div class="row" style="align-items:flex-end">
+<p class="s" style="flex:1">最大1対4の個別指導・月5,980円〜（税抜）</p>
+<div class="ph" style="width:100px;height:60px">人物イラスト<br>母+子</div>
+</div>
+<div class="bt bo" style="margin-top:6px">まずは資料請求（SMSで届く）</div>
+</div>
+<div class="sec" style="background:#E3ECF8">
+<p class="h">うちの子に合うか、30秒で分かります</p>
+<div class="bt bn">相性診断をやってみる → /diagnosis</div>
+<p class="note">診断を前半に置いて自分ごと化</p>
+</div>
+<div class="sec">
+<div class="lab">Reason</div>
+<p class="h">解決できる3つの理由</p>
+<div class="col">
+<div class="box"><b>① 苦手な子「専門」</b> — できる子向けの塾ではありません</div>
+<div class="box"><b>② 基礎までさかのぼる個別指導</b> — 最大1対4</div>
+<div class="box"><b>③ 講師は全員千葉大生</b> — お子さまの少し先を走る先輩</div>
+</div>
+</div>
+<div class="sec">
+<div class="lab">Before → After</div>
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center;background:#f5f5f5">Before<br><b>「分からない」<br>が言えない</b></div>
+<span style="color:#E67832;font-weight:900">⇒</span>
+<div class="box" style="text-align:center;border-color:#E67832">After<br><b>「できた！」で<br>自分から机へ</b></div>
+</div>
+<div class="ph" style="height:42px;margin-top:6px">図解イラスト</div>
+</div>
+<div class="sec">
+<div class="lab">Voice</div>
+<p class="h">同じ悩みだった保護者さまの声</p>
+<div class="vrow"><div class="vcard">中1・母「うちも家で勉強ゼロでした…」<b style="color:#c00">※仮</b></div><div class="vcard">中3・母<b style="color:#c00">※仮</b></div></div>
+</div>
+<div class="sec">
+<div class="lab">Price</div>
+<p class="h">続けられる料金だから、安心。</p>
+<p class="p">1教科 月5,980円（税抜）／諸経費なし・中学3年間据置</p>
+<div class="row" style="margin-top:6px"><div class="badge">入会金なし</div><div class="badge">諸経費なし</div><div class="badge">3年間据置</div></div>
+</div>
+<div class="sec">
+<div class="lab">Classrooms</div>
+<p class="h">お近くの教室（全10教室）</p>
+<div class="bt bg">現在地から最寄りをさがす</div>
+<div class="tabrow" style="margin-top:6px"><span class="tab on">千葉市</span><span class="tab">市川</span><span class="tab">市原</span><span class="tab">四街道</span></div>
+</div>
+<div class="sec">
+<div class="lab">Flow + FAQ</div>
+<div class="row"><div class="box" style="text-align:center">1 資料請求</div><div class="box" style="text-align:center">2 相談</div><div class="box" style="text-align:center">3 体験</div><div class="box" style="text-align:center">4 入塾</div></div>
+<div class="col" style="margin-top:6px"><div class="acc">無理な勧誘はありませんか？ <b>＋</b></div><div class="acc">途中でやめられますか？ <b>＋</b></div></div>
+</div>
+<div class="sec" style="background:#FFFBF2">
+<p class="h">一人で悩まず、一度話しに来てください。</p>
+<div class="row"><div class="bt bn">無料相談を予約</div><div class="bt bg">電話する</div></div>
+</div>
+<div class="foot">フッター（サイトマップ・会社概要）</div>
+<div class="stick"><div class="bt bo">資料請求（無料・SMSで届く）</div></div>
+</div></div>
+</div>
+
+<!-- ============ 1c 価格ドン・比較型 ============ -->
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>価格ドン — 数字と比較で即決させる</div>
+<ul class="meta"><li><b>コピー</b>：端的・数字ドリブン</li><li><b>密度</b>：やや低（比較表が主役）</li><li><b>CTA</b>：資料請求オレンジ一択を連打</li><li><b>ラクガキ</b>：最小限・クリーン</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec" style="background:#143778">
+<span class="tag" style="background:#fff">勉強がニガテな中学生専門</span>
+<p class="h" style="color:#fff;font-size:15px;margin-top:8px">個別指導なのに、<br>集団塾の価格。</p>
+<p style="color:#FFE869;font-weight:900;font-size:26px;margin:4px 0">月5,980<span style="font-size:11px">円〜(税抜)</span></p>
+<p class="s" style="color:#cdd8ec">1教科／税込6,578円／諸経費0円／3年間値上げなし</p>
+<div class="bt bo" style="margin-top:8px">資料請求はこちら（無料）</div>
+</div>
+<div class="sec">
+<div class="lab">Hikaku</div>
+<p class="h">よくある塾と、くらべてください</p>
+<div class="col" style="gap:3px">
+<div class="row" style="font-size:8.5px;color:#999"><span style="flex:1.4"></span><span style="flex:1;text-align:center">集団塾</span><span style="flex:1;text-align:center">他の個別</span><span style="flex:1;text-align:center;font-weight:900;color:#E67832">FOCUS</span></div>
+<div class="row"><div class="box" style="flex:1.4">月謝(1教科)</div><div class="box" style="text-align:center">△</div><div class="box" style="text-align:center">×高い</div><div class="box" style="text-align:center;border-color:#E67832"><b>○5,980円</b></div></div>
+<div class="row"><div class="box" style="flex:1.4">諸経費</div><div class="box" style="text-align:center">×あり</div><div class="box" style="text-align:center">×あり</div><div class="box" style="text-align:center;border-color:#E67832"><b>○なし</b></div></div>
+<div class="row"><div class="box" style="flex:1.4">苦手な子への個別対応</div><div class="box" style="text-align:center">×</div><div class="box" style="text-align:center">△</div><div class="box" style="text-align:center;border-color:#E67832"><b>◎専門</b></div></div>
+</div>
+<p class="note">比較表現は根拠の確認が必要（景表法）</p>
+</div>
+<div class="sec">
+<div class="lab">Why cheap</div>
+<p class="h">なぜこの価格でできるの？</p>
+<p class="p">最大1対4の指導形態と教室運営の工夫。安かろう悪かろうではない理由を短く説明。</p>
+<div class="ph" style="height:40px;margin-top:6px">図解</div>
+</div>
+<div class="sec">
+<div class="lab">Teacher</div>
+<p class="h">講師は<span class="hl">全員、現役の千葉大生</span></p>
+<div class="row"><div class="ph" style="flex:1;height:50px">顔写真</div><div class="ph" style="flex:1;height:50px">顔写真</div><div class="ph" style="flex:1;height:50px">顔写真</div></div>
+<div class="bt bo" style="margin-top:8px">資料請求はこちら（無料）</div>
+</div>
+<div class="sec">
+<div class="lab">Price detail</div>
+<p class="h">料金は、これだけ。</p>
+<div class="row"><div class="badge">入会金 0円</div><div class="badge">設備費 0円</div><div class="badge">教材費 明朗</div></div>
+<p class="note">「教材費」の扱い=要確認</p>
+</div>
+<div class="sec">
+<div class="lab">Classrooms</div>
+<div class="tabrow"><span class="tab on">千葉市</span><span class="tab">市川</span><span class="tab">市原</span><span class="tab">四街道</span></div>
+<div class="col" style="margin-top:6px"><div class="acc">○○教室 <span>→</span></div><div class="acc">△△教室 <span>→</span></div></div>
+</div>
+<div class="sec">
+<div class="lab">FAQ（費用系）</div>
+<div class="col"><div class="acc">追加費用は本当にない？ <b>＋</b></div><div class="acc">兄弟割はある？ <b>＋</b></div><div class="acc">支払い方法は？ <b>＋</b></div></div>
+</div>
+<div class="sec" style="background:#FFFBF2">
+<p class="h">くわしい料金表を、パンフでどうぞ</p>
+<div class="bt bo">資料請求（SMSですぐ届く）</div>
+<div class="row" style="margin-top:6px"><div class="bt bw">無料相談</div><div class="bt bg">電話</div></div>
+</div>
+<div class="foot">フッター</div>
+<div class="stick"><div class="bt bo">資料請求（無料）</div></div>
+</div></div>
+</div>
+
+<!-- ============ 1d ストーリー・千葉大生推し ============ -->
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>ストーリー型 — 子どもの変化と千葉大生講師が主役</div>
+<ul class="meta"><li><b>コピー</b>：物語・あたたかい</li><li><b>密度</b>:標準（声と講師を前半に）</li><li><b>CTA</b>：無料相談ネイビーを主役に</li><li><b>ラクガキ</b>：強め（矢印・星・ふきだし多用）</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec">
+<span class="doodle" style="top:6px;left:8px;transform:rotate(-12deg)">＊</span>
+<span class="doodle" style="top:40px;right:6px">→</span>
+<p class="h" style="font-size:17px">「できた」が、<br>子どもを<span class="hl">変える。</span></p>
+<div class="row" style="margin-top:6px">
+<div class="ph" style="flex:1;height:52px">マンガ1コマ<br>うつむく子</div>
+<div class="ph" style="flex:1;height:52px">2コマ<br>先生と解く</div>
+<div class="ph" style="flex:1;height:52px">3コマ<br>笑顔で○</div>
+</div>
+<p class="s" style="margin-top:5px">勉強がニガテな中学生専門・最大1対4・月5,980円〜</p>
+<div class="row" style="margin-top:6px"><div class="bt bn">無料相談で話を聞く</div><div class="bt bo">資料請求</div></div>
+</div>
+<div class="sec">
+<div class="lab">Teacher</div>
+<p class="h">教えるのは、<span class="hl">全員が現役千葉大生。</span></p>
+<p class="p">「勉強の仕方」でつまずいた経験がある先輩だから、苦手な子の気持ちが分かる。</p>
+<div class="row" style="margin-top:6px">
+<div class="vcard" style="width:auto;flex:1"><div class="ph" style="height:36px;margin-bottom:3px">顔</div>教育学部・2年<br>「僕も中学は平均点でした」</div>
+<div class="vcard" style="width:auto;flex:1"><div class="ph" style="height:36px;margin-bottom:3px">顔</div>理学部・3年<br>「褒めて伸ばします」</div>
+</div>
+<p class="note">講師紹介コンテンツ=素材要調達</p>
+</div>
+<div class="sec">
+<div class="lab">Voice</div>
+<p class="h">通わせて、変わったこと</p>
+<div class="vrow"><div class="vcard"><div class="ph" style="height:24px;margin-bottom:3px">写真</div>「初めて自分から宿題を…」中2母<b style="color:#c00">※仮</b></div><div class="vcard">「苦手と言わなくなった」<b style="color:#c00">※仮</b></div></div>
+</div>
+<div class="sec">
+<div class="lab">Method</div>
+<p class="h">変わる理由は、順番にあります</p>
+<div class="row" style="align-items:center">
+<div class="box" style="text-align:center">まず<br><b>基礎に戻る</b></div><span style="color:#E67832">→</span>
+<div class="box" style="text-align:center">分かる</div><span style="color:#E67832">→</span>
+<div class="box" style="text-align:center"><b>勉強の仕方</b><br>が身につく</div>
+</div>
+</div>
+<div class="sec">
+<div class="lab">Reason + Price</div>
+<div class="col">
+<div class="box"><b>苦手な子専門</b>だから、置いていかれない</div>
+<div class="box"><b>月5,980円〜・諸経費なし</b>だから、続けられる</div>
+</div>
+<div class="row" style="margin-top:6px"><div class="badge">入会金なし</div><div class="badge">3年据置</div></div>
+</div>
+<div class="sec" style="background:#E3ECF8">
+<p class="h">お子さまに合うか、まず診断</p>
+<div class="bt bn">30秒相性診断 →</div>
+</div>
+<div class="sec">
+<div class="lab">Classrooms / Flow / FAQ</div>
+<div class="tabrow"><span class="tab on">千葉市</span><span class="tab">市川</span><span class="tab">市原</span><span class="tab">四街道</span></div>
+<div class="row" style="margin-top:6px"><div class="box" style="text-align:center">1 資料</div><div class="box" style="text-align:center">2 相談</div><div class="box" style="text-align:center">3 体験</div><div class="box" style="text-align:center">4 入塾</div></div>
+<div class="acc" style="margin-top:6px">よくある質問 → /faq</div>
+</div>
+<div class="sec" style="background:#143778">
+<p class="h" style="color:#fff">先生に、会いに来ませんか？</p>
+<div class="row"><div class="bt bn" style="background:#fff;color:#143778">無料相談を予約</div><div class="bt bo">資料請求</div></div>
+</div>
+<div class="foot">フッター</div>
+<div class="stick"><div class="bt bo">資料請求</div><div class="bt bn">無料相談</div></div>
+</div></div>
+</div>
+
+<!-- ============ 1e 30秒・診断ハブ ============ -->
+<div class="dv-opt" id="1e">
+<div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>30秒スキャン型 — 最小密度・診断が入口</div>
+<ul class="meta"><li><b>コピー</b>：超短文・見出しだけで完結</li><li><b>密度</b>：最小（6セクション）</li><li><b>CTA</b>：診断ネイビー→資料請求の2段導線</li><li><b>ラクガキ</b>：中（余白多め）</li></ul>
+<div class="dv-card"><div class="fr">
+<div class="bar">FOCUS <span>☰</span></div>
+<div class="sec" style="padding-bottom:16px">
+<span class="tag">勉強がニガテな中学生専門</span>
+<p class="h" style="font-size:18px;margin-top:8px">苦手なのは、<br>やり方を知らないだけ。</p>
+<div class="ph" style="height:70px;margin-top:6px">人物イラスト（横長）</div>
+<div class="box" style="margin-top:8px;border-color:#143778;background:#E3ECF8;text-align:center">
+<b style="color:#143778">うちの子、フォーカスに合う？</b><br>
+<div class="bt bn" style="margin-top:5px">30秒で相性診断 →</div>
+</div>
+</div>
+<div class="sec">
+<div class="row">
+<div class="box" style="text-align:center"><b style="font-size:14px;color:#143778">5,980<span style="font-size:8px">円〜</span></b><br>月謝(1教科・税抜)</div>
+<div class="box" style="text-align:center"><b style="font-size:14px;color:#143778">1対4</b><br>までの個別指導</div>
+<div class="box" style="text-align:center"><b style="font-size:14px;color:#143778">100%</b><br>千葉大生講師</div>
+</div>
+<p class="note">数字3つだけのスタット行</p>
+</div>
+<div class="sec">
+<div class="lab">Reason</div>
+<div class="col">
+<div class="acc"><span><b>①</b> 苦手な子の専門塾です</span><b>＋</b></div>
+<div class="acc"><span><b>②</b> 集団塾なみの価格です</span><b>＋</b></div>
+<div class="acc"><span><b>③</b> 先生は全員千葉大生です</span><b>＋</b></div>
+</div>
+<p class="note">開くと2行の説明（読ませない）</p>
+</div>
+<div class="sec">
+<div class="lab">Classrooms</div>
+<p class="h">全10教室・最寄りは？</p>
+<div class="bt bg">現在地からさがす</div>
+<div class="ph" style="height:44px;margin-top:6px">簡易マップ</div>
+</div>
+<div class="sec">
+<div class="lab">Flow</div>
+<div class="row"><div class="box" style="text-align:center">資料請求<br><b>1分</b></div><div class="box" style="text-align:center">無料相談<br><b>60分</b></div><div class="box" style="text-align:center">入塾</div></div>
+</div>
+<div class="sec" style="background:#FFFBF2">
+<p class="h">迷ったら、パンフだけでも。</p>
+<div class="bt bo">資料請求（電話番号だけでOK）</div>
+</div>
+<div class="foot">フッター（声・FAQ・詳細は下層ページへ逃がす）</div>
+<div class="stick"><div class="bt bo">資料請求</div><div class="bt bn">30秒診断</div></div>
+</div></div>
+</div>
+
+<!-- ============ 1f 下層ページ一式 ============ -->
+<div class="dv-opt" id="1f">
+<div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>下層ページ一式（共通骨格・全案共用）</div>
+<div class="dv-card" style="padding:16px"><div style="display:flex;flex-wrap:wrap;gap:14px;max-width:920px">
+<div class="mini"><div class="bar" style="font-size:10px">/reason 選ばれる理由</div>
+<div class="sec"><p class="h" style="font-size:11px">選ばれる3つの理由</p><div class="ph" style="height:30px">ヒーローイラスト</div></div>
+<div class="sec"><div class="box"><b>① 苦手専門</b><br>詳細説明＋図解ph</div></div>
+<div class="sec"><div class="box"><b>② 価格</b>＋<b>③ 千葉大生</b>同構造で続く</div></div>
+<div class="sec"><div class="bt bo" style="font-size:9px">資料請求</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/method 指導方針</div>
+<div class="sec"><p class="h" style="font-size:11px">基礎→自立の2ステップ</p><div class="ph" style="height:30px">図解</div></div>
+<div class="sec"><div class="box">STEP1 さかのぼり学習の中身</div></div>
+<div class="sec"><div class="box">STEP2 正しい勉強の仕方</div></div>
+<div class="sec"><div class="box">1週間の学習サイクル例</div><div class="bt bn" style="font-size:9px;margin-top:5px">無料相談</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/price 料金</div>
+<div class="sec"><p class="h" style="font-size:11px">月5,980円〜（税抜）</p><div class="row"><div class="badge" style="font-size:7.5px">諸経費なし</div><div class="badge" style="font-size:7.5px">3年据置</div></div></div>
+<div class="sec"><div class="box">学年×教科数の料金表</div></div>
+<div class="sec"><div class="box">よくある塾との比較表</div></div>
+<div class="sec"><div class="box">費用FAQ 3問</div><div class="bt bo" style="font-size:9px;margin-top:5px">資料請求</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/faq よくある質問</div>
+<div class="sec"><div class="tabrow"><span class="tab on" style="font-size:7.5px">料金</span><span class="tab" style="font-size:7.5px">指導</span><span class="tab" style="font-size:7.5px">教室</span></div></div>
+<div class="sec"><div class="col"><div class="acc" style="font-size:8.5px">Q… <b>＋</b></div><div class="acc" style="font-size:8.5px">Q… <b>＋</b></div><div class="acc" style="font-size:8.5px">Q… <b>＋</b></div></div></div>
+<div class="sec"><div class="box">解決しなければ→無料相談へ誘導</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/classrooms 教室一覧</div>
+<div class="sec"><div class="ph" style="height:40px">全体マップ（10ピン）</div><div class="bt bg" style="font-size:8.5px;margin-top:5px">現在地から最寄り検索</div></div>
+<div class="sec"><div class="tabrow"><span class="tab on" style="font-size:7.5px">千葉市</span><span class="tab" style="font-size:7.5px">市川</span><span class="tab" style="font-size:7.5px">市原</span><span class="tab" style="font-size:7.5px">四街道</span></div><div class="col" style="margin-top:5px"><div class="acc" style="font-size:8.5px">○○教室 →</div><div class="acc" style="font-size:8.5px">△△教室 →</div></div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/classrooms/[slug] 教室詳細</div>
+<div class="sec"><p class="h" style="font-size:11px">○○教室</p><div class="ph" style="height:34px">外観写真</div></div>
+<div class="sec"><div class="box">アクセス（地図埋込ph・住所・駅徒歩）</div></div>
+<div class="sec"><div class="box">教室の様子（写真×3 ph）</div></div>
+<div class="sec"><div class="box">対応中学リスト ※要確認</div><div class="row" style="margin-top:5px"><div class="bt bg" style="font-size:8.5px">この教室に電話</div><div class="bt bn" style="font-size:8.5px">無料相談</div></div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px;background:#FFFBF2">/document 資料請求</div>
+<div class="sec"><p class="h" style="font-size:11px">パンフをSMSでお届け</p><p class="p" style="font-size:8.5px">入力は電話番号だけ。営業電話はしません。</p></div>
+<div class="sec"><div class="col"><div class="inp">携帯電話番号</div><div class="inp" style="color:#bbb">お名前（任意）</div></div><div class="bt bo" style="font-size:9px;margin-top:6px">送信する</div></div>
+<div class="sec"><div class="box">送信後：完了画面→無料相談へ後押し</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px;background:#E3ECF8">/consult 無料相談</div>
+<div class="sec"><p class="h" style="font-size:11px">来塾60分・無料の面談</p><div class="box" style="font-size:8.5px">当日の流れ：話を聞く→現状分析→提案（入塾を迫りません）</div></div>
+<div class="sec"><div class="col"><div class="inp">希望教室（選択）</div><div class="inp">希望日時（第2希望まで）</div><div class="inp">お名前・電話番号</div></div><div class="bt bn" style="font-size:9px;margin-top:6px">予約する</div></div>
+</div>
+<div class="mini"><div class="bar" style="font-size:10px">/company 会社概要ほか</div>
+<div class="sec"><div class="box">会社概要（表）</div></div>
+<div class="sec"><div class="box">プライバシーポリシー</div></div>
+<div class="sec"><div class="box">特商法表記</div><p class="note" style="font-size:8px">文面=公開前に確定必須</p></div>
+</div>
+</div></div>
+</div>
+
+<!-- ============ 1g 相性診断 ============ -->
+<div class="dv-opt" id="1g">
+<div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>/diagnosis 相性診断 — カード式UI（3画面）</div>
+<div class="dv-card" style="padding:16px"><div style="display:flex;gap:14px;flex-wrap:wrap">
+<div class="fr" style="width:230px">
+<div class="bar" style="font-size:11px">相性診断 <span style="font-size:9px;color:#999">とじる ×</span></div>
+<div class="sec" style="text-align:center;padding:20px 14px">
+<span class="tag">30秒・5問</span>
+<p class="h" style="margin-top:10px">うちの子、<br>フォーカスに合う？</p>
+<div class="ph" style="height:56px;margin:8px 0">イラスト</div>
+<p class="p">お子さまのことを5問だけ。<br>結果はその場で分かります。</p>
+<div class="bt bn" style="margin-top:10px">はじめる →</div>
+</div>
+</div>
+<div class="fr" style="width:230px">
+<div class="bar" style="font-size:11px">Q2 / 5 <span style="font-size:9px;color:#999">●●○○○</span></div>
+<div class="sec" style="padding:16px 14px">
+<div class="box" style="background:#fff;border-color:#143778;padding:12px;text-align:center;box-shadow:3px 4px 0 rgba(20,55,120,.15)">
+<p class="h">お子さまは家で<br>勉強していますか？</p>
+<div class="col" style="margin-top:10px">
+<div class="bt bw">ほとんどしない</div>
+<div class="bt bw">テスト前だけ</div>
+<div class="bt bw">毎日少しは</div>
+</div>
+</div>
+<p class="note" style="text-align:center">カードが1問ずつスライド／選択で即次へ</p>
+<div class="s" style="text-align:center;margin-top:6px">← まえの質問にもどる</div>
+</div>
+</div>
+<div class="fr" style="width:230px">
+<div class="bar" style="font-size:11px">診断結果</div>
+<div class="sec" style="text-align:center;padding:16px 14px;background:#FFFBF2">
+<span class="chip">相性 ◎</span>
+<p class="h" style="margin-top:8px">フォーカスに<br><span class="hl">ぴったりのタイプ</span>です</p>
+<div class="ph" style="height:46px;margin:8px 0">タイプ別イラスト</div>
+<p class="p">「やり方が分からない」タイプ。基礎さかのぼり指導が効きます。</p>
+<div class="col" style="margin-top:10px">
+<div class="bt bo">資料請求へ（結果を添えて）</div>
+<div class="bt bn">無料相談で詳しく聞く</div>
+</div>
+<p class="note">ロジックは仮／結果は全タイプ前向きに</p>
+</div>
+</div>
+</div></div>
+</div>
+
+<!-- ============ 1h PC骨格 ============ -->
+<div class="dv-opt" id="1h">
+<div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>PC骨格 — 右端固定CTA＋2カラム展開（全案共通ルール）</div>
+<div class="dv-card" style="padding:16px"><div class="col" style="gap:14px">
+<div class="frpc">
+<div class="bar">FOCUS <span class="row" style="gap:10px;font-size:9.5px;font-weight:500;align-items:center"><span>選ばれる理由</span><span>指導方針</span><span>料金</span><span>教室一覧</span><span>FAQ</span><span class="bt bn" style="flex:none;padding:5px 12px;font-size:9.5px">無料相談</span><span class="bt bo" style="flex:none;padding:5px 12px;font-size:9.5px">資料請求</span></span></div>
+<div class="sec" style="display:flex;gap:16px;padding:20px 22px">
+<div style="flex:1.2">
+<span class="tag">勉強がニガテな中学生専門の個別指導塾</span>
+<p class="h" style="font-size:22px;margin-top:10px">自信がつくから、<br><span class="hl">勉強は楽しくなる！</span></p>
+<div class="row" style="margin-top:10px;max-width:340px"><div class="bt bo">資料請求（無料）</div><div class="bt bn">無料相談</div></div>
+<div class="row" style="margin-top:8px;max-width:340px"><div class="badge">月5,980円〜</div><div class="badge">最大1対4</div><div class="badge">千葉大生講師</div></div>
+</div>
+<div class="ph" style="flex:1;height:150px">人物イラスト（先生+生徒）大</div>
+</div>
+<div class="sec" style="display:flex;gap:10px;padding:14px 22px">
+<div class="box" style="text-align:center">01 理由</div><div class="box" style="text-align:center">02 方針</div><div class="box" style="text-align:center">03 料金</div><div class="box" style="text-align:center">04 声</div><div class="box" style="text-align:center">05 教室</div>
+</div>
+<div class="sec" style="display:flex;gap:10px;padding:14px 22px">
+<div class="box" style="height:70px">以降のセクションはSP構成を2〜3カラムに展開（理由=3カード横並び、声=3枚横並び、教室=マップ+リスト2カラム）</div>
+</div>
+<div style="position:absolute;right:0;top:70px;width:44px;display:flex;flex-direction:column;gap:6px">
+<div class="bt bo" style="writing-mode:vertical-rl;padding:14px 6px;border-radius:8px 0 0 8px;font-size:10px">資料請求</div>
+<div class="bt bn" style="writing-mode:vertical-rl;padding:14px 6px;border-radius:8px 0 0 8px;font-size:10px">無料相談</div>
+</div>
+</div>
+<p class="note" style="margin:0">PC=右端に縦型固定CTA（オレンジ/ネイビー）・ヘッダーにもCV2種／SPは下部固定。診断ポップアップは右下。ブレークポイント想定: 〜768px=SP構成そのまま。</p>
+</div></div>
+</div>
+
+</div>
+<p class="dv-next">Try next: 「<a class="dv-oid" href="#1b">1b</a>の共感ヒーローと<a class="dv-oid" href="#1a">1a</a>の本文構成を合体」 · 「<a class="dv-oid" href="#1c">1c</a>の比較表を<a class="dv-oid" href="#1a">1a</a>の料金セクションに入れる」 · 「この案でハイファイへ」</p>
+</section>
+
+</x-dc>
+</body>
+</html>
+

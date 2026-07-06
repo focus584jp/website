@@ -1,7 +1,7 @@
 ---
 // 画面の隅からにゅっと出る相性診断への誘導。タップで /diagnosis へ。
 // 一度閉じたらそのセッションでは再表示しない（sessionStorage）。
-import { u } from '../lib/path';
+import { u } from '../../lib/path';
 ---
 <div class="wf-diagpop" id="wf-diagpop" data-state="hidden">
   <a class="body" href={u('/diagnosis')}>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&amp;family=Zen+Maru+Gothic:wght@700;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Noto Sans JP',sans-serif;color:#333333;background:#F4F8FC;-webkit-font-smoothing:antialiased}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cardInB{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+<header style="background:#fff;border-bottom:1px solid #E8EDF4">
+<div style="max-width:640px;margin:0 auto;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 20px">
+<a href="トップページ.dc.html"><img src="assets/logo.png" alt="FOCUS" style="height:24px;display:block"></a>
+<a href="トップページ.dc.html" style="font-size:12.5px;font-weight:700;color:#7A8598;text-decoration:none" style-hover="color:#143778">← トップへもどる</a>
+</div>
+</header>
+
+<main style="flex:1;display:flex;flex-direction:column;align-items:center;padding:28px 20px 48px;box-sizing:border-box">
+<div style="width:100%;max-width:560px">
+
+<!-- ============ 導入 ============ -->
+<sc-if value="{{isIntro}}" hint-placeholder-val="{{true}}">
+<div data-screen-label="診断 導入" style="background:#fff;border:1px solid #DBE3EE;border-radius:18px;padding:36px 28px;text-align:center;box-shadow:0 4px 18px rgba(20,42,84,.08);animation:cardIn .3s ease both">
+<span style="display:inline-block;font-size:12.5px;font-weight:800;color:#143778;background:#DDE7F7;border-radius:999px;padding:5px 16px">30秒・全5問</span>
+<h1 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,5.5vw,30px);line-height:1.6;margin:16px 0 0;color:#333">うちの子、<br><span style="background:linear-gradient(transparent 62%,var(--mk,#FFE869) 62% 94%,transparent 94%);padding:0 4px">フォーカスに合う？</span></h1>
+<p style="font-size:14px;line-height:2;color:#5B6B85;margin:16px 0 0">お子さまのことを5問だけ教えてください。<br>ぴったりの「塾のタイプ」がその場で分かります。</p>
+<button onClick="{{start}}" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:320px;margin:24px auto 0;background:#143778;color:#fff;font-family:'Noto Sans JP',sans-serif;font-size:16px;font-weight:700;padding:16px;border-radius:999px;border:none;cursor:pointer;box-shadow:0 5px 0 #0D2551;transition:transform .12s,box-shadow .12s" style-hover="transform:translateY(5px);box-shadow:0 0 0 #0D2551">診断をはじめる →</button>
+</div>
+</sc-if>
+
+<!-- ============ 設問 ============ -->
+<sc-if value="{{isQuiz}}" hint-placeholder-val="{{false}}">
+<div data-screen-label="診断 設問">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+<span style="font:900 14px ui-monospace,Menlo,monospace;color:#143778;letter-spacing:.1em">Q{{qNum}} <span style="color:#8FA9D0">/ 5</span></span>
+<div style="display:flex;gap:6px">
+<sc-for list="{{progress}}" as="p" hint-placeholder-count="5"><span style="width:9px;height:9px;border-radius:50%;background:{{p.bg}};display:inline-block"></span></sc-for>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #DBE3EE;border-radius:18px;padding:28px 24px;box-shadow:0 4px 18px rgba(20,42,84,.08);animation:{{cardAnim}}">
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(18px,4.4vw,22px);line-height:1.7;margin:0;color:#333;text-align:center">{{qText}}</h2>
+<div style="display:flex;flex-direction:column;gap:10px;margin-top:22px">
+<sc-for list="{{choices}}" as="c" hint-placeholder-count="3">
+<button onClick="{{c.pick}}" style="display:block;width:100%;text-align:center;background:#fff;border:1.5px solid #143778;color:#143778;font-family:'Noto Sans JP',sans-serif;font-size:14.5px;font-weight:700;padding:14px 12px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s" style-hover="background:#143778;color:#fff">{{c.label}}</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{canBack}}" hint-placeholder-val="{{false}}">
+<button onClick="{{back}}" style="display:block;margin:16px auto 0;background:none;border:none;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;color:#7A8598;cursor:pointer" style-hover="color:#143778">← まえの質問にもどる</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ 結果 ============ -->
+<sc-if value="{{isResult}}" hint-placeholder-val="{{false}}">
+<div data-screen-label="診断 結果">
+<div style="background:#fff;border:1px solid #DBE3EE;border-radius:18px;overflow:hidden;box-shadow:0 4px 18px rgba(20,42,84,.08);animation:cardIn .35s ease both">
+<div style="background:#143778;padding:18px 24px;text-align:center">
+<span style="font-size:12.5px;font-weight:800;color:#fff;letter-spacing:.06em">診断結果 — お子さまに合うのは…</span>
+</div>
+<div style="padding:28px 24px;text-align:center">
+<span style="display:inline-block;font-size:13px;font-weight:800;color:{{badgeFg}};background:{{badgeBg}};border-radius:999px;padding:5px 16px">フォーカスとの相性 {{badgeMark}}</span>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(21px,5vw,26px);line-height:1.6;margin:14px 0 0;color:#333"><span style="background:linear-gradient(transparent 62%,var(--mk,#FFE869) 62% 94%,transparent 94%);padding:0 4px">{{typeName}}</span></h2>
+<div style="display:flex;flex-direction:column;gap:8px;margin:18px auto 0;max-width:420px;text-align:left">
+<sc-for list="{{typePoints}}" as="t" hint-placeholder-count="3">
+<div style="display:flex;gap:8px;align-items:flex-start;font-size:13.5px;line-height:1.8;color:#555"><span style="color:#E67832;font-weight:900;flex:none">・</span><span>{{t.text}}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{isFit}}" hint-placeholder-val="{{true}}">
+<div style="margin-top:20px;background:#FFF8E1;border:1.5px dashed #E6C94A;border-radius:12px;padding:14px 16px;text-align:center">
+<p style="font-size:14px;font-weight:800;color:#333;margin:0;line-height:1.9">フォーカスは、まさにこのタイプの<br>「1対多数（最大1対4）の個別指導塾」です！</p>
+</div>
+</sc-if>
+<sc-if value="{{isNotFit}}" hint-placeholder-val="{{false}}">
+<div style="margin-top:20px;background:#F4F8FC;border-radius:12px;padding:14px 16px;text-align:center">
+<p style="font-size:13.5px;color:#5B6B85;margin:0;line-height:1.9">{{fitNote}}</p>
+</div>
+</sc-if>
+<div style="display:flex;flex-direction:column;gap:11px;max-width:360px;margin:24px auto 0">
+<a href="#" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#E67832;color:#fff;font-size:15.5px;font-weight:700;padding:15px;border-radius:999px;text-decoration:none;box-shadow:0 5px 0 #B95A1E;transition:transform .12s,box-shadow .12s" style-hover="transform:translateY(5px);box-shadow:0 0 0 #B95A1E"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+<a href="#" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#143778;color:#fff;font-size:15.5px;font-weight:700;padding:15px;border-radius:999px;text-decoration:none;box-shadow:0 5px 0 #0D2551;transition:transform .12s,box-shadow .12s" style-hover="transform:translateY(5px);box-shadow:0 0 0 #0D2551">無料相談を申し込む →</a>
+</div>
+<button onClick="{{restart}}" style="display:block;margin:18px auto 0;background:none;border:none;font-family:'Noto Sans JP',sans-serif;font-size:13px;font-weight:700;color:#7A8598;cursor:pointer" style-hover="color:#143778">もう一度診断する</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: 480, &quot;height&quot;: 760}}">
+class Component extends DCLogic {
+  state = { step: 'intro', answers: [] };
+
+  questions() {
+    // scores: [A, B, C, D, E]  A=通信/映像 B=難関集団 C=一般集団 D=1対少数個別 E=1対多数個別(FOCUS)
+    return [
+      {
+        q: 'お子さまは、家で勉強していますか？',
+        choices: [
+          { label: 'ほとんどしない', s: [0, 0, 0, 1, 2] },
+          { label: 'テスト前だけ、あわてて', s: [0, 0, 1, 0, 2] },
+          { label: '毎日すこしはしている', s: [0, 1, 2, 0, 1] }
+        ]
+      },
+      {
+        q: '学校の授業は、どのくらい分かっていそうですか？',
+        choices: [
+          { label: '分からないところが多い', s: [0, 0, 0, 2, 2] },
+          { label: '分かる時と分からない時が半々', s: [0, 0, 1, 1, 2] },
+          { label: 'だいたい分かっている', s: [1, 2, 2, 0, 1] }
+        ]
+      },
+      {
+        q: '「勉強のやり方」については、どうですか？',
+        choices: [
+          { label: 'やり方が分かっていない', s: [0, 0, 0, 1, 2] },
+          { label: '教わればできるが、ひとりだと止まる', s: [0, 0, 1, 1, 2] },
+          { label: '自分で計画して進められる', s: [2, 2, 1, 0, 0] }
+        ]
+      },
+      {
+        q: 'どんな教わり方が合いそうですか？',
+        choices: [
+          { label: '分からない所を、その場で質問したい', s: [0, 0, 0, 2, 2] },
+          { label: '自分のペースで進めて、見守ってほしい', s: [1, 0, 0, 0, 2] },
+          { label: 'みんなと一緒に、競い合いたい', s: [0, 2, 2, 0, 0] }
+        ]
+      },
+      {
+        q: '塾に通うとしたら、なにを大事にしたいですか？',
+        choices: [
+          { label: '無理なく続けられる費用', s: [1, 0, 1, 0, 2] },
+          { label: '費用よりも、とにかく手厚さ', s: [0, 0, 0, 2, 1] },
+          { label: '決まった時間に通うのがむずかしい', s: [2, 0, 0, 0, 1] }
+        ]
+      }
+    ];
+  }
+
+  types() {
+    return {
+      A: { name: '通信教育 / 映像授業', mark: '○', fit: false,
+        points: ['「多忙で決まった時間に通塾が難しい」お子さま向け', '自分のペースで、好きな時間に学習できる'],
+        note: '通いやすさが心配な場合も、フォーカスは千葉市を中心に全10教室。お近くの教室をぜひ一度のぞいてみてください。' },
+      B: { name: '難関校向け集団指導塾', mark: '○', fit: false,
+        points: ['「学習意欲が高く、主体的に勉強ができる」お子さま向け', 'ハイレベルな授業で、応用力や思考力を養える'],
+        note: '基礎に不安が出てきたときは、基礎さかのぼり専門のフォーカスにもご相談ください。' },
+      C: { name: '一般集団指導塾', mark: '○', fit: false,
+        points: ['「基本的な学習習慣が身についている」お子さま向け', '学習内容を先取りして学ぶことができる'],
+        note: '集団のペースが合わないと感じたら、一人ひとりに合わせるフォーカスの無料相談へどうぞ。' },
+      D: { name: '1対少数の個別指導塾', mark: '◎', fit: false,
+        points: ['「手取り足取り指導を受けたい」お子さま向け', '分からない部分をすぐに質問できる', 'オーダーメイドで学習を進められるが、授業料も高い'],
+        note: 'フォーカス（最大1対4の個別指導）なら、質問しやすさはそのままに、月5,980円〜で続けられます。' },
+      E: { name: '1対多数の個別指導塾', mark: '◎', fit: true,
+        points: ['「自分のペースで学習を進めたい」お子さま向け', '必要なときにサポートが受けられるので、主体的に学ぶ習慣がつく', '授業料が比較的リーズナブルで、無理なく継続できる'] }
+    };
+  }
+
+  resultType() {
+    const qs = this.questions();
+    const total = [0, 0, 0, 0, 0];
+    this.state.answers.forEach((a, i) => {
+      const s = qs[i].choices[a].s;
+      s.forEach((v, k) => { total[k] += v; });
+    });
+    const order = [4, 3, 2, 0, 1]; // tie-break: E > D > C > A > B
+    let best = order[0];
+    order.forEach(k => { if (total[k] > total[best]) best = k; });
+    return 'ABCDE'[best];
+  }
+
+  renderVals() {
+    const step = this.state.step;
+    const isQuiz = typeof step === 'number';
+    const qs = this.questions();
+    const vals = {
+      isIntro: step === 'intro',
+      isQuiz,
+      isResult: step === 'result',
+      start: () => this.setState({ step: 0, answers: [] }),
+      restart: () => this.setState({ step: 'intro', answers: [] })
+    };
+    if (isQuiz) {
+      const q = qs[step];
+      vals.qNum = step + 1;
+      vals.qText = q.q;
+      vals.choices = q.choices.map((c, i) => ({
+        label: c.label,
+        pick: () => {
+          const answers = [...this.state.answers];
+          answers[step] = i;
+          const next = step + 1;
+          this.setState({ answers, step: next >= qs.length ? 'result' : next });
+        }
+      }));
+      vals.progress = qs.map((_, i) => ({ bg: i < step ? '#143778' : (i === step ? '#E67832' : '#C6D4DF') }));
+      vals.canBack = step > 0;
+      vals.cardAnim = (step % 2 === 0 ? 'cardIn' : 'cardInB') + ' .35s ease both';
+      vals.back = () => this.setState({ step: step - 1 });
+    }
+    if (step === 'result') {
+      const t = this.types()[this.resultType()];
+      vals.typeName = t.name;
+      vals.badgeMark = t.mark;
+      vals.badgeFg = t.fit ? '#fff' : '#143778';
+      vals.badgeBg = t.fit ? '#E67832' : '#DDE7F7';
+      vals.typePoints = t.points.map(p => ({ text: p }));
+      vals.isFit = t.fit;
+      vals.isNotFit = !t.fit;
+      vals.fitNote = t.note || '';
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
