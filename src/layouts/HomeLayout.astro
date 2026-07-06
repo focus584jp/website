@@ -1,0 +1,49 @@
+---
+// hifi化したページ用のレイアウト（ワイヤー用 BaseLayout とは別系統）
+import '../styles/site.css';
+import HomeHeader from '../components/home/HomeHeader.astro';
+import HomeFooter from '../components/home/HomeFooter.astro';
+import FixedCta from '../components/home/FixedCta.astro';
+import DiagnosisPopupHifi from '../components/home/DiagnosisPopupHifi.astro';
+
+const { title, description = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />{/* 公開前：検索インデックス除外。ローンチ時に外す */}
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <HomeHeader />
+    <main><slot /></main>
+    <HomeFooter />
+    <FixedCta />
+    <DiagnosisPopupHifi />
+
+    <script>
+      // ヒーロー通過判定 → body.past-hero（PC右端CTA・診断ポップアップの表示トリガー）
+      const hero = document.getElementById('top');
+      function onScroll() {
+        const past = hero ? hero.getBoundingClientRect().bottom < 70 : window.scrollY > 400;
+        document.body.classList.toggle('past-hero', past);
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // タッチでの「沈み込み」フィードバック（:hoverが効かない環境向け）
+      window.addEventListener('pointerdown', (e) => {
+        (e.target as Element | null)?.closest?.('.btn3d')?.classList.add('pressed');
+      }, true);
+      const release = () => document.querySelectorAll('.btn3d.pressed').forEach((b) => b.classList.remove('pressed'));
+      window.addEventListener('pointerup', release, true);
+      window.addEventListener('pointercancel', release, true);
+    </script>
+  </body>
+</html>

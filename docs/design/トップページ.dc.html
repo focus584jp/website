@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<template id="__bundler_thumbnail" data-bg-color="#F4F8FC">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="800" fill="#F4F8FC"></rect>
+<g stroke="#c9dcf0" stroke-width="2"><line x1="0" y1="200" x2="1200" y2="200"></line><line x1="0" y1="400" x2="1200" y2="400"></line><line x1="0" y1="600" x2="1200" y2="600"></line><line x1="300" y1="0" x2="300" y2="800"></line><line x1="600" y1="0" x2="600" y2="800"></line><line x1="900" y1="0" x2="900" y2="800"></line></g>
+<rect x="390" y="310" width="420" height="200" rx="24" fill="#143778"></rect>
+<text x="600" y="445" text-anchor="middle" font-family="sans-serif" font-size="110" font-weight="900" fill="#ffffff">FOCUS</text>
+<rect x="470" y="540" width="260" height="26" rx="13" fill="#FFD84D"></rect>
+</svg>
+</template>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&amp;family=Zen+Maru+Gothic:wght@500;700;900&amp;display=swap" rel="stylesheet">
+<style>
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Noto Sans JP',sans-serif;color:#333333;background:#fff;-webkit-font-smoothing:antialiased}
+details>summary::-webkit-details-marker{display:none}
+details>summary{list-style:none}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:translateY(14px) rotate(-1.5deg)}to{opacity:1;transform:rotate(-1.5deg)}}
+.nav-hov{position:relative;display:inline-block;cursor:pointer;transition:color .2s}
+.nav-hov::after{content:"";position:absolute;left:0;bottom:-4px;width:100%;height:2.5px;background:#E67832;transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.nav-hov:hover{color:#E67832}
+.nav-hov:hover::after{transform:scaleX(1)}
+.btn-shine{position:relative;overflow:hidden}
+.btn-shine::after{content:"";position:absolute;top:-150%;left:-120%;width:60%;height:400%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:btnShine 6s ease-in-out infinite}
+@keyframes btnShine{0%{left:-120%;top:-150%}30%{left:140%;top:-50%}100%{left:140%;top:-50%}}
+.btn-shine-v{position:relative;overflow:hidden}
+.btn-shine-v::after{content:"";position:absolute;left:-150%;top:-120%;width:300%;height:50%;background:linear-gradient(210deg,transparent,rgba(255,255,255,.5),transparent);transform:skewY(-25deg);animation:btnShineV 6s ease-in-out infinite}
+@keyframes btnShineV{0%{top:-120%;left:-150%}30%{top:150%;left:60%}100%{top:150%;left:60%}}
+.btn3d{transition:transform .1s,box-shadow .1s !important}
+.btn3d-o:active{transform:translateY(5px) !important;box-shadow:0 0 0 #B95A1E !important}
+.btn3d-n:active{transform:translateY(5px) !important;box-shadow:0 0 0 #0D2551 !important}
+.btn-out .ar{transition:transform .2s;display:inline-block}
+.btn-out:hover .ar{transform:translateX(5px)}
+.btn3d.pressed,.btn3d:hover{transform:translateY(5px) !important;box-shadow:0 0 0 transparent !important}
+</style>
+<script>
+(function(){
+  function press(e){
+    var b = e.target && e.target.closest ? e.target.closest('.btn3d') : null;
+    if(!b) return;
+    b.classList.add('pressed');
+  }
+  function release(){
+    document.querySelectorAll('.btn3d.pressed').forEach(function(b){ b.classList.remove('pressed'); });
+  }
+  window.addEventListener('pointerdown', press, true);
+  window.addEventListener('pointerup', release, true);
+  window.addEventListener('pointercancel', release, true);
+})();
+</script>
+</helmet>
+
+<div style="--mk:{{markerColor}};--alt:{{altBg}}">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<filter id="wob"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="3"></feDisplacementMap></filter>
+</defs></svg>
+
+<!-- ============ ヘッダー ============ -->
+<header data-screen-label="ヘッダー" style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid #E8EDF4">
+<div style="max-width:1280px;margin:0 auto;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px">
+<img src="assets/logo.png" alt="FOCUS" style="height:40px;cursor:pointer" onClick="{{goTop}}">
+<sc-if value="{{notMobile}}" hint-placeholder-val="{{false}}">
+<nav style="display:flex;align-items:center">
+<span class="nav-hov" onClick="{{goReason}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 24px 0 0">選ばれる理由</span>
+<span style="width:1px;height:16px;background:#DDE3EA"></span>
+<span class="nav-hov" onClick="{{goMethod}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 24px">指導方針</span>
+<span style="width:1px;height:16px;background:#DDE3EA"></span>
+<span class="nav-hov" onClick="{{goPrice}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 24px">料金</span>
+<span style="width:1px;height:16px;background:#DDE3EA"></span>
+<span class="nav-hov" onClick="{{goVoice}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 24px">保護者さまの声</span>
+<span style="width:1px;height:16px;background:#DDE3EA"></span>
+<span class="nav-hov" onClick="{{goRooms}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 24px">教室一覧</span>
+<span style="width:1px;height:16px;background:#DDE3EA"></span>
+<span class="nav-hov" onClick="{{goFaq}}" style="font-size:13.5px;font-weight:500;color:#333;margin:0 0 0 24px">よくあるご質問</span>
+</nav>
+</sc-if>
+<sc-if value="{{isMobile}}" hint-placeholder-val="{{true}}">
+<button onClick="{{toggleMenu}}" aria-label="メニュー" style="background:none;border:none;cursor:pointer;padding:6px 8px;margin-right:-10px;display:flex;flex-direction:column;align-items:center;gap:3px">
+<span style="position:relative;width:26px;height:18px;display:block">
+<span style="position:absolute;left:0;top:{{hbT1}};width:26px;height:2.4px;border-radius:2px;background:#143778;transition:top .25s,transform .25s;transform:rotate({{hbR1}});transform-origin:center"></span>
+<span style="position:absolute;left:0;top:8px;width:26px;height:2.4px;border-radius:2px;background:#143778;transition:opacity .2s;opacity:{{hbO2}}"></span>
+<span style="position:absolute;left:0;top:{{hbT3}};width:26px;height:2.4px;border-radius:2px;background:#143778;transition:top .25s,transform .25s;transform:rotate({{hbR3}});transform-origin:center"></span>
+</span>
+<span style="font-size:9px;font-weight:700;letter-spacing:.08em;color:#143778;line-height:1;margin-top:3px;min-width:38px;text-align:center;display:block">{{hbLabel}}</span>
+</button>
+</sc-if>
+</div>
+</header>
+
+<!-- ============ SPメニュー（上からスライドダウン） ============ -->
+<div data-screen-label="メニュー" style="position:fixed;top:60px;left:0;right:0;bottom:0;z-index:49;pointer-events:{{menuPE}};visibility:{{menuVis}}">
+<div style="background:#fff;border-bottom:2px solid #143778;padding:8px 24px 24px;box-shadow:0 12px 30px rgba(20,55,120,.12);transform:translateY({{menuTy}});transition:transform .38s cubic-bezier(.65,0,.35,1)">
+<div style="display:flex;flex-direction:column">
+<div onClick="{{goReason}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .12s,transform .3s ease .12s">選ばれる理由<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+<div onClick="{{goMethod}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .16s,transform .3s ease .16s">指導方針<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+<div onClick="{{goPrice}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .2s,transform .3s ease .2s">料金<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+<div onClick="{{goVoice}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .24s,transform .3s ease .24s">保護者さまの声<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+<div onClick="{{goRooms}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .28s,transform .3s ease .28s">教室一覧<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+<div onClick="{{goFaq}}" style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:15px;font-weight:700;color:#333;cursor:pointer;padding:15px 2px;border-bottom:1px solid #D8DFE8;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .32s,transform .3s ease .32s">よくあるご質問<svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg></div>
+</div>
+<div style="margin-top:14px;display:flex;justify-content:center;opacity:{{miOp}};transform:translateY({{miTy}});transition:opacity .3s ease .36s,transform .3s ease .36s">
+<a href="tel:0120267140" style="display:block;min-width:250px;text-align:center;text-decoration:none;border:2px solid #143778;border-radius:12px;padding:9px 20px 8px" style-active="opacity:.6">
+<p style="font-size:11.5px;font-weight:700;color:#333;margin:0">電話でのお問い合わせ</p>
+<span style="display:inline-flex;align-items:center;justify-content:center;gap:7px;margin-top:2px;color:#143778">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"></rect><path d="M11 18.5h2"></path></svg>
+<span style="font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans',sans-serif;font-size:20px;font-weight:800;letter-spacing:.02em">0120-267-140</span>
+</span>
+<p style="font-size:10.5px;color:#7A8598;margin:2px 0 0">受付時間 16:00〜22:00（日曜定休）</p>
+</a>
+</div>
+</div>
+<div onClick="{{closeMenu}}" style="position:absolute;top:auto;left:0;right:0;bottom:0;height:100%;background:rgba(10,20,40,.35);z-index:-1;opacity:{{menuBdOp}};transition:opacity .45s ease"></div>
+</div>
+
+<!-- ============ ヒーロー ============ -->
+<section data-screen-label="ヒーロー" style="background:#fff;overflow:hidden">
+<div style="position:relative;max-width:1440px;margin:0 auto;overflow:hidden;display:flex;align-items:{{heroAlign}};min-height:{{heroMinH}}">
+<sc-if value="{{heroNarrowImg}}" hint-placeholder-val="{{false}}"><img src="assets/hero-photo-sp-small.png" alt="階段をのぼる生徒と先生" style="position:absolute;top:0;right:-3%;width:86%;height:auto"></sc-if>
+<sc-if value="{{heroWideImg}}" hint-placeholder-val="{{true}}"><img src="assets/hero-photo-crop2.jpg" alt="階段をのぼる生徒と先生" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:right top;transform-origin:right top;transform:translateX({{heroImgShift}})"></sc-if>
+<div style="position:absolute;inset:0;background:{{heroFade}}"></div>
+<div style="position:relative;z-index:2;width:{{htW}};max-width:{{htMaxW}};margin-left:{{htLeft}};padding:{{htPadV}};box-sizing:border-box;display:flex;flex-direction:column;gap:{{htGap}}">
+<div><span style="display:inline-block;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP',sans-serif;font-weight:800;font-size:{{heroTagSize}};color:#fff;background:#143778;white-space:nowrap;padding:0.6em 1.1em;border-radius:0;box-shadow:4px 4px 0 rgba(20,55,120,.22);transform:rotate(-2.5deg);margin-top:{{tagMT}}">勉強が苦手な中学生専門！</span></div>
+<h1 style="margin:{{catchMT}} 0 0" aria-label="「できた！」が増えると、勉強は変わる。">
+<img src="assets/hero-catch-small.png" alt="「できた！」が増えると、勉強は変わる。" style="width:{{catchW}};max-width:{{catchMax}};height:auto;display:block;margin-left:{{catchML}}">
+</h1>
+<p style="font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:{{heroSubSize}};color:{{heroSubColor}};margin:{{heroSubMT}} 0 0;line-height:1.8"><span style="white-space:nowrap">一人ひとりの「わからない」に寄り添い、</span><br><span style="white-space:nowrap">小さな成功体験を積み重ねます。</span></p>
+<sc-if value="{{heroStacked}}" hint-placeholder-val="{{false}}">
+<div style="position:relative;width:100vw;margin:0 -24px;align-self:center">
+<img src="assets/hero-photo-w.jpg" alt="階段をのぼる生徒と先生" style="width:100%;display:block">
+<div style="position:absolute;inset:0;background:linear-gradient(to top,#fff 0%,rgba(255,255,255,0) 12%)"></div>
+</div>
+</sc-if>
+<div style="background:rgba(255,255,255,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1.5px solid rgba(255,255,255,.9);border-radius:16px;padding:{{priceCardPad}};box-shadow:0 4px 18px rgba(20,42,84,.12);display:flex;align-items:stretch;justify-content:space-evenly;box-sizing:border-box;max-width:{{priceCardMaxW}};width:{{priceCardW}};align-self:{{priceCardAlign}};margin:{{priceCardMargin}};margin-top:{{priceCardMT}}">
+<div style="flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center">
+<div style="font-size:13.5px;font-weight:800;color:#333">1教科あたり</div>
+<div style="line-height:1.15;white-space:nowrap"><span style="font-size:{{priceUnitSize}};font-weight:800;color:#333;margin-right:6px">月</span><span style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:{{priceNumSize}};color:#E67832">6,578</span><span style="font-size:{{priceUnitSize}};font-weight:800;color:#333;margin-left:3px">円<span style="margin-left:4px">〜</span></span></div>
+</div>
+<div style="width:1.5px;background:rgba(20,55,120,.18);margin:2px 0"></div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center">
+<div style="font-size:13.5px;font-weight:800;color:#333">入会金</div>
+<div style="line-height:1.15;white-space:nowrap"><span style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:{{priceNumSize}};color:#E67832">0</span><span style="font-size:{{priceUnitSize}};font-weight:800;color:#333;margin-left:3px">円</span></div>
+</div>
+</div>
+<sc-if value="{{notMobile}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:row;gap:14px;max-width:620px;margin-top:4px">
+<a href="#" class="btn3d btn3d-n" style="flex:1;display:flex;align-items:center;justify-content:center;gap:9px;background:#143778;color:#fff;font-size:16px;font-weight:700;padding:16px 12px;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 5px 0 #0D2551;transition:transform .1s,box-shadow .1s" style-active="transform:translateY(5px);box-shadow:0 0 0 #0D2551">無料相談を申し込む<span style="width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
+<a href="#" class="btn-shine btn3d btn3d-o" style="flex:1;display:flex;align-items:center;justify-content:center;gap:9px;background:#E67832;color:#fff;font-size:16px;font-weight:700;padding:16px 12px;border-radius:999px;text-decoration:none;white-space:nowrap;box-shadow:0 5px 0 #B95A1E;transition:transform .1s,box-shadow .1s" style-active="transform:translateY(5px);box-shadow:0 0 0 #B95A1E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+</div>
+</sc-if>
+</div>
+</div>
+</section>
+
+<!-- ============ 01 選ばれる理由 ============ -->
+<section id="reason" data-screen-label="01 選ばれる理由" style="background:#fff">
+<div style="max-width:1160px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(28px,4vw,44px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">REASON</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">選ばれる理由<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:38px 20px;justify-content:center">
+<div style="position:relative;flex:1 1 280px;max-width:330px;background:#fff;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,42,84,.08),0 0 0 1px rgba(20,55,120,.08),0 12px 24px rgba(20,42,84,.08)">
+<span style="position:absolute;top:-24px;left:-16px;width:66px;height:66px;z-index:1">
+<svg width="66" height="66" viewBox="0 0 66 66" style="position:absolute;inset:0;overflow:visible" aria-hidden="true"><defs><path id="bArc1" d="M 7 33 A 26 26 0 0 1 59 33" fill="none"></path></defs><text style="font:800 9px 'Zen Maru Gothic',sans-serif;letter-spacing:.3em" fill="#143778"><textPath href="#bArc1" startOffset="50%" text-anchor="middle">POINT</textPath></text></svg>
+<span style="position:absolute;left:11px;top:11px;width:44px;height:44px;border-radius:50%;background:#143778;color:#fff;display:grid;place-items:center;line-height:1;box-shadow:3px 3px 0 #DCE5F4;font:900 16px 'Zen Maru Gothic',sans-serif;letter-spacing:.04em">01</span>
+</span>
+<img src="assets/reason-1.jpg" alt="生徒に寄り添って教える先生" style="width:100%;height:190px;object-fit:cover;border-radius:10px;display:block">
+<h3 style="font-family:'Zen Maru Gothic',sans-serif;font-size:18.5px;font-weight:700;color:#333;margin:0">「勉強が苦手」な中学生専門</h3>
+<p style="font-size:14px;line-height:1.9;color:#555;margin:0">「どこが分からないかも分からない…」でも大丈夫。基礎から徹底的にやり直し、遅れを確実に取り戻す、苦手克服の専門塾です。</p>
+</div>
+<div style="position:relative;flex:1 1 280px;max-width:330px;background:#fff;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,42,84,.08),0 0 0 1px rgba(20,55,120,.08),0 12px 24px rgba(20,42,84,.08)">
+<span style="position:absolute;top:-24px;left:-16px;width:66px;height:66px;z-index:1">
+<svg width="66" height="66" viewBox="0 0 66 66" style="position:absolute;inset:0;overflow:visible" aria-hidden="true"><defs><path id="bArc2" d="M 7 33 A 26 26 0 0 1 59 33" fill="none"></path></defs><text style="font:800 9px 'Zen Maru Gothic',sans-serif;letter-spacing:.3em" fill="#143778"><textPath href="#bArc2" startOffset="50%" text-anchor="middle">POINT</textPath></text></svg>
+<span style="position:absolute;left:11px;top:11px;width:44px;height:44px;border-radius:50%;background:#143778;color:#fff;display:grid;place-items:center;line-height:1;box-shadow:3px 3px 0 #DCE5F4;font:900 16px 'Zen Maru Gothic',sans-serif;letter-spacing:.04em">02</span>
+</span>
+<img src="assets/reason-2.jpg" alt="安心した表情で料金明細を見る母親" style="width:100%;height:190px;object-fit:cover;border-radius:10px;display:block">
+<h3 style="font-family:'Zen Maru Gothic',sans-serif;font-size:18.5px;font-weight:700;color:#333;margin:0">個別指導の常識を破る「低価格」</h3>
+<p style="font-size:14px;line-height:1.9;color:#555;margin:0">個別指導を月6,578円〜の安心価格で実現しました。入会金や設備管理費は0円。家計の負担を抑え、継続的に通うことができます。</p>
+</div>
+<div style="position:relative;flex:1 1 280px;max-width:330px;background:#fff;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(20,42,84,.08),0 0 0 1px rgba(20,55,120,.08),0 12px 24px rgba(20,42,84,.08)">
+<span style="position:absolute;top:-24px;left:-16px;width:66px;height:66px;z-index:1">
+<svg width="66" height="66" viewBox="0 0 66 66" style="position:absolute;inset:0;overflow:visible" aria-hidden="true"><defs><path id="bArc3" d="M 7 33 A 26 26 0 0 1 59 33" fill="none"></path></defs><text style="font:800 9px 'Zen Maru Gothic',sans-serif;letter-spacing:.3em" fill="#143778"><textPath href="#bArc3" startOffset="50%" text-anchor="middle">POINT</textPath></text></svg>
+<span style="position:absolute;left:11px;top:11px;width:44px;height:44px;border-radius:50%;background:#143778;color:#fff;display:grid;place-items:center;line-height:1;box-shadow:3px 3px 0 #DCE5F4;font:900 16px 'Zen Maru Gothic',sans-serif;letter-spacing:.04em">03</span>
+</span>
+<img src="assets/reason-3.jpg" alt="笑顔の千葉大生講師たち" style="width:100%;height:190px;object-fit:cover;border-radius:10px;display:block">
+<h3 style="font-family:'Zen Maru Gothic',sans-serif;font-size:18.5px;font-weight:700;color:#333;margin:0">講師は全員「千葉大生」</h3>
+<p style="font-size:14px;line-height:1.9;color:#555;margin:0">厳選された千葉大生の講師たちが、どの授業でも質の高い指導を提供します。担当によるムラがなく、お子さまの学力を着実に引き上げます。</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ 02 指導方針 ============ -->
+<section id="method" data-screen-label="02 指導方針" style="background:var(--alt,#F4F8FC)">
+<div style="max-width:900px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">METHOD</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">指導方針<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="display:flex;flex-direction:column;gap:clamp(20px,3vw,28px)">
+
+<div style="background-color:#fff;background-image:linear-gradient(rgba(74,122,204,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,204,.10) 1px,transparent 1px);background-size:24px 24px;border:1px solid #DBE3EE;border-radius:16px;padding:clamp(20px,3.5vw,32px);box-shadow:0 1px 2px rgba(20,42,84,.06),0 12px 24px rgba(20,42,84,.06)">
+<div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+<span style="font-family:'Zen Maru Gothic',sans-serif;font-size:clamp(11.5px,1.4vw,13px);font-weight:900;color:#fff;background:#E67832;border-radius:999px;padding:4px 16px">特徴 1</span>
+<h3 style="font-family:'Zen Maru Gothic',sans-serif;font-size:clamp(18px,2.4vw,23px);font-weight:900;color:#333;margin:0">基礎から、学び直す</h3>
+</div>
+<p style="font-size:clamp(13px,1.6vw,15px);line-height:2;color:#555;margin:clamp(14px,2vw,20px) auto 0;max-width:640px">フォーカスでは、学年にとらわれず「分かる」ところまで戻って学び直します。必要に応じて小学生の範囲までさかのぼるので、授業についていけない心配はありません。</p>
+<div style="background:#F2F4F7;border-radius:14px;padding:clamp(16px,2.5vw,26px) clamp(8px,1.5vw,20px);margin-top:clamp(14px,2vw,20px)">
+<div style="display:flex;align-items:stretch;justify-content:center;gap:clamp(8px,1.5vw,18px)">
+<div style="flex:1;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="display:flex;align-items:center;gap:7px;font-size:clamp(11px,1.4vw,14px);font-weight:800;color:#333"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg>無理に学校の進度に合わせると…</div>
+<svg viewBox="0 0 210 150" style="width:100%;max-width:210px;height:auto;margin-top:4px">
+<ellipse cx="102" cy="131" rx="92" ry="9" fill="#2B3242" opacity=".12"></ellipse>
+<rect x="28" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+<rect x="74" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+<rect x="142" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+<rect x="52" y="58" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(-14 69 75)"></rect>
+<rect x="118" y="58" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(10 135 75)"></rect>
+<rect x="112" y="15" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(22 129 32)"></rect>
+<g stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+<path d="M60 26 l-8 6 4 9 -8 6 4 9" transform="rotate(-6 56 41)"></path>
+<path d="M48 22 l-8 6 4 9 -8 6 4 9" transform="rotate(-6 44 37)"></path>
+<path d="M160 26 l8 6 -4 9 8 6 -4 9" transform="rotate(6 164 41)"></path>
+<path d="M172 22 l8 6 -4 9 8 6 -4 9" transform="rotate(6 176 37)"></path>
+</g>
+</svg>
+<p style="font-size:clamp(11.5px,1.4vw,14.5px);font-weight:800;color:#333;margin:2px 0 0;text-align:center;line-height:1.8">取りこぼしが増え …<br>成績が伸びなやむ</p>
+</div>
+<div style="border-left:2px dashed #C6D0DC"></div>
+<div style="flex:1;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:8px">
+<div style="display:flex;align-items:center;gap:7px;font-size:clamp(11px,1.4vw,14px);font-weight:800;color:#143778"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg>フォーカスでの成績の上がり方</div>
+<svg viewBox="0 0 210 150" style="width:100%;max-width:210px;height:auto;margin-top:4px">
+<ellipse cx="105" cy="131" rx="92" ry="9" fill="#143778" opacity=".14"></ellipse>
+<rect x="28" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+<rect x="66" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+<rect x="104" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+<rect x="142" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+<rect x="47" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+<rect x="85" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+<rect x="123" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+<rect x="66" y="20" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+<rect x="104" y="20" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+<g fill="#FFC94A">
+<path d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z" transform="translate(48,26)"></path>
+<path d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z" transform="translate(160,14)"></path>
+<path d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z" transform="translate(172,46)"></path>
+</g>
+</svg>
+<p style="font-size:clamp(11.5px,1.4vw,14.5px);font-weight:800;color:#333;margin:2px 0 0;text-align:center;line-height:1.8">正しく基礎を積み重ねて …<br><span style="background:linear-gradient(transparent 25%,var(--mk,#FFE869) 25% 95%,transparent 95%);padding:0 2px">苦手を克服！</span></p>
+</div>
+</div>
+</div>
+</div>
+
+<div style="background-color:#fff;background-image:linear-gradient(rgba(74,122,204,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(74,122,204,.10) 1px,transparent 1px);background-size:24px 24px;border:1px solid #DBE3EE;border-radius:16px;padding:clamp(20px,3.5vw,32px);box-shadow:0 1px 2px rgba(20,42,84,.06),0 12px 24px rgba(20,42,84,.06)">
+<div style="display:flex;flex-direction:column;align-items:center;gap:9px">
+<span style="font-family:'Zen Maru Gothic',sans-serif;font-size:clamp(11.5px,1.4vw,13px);font-weight:900;color:#fff;background:#E67832;border-radius:999px;padding:4px 16px">特徴 2</span>
+<h3 style="font-family:'Zen Maru Gothic',sans-serif;font-size:clamp(18px,2.4vw,23px);font-weight:900;color:#333;margin:0">勉強の仕方を、身につける</h3>
+</div>
+<p style="font-size:clamp(13px,1.6vw,15px);line-height:2;color:#555;margin:clamp(14px,2vw,20px) auto 0;max-width:640px">「何を・どの順番で・どうやって」勉強するかまで教えるのがフォーカス流。正しい勉強の仕方が身につくから、塾の外でも自分ひとりで学べるようになります。</p>
+<div style="display:flex;gap:clamp(10px,1.8vw,18px);justify-content:center;margin-top:clamp(16px,2.5vw,24px)">
+<div style="flex:1;min-width:0;max-width:350px;background:#F2F4F7;border-radius:12px;padding:clamp(12px,2.2vw,22px) clamp(8px,1.4vw,14px);text-align:center;box-sizing:border-box">
+<div style="font-size:clamp(11.5px,1.5vw,14.5px);font-weight:800;color:#8A96A8">従来の塾の学習スタイル</div>
+<div style="font-size:clamp(9.5px,1.3vw,12px);font-weight:700;color:#A9B2BE;margin-top:2px">Teaching — 授業の質を最大化</div>
+<svg viewBox="0 0 240 100" style="width:100%;max-width:250px;margin-top:12px">
+<g fill="#8A96A8">
+<circle cx="45" cy="27" r="15"></circle>
+<path d="M19 74 a26 26 0 0 1 52 0 Z"></path>
+</g>
+<text x="45" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A96A8">先生</text>
+<g fill="#8A96A8">
+<circle cx="195" cy="32" r="12.5"></circle>
+<path d="M174 74 a21 21 0 0 1 42 0 Z"></path>
+</g>
+<text x="195" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A96A8">生徒</text>
+<path d="M86 52 h72" stroke="#8A96A8" stroke-width="3" stroke-linecap="round"></path>
+<path d="M158 52 l-9 -6 m9 6 l-9 6" stroke="#8A96A8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+<text x="122" y="40" text-anchor="middle" font-family="'Zen Maru Gothic',sans-serif" font-size="13" font-weight="900" fill="#5B6B85">教える</text>
+</svg>
+<p style="font-size:clamp(10.5px,1.3vw,12.5px);line-height:1.8;color:#5B6B85;margin:8px 0 0">答えややり方を解説する指導<br>受ける側は受け身になりがち</p>
+</div>
+<div style="flex:1;min-width:0;max-width:350px;background:#EFF5FD;border:2px solid #143778;border-radius:12px;padding:clamp(12px,2.2vw,22px) clamp(8px,1.4vw,14px);text-align:center;box-sizing:border-box">
+<div style="font-size:clamp(11.5px,1.5vw,14.5px);font-weight:900;color:#143778;font-family:'Zen Maru Gothic',sans-serif">フォーカスの学習スタイル</div>
+<div style="font-size:clamp(9.5px,1.3vw,12px);font-weight:700;color:#4A7ACC;margin-top:2px">Coaching — 自立学習の質を最大化</div>
+<svg viewBox="0 0 240 100" style="width:100%;max-width:250px;margin-top:12px">
+<g fill="#143778">
+<circle cx="45" cy="27" r="15"></circle>
+<path d="M19 74 a26 26 0 0 1 52 0 Z"></path>
+</g>
+<text x="45" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#143778">先生</text>
+<g fill="#143778">
+<circle cx="195" cy="32" r="12.5"></circle>
+<path d="M174 74 a21 21 0 0 1 42 0 Z"></path>
+</g>
+<text x="195" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#143778">生徒</text>
+<path d="M86 42 h72" stroke="#E67832" stroke-width="2.6" stroke-linecap="round"></path>
+<path d="M158 42 l-8 -5 m8 5 l-8 5" stroke="#E67832" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+<text x="122" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#E67832">問いかけ</text>
+<path d="M158 60 h-72" stroke="#143778" stroke-width="2.6" stroke-linecap="round"></path>
+<path d="M86 60 l8 -5 m-8 5 l8 5" stroke="#143778" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+<text x="122" y="76" text-anchor="middle" font-size="11" font-weight="700" fill="#143778">回答</text>
+<path d="M216 10 v-8 M224 14 l6 -6 M226 22 h8" stroke="#FFC94A" stroke-width="3" stroke-linecap="round"></path>
+</svg>
+<p style="font-size:clamp(10.5px,1.3vw,12.5px);line-height:1.8;color:#143778;margin:8px 0 0;font-weight:700">考え方を問いかけ、ヒントを与えて、自分で答えまで導かせる指導</p>
+</div>
+</div>
+</div>
+
+</div>
+<div style="display:flex;justify-content:center;margin-top:28px">
+<a href="#" class="btn-out" style="display:flex;align-items:center;justify-content:center;min-width:180px;border:2px solid #143778;color:#143778;background:#fff;font-size:14.5px;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;gap:8px">詳しく見る<span class="ar">→</span></a>
+</div>
+</div>
+</section>
+
+<!-- ============ 03 料金 ============ -->
+<section id="price" data-screen-label="03 料金" style="background:#fff">
+<div style="max-width:940px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">PRICE</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">料金<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:10px;align-items:end">
+<div style="position:relative;border:2px solid #143778;border-radius:14px;overflow:hidden;box-shadow:0 6px 16px rgba(20,42,84,.14)">
+<div style="background:#143778;color:#fff;text-align:center;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(14px,1.8vw,21px);padding:clamp(9px,1.2vw,13px) 4px">フォーカス</div>
+<div style="text-align:center;padding:clamp(12px,2vw,18px) 4px clamp(8px,1.5vw,12px);background:#fff">
+<div style="font-size:clamp(10px,1.3vw,15px);color:#5B6B85;font-weight:700">1教科・月額</div>
+<div style="line-height:1.1;margin-top:3px"><span style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(26px,3.6vw,46px);color:#E67832">6,578</span><span style="font-size:clamp(11px,1.5vw,18px);font-weight:800;color:#333;margin-left:4px">円</span></div>
+<div style="font-size:clamp(9px,1.2vw,13px);color:#8A96A8;margin-top:2px">（税込）</div>
+</div>
+</div>
+<div style="border:1.5px solid #DBE3EE;border-radius:12px;overflow:hidden">
+<div style="background:#8A96A8;color:#fff;text-align:center;font-weight:800;font-size:clamp(11px,1.4vw,16px);padding:clamp(7px,1vw,10px) 2px">個別A社</div>
+<div style="text-align:center;padding:clamp(10px,1.6vw,14px) 2px clamp(7px,1.2vw,10px)">
+<div style="font-size:clamp(9px,1.2vw,13px);color:#8A96A8;font-weight:700">1教科・月額</div>
+<div style="line-height:1.1;margin-top:3px"><span style="font-weight:800;font-size:clamp(16px,2.2vw,28px);color:#5B6B85">18,700</span><span style="font-size:clamp(9px,1.2vw,14px);color:#5B6B85;margin-left:3px">円</span></div>
+<div style="font-size:clamp(8.5px,1.1vw,12px);color:#A9B2BE;margin-top:2px">（税込）</div>
+</div>
+</div>
+<div style="border:1.5px solid #DBE3EE;border-radius:12px;overflow:hidden">
+<div style="background:#8A96A8;color:#fff;text-align:center;font-weight:800;font-size:clamp(11px,1.4vw,16px);padding:clamp(7px,1vw,10px) 2px">個別B社</div>
+<div style="text-align:center;padding:clamp(10px,1.6vw,14px) 2px clamp(7px,1.2vw,10px)">
+<div style="font-size:clamp(9px,1.2vw,13px);color:#8A96A8;font-weight:700">1教科・月額</div>
+<div style="line-height:1.1;margin-top:3px"><span style="font-weight:800;font-size:clamp(16px,2.2vw,28px);color:#5B6B85">15,400</span><span style="font-size:clamp(9px,1.2vw,14px);color:#5B6B85;margin-left:3px">円</span></div>
+<div style="font-size:clamp(8.5px,1.1vw,12px);color:#A9B2BE;margin-top:2px">（税込）</div>
+</div>
+</div>
+</div>
+<div style="display:flex;justify-content:flex-start;margin-top:8px;padding-left:12px;position:relative;z-index:1">
+<div style="position:relative;background:#E67832;color:#fff;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(15px,2vw,21px);border-radius:11px;padding:clamp(10px,1.4vw,13px) clamp(20px,2.6vw,26px);box-shadow:0 3px 10px rgba(230,120,50,.3)">
+<span style="position:absolute;top:-16px;left:28px;border-left:12px solid transparent;border-right:12px solid transparent;border-bottom:17px solid #E67832"></span>
+1教科あたり、他塾の<span style="font-size:clamp(20px,2.6vw,28px)">約1/3</span>！
+</div>
+</div>
+<div style="margin-top:30px;text-align:center">
+<p style="font-size:clamp(13.5px,1.7vw,18px);font-weight:800;color:#5B6B85;margin:0">つまり、フォーカスなら<span style="margin-left:.4em">──</span></p>
+<p style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(18.5px,2.8vw,36px);color:#333;margin:10px 0 0;line-height:1.6;white-space:nowrap">他塾の2教科分の料金で、<span style="color:#E67832;display:inline-block;position:relative;margin-right:.35em"><span style="font-size:1.15em">5</span>教科全部<svg viewBox="0 0 120 10" preserveAspectRatio="none" style="position:absolute;left:1%;bottom:-8px;width:98%;height:11px"><path d="M2 5.5 Q 9 1.5 17 5 T 32 5 T 47 5 T 62 5 T 77 5 T 92 5 T 107 5 T 118 5" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>通える！</p>
+<div style="display:flex;align-items:stretch;justify-content:center;gap:clamp(6px,1vw,12px);margin-top:18px">
+<div style="flex:.8;max-width:230px;display:flex;flex-direction:column;justify-content:center;gap:clamp(5px,.8vw,8px);text-align:center;background:#F2F4F7;border-radius:12px;padding:clamp(8px,1.4vw,16px) clamp(5px,1vw,14px);box-sizing:border-box;align-self:center">
+<div style="font-size:clamp(11.5px,1.5vw,16px);font-weight:800;color:#8A96A8">他塾の月謝</div>
+<div style="display:flex;gap:4px;justify-content:center;flex-wrap:wrap"><span style="font-size:clamp(10.5px,1.4vw,14px);font-weight:800;background:#DDE7F7;color:#143778;border-radius:6px;padding:3px 10px">数学</span><span style="font-size:clamp(10.5px,1.4vw,14px);font-weight:800;background:#FBDECB;color:#B95A1E;border-radius:6px;padding:3px 10px">英語</span></div>
+<div style="font-size:clamp(10px,1.3vw,14px);font-weight:700;color:#8A96A8">2教科で 約37,000円</div>
+</div>
+<div style="display:flex;align-items:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></div>
+<div style="flex:1.2;max-width:340px;display:flex;flex-direction:column;justify-content:center;gap:clamp(9px,1.2vw,12px);text-align:center;background:#fff;border:2.5px solid #143778;border-radius:12px;padding:clamp(14px,2.2vw,24px) clamp(7px,1.2vw,18px);box-shadow:0 6px 16px rgba(20,42,84,.14);box-sizing:border-box">
+<div style="font-size:clamp(13px,1.7vw,18px);font-weight:900;color:#143778;font-family:'Zen Maru Gothic',sans-serif">フォーカスなら</div>
+<div style="display:flex;flex-direction:column;gap:clamp(5px,.7vw,7px);align-items:center">
+<div style="display:flex;gap:clamp(5px,.7vw,7px);justify-content:center"><span style="font-size:clamp(11.5px,1.6vw,15px);font-weight:800;background:#FBE4E4;color:#B0413E;border-radius:6px;padding:4px 12px">国語</span><span style="font-size:clamp(11.5px,1.6vw,15px);font-weight:800;background:#DDE7F7;color:#143778;border-radius:6px;padding:4px 12px">数学</span><span style="font-size:clamp(11.5px,1.6vw,15px);font-weight:800;background:#FBDECB;color:#B95A1E;border-radius:6px;padding:4px 12px">英語</span></div>
+<div style="display:flex;gap:clamp(5px,.7vw,7px);justify-content:center"><span style="font-size:clamp(11.5px,1.6vw,15px);font-weight:800;background:#D7ECDD;color:#1F6B3C;border-radius:6px;padding:4px 12px">理科</span><span style="font-size:clamp(11.5px,1.6vw,15px);font-weight:800;background:#E8E0F5;color:#6B4FA3;border-radius:6px;padding:4px 12px">社会</span></div>
+</div>
+<div style="font-family:'Zen Maru Gothic',sans-serif;font-size:clamp(14px,1.9vw,20px);font-weight:900;color:#E67832">5教科 全部！</div>
+</div>
+</div>
+</div>
+
+<div style="display:flex;justify-content:center;margin-top:36px">
+<a href="#" class="btn-out" style="display:flex;align-items:center;justify-content:center;gap:6px;min-width:200px;border:2px solid #143778;color:#143778;background:#fff;font-size:14.5px;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;gap:8px">料金を詳しく見る<span class="ar">→</span></a>
+</div>
+</div>
+</section>
+
+<!-- ============ 04 保護者さまの声 ============ -->
+<section id="voice" data-screen-label="04 保護者さまの声" style="background:var(--alt,#F4F8FC)">
+<div style="max-width:1160px;margin:0 auto;padding:clamp(48px,7vw,88px) 0">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px);padding:0 24px">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">VOICE</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">保護者さまの声<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="position:relative;max-width:640px;margin:0 auto;padding:0 24px;box-sizing:border-box">
+<div ref="{{voiceViewRef}}" style="overflow:hidden;padding:12px 0">
+<div style="display:flex;align-items:stretch;transition:transform .45s cubic-bezier(.25,.8,.3,1);transform:translateX({{voiceTx}})">
+<sc-for list="{{voices}}" as="v" hint-placeholder-count="5">
+<div onClick="{{v.go}}" style="flex:0 0 62%;margin:0 3%;box-sizing:border-box;background:#fff;border:1px solid #DBE3EE;border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:12px;min-height:170px;cursor:pointer;transform:scale({{v.scale}});opacity:{{v.op}};transition:transform .45s,opacity .45s">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:48px;height:48px;border-radius:50%;background:repeating-linear-gradient(45deg,#F2F1EE 0 6px,#E7E5E0 6px 12px);border:1.5px dashed #B4AEA2;flex:none"></div>
+<div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700;color:#333">{{v.who}}</span><span style="font-size:11px;font-weight:700;color:#C0392B">※仮の内容です</span></div>
+</div>
+<p style="font-size:13.5px;line-height:1.9;color:#555;margin:0">{{v.text}}</p>
+</div>
+</sc-for>
+</div>
+</div>
+<button onClick="{{voicePrev}}" aria-label="前の声へ" style="position:absolute;top:50%;left:8px;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.94);color:#143778;font-size:20px;font-weight:900;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 8px rgba(29,42,54,.22);padding:0 0 2px">‹</button>
+<button onClick="{{voiceNext}}" aria-label="次の声へ" style="position:absolute;top:50%;right:8px;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.94);color:#143778;font-size:20px;font-weight:900;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:0 2px 8px rgba(29,42,54,.22);padding:0 0 2px">›</button>
+</div>
+<div style="display:flex;justify-content:center;gap:8px;margin-top:16px">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="5"><button onClick="{{d.go}}" aria-label="{{d.label}}" style="width:9px;height:9px;border-radius:50%;border:none;padding:0;cursor:pointer;background:{{d.bg}}"></button></sc-for>
+</div>
+</div>
+</section>
+
+<!-- ============ 05 教室一覧 ============ -->
+<section id="rooms" data-screen-label="05 教室一覧" style="background:#fff">
+<div style="max-width:1040px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">CLASSROOMS</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">教室一覧<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="display:flex;justify-content:center;margin-bottom:22px">
+<a href="#" style="display:flex;align-items:center;justify-content:center;gap:8px;min-width:260px;background:#fff;border:2px solid #143778;color:#143778;font-size:14px;font-weight:700;padding:12px 26px;border-radius:999px;text-decoration:none;transition:background .2s,color .2s" style-hover="background:#143778;color:#fff"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3"></path><path d="M12 19v3"></path><path d="M2 12h3"></path><path d="M19 12h3"></path></svg>現在地から最寄りの教室をさがす</a>
+</div>
+<div style="background:#fff;border:2px solid #DFE9F1;border-radius:14px;overflow:hidden">
+<div role="tablist" aria-label="教室のエリア" style="display:flex;border-bottom:2px solid #DFE9F1">
+<button onClick="{{setChiba}}" role="tab" aria-selected="{{chibaSel}}" style="flex:1;padding:13px 6px;background:none;border:none;border-bottom:3px solid {{chibaTabB}};margin-bottom:-2px;font-family:'Noto Sans JP',sans-serif;font-size:14.5px;font-weight:800;color:{{chibaTabC}};cursor:pointer;transition:color .3s,border-color .3s">千葉市</button>
+<button onClick="{{setOther}}" role="tab" aria-selected="{{otherSel}}" style="flex:1;padding:13px 6px;background:none;border:none;border-bottom:3px solid {{otherTabB}};margin-bottom:-2px;font-family:'Noto Sans JP',sans-serif;font-size:14.5px;font-weight:800;color:{{otherTabC}};cursor:pointer;transition:color .3s,border-color .3s">千葉市以外</button>
+</div>
+<div onPointerDown="{{tabDown}}" onPointerMove="{{tabMove}}" onPointerUp="{{tabEnd}}" onPointerCancel="{{tabEnd}}" style="overflow:hidden;touch-action:pan-y;cursor:grab" style-active="cursor:grabbing">
+<div style="display:flex;transition:{{trackTrans}};transform:{{trackTx}}">
+<div role="tabpanel" style="flex:0 0 100%;padding:16px;box-sizing:border-box;user-select:none;-webkit-user-select:none">
+<div style="display:grid;grid-template-columns:{{roomCols}};gap:10px">
+<sc-for list="{{chibaRooms}}" as="r" hint-placeholder-count="4">
+<a href="#" class="btn-out" style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #DBE3EE;border-radius:12px;padding:{{roomPad}};text-decoration:none;box-sizing:border-box" style-hover="border-color:#143778;background:#F8FAFD">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-size:{{roomNameSize}};font-weight:700;color:#333">{{r.name}}</span>
+<span style="font-size:12px;color:#7A8598;line-height:1.7">{{r.station}}<br>{{r.walk}}</span>
+</div>
+<span style="flex:none;color:#143778;font-weight:900;font-size:16px" class="ar">→</span>
+</a>
+</sc-for>
+</div>
+</div>
+<div role="tabpanel" style="flex:0 0 100%;padding:16px;box-sizing:border-box;user-select:none;-webkit-user-select:none">
+<div style="display:grid;grid-template-columns:{{roomCols}};gap:10px">
+<sc-for list="{{otherRooms}}" as="r" hint-placeholder-count="3">
+<a href="#" class="btn-out" style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #DBE3EE;border-radius:12px;padding:{{roomPad}};text-decoration:none;box-sizing:border-box" style-hover="border-color:#143778;background:#F8FAFD">
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-size:{{roomNameSize}};font-weight:700;color:#333;white-space:nowrap">{{r.name}}</span>
+<sc-if value="{{r.chip}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:700;color:#143778;background:#DDE7F7;border-radius:999px;padding:2px 8px;white-space:nowrap">{{r.chip}}</span></sc-if>
+</div>
+<span style="font-size:12px;color:#7A8598;line-height:1.7">{{r.station}}<br>{{r.walk}}</span>
+</div>
+<span style="flex:none;color:#143778;font-weight:900;font-size:16px" class="ar">→</span>
+</a>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ 入塾までの流れ ============ -->
+<section id="flow" data-screen-label="入塾までの流れ" style="background:var(--alt,#F4F8FC)">
+<div style="max-width:520px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">FLOW</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">入塾までの流れ<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="background:#fff;border-radius:14px;padding:24px 26px;box-shadow:0 6px 16px rgba(20,55,120,.09)">
+<div style="position:relative;padding:2px 0 26px 44px">
+<span style="position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#143778;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Zen Maru Gothic',sans-serif">1</span>
+<span style="position:absolute;left:13px;top:32px;bottom:4px;width:2px;background:rgba(20,55,120,.22)"></span>
+<div style="font-size:15px;font-weight:700;color:#333;line-height:1.5">資料をダウンロード</div>
+<div style="font-size:12.5px;color:#7A8598;margin-top:3px;line-height:1.7">電話番号だけでOK。SMSでパンフが届きます（約1分）</div>
+</div>
+<div style="position:relative;padding:2px 0 26px 44px">
+<span style="position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#143778;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Zen Maru Gothic',sans-serif">2</span>
+<span style="position:absolute;left:13px;top:32px;bottom:4px;width:2px;background:rgba(20,55,120,.22)"></span>
+<div style="font-size:15px;font-weight:700;color:#333;line-height:1.5">無料相談</div>
+<div style="font-size:12.5px;color:#7A8598;margin-top:3px;line-height:1.7">教室で約60分。お子さまの状況をお聞かせください</div>
+</div>
+<div style="position:relative;padding:2px 0 26px 44px">
+<span style="position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#143778;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Zen Maru Gothic',sans-serif">3</span>
+<span style="position:absolute;left:13px;top:32px;bottom:4px;width:2px;background:rgba(20,55,120,.22)"></span>
+<div style="font-size:15px;font-weight:700;color:#333;line-height:1.5">体験授業<span style="font-size:11px;font-weight:700;color:#C0392B;margin-left:8px">※実施有無 確認中</span></div>
+<div style="font-size:12.5px;color:#7A8598;margin-top:3px;line-height:1.7">実際の授業を体験して、相性をたしかめます</div>
+</div>
+<div style="position:relative;padding:2px 0 2px 44px">
+<span style="position:absolute;left:0;top:0;width:28px;height:28px;border-radius:50%;background:#E67832;color:#fff;display:flex;align-items:center;justify-content:center;font:700 14px 'Zen Maru Gothic',sans-serif">4</span>
+<div style="font-size:15px;font-weight:700;color:#333;line-height:1.5">入塾</div>
+<div style="font-size:12.5px;color:#7A8598;margin-top:3px;line-height:1.7">「できた」を一緒に増やしていきましょう</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ よくある質問 ============ -->
+<section id="faq" data-screen-label="よくある質問" style="background:#fff">
+<div style="max-width:680px;margin:0 auto;padding:clamp(48px,7vw,88px) 24px">
+<div style="text-align:center;margin-bottom:clamp(24px,3.5vw,36px)">
+<div style="font:800 clamp(11px,1.3vw,13px) 'Zen Maru Gothic',sans-serif;color:#E67832;letter-spacing:.32em;margin-bottom:6px">FAQ</div>
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(24px,3.4vw,32px);margin:0;color:#333"><span style="display:inline-block;position:relative;padding:0 6px;z-index:0">よくあるご質問<svg viewBox="0 0 400 22" preserveAspectRatio="none" style="position:absolute;left:-8px;bottom:0;width:calc(100% + 16px);height:19px;z-index:-1"><path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path></svg></span></h2>
+</div>
+<div style="background:#fff;border-radius:14px;padding:4px 18px;box-shadow:0 6px 16px rgba(20,55,120,.09)">
+<sc-for list="{{faqs}}" as="f" hint-placeholder-count="3">
+<div style="border-bottom:{{f.border}}">
+<button onClick="{{f.toggle}}" aria-expanded="{{f.openAttr}}" style="display:flex;align-items:center;gap:10px;width:100%;padding:15px 0;background:none;border:none;text-align:left;font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:700;color:#333;cursor:pointer">
+<span style="flex:none;width:24px;height:24px;border-radius:7px;background:#E67832;color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:900">Q</span>
+<span style="flex:1">{{f.q}}</span>
+<span style="flex:none;color:#143778;font-weight:900;font-size:17px;transform:rotate({{f.rot}});transition:transform .3s;display:inline-block">＋</span>
+</button>
+<div style="display:grid;grid-template-rows:{{f.rows}};transition:grid-template-rows .3s ease">
+<div style="overflow:hidden">
+<p style="font-size:14px;line-height:1.85;color:#555;margin:0;padding:0 0 15px 34px">{{f.a}}</p>
+</div>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;justify-content:center;margin-top:24px">
+<a href="#" class="btn-out" style="display:flex;align-items:center;justify-content:center;min-width:200px;border:2px solid #143778;color:#143778;background:#fff;font-size:14.5px;font-weight:700;padding:13px 28px;border-radius:999px;text-decoration:none;gap:8px">すべての質問を見る<span class="ar">→</span></a>
+</div>
+</div>
+</section>
+
+<!-- ============ CTAバンド ============ -->
+<section data-screen-label="CTAバンド" style="background:#143778">
+<div style="max-width:560px;margin:0 auto;padding:clamp(48px,7vw,80px) 24px;text-align:center">
+<h2 style="font-family:'Zen Maru Gothic',sans-serif;font-weight:900;font-size:clamp(22px,3.2vw,30px);color:#fff;margin:0"><span style="background:linear-gradient(transparent 62%,rgba(255,232,105,.4) 62% 94%,transparent 94%);padding:0 4px">まずは、話を聞きに来ませんか？</span></h2>
+<p style="font-size:13.5px;color:#C9D6EE;margin:14px 0 26px">無理な勧誘はいたしません。パンフだけでもお気軽に。</p>
+<div style="display:flex;flex-direction:column;gap:11px;max-width:380px;margin:0 auto">
+<a href="#" class="btn-shine btn3d btn3d-o" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#E67832;color:#fff;font-size:16px;font-weight:700;padding:16px;border-radius:999px;text-decoration:none;box-shadow:0 5px 0 #B95A1E;transition:transform .1s,box-shadow .1s" style-active="transform:translateY(5px);box-shadow:0 0 0 #B95A1E" style-hover="transform:translateY(-2px)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+<a href="#" style="display:flex;align-items:center;justify-content:center;gap:9px;background:#fff;color:#143778;font-size:16px;font-weight:700;padding:16px;border-radius:999px;text-decoration:none" style-hover="transform:translateY(-2px)">無料相談を申し込む →</a>
+<a href="tel:0000000000" style="display:flex;align-items:center;justify-content:center;gap:8px;background:transparent;border:1.5px solid rgba(255,255,255,.45);color:#fff;font-size:14.5px;font-weight:700;padding:14px;border-radius:999px;text-decoration:none" style-hover="background:rgba(255,255,255,.08)">お近くの教室へ電話する</a>
+</div>
+</div>
+</section>
+
+<!-- ============ フッター ============ -->
+<footer data-screen-label="フッター" style="background:#F2F4F7">
+<div style="max-width:1200px;margin:0 auto;padding:40px 24px 28px;display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between">
+<div style="display:flex;flex-direction:column;gap:10px">
+<img src="assets/logo.png" alt="FOCUS" style="height:24px;width:fit-content">
+<p style="font-size:12.5px;color:#7A8598;margin:0">勉強がニガテな中学生専門の個別指導塾</p>
+</div>
+<div style="display:flex;gap:40px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:12px;font-weight:700;color:#5B6B85">フォーカスについて</span>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">選ばれる理由</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">指導方針</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">料金</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">よくあるご質問</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:12px;font-weight:700;color:#5B6B85">教室・お問い合わせ</span>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">教室一覧</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">資料請求</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">無料相談</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">相性診断</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:12px;font-weight:700;color:#5B6B85">運営</span>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">会社概要</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">プライバシーポリシー</a>
+<a href="#" style="font-size:12.5px;color:#7A8598;text-decoration:none" style-hover="color:#143778">特定商取引法に基づく表記</a>
+</div>
+</div>
+</div>
+<div style="background:#143778"><p style="margin:0;padding:16px 24px;font-size:11.5px;color:#C9D6EE;text-align:center">© 2026 FOCUS, Inc.</p></div>
+<sc-if value="{{isMobile}}" hint-placeholder-val="{{false}}"><div style="height:76px"></div></sc-if>
+</footer>
+
+<!-- ============ 相性診断ポップアップ ============ -->
+<sc-if value="{{popupShown}}" hint-placeholder-val="{{false}}">
+<div data-screen-label="相性診断ポップアップ" style="position:fixed;left:{{popLeft}};right:{{popRight}};bottom:{{popBottom}};z-index:55;width:288px;background:#fff;border:2px solid #143778;border-radius:16px;box-shadow:4px 5px 0 rgba(20,55,120,.15);padding:18px 18px 16px;transform:translateX({{popTx}}) rotate({{popRot}});opacity:{{popOp}};transition:transform .4s ease,opacity .4s ease;pointer-events:{{popPE}}">
+<button onClick="{{closePopup}}" aria-label="とじる" style="position:absolute;top:4px;right:6px;background:none;border:none;cursor:pointer;color:#8A96A8;font-size:21px;font-weight:700;padding:6px;line-height:1">×</button>
+<div style="display:flex;align-items:center;gap:11px">
+<span style="flex:none;width:50px;height:50px;border-radius:50%;background:#FFF8E1;border:2px dashed #E6C94A;display:grid;place-items:center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#333333" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+<div style="display:flex;flex-direction:column;gap:6px;min-width:0;align-items:center">
+<div style="display:flex;align-items:center;gap:6px">
+<span style="font-family:'Zen Maru Gothic',sans-serif;font-size:11.5px;font-weight:900;color:#143778;background:#DDE7F7;border-radius:999px;padding:3px 10px;white-space:nowrap">集団指導？</span>
+<span style="font:900 10.5px 'Zen Maru Gothic',sans-serif;color:#8A96A8">vs</span>
+<span style="font-family:'Zen Maru Gothic',sans-serif;font-size:11.5px;font-weight:900;color:#B95A1E;background:#FBDECB;border-radius:999px;padding:3px 10px;white-space:nowrap">個別指導？</span>
+</div>
+<p style="font-family:'Zen Maru Gothic',sans-serif;font-size:13px;font-weight:900;color:#333;margin:0;line-height:1.5;white-space:nowrap">うちの子に合う塾は、<span style="background:linear-gradient(transparent 60%,var(--mk,#FFE869) 60% 95%,transparent 95%);padding:0 2px">どのタイプ？</span></p>
+</div>
+</div>
+<a href="相性診断.dc.html" style="display:flex;align-items:center;justify-content:center;gap:6px;background:#143778;color:#fff;font-size:14px;font-weight:700;padding:13px;border-radius:999px;text-decoration:none;margin-top:12px;box-shadow:0 3px 0 #0D2551">30秒でわかる塾タイプ診断 →</a>
+</div>
+</sc-if>
+
+<!-- ============ SP 下部固定CTA ============ -->
+<sc-if value="{{isMobile}}" hint-placeholder-val="{{false}}">
+<div data-screen-label="固定CTA" style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(255,255,255,.97);border-top:1px solid #E3E8EF;padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px">
+<a href="#" class="btn3d btn3d-n" style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px;background:#143778;color:#fff;font-size:14px;font-weight:700;padding:14px 6px;border-radius:999px;text-decoration:none;box-shadow:0 5px 0 #0D2551;transition:transform .1s,box-shadow .1s" style-active="transform:translateY(5px);box-shadow:0 0 0 #0D2551">無料相談を申し込む →</a>
+<a href="#" class="btn-shine btn3d btn3d-o" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#E67832;color:#fff;font-size:14px;font-weight:700;padding:14px 6px;border-radius:999px;text-decoration:none;box-shadow:0 5px 0 #B95A1E;transition:transform .1s,box-shadow .1s" style-active="transform:translateY(5px);box-shadow:0 0 0 #B95A1E"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+</div>
+</sc-if>
+
+<!-- ============ PC 右端固定CTA ============ -->
+<sc-if value="{{notMobile}}" hint-placeholder-val="{{false}}">
+<div data-screen-label="固定CTA" style="position:fixed;right:0;top:50%;z-index:60;display:flex;flex-direction:column;gap:10px;transform:translateY(-50%) translateX({{sideCtaTx}});opacity:{{sideCtaOp}};transition:transform .4s ease,opacity .4s ease;pointer-events:{{sideCtaPE}}">
+<a href="#" style="writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;gap:10px;background:#143778;color:#fff;font-size:14.5px;font-weight:700;padding:24px 14px;border-radius:14px 0 0 14px;text-decoration:none;letter-spacing:.14em;box-shadow:-3px 4px 12px rgba(20,42,84,.22);transition:transform .2s" style-hover="transform:translateX(-4px)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>無料相談を申し込む</a>
+<a href="#" class="btn-shine-v" style="writing-mode:vertical-rl;display:flex;align-items:center;justify-content:center;gap:10px;background:#E67832;color:#fff;font-size:14.5px;font-weight:700;padding:24px 14px;border-radius:14px 0 0 14px;text-decoration:none;letter-spacing:.14em;box-shadow:-3px 4px 12px rgba(20,42,84,.22);transition:transform .2s" style-hover="transform:translateX(-4px)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;popupEnabled&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;機能&quot;},&quot;markerColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#FFE869&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#FFE869&quot;,&quot;#FFF59D&quot;,&quot;#FFDCA8&quot;],&quot;section&quot;:&quot;スタイル&quot;},&quot;altBg&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#F4F8FC&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#F4F8FC&quot;,&quot;#F2F4F7&quot;,&quot;#FFFBF2&quot;],&quot;section&quot;:&quot;スタイル&quot;}}">
+class Component extends DCLogic {
+  state = {
+    isMobile: typeof window !== 'undefined' ? window.innerWidth <= 1024 : false,
+    isNarrow: typeof window !== 'undefined' ? window.innerWidth < 768 : false,
+    vw: typeof document !== 'undefined' ? document.documentElement.clientWidth : 375,
+    menuOpen: false,
+    tab: 'chiba',
+    dragPx: 0,
+    dragging: false,
+    voiceIdx: 0,
+    scrolled: false,
+    pastHero: false,
+    popupClosed: false,
+    faqOpen: -1
+  };
+
+  componentDidMount() {
+    this._voiceView = null;
+    this._onResize = () => {
+      const m = window.innerWidth <= 1024;
+      const n = window.innerWidth < 768;
+      const vw = document.documentElement.clientWidth;
+      if (m !== this.state.isMobile || n !== this.state.isNarrow || vw !== this.state.vw) this.setState({ isMobile: m, isNarrow: n, vw, menuOpen: m === this.state.isMobile ? this.state.menuOpen : false });
+    };
+    this._onScroll = () => {
+      const s = window.scrollY > 500;
+      const hero = document.querySelector('[data-screen-label="ヒーロー"]');
+      const past = hero ? hero.getBoundingClientRect().bottom < 70 : window.scrollY > 400;
+      if (s !== this.state.scrolled || past !== this.state.pastHero) this.setState({ scrolled: s, pastHero: past });
+    };
+    window.addEventListener('resize', this._onResize);
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onScroll);
+  }
+
+  go(id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top, behavior: 'smooth' });
+    if (this.state.menuOpen) this.setState({ menuOpen: false });
+  }
+
+  renderVals() {
+    const chibaRooms = [
+      { name: '稲毛教室', station: '稲毛駅', walk: '徒歩5分', chip: '' },
+      { name: '西千葉教室', station: '西千葉駅', walk: '徒歩5分', chip: '' },
+      { name: '都賀教室', station: '都賀駅', walk: '徒歩5分', chip: '' },
+      { name: '新検見川教室', station: '新検見川駅', walk: '徒歩5分', chip: '' },
+      { name: '蘇我教室', station: '蘇我駅', walk: '徒歩5分', chip: '' },
+      { name: '稲毛海岸教室', station: '稲毛海岸駅', walk: '徒歩5分', chip: '' },
+      { name: '鎌取教室', station: '鎌取駅', walk: '徒歩5分', chip: '' }
+    ];
+    const otherRooms = [
+      { name: '妙典教室', station: '妙典駅', walk: '徒歩5分', chip: '市川市' },
+      { name: '五井教室', station: '五井駅', walk: '徒歩5分', chip: '市原市' },
+      { name: '四街道教室', station: '四街道駅', walk: '徒歩5分', chip: '四街道市' }
+    ];
+    const voices = [
+      { who: '中2・お母さま', text: '「点数より先に、机に向かうようになりました。家で全く勉強しなかったのが嘘みたいです。」' },
+      { who: '中3・お母さま', text: '「費用が続けられる金額なのが決め手でした。3年間値上がりしないのも安心です。」' },
+      { who: '中1・お母さま', text: '「千葉大生の先生に憧れて、塾の日を楽しみにしています。」' },
+      { who: '中2・お母さま', text: '「『どこが分からないか』を先生が一緒に探してくれたのが良かったです。」' },
+      { who: '中3・お母さま', text: '「基礎に戻ってくれたおかげで、初めて平均点を超えました。」' }
+    ];
+    const isChiba = this.state.tab === 'chiba';
+    const idx = this.state.voiceIdx;
+    return {
+      isMobile: this.state.isMobile,
+      ctaDir: this.state.isMobile ? 'column' : 'row',
+      priceCardMargin: this.state.isMobile ? '0 auto' : '0',
+      priceCardPad: this.state.isNarrow ? '10px 8px' : '16px 8px',
+      priceCardMaxW: this.state.isNarrow ? 'none' : (this.state.isMobile ? '480px' : '620px'),
+      priceNumSize: this.state.isNarrow ? 'clamp(25px,7.6vw,34px)' : (this.state.isMobile ? '34px' : '44px'),
+      priceUnitSize: this.state.isNarrow ? 'clamp(12px,3.4vw,14px)' : (this.state.isMobile ? '14px' : '17px'),
+      htMaxW: this.state.isNarrow ? 'none' : (this.state.isMobile ? '540px' : '700px'),
+      priceCardW: this.state.isNarrow ? (this.state.vw - 48) + 'px' : '100%',
+      priceCardAlign: this.state.isNarrow ? 'flex-start' : 'auto',
+      htLeft: this.state.isNarrow ? '24px' : 'clamp(24px, 4.5vw, 80px)',
+      htW: this.state.isNarrow ? 'calc(100% - 48px)' : (this.state.isMobile ? 'min(500px, 46%)' : 'min(700px, 50%)'),
+      catchMax: this.state.isNarrow ? '560px' : (this.state.isMobile ? '560px' : '700px'),
+      heroAlign: this.state.isNarrow ? 'stretch' : 'center',
+      htGap: this.state.isNarrow ? '20px' : '30px',
+      heroImgShift: this.state.isMobile ? '9%' : '11%',
+      tagRotate: this.state.isNarrow ? '-4deg' : '0deg',
+      tagShift: '0',
+      catchMT: this.state.isNarrow ? '40px' : '14px',
+      catchW: this.state.isNarrow ? '72%' : '110%',
+      catchML: this.state.isNarrow ? '-8px' : '0',
+      heroMinH: this.state.isNarrow ? 'auto' : (this.state.isMobile ? '520px' : 'min(76vh, 700px)'),
+      htPadV: this.state.isNarrow ? '42px 0 26px' : '32px 0 40px',
+      heroNarrowImg: this.state.isNarrow,
+      heroWideImg: !this.state.isNarrow,
+      heroFade: this.state.isNarrow
+        ? 'linear-gradient(to right,rgba(255,255,255,.88) 6%,rgba(255,255,255,.5) 44%,rgba(255,255,255,0) 72%),linear-gradient(to top,#fff 0%,rgba(255,255,255,0) 12%)'
+        : 'linear-gradient(to right,rgba(255,255,255,1) 4%,rgba(255,255,255,.88) 24%,rgba(255,255,255,0) 52%),linear-gradient(to top,#fff 0%,rgba(255,255,255,0) 16%)',
+      heroStacked: false,
+      heroSide: true,
+      heroH1Size: 'clamp(23px, 3.9vw, 50px)',
+      heroTagSize: this.state.isNarrow ? 'clamp(12px, 3.3vw, 18px)' : (this.state.isMobile ? 'clamp(14px, 1.9vw, 22px)' : 'clamp(17px, 1.85vw, 36px)'),
+      tagMT: this.state.isNarrow ? '0' : '32px',
+      heroSubSize: this.state.isNarrow ? 'clamp(10px, 3vw, 16px)' : (this.state.isMobile ? 'clamp(12px, 1.7vw, 18px)' : 'clamp(16px, 1.75vw, 26px)'),
+      heroSubColor: this.state.isNarrow ? '#3E4A5E' : '#5B6B85',
+      heroSubMT: this.state.isNarrow ? '20px' : '16px',
+      priceCardMT: this.state.isNarrow ? 'auto' : '0',
+      notMobile: !this.state.isMobile,
+      menuOpen: this.state.menuOpen,
+      menuClosed: !this.state.menuOpen,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen })),
+      hbT1: this.state.menuOpen ? '8px' : '0px',
+      hbT3: this.state.menuOpen ? '8px' : '16px',
+      hbR1: this.state.menuOpen ? '45deg' : '0deg',
+      hbR3: this.state.menuOpen ? '-45deg' : '0deg',
+      hbO2: this.state.menuOpen ? '0' : '1',
+      hbLabel: this.state.menuOpen ? 'とじる' : 'メニュー',
+      menuPE: (this.state.isMobile && this.state.menuOpen) ? 'auto' : 'none',
+      menuVis: this.state.isMobile ? 'visible' : 'hidden',
+      menuTy: this.state.menuOpen ? '0' : '-105%',
+      menuBdOp: this.state.menuOpen ? '1' : '0',
+      miOp: '1',
+      miTy: '0',
+      closeMenu: () => this.setState({ menuOpen: false }),
+      goTop: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+      goReason: () => this.go('reason'),
+      goMethod: () => this.go('method'),
+      goPrice: () => this.go('price'),
+      goVoice: () => this.go('voice'),
+      goRooms: () => this.go('rooms'),
+      goFaq: () => this.go('faq'),
+      chibaRooms,
+      otherRooms,
+      roomCols: this.state.isNarrow ? 'repeat(2, 1fr)' : (this.state.isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'),
+      roomPad: this.state.isNarrow ? '12px 12px' : '14px 16px',
+      roomNameSize: this.state.isNarrow ? '13.5px' : '15px',
+      setChiba: () => this.setState({ tab: 'chiba', dragPx: 0 }),
+      setOther: () => this.setState({ tab: 'other', dragPx: 0 }),
+      chibaSel: isChiba ? 'true' : 'false',
+      otherSel: isChiba ? 'false' : 'true',
+      chibaTabC: isChiba ? '#143778' : '#8A96A8',
+      chibaTabB: isChiba ? '#143778' : 'transparent',
+      otherTabC: isChiba ? '#8A96A8' : '#143778',
+      otherTabB: isChiba ? 'transparent' : '#143778',
+      trackTx: `translateX(calc(${isChiba ? 0 : -100}% + ${this.state.dragPx}px))`,
+      trackTrans: this.state.dragging ? 'none' : 'transform .3s ease',
+      tabDown: (e) => {
+        this._tabStartX = e.clientX;
+        this.setState({ dragging: true, dragPx: 0 });
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+      },
+      tabMove: (e) => {
+        if (!this.state.dragging) return;
+        this.setState({ dragPx: e.clientX - this._tabStartX });
+      },
+      tabEnd: (e) => {
+        if (!this.state.dragging) return;
+        const dx = e.clientX - this._tabStartX;
+        let t = this.state.tab;
+        if (dx <= -40) t = 'other';
+        else if (dx >= 40) t = 'chiba';
+        this.setState({ dragging: false, dragPx: 0, tab: t });
+      },
+      voices: voices.map((v, i) => ({
+        ...v,
+        scale: i === idx ? '1' : '0.85',
+        op: i === idx ? '1' : '0.5',
+        go: () => this.setState({ voiceIdx: i })
+      })),
+      voiceViewRef: (el) => {
+        if (el && el !== this._voiceView) { this._voiceView = el; this.forceUpdate(); }
+      },
+      voiceTx: (() => {
+        const w = this._voiceView ? this._voiceView.clientWidth : 0;
+        // slide = 62% + 3%*2 margins = 68% pitch; first slide center at 34% of view
+        return `${-(idx * 0.68 - 0.16) * w}px`;
+      })(),
+      voicePrev: () => this.setState(s => ({ voiceIdx: (s.voiceIdx + voices.length - 1) % voices.length })),
+      voiceNext: () => this.setState(s => ({ voiceIdx: (s.voiceIdx + 1) % voices.length })),
+      dots: voices.map((v, i) => ({
+        bg: i === idx ? '#143778' : '#C6D4DF',
+        label: `${i + 1}件目を表示`,
+        go: () => this.setState({ voiceIdx: i })
+      })),
+      faqs: [
+        { q: '本当に諸経費はかかりませんか？', a: 'はい。入会金・設備管理費などの諸経費は一切かかりません。授業料も中学3年間据え置きです。' },
+        { q: '勉強が本当に苦手でも大丈夫ですか？', a: 'フォーカスは「勉強が苦手な中学生」専門の塾です。基礎までさかのぼって「分かる」を取り戻すところから始めるので、安心してお任せください。' },
+        { q: '講師はどんな人ですか？', a: '全員が現役の千葉大生です。お子さまとの相性を見ながら担当を決めていきます。※回答は仮' }
+      ].map((f, i) => {
+        const open = this.state.faqOpen === i;
+        return {
+          ...f,
+          border: i === 2 ? 'none' : '2px dashed #DFE9F1',
+          rows: open ? '1fr' : '0fr',
+          rot: open ? '45deg' : '0deg',
+          openAttr: open ? 'true' : 'false',
+          toggle: () => this.setState(s => ({ faqOpen: s.faqOpen === i ? -1 : i }))
+        };
+      }),
+      sideCtaTx: this.state.pastHero ? '0' : '110%',
+      sideCtaOp: this.state.pastHero ? '1' : '0',
+      sideCtaPE: this.state.pastHero ? 'auto' : 'none',
+      popupShown: (this.props.popupEnabled ?? true) && !this.state.popupClosed,
+      popTx: this.state.pastHero ? '0' : (this.state.isMobile ? '120%' : '-120%'),
+      popOp: this.state.pastHero ? '1' : '0',
+      popPE: this.state.pastHero ? 'auto' : 'none',
+      popRot: '-2.5deg',
+      popLeft: this.state.isMobile ? 'auto' : '18px',
+      popRight: this.state.isMobile ? '14px' : 'auto',
+      popBottom: this.state.isMobile ? '96px' : '22px',
+      closePopup: () => this.setState({ popupClosed: true }),
+      markerColor: this.props.markerColor ?? '#FFE869',
+      altBg: this.props.altBg ?? '#F4F8FC'
+    };
+  }
+}
+</script>
+</body>
+</html>
+

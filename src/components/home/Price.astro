@@ -1,0 +1,158 @@
+---
+// 03 料金 — 3社比較カード＋吹き出し＋「5教科全部通える」訴求
+// 他塾金額の根拠・「当社調べ」表記は /price ページで担保（公開前に要確認）
+import SectionHead from './SectionHead.astro';
+import { u } from '../../lib/path';
+
+const subjectChip = {
+  国語: { bg: '#FBE4E4', color: '#B0413E' },
+  数学: { bg: '#DDE7F7', color: '#143778' },
+  英語: { bg: '#FBDECB', color: '#B95A1E' },
+  理科: { bg: '#D7ECDD', color: '#1F6B3C' },
+  社会: { bg: '#E8E0F5', color: '#6B4FA3' },
+} as const;
+type Subject = keyof typeof subjectChip;
+
+const chip = (s: Subject, size: 'sm' | 'lg') =>
+  `background:${subjectChip[s].bg};color:${subjectChip[s].color};` +
+  (size === 'sm' ? 'font-size:clamp(10.5px,1.4vw,14px);padding:3px 10px' : 'font-size:clamp(11.5px,1.6vw,15px);padding:4px 12px');
+---
+<section id="price" class="price">
+  <div class="container">
+    <SectionHead eyebrow="PRICE" title="料金" />
+
+    <div class="compare-grid">
+      <div class="card focus-card">
+        <div class="card-head">フォーカス</div>
+        <div class="card-body">
+          <div class="per">1教科・月額</div>
+          <div class="amount"><span class="num">6,578</span><span class="yen">円</span></div>
+          <div class="tax">（税込）</div>
+        </div>
+      </div>
+      {[
+        { name: '個別A社', price: '18,700' },
+        { name: '個別B社', price: '15,400' },
+      ].map((c) => (
+        <div class="card other-card">
+          <div class="card-head other">{c.name}</div>
+          <div class="card-body">
+            <div class="per other-per">1教科・月額</div>
+            <div class="amount"><span class="other-num">{c.price}</span><span class="other-yen">円</span></div>
+            <div class="tax other-tax">（税込）</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="bubble-row">
+      <div class="bubble">
+        <span class="bubble-tail"></span>
+        1教科あたり、他塾の<span class="big">約1/3</span>！
+      </div>
+    </div>
+
+    <div class="summary">
+      <p class="tsumari">つまり、フォーカスなら<span class="dash">──</span></p>
+      <p class="headline">他塾の2教科分の料金で、<span class="em"><span class="five">5</span>教科全部<svg viewBox="0 0 120 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5.5 Q 9 1.5 17 5 T 32 5 T 47 5 T 62 5 T 77 5 T 92 5 T 107 5 T 118 5" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>通える！</p>
+
+      <div class="band">
+        <div class="band-other">
+          <div class="band-other-title">他塾の月謝</div>
+          <div class="chips"><span class="chip" style={chip('数学', 'sm')}>数学</span><span class="chip" style={chip('英語', 'sm')}>英語</span></div>
+          <div class="band-other-note">2教科で 約37,000円</div>
+        </div>
+        <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></div>
+        <div class="band-focus">
+          <div class="band-focus-title">フォーカスなら</div>
+          <div class="chip-rows">
+            <div class="chips">{(['国語', '数学', '英語'] as const).map((s) => <span class="chip" style={chip(s, 'lg')}>{s}</span>)}</div>
+            <div class="chips">{(['理科', '社会'] as const).map((s) => <span class="chip" style={chip(s, 'lg')}>{s}</span>)}</div>
+          </div>
+          <div class="band-focus-note">5教科 全部！</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="more">
+      <a href={u('/price')} class="btn-out">料金を詳しく見る<span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .price { background: #fff; }
+  .container { max-width: 940px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
+
+  .compare-grid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 10px; align-items: end; }
+  .focus-card { position: relative; border: 2px solid var(--navy); border-radius: 14px; overflow: hidden; box-shadow: 0 6px 16px rgba(20, 42, 84, .14); }
+  .focus-card .card-head {
+    background: var(--navy); color: #fff; text-align: center;
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(14px, 1.8vw, 21px); padding: clamp(9px, 1.2vw, 13px) 4px;
+  }
+  .focus-card .card-body { text-align: center; padding: clamp(12px, 2vw, 18px) 4px clamp(8px, 1.5vw, 12px); background: #fff; }
+  .per { font-size: clamp(10px, 1.3vw, 15px); color: var(--muted); font-weight: 700; }
+  .amount { line-height: 1.1; margin-top: 3px; }
+  .num { font-family: var(--font-round); font-weight: 900; font-size: clamp(26px, 3.6vw, 46px); color: var(--orange); }
+  .yen { font-size: clamp(11px, 1.5vw, 18px); font-weight: 800; color: var(--ink); margin-left: 4px; }
+  .tax { font-size: clamp(9px, 1.2vw, 13px); color: var(--gray-1); margin-top: 2px; }
+
+  .other-card { border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .card-head.other { background: var(--gray-1); color: #fff; text-align: center; font-weight: 800; font-size: clamp(11px, 1.4vw, 16px); padding: clamp(7px, 1vw, 10px) 2px; }
+  .other-card .card-body { text-align: center; padding: clamp(10px, 1.6vw, 14px) 2px clamp(7px, 1.2vw, 10px); }
+  .other-per { font-size: clamp(9px, 1.2vw, 13px); color: var(--gray-1); }
+  .other-num { font-weight: 800; font-size: clamp(16px, 2.2vw, 28px); color: var(--muted); }
+  .other-yen { font-size: clamp(9px, 1.2vw, 14px); color: var(--muted); margin-left: 3px; }
+  .other-tax { font-size: clamp(8.5px, 1.1vw, 12px); color: var(--gray-2); }
+
+  .bubble-row { display: flex; justify-content: flex-start; margin-top: 8px; padding-left: 12px; position: relative; z-index: 1; }
+  .bubble {
+    position: relative; background: var(--orange); color: #fff;
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(15px, 2vw, 21px);
+    border-radius: 11px; padding: clamp(10px, 1.4vw, 13px) clamp(20px, 2.6vw, 26px);
+    box-shadow: 0 3px 10px rgba(230, 120, 50, .3);
+  }
+  .bubble-tail {
+    position: absolute; top: -16px; left: 28px;
+    border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 17px solid var(--orange);
+  }
+  .bubble .big { font-size: clamp(20px, 2.6vw, 28px); }
+
+  .summary { margin-top: 30px; text-align: center; }
+  .tsumari { font-size: clamp(13.5px, 1.7vw, 18px); font-weight: 800; color: var(--muted); margin: 0; }
+  .dash { margin-left: .4em; }
+  .headline {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(18.5px, 2.8vw, 36px);
+    color: var(--ink); margin: 10px 0 0; line-height: 1.6; white-space: nowrap;
+  }
+  .em { color: var(--orange); display: inline-block; position: relative; margin-right: .35em; }
+  .five { font-size: 1.15em; }
+  .em svg { position: absolute; left: 1%; bottom: -8px; width: 98%; height: 11px; }
+
+  .band { display: flex; align-items: stretch; justify-content: center; gap: clamp(6px, 1vw, 12px); margin-top: 18px; }
+  .band-other {
+    flex: .8; max-width: 230px; display: flex; flex-direction: column; justify-content: center; gap: clamp(5px, .8vw, 8px);
+    text-align: center; background: var(--panel); border-radius: 12px;
+    padding: clamp(8px, 1.4vw, 16px) clamp(5px, 1vw, 14px); box-sizing: border-box; align-self: center;
+  }
+  .band-other-title { font-size: clamp(11.5px, 1.5vw, 16px); font-weight: 800; color: var(--gray-1); }
+  .band-other-note { font-size: clamp(10px, 1.3vw, 14px); font-weight: 700; color: var(--gray-1); }
+  .chips { display: flex; gap: clamp(5px, .7vw, 7px); justify-content: center; flex-wrap: wrap; }
+  .chip { font-weight: 800; border-radius: 6px; }
+  .arrow { display: flex; align-items: center; }
+  .band-focus {
+    flex: 1.2; max-width: 340px; display: flex; flex-direction: column; justify-content: center; gap: clamp(9px, 1.2vw, 12px);
+    text-align: center; background: #fff; border: 2.5px solid var(--navy); border-radius: 12px;
+    padding: clamp(14px, 2.2vw, 24px) clamp(7px, 1.2vw, 18px); box-shadow: 0 6px 16px rgba(20, 42, 84, .14); box-sizing: border-box;
+  }
+  .band-focus-title { font-size: clamp(13px, 1.7vw, 18px); font-weight: 900; color: var(--navy); font-family: var(--font-round); }
+  .chip-rows { display: flex; flex-direction: column; gap: clamp(5px, .7vw, 7px); align-items: center; }
+  .band-focus-note { font-family: var(--font-round); font-size: clamp(14px, 1.9vw, 20px); font-weight: 900; color: var(--orange); }
+
+  .more { display: flex; justify-content: center; margin-top: 36px; }
+  .more a {
+    display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 200px;
+    border: 2px solid var(--navy); color: var(--navy); background: #fff;
+    font-size: 14.5px; font-weight: 700; padding: 13px 28px; border-radius: 999px; text-decoration: none;
+  }
+</style>

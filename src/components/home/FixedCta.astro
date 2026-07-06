@@ -1,0 +1,51 @@
+---
+// 固定CTA — SP(≤1024px): 下部バー常時表示 / PC(>1024px): 右端縦書き（ヒーロー通過後にスライドイン）
+import { u } from '../../lib/path';
+---
+<div class="sp-cta">
+  <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む →</a>
+  <a href={u('/document')} class="btn-shine btn3d btn3d-o doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+</div>
+
+<div class="side-cta" data-side-cta>
+  <a href={u('/consult')} class="v-btn consult-v"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>無料相談を申し込む</a>
+  <a href={u('/document')} class="v-btn doc-v btn-shine-v"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+</div>
+
+<style>
+  .sp-cta {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    background: rgba(255, 255, 255, .97); border-top: 1px solid #E3E8EF;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    display: flex; gap: 8px;
+  }
+  .sp-cta a {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; padding: 14px 6px; border-radius: 999px;
+    text-decoration: none; color: #fff;
+  }
+  .sp-cta .consult { gap: 5px; background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .sp-cta .doc { gap: 6px; background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
+
+  .side-cta {
+    display: none; position: fixed; right: 0; top: 50%; z-index: 60;
+    flex-direction: column; gap: 10px;
+    transform: translateY(-50%) translateX(110%); opacity: 0; pointer-events: none;
+    transition: transform .4s ease, opacity .4s ease;
+  }
+  :global(body.past-hero) .side-cta { transform: translateY(-50%) translateX(0); opacity: 1; pointer-events: auto; }
+  .v-btn {
+    writing-mode: vertical-rl; display: flex; align-items: center; justify-content: center; gap: 10px;
+    color: #fff; font-size: 14.5px; font-weight: 700; padding: 24px 14px;
+    border-radius: 14px 0 0 14px; text-decoration: none; letter-spacing: .14em;
+    box-shadow: -3px 4px 12px rgba(20, 42, 84, .22); transition: transform .2s;
+  }
+  .v-btn:hover { transform: translateX(-4px); }
+  .consult-v { background: var(--navy); }
+  .doc-v { background: var(--orange); }
+
+  @media (min-width: 1025px) {
+    .sp-cta { display: none; }
+    .side-cta { display: flex; }
+  }
+</style>

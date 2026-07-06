@@ -1,0 +1,69 @@
+---
+// 相性診断ポップアップ — ヒーロー通過後に表示（SP: 右下から / PC: 左下から）
+// ×で閉じたらセッション中は再表示しない（sessionStorage）
+import { u } from '../../lib/path';
+---
+<div class="diag-popup" data-diag-popup>
+  <button class="close" aria-label="とじる" data-diag-close>×</button>
+  <div class="body">
+    <span class="icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#333333" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg></span>
+    <div class="text">
+      <div class="vs-row">
+        <span class="chip group">集団指導？</span>
+        <span class="vs">vs</span>
+        <span class="chip solo">個別指導？</span>
+      </div>
+      <p>うちの子に合う塾は、<span class="mk">どのタイプ？</span></p>
+    </div>
+  </div>
+  <a href={u('/diagnosis')} class="go">30秒でわかる塾タイプ診断 →</a>
+</div>
+
+<style>
+  .diag-popup {
+    position: fixed; right: 14px; left: auto; bottom: 96px; z-index: 55; width: 288px;
+    background: #fff; border: 2px solid var(--navy); border-radius: 16px;
+    box-shadow: 4px 5px 0 rgba(20, 55, 120, .15); padding: 18px 18px 16px;
+    transform: translateX(120%) rotate(-2.5deg); opacity: 0; pointer-events: none;
+    transition: transform .4s ease, opacity .4s ease; box-sizing: border-box;
+  }
+  @media (min-width: 1025px) {
+    .diag-popup { left: 18px; right: auto; bottom: 22px; transform: translateX(-120%) rotate(-2.5deg); }
+  }
+  :global(body.past-hero) .diag-popup:not(.closed) {
+    transform: translateX(0) rotate(-2.5deg); opacity: 1; pointer-events: auto;
+  }
+  .close {
+    position: absolute; top: 4px; right: 6px; background: none; border: none; cursor: pointer;
+    color: var(--gray-1); font-size: 21px; font-weight: 700; padding: 6px; line-height: 1;
+  }
+  .body { display: flex; align-items: center; gap: 11px; }
+  .icon {
+    flex: none; width: 50px; height: 50px; border-radius: 50%;
+    background: #FFF8E1; border: 2px dashed #E6C94A; display: grid; place-items: center;
+  }
+  .text { display: flex; flex-direction: column; gap: 6px; min-width: 0; align-items: center; }
+  .vs-row { display: flex; align-items: center; gap: 6px; }
+  .chip { font-family: var(--font-round); font-size: 11.5px; font-weight: 900; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+  .chip.group { color: var(--navy); background: var(--blue-pale); }
+  .chip.solo { color: var(--orange-shadow); background: #FBDECB; }
+  .vs { font: 900 10.5px var(--font-round); color: var(--gray-1); }
+  .text p { font-family: var(--font-round); font-size: 13px; font-weight: 900; color: var(--ink); margin: 0; line-height: 1.5; white-space: nowrap; }
+  .go {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--navy); color: #fff; font-size: 14px; font-weight: 700; padding: 13px;
+    border-radius: 999px; text-decoration: none; margin-top: 12px; box-shadow: 0 3px 0 var(--navy-shadow);
+  }
+</style>
+
+<script>
+  const popup = document.querySelector<HTMLElement>('[data-diag-popup]');
+  const KEY = 'focus-diag-popup-closed';
+  if (popup) {
+    if (sessionStorage.getItem(KEY)) popup.classList.add('closed');
+    popup.querySelector('[data-diag-close]')?.addEventListener('click', () => {
+      popup.classList.add('closed');
+      sessionStorage.setItem(KEY, '1');
+    });
+  }
+</script>

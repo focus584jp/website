@@ -1,0 +1,38 @@
+---
+// 入塾までの流れ — 縦4ステップ（丸数字＋縦ライン接続）
+import SectionHead from './SectionHead.astro';
+import { flowSteps } from '../../data/home';
+---
+<section id="flow" class="flow">
+  <div class="container">
+    <SectionHead eyebrow="FLOW" title="入塾までの流れ" />
+    <div class="card">
+      {flowSteps.map((s, i) => (
+        <div class:list={['step', { last: i === flowSteps.length - 1 }]}>
+          <span class:list={['circle', { accent: s.accent }]}>{i + 1}</span>
+          {i < flowSteps.length - 1 && <span class="line"></span>}
+          <div class="title">{s.title}{s.titleNote && <span class="title-note">{s.titleNote}</span>}</div>
+          <div class="note">{s.note}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .flow { background: var(--alt-bg); }
+  .container { max-width: 520px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
+  .card { background: #fff; border-radius: 14px; padding: 24px 26px; box-shadow: 0 6px 16px rgba(20, 55, 120, .09); }
+  .step { position: relative; padding: 2px 0 26px 44px; }
+  .step.last { padding-bottom: 2px; }
+  .circle {
+    position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%;
+    background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center;
+    font: 700 14px var(--font-round);
+  }
+  .circle.accent { background: var(--orange); }
+  .line { position: absolute; left: 13px; top: 32px; bottom: 4px; width: 2px; background: rgba(20, 55, 120, .22); }
+  .title { font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.5; }
+  .title-note { font-size: 11px; font-weight: 700; color: #C0392B; margin-left: 8px; }
+  .note { font-size: 12.5px; color: var(--gray-3); margin-top: 3px; line-height: 1.7; }
+</style>

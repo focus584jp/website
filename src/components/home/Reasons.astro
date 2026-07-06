@@ -1,0 +1,69 @@
+---
+// 01 選ばれる理由 — POINTバッジ付き3カード
+import { Image } from 'astro:assets';
+import SectionHead from './SectionHead.astro';
+import reason1 from '../../assets/home/reason-1.jpg';
+import reason2 from '../../assets/home/reason-2.jpg';
+import reason3 from '../../assets/home/reason-3.jpg';
+
+const cards = [
+  {
+    num: '01', img: reason1, alt: '生徒に寄り添って教える先生',
+    title: '「勉強が苦手」な中学生専門',
+    body: '「どこが分からないかも分からない…」でも大丈夫。基礎から徹底的にやり直し、遅れを確実に取り戻す、苦手克服の専門塾です。',
+  },
+  {
+    num: '02', img: reason2, alt: '安心した表情で料金明細を見る母親',
+    title: '個別指導の常識を破る「低価格」',
+    body: '個別指導を月6,578円〜の安心価格で実現しました。入会金や設備管理費は0円。家計の負担を抑え、継続的に通うことができます。',
+  },
+  {
+    num: '03', img: reason3, alt: '笑顔の千葉大生講師たち',
+    title: '講師は全員「千葉大生」',
+    body: '厳選された千葉大生の講師たちが、どの授業でも質の高い指導を提供します。担当によるムラがなく、お子さまの学力を着実に引き上げます。',
+  },
+];
+---
+<section id="reason" class="reason">
+  <div class="container">
+    <SectionHead eyebrow="REASON" title="選ばれる理由" />
+    <div class="cards">
+      {cards.map((c) => (
+        <div class="card">
+          <span class="badge">
+            <svg width="66" height="66" viewBox="0 0 66 66" aria-hidden="true">
+              <defs><path id={`bArc${c.num}`} d="M 7 33 A 26 26 0 0 1 59 33" fill="none"></path></defs>
+              <text class="arc-text" fill="#143778"><textPath href={`#bArc${c.num}`} startOffset="50%" text-anchor="middle">POINT</textPath></text>
+            </svg>
+            <span class="badge-num">{c.num}</span>
+          </span>
+          <Image src={c.img} alt={c.alt} widths={[380, 760]} sizes="(max-width: 767px) 90vw, 330px" class="photo" />
+          <h3>{c.title}</h3>
+          <p>{c.body}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .reason { background: #fff; }
+  .container { max-width: 1160px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
+  .cards { display: flex; flex-wrap: wrap; gap: 38px 20px; justify-content: center; }
+  .card {
+    position: relative; flex: 1 1 280px; max-width: 330px; background: #fff; border-radius: 16px;
+    padding: 20px; display: flex; flex-direction: column; gap: 12px;
+    box-shadow: var(--shadow-card);
+  }
+  .badge { position: absolute; top: -24px; left: -16px; width: 66px; height: 66px; z-index: 1; }
+  .badge svg { position: absolute; inset: 0; overflow: visible; }
+  .arc-text { font: 800 9px var(--font-round); letter-spacing: .3em; }
+  .badge-num {
+    position: absolute; left: 11px; top: 11px; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--navy); color: #fff; display: grid; place-items: center; line-height: 1;
+    box-shadow: 3px 3px 0 #DCE5F4; font: 900 16px var(--font-round); letter-spacing: .04em;
+  }
+  .photo { width: 100%; height: 190px; object-fit: cover; border-radius: 10px; display: block; }
+  h3 { font-family: var(--font-round); font-size: 18.5px; font-weight: 700; color: var(--ink); margin: 0; }
+  p { font-size: 14px; line-height: 1.9; color: #555; margin: 0; }
+</style>

@@ -1,0 +1,162 @@
+---
+// 02 指導方針 — 方眼ノート地の白カード2枚（特徴1: 積み木比較 / 特徴2: Teaching vs Coaching）
+import SectionHead from './SectionHead.astro';
+import { u } from '../../lib/path';
+---
+<section id="method" class="method">
+  <div class="container">
+    <SectionHead eyebrow="METHOD" title="指導方針" />
+    <div class="cards">
+
+      <div class="note-card">
+        <div class="feature-head">
+          <span class="pill">特徴 1</span>
+          <h3>基礎から、学び直す</h3>
+        </div>
+        <p class="lead">フォーカスでは、学年にとらわれず「分かる」ところまで戻って学び直します。必要に応じて小学生の範囲までさかのぼるので、授業についていけない心配はありません。</p>
+        <div class="compare-panel">
+          <div class="compare">
+            <div class="col">
+              <div class="col-head ng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg>無理に学校の進度に合わせると…</div>
+              <svg viewBox="0 0 210 150" class="illust">
+                <ellipse cx="102" cy="131" rx="92" ry="9" fill="#2B3242" opacity=".12"></ellipse>
+                <rect x="28" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+                <rect x="74" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+                <rect x="142" y="96" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+                <rect x="52" y="58" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(-14 69 75)"></rect>
+                <rect x="118" y="58" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(10 135 75)"></rect>
+                <rect x="112" y="15" width="34" height="34" rx="2" fill="#4A7ACC" transform="rotate(22 129 32)"></rect>
+                <g stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+                  <path d="M60 26 l-8 6 4 9 -8 6 4 9" transform="rotate(-6 56 41)"></path>
+                  <path d="M48 22 l-8 6 4 9 -8 6 4 9" transform="rotate(-6 44 37)"></path>
+                  <path d="M160 26 l8 6 -4 9 8 6 -4 9" transform="rotate(6 164 41)"></path>
+                  <path d="M172 22 l8 6 -4 9 8 6 -4 9" transform="rotate(6 176 37)"></path>
+                </g>
+              </svg>
+              <p class="col-note">取りこぼしが増え …<br />成績が伸びなやむ</p>
+            </div>
+            <div class="v-dash"></div>
+            <div class="col">
+              <div class="col-head ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg>フォーカスでの成績の上がり方</div>
+              <svg viewBox="0 0 210 150" class="illust">
+                <ellipse cx="105" cy="131" rx="92" ry="9" fill="#143778" opacity=".14"></ellipse>
+                <rect x="28" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+                <rect x="66" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+                <rect x="104" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+                <rect x="142" y="96" width="34" height="34" rx="2" fill="#143778"></rect>
+                <rect x="47" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+                <rect x="85" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+                <rect x="123" y="58" width="34" height="34" rx="2" fill="#2C55A0"></rect>
+                <rect x="66" y="20" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+                <rect x="104" y="20" width="34" height="34" rx="2" fill="#4A7ACC"></rect>
+                <g fill="#FFC94A">
+                  <path d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z" transform="translate(48,26)"></path>
+                  <path d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z" transform="translate(160,14)"></path>
+                  <path d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z" transform="translate(172,46)"></path>
+                </g>
+              </svg>
+              <p class="col-note">正しく基礎を積み重ねて …<br /><span class="mk">苦手を克服！</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <div class="feature-head">
+          <span class="pill">特徴 2</span>
+          <h3>勉強の仕方を、身につける</h3>
+        </div>
+        <p class="lead">「何を・どの順番で・どうやって」勉強するかまで教えるのがフォーカス流。正しい勉強の仕方が身につくから、塾の外でも自分ひとりで学べるようになります。</p>
+        <div class="style-compare">
+          <div class="style-box old">
+            <div class="style-title">従来の塾の学習スタイル</div>
+            <div class="style-sub">Teaching — 授業の質を最大化</div>
+            <svg viewBox="0 0 240 100" class="style-illust">
+              <g fill="#8A96A8"><circle cx="45" cy="27" r="15"></circle><path d="M19 74 a26 26 0 0 1 52 0 Z"></path></g>
+              <text x="45" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A96A8">先生</text>
+              <g fill="#8A96A8"><circle cx="195" cy="32" r="12.5"></circle><path d="M174 74 a21 21 0 0 1 42 0 Z"></path></g>
+              <text x="195" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8A96A8">生徒</text>
+              <path d="M86 52 h72" stroke="#8A96A8" stroke-width="3" stroke-linecap="round"></path>
+              <path d="M158 52 l-9 -6 m9 6 l-9 6" stroke="#8A96A8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+              <text x="122" y="40" text-anchor="middle" font-family="'Zen Maru Gothic',sans-serif" font-size="13" font-weight="900" fill="#5B6B85">教える</text>
+            </svg>
+            <p class="style-note">答えややり方を解説する指導<br />受ける側は受け身になりがち</p>
+          </div>
+          <div class="style-box focus">
+            <div class="style-title">フォーカスの学習スタイル</div>
+            <div class="style-sub">Coaching — 自立学習の質を最大化</div>
+            <svg viewBox="0 0 240 100" class="style-illust">
+              <g fill="#143778"><circle cx="45" cy="27" r="15"></circle><path d="M19 74 a26 26 0 0 1 52 0 Z"></path></g>
+              <text x="45" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#143778">先生</text>
+              <g fill="#143778"><circle cx="195" cy="32" r="12.5"></circle><path d="M174 74 a21 21 0 0 1 42 0 Z"></path></g>
+              <text x="195" y="93" text-anchor="middle" font-size="11.5" font-weight="700" fill="#143778">生徒</text>
+              <path d="M86 42 h72" stroke="#E67832" stroke-width="2.6" stroke-linecap="round"></path>
+              <path d="M158 42 l-8 -5 m8 5 l-8 5" stroke="#E67832" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              <text x="122" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#E67832">問いかけ</text>
+              <path d="M158 60 h-72" stroke="#143778" stroke-width="2.6" stroke-linecap="round"></path>
+              <path d="M86 60 l8 -5 m-8 5 l8 5" stroke="#143778" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              <text x="122" y="76" text-anchor="middle" font-size="11" font-weight="700" fill="#143778">回答</text>
+              <path d="M216 10 v-8 M224 14 l6 -6 M226 22 h8" stroke="#FFC94A" stroke-width="3" stroke-linecap="round"></path>
+            </svg>
+            <p class="style-note focus-note">考え方を問いかけ、ヒントを与えて、自分で答えまで導かせる指導</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="more">
+      <a href={u('/method')} class="btn-out">詳しく見る<span class="ar">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .method { background: var(--alt-bg); }
+  .container { max-width: 900px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
+  .cards { display: flex; flex-direction: column; gap: clamp(20px, 3vw, 28px); }
+  .note-card {
+    background-color: #fff;
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+    background-size: 24px 24px;
+    border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3.5vw, 32px);
+    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
+  }
+  .feature-head { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  .pill {
+    font-family: var(--font-round); font-size: clamp(11.5px, 1.4vw, 13px); font-weight: 900;
+    color: #fff; background: var(--orange); border-radius: 999px; padding: 4px 16px;
+  }
+  h3 { font-family: var(--font-round); font-size: clamp(18px, 2.4vw, 23px); font-weight: 900; color: var(--ink); margin: 0; }
+  .lead { font-size: clamp(13px, 1.6vw, 15px); line-height: 2; color: #555; margin: clamp(14px, 2vw, 20px) auto 0; max-width: 640px; }
+
+  .compare-panel { background: var(--panel); border-radius: 14px; padding: clamp(16px, 2.5vw, 26px) clamp(8px, 1.5vw, 20px); margin-top: clamp(14px, 2vw, 20px); }
+  .compare { display: flex; align-items: stretch; justify-content: center; gap: clamp(8px, 1.5vw, 18px); }
+  .col { flex: 1; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .col-head { display: flex; align-items: center; gap: 7px; font-size: clamp(11px, 1.4vw, 14px); font-weight: 800; }
+  .col-head.ng { color: var(--ink); }
+  .col-head.ok { color: var(--navy); }
+  .illust { width: 100%; max-width: 210px; height: auto; margin-top: 4px; }
+  .col-note { font-size: clamp(11.5px, 1.4vw, 14.5px); font-weight: 800; color: var(--ink); margin: 2px 0 0; text-align: center; line-height: 1.8; }
+  .v-dash { border-left: 2px dashed #C6D0DC; }
+
+  .style-compare { display: flex; gap: clamp(10px, 1.8vw, 18px); justify-content: center; margin-top: clamp(16px, 2.5vw, 24px); }
+  .style-box { flex: 1; min-width: 0; max-width: 350px; border-radius: 12px; padding: clamp(12px, 2.2vw, 22px) clamp(8px, 1.4vw, 14px); text-align: center; box-sizing: border-box; }
+  .style-box.old { background: var(--panel); }
+  .style-box.old .style-title { font-size: clamp(11.5px, 1.5vw, 14.5px); font-weight: 800; color: var(--gray-1); }
+  .style-box.old .style-sub { font-size: clamp(9.5px, 1.3vw, 12px); font-weight: 700; color: var(--gray-2); margin-top: 2px; }
+  .style-box.focus { background: var(--blue-paler); border: 2px solid var(--navy); }
+  .style-box.focus .style-title { font-size: clamp(11.5px, 1.5vw, 14.5px); font-weight: 900; color: var(--navy); font-family: var(--font-round); }
+  .style-box.focus .style-sub { font-size: clamp(9.5px, 1.3vw, 12px); font-weight: 700; color: var(--navy-light); margin-top: 2px; }
+  .style-illust { width: 100%; max-width: 250px; margin-top: 12px; }
+  .style-note { font-size: clamp(10.5px, 1.3vw, 12.5px); line-height: 1.8; color: var(--muted); margin: 8px 0 0; }
+  .focus-note { color: var(--navy); font-weight: 700; }
+
+  .more { display: flex; justify-content: center; margin-top: 28px; }
+  .more a {
+    display: flex; align-items: center; justify-content: center; min-width: 180px; gap: 8px;
+    border: 2px solid var(--navy); color: var(--navy); background: #fff;
+    font-size: 14.5px; font-weight: 700; padding: 13px 28px; border-radius: 999px; text-decoration: none;
+  }
+</style>

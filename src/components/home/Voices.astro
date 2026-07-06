@@ -1,0 +1,100 @@
+---
+// 04 保護者さまの声 — 中央拡大カルーセル（前後ボタン・カードタップ・ドット）
+// ※全件仮文面 — 公開前に実物へ差し替え必須
+import SectionHead from './SectionHead.astro';
+import { voices } from '../../data/home';
+---
+<section id="voice" class="voice">
+  <div class="container">
+    <div class="head-wrap"><SectionHead eyebrow="VOICE" title="保護者さまの声" /></div>
+    <div class="carousel" data-voice>
+      <div class="viewport" data-voice-viewport>
+        <div class="track" data-voice-track>
+          {voices.map((v, i) => (
+            <div class="card" data-voice-card data-index={i}>
+              <div class="meta">
+                <div class="avatar"></div>
+                <div class="names"><span class="who">{v.who}</span><span class="draft">※仮の内容です</span></div>
+              </div>
+              <p>{v.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <button class="nav prev" aria-label="前の声へ" data-voice-prev>‹</button>
+      <button class="nav next" aria-label="次の声へ" data-voice-next>›</button>
+    </div>
+    <div class="dots">
+      {voices.map((_, i) => (
+        <button aria-label={`${i + 1}件目を表示`} data-voice-dot data-index={i}></button>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .voice { background: var(--alt-bg); }
+  .container { max-width: 1160px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 0; }
+  .head-wrap { padding: 0 24px; }
+  .carousel { position: relative; max-width: 640px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+  .viewport { overflow: hidden; padding: 12px 0; }
+  .track { display: flex; align-items: stretch; transition: transform .45s cubic-bezier(.25, .8, .3, 1); }
+  .card {
+    flex: 0 0 62%; margin: 0 3%; box-sizing: border-box; background: #fff;
+    border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+    display: flex; flex-direction: column; gap: 12px; min-height: 170px; cursor: pointer;
+    transform: scale(.85); opacity: .5; transition: transform .45s, opacity .45s;
+  }
+  .card.active { transform: scale(1); opacity: 1; }
+  .meta { display: flex; align-items: center; gap: 12px; }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: repeating-linear-gradient(45deg, #F2F1EE 0 6px, #E7E5E0 6px 12px);
+    border: 1.5px dashed #B4AEA2; flex: none;
+  }
+  .names { display: flex; flex-direction: column; }
+  .who { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .draft { font-size: 11px; font-weight: 700; color: #C0392B; }
+  .card p { font-size: 13.5px; line-height: 1.9; color: #555; margin: 0; }
+  .nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(255, 255, 255, .94); color: var(--navy);
+    font-size: 20px; font-weight: 900; line-height: 1; cursor: pointer;
+    display: grid; place-items: center; box-shadow: 0 2px 8px rgba(29, 42, 54, .22); padding: 0 0 2px;
+  }
+  .prev { left: 8px; }
+  .next { right: 8px; }
+  .dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+  .dots button { width: 9px; height: 9px; border-radius: 50%; border: none; padding: 0; cursor: pointer; background: #C6D4DF; }
+  .dots button.active { background: var(--navy); }
+</style>
+
+<script>
+  const viewport = document.querySelector<HTMLElement>('[data-voice-viewport]');
+  const track = document.querySelector<HTMLElement>('[data-voice-track]');
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-voice-card]')];
+  const dots = [...document.querySelectorAll<HTMLElement>('[data-voice-dot]')];
+  let idx = 0;
+
+  function render() {
+    if (!viewport || !track) return;
+    // カード幅62% + 左右マージン3%×2 = 68%ピッチ。先頭カードの中心を34%位置に置く
+    const w = viewport.clientWidth;
+    track.style.transform = `translateX(${-(idx * 0.68 - 0.16) * w}px)`;
+    cards.forEach((c, i) => c.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  function goTo(i: number) {
+    idx = (i + cards.length) % cards.length;
+    render();
+  }
+
+  document.querySelector('[data-voice-prev]')?.addEventListener('click', () => goTo(idx - 1));
+  document.querySelector('[data-voice-next]')?.addEventListener('click', () => goTo(idx + 1));
+  cards.forEach((c) => c.addEventListener('click', () => goTo(Number(c.dataset.index))));
+  dots.forEach((d) => d.addEventListener('click', () => goTo(Number(d.dataset.index))));
+  window.addEventListener('resize', render);
+  render();
+</script>

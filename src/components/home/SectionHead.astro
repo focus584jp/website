@@ -1,0 +1,29 @@
+---
+// セクション見出しの型: 英字ラベル → タイトル（黄色蛍光ペンSVGを下に敷く）
+const { eyebrow, title } = Astro.props;
+---
+<div class="sec-head">
+  <div class="eyebrow">{eyebrow}</div>
+  <h2>
+    <span class="title-wrap">
+      {title}
+      <svg viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path>
+      </svg>
+    </span>
+  </h2>
+</div>
+
+<style>
+  .sec-head { text-align: center; margin-bottom: clamp(24px, 3.5vw, 36px); }
+  .eyebrow {
+    font: 800 clamp(11px, 1.3vw, 13px) var(--font-round);
+    color: var(--orange); letter-spacing: .32em; margin-bottom: 6px;
+  }
+  h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 3.4vw, 32px); margin: 0; color: var(--ink); }
+  .title-wrap { display: inline-block; position: relative; padding: 0 6px; z-index: 0; }
+  .title-wrap svg {
+    position: absolute; left: -8px; bottom: 0;
+    width: calc(100% + 16px); height: 19px; z-index: -1;
+  }
+</style>

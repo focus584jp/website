@@ -1,0 +1,181 @@
+---
+// 05 教室一覧 — 千葉市/千葉市以外タブ（スワイプ切替対応）＋現在地から最寄り検索
+import SectionHead from './SectionHead.astro';
+import { classrooms, stationLabel } from '../../data/classrooms';
+import { u } from '../../lib/path';
+
+const chibaRooms = classrooms.filter((c) => c.region === '千葉市');
+const otherRooms = classrooms.filter((c) => c.region !== '千葉市');
+// Geolocation用の最小データ（slugと座標のみ）
+const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng }));
+---
+<section id="rooms" class="rooms">
+  <div class="container">
+    <SectionHead eyebrow="CLASSROOMS" title="教室一覧" />
+
+    <div class="near-wrap">
+      <button class="near-btn" data-nearest data-rooms={JSON.stringify(geoData)} data-base={u('/classrooms/')}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2.5"></circle><path d="M12 2v3"></path><path d="M12 19v3"></path><path d="M2 12h3"></path><path d="M19 12h3"></path></svg>
+        現在地から最寄りの教室をさがす
+      </button>
+    </div>
+
+    <div class="tabs-card">
+      <div role="tablist" aria-label="教室のエリア" class="tablist">
+        <button role="tab" aria-selected="true" class="tab active" data-room-tab="chiba">千葉市</button>
+        <button role="tab" aria-selected="false" class="tab" data-room-tab="other">千葉市以外</button>
+      </div>
+      <div class="panels" data-room-panels>
+        <div class="track" data-room-track>
+          <div role="tabpanel" class="panel">
+            <div class="grid">
+              {chibaRooms.map((r) => (
+                <a href={u(`/classrooms/${r.slug}`)} class="room btn-out">
+                  <div class="room-info">
+                    <span class="room-name">{r.name}</span>
+                    <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
+                  </div>
+                  <span class="ar">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+          <div role="tabpanel" class="panel">
+            <div class="grid">
+              {otherRooms.map((r) => (
+                <a href={u(`/classrooms/${r.slug}`)} class="room btn-out">
+                  <div class="room-info">
+                    <div class="room-name-row">
+                      <span class="room-name">{r.name}</span>
+                      <span class="chip">{r.region}</span>
+                    </div>
+                    <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
+                  </div>
+                  <span class="ar">→</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .rooms { background: #fff; }
+  .container { max-width: 1040px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
+
+  .near-wrap { display: flex; justify-content: center; margin-bottom: 22px; }
+  .near-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 260px;
+    background: #fff; border: 2px solid var(--navy); color: var(--navy);
+    font-family: var(--font-body); font-size: 14px; font-weight: 700; padding: 12px 26px; border-radius: 999px;
+    cursor: pointer; transition: background .2s, color .2s;
+  }
+  .near-btn:hover { background: var(--navy); color: #fff; }
+
+  .tabs-card { background: #fff; border: 2px solid #DFE9F1; border-radius: 14px; overflow: hidden; }
+  .tablist { display: flex; border-bottom: 2px solid #DFE9F1; }
+  .tab {
+    flex: 1; padding: 13px 6px; background: none; border: none;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
+    font-family: var(--font-body); font-size: 14.5px; font-weight: 800; color: var(--gray-1);
+    cursor: pointer; transition: color .3s, border-color .3s;
+  }
+  .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+
+  .panels { overflow: hidden; touch-action: pan-y; cursor: grab; }
+  .panels.dragging { cursor: grabbing; }
+  .track { display: flex; transition: transform .3s ease; }
+  .panel { flex: 0 0 100%; padding: 16px; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 1025px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .room {
+    display: flex; align-items: center; gap: 12px; background: #fff;
+    border: 1px solid var(--line); border-radius: 12px; padding: 12px;
+    text-decoration: none; box-sizing: border-box; transition: border-color .2s, background .2s;
+  }
+  .room:hover { border-color: var(--navy); background: #F8FAFD; }
+  @media (min-width: 768px) { .room { padding: 14px 16px; } }
+  .room-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .room-name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .room-name { font-size: 13.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  @media (min-width: 768px) { .room-name { font-size: 15px; } }
+  .chip { font-size: 10.5px; font-weight: 700; color: var(--navy); background: var(--blue-pale); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+  .room-access { font-size: 12px; color: var(--gray-3); line-height: 1.7; }
+  .room .ar { flex: none; color: var(--navy); font-weight: 900; font-size: 16px; }
+</style>
+
+<script>
+  // --- タブ切替（クリック＋横スワイプ） ---
+  const tabs = [...document.querySelectorAll<HTMLElement>('[data-room-tab]')];
+  const panels = document.querySelector<HTMLElement>('[data-room-panels]');
+  const track = document.querySelector<HTMLElement>('[data-room-track]');
+  let current: 'chiba' | 'other' = 'chiba';
+  let startX = 0;
+  let dragging = false;
+
+  function setTab(tab: 'chiba' | 'other', dragPx = 0, animate = true) {
+    current = tab;
+    if (track) {
+      track.style.transition = animate ? 'transform .3s ease' : 'none';
+      track.style.transform = `translateX(calc(${tab === 'chiba' ? 0 : -100}% + ${dragPx}px))`;
+    }
+    tabs.forEach((t) => {
+      const active = t.dataset.roomTab === tab;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', String(active));
+    });
+  }
+
+  tabs.forEach((t) => t.addEventListener('click', () => setTab(t.dataset.roomTab as 'chiba' | 'other')));
+
+  panels?.addEventListener('pointerdown', (e) => {
+    startX = e.clientX;
+    dragging = true;
+    panels.classList.add('dragging');
+    try { panels.setPointerCapture(e.pointerId); } catch {}
+  });
+  panels?.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    setTab(current, e.clientX - startX, false);
+  });
+  function endDrag(e: PointerEvent) {
+    if (!dragging) return;
+    dragging = false;
+    panels?.classList.remove('dragging');
+    const dx = e.clientX - startX;
+    let next = current;
+    if (dx <= -40) next = 'other';
+    else if (dx >= 40) next = 'chiba';
+    setTab(next);
+  }
+  panels?.addEventListener('pointerup', endDrag);
+  panels?.addEventListener('pointercancel', endDrag);
+
+  // --- 現在地から最寄りの教室（座標は仮値。公開前に教室所在地へ差し替え） ---
+  const nearBtn = document.querySelector<HTMLElement>('[data-nearest]');
+  nearBtn?.addEventListener('click', () => {
+    const rooms: { slug: string; lat: number; lng: number }[] = JSON.parse(nearBtn.dataset.rooms ?? '[]');
+    const base = nearBtn.dataset.base ?? '/classrooms/';
+    if (!('geolocation' in navigator)) {
+      alert('お使いのブラウザでは現在地を取得できません。');
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        // 近距離なので平面近似で十分（緯度1度≈111km、経度は緯度で補正）
+        const kx = Math.cos((latitude * Math.PI) / 180);
+        const nearest = rooms.reduce((a, b) => {
+          const d = (r: typeof a) => (r.lat - latitude) ** 2 + ((r.lng - longitude) * kx) ** 2;
+          return d(b) < d(a) ? b : a;
+        });
+        location.href = base + nearest.slug;
+      },
+      () => alert('現在地を取得できませんでした。位置情報の利用を許可してください。'),
+    );
+  });
+</script>

@@ -1,0 +1,73 @@
+---
+// フッター — ロゴ＋3カラムのリンク＋ネイビーの©バンド
+import { Image } from 'astro:assets';
+import logo from '../../assets/home/logo.png';
+import { u } from '../../lib/path';
+
+const columns = [
+  {
+    title: 'フォーカスについて',
+    links: [
+      { href: '/reason', label: '選ばれる理由' },
+      { href: '/method', label: '指導方針' },
+      { href: '/price', label: '料金' },
+      { href: '/faq', label: 'よくあるご質問' },
+    ],
+  },
+  {
+    title: '教室・お問い合わせ',
+    links: [
+      { href: '/classrooms', label: '教室一覧' },
+      { href: '/document', label: '資料請求' },
+      { href: '/consult', label: '無料相談' },
+      { href: '/diagnosis', label: '相性診断' },
+    ],
+  },
+  {
+    title: '運営',
+    links: [
+      { href: '/company', label: '会社概要' },
+      { href: '/company#privacy', label: 'プライバシーポリシー' },
+      { href: '/company#tokushoho', label: '特定商取引法に基づく表記' },
+    ],
+  },
+];
+---
+<footer class="site-footer">
+  <div class="inner">
+    <div class="brand">
+      <Image src={logo} alt="FOCUS" width={57} densities={[1, 2, 3]} class="logo" />
+      <p>勉強がニガテな中学生専門の個別指導塾</p>
+    </div>
+    <div class="columns">
+      {columns.map((col) => (
+        <div class="col">
+          <span class="col-title">{col.title}</span>
+          {col.links.map((l) => <a href={u(l.href)}>{l.label}</a>)}
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="copyright"><p>© 2026 FOCUS, Inc.</p></div>
+  <div class="sp-spacer" aria-hidden="true"></div>
+</footer>
+
+<style>
+  .site-footer { background: var(--panel); }
+  .inner {
+    max-width: 1200px; margin: 0 auto; padding: 40px 24px 28px;
+    display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between;
+  }
+  .brand { display: flex; flex-direction: column; gap: 10px; }
+  .logo { height: 24px; width: auto; }
+  .brand p { font-size: 12.5px; color: var(--gray-3); margin: 0; }
+  .columns { display: flex; gap: 40px; flex-wrap: wrap; }
+  .col { display: flex; flex-direction: column; gap: 8px; }
+  .col-title { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .col a { font-size: 12.5px; color: var(--gray-3); text-decoration: none; transition: color .2s; }
+  .col a:hover { color: var(--navy); }
+  .copyright { background: var(--navy); }
+  .copyright p { margin: 0; padding: 16px 24px; font-size: 11.5px; color: #C9D6EE; text-align: center; }
+  .sp-spacer { height: 76px; }
+  @media (min-width: 1025px) { .sp-spacer { display: none; } }
+</style>

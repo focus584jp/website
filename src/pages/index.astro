@@ -1,0 +1,27 @@
+---
+// トップページ（hifi実装。正: docs/design/トップページ.dc.html）
+import HomeLayout from '../layouts/HomeLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import Reasons from '../components/home/Reasons.astro';
+import Method from '../components/home/Method.astro';
+import Price from '../components/home/Price.astro';
+import Voices from '../components/home/Voices.astro';
+import Rooms from '../components/home/Rooms.astro';
+import Flow from '../components/home/Flow.astro';
+import Faq from '../components/home/Faq.astro';
+import HomeCtaBand from '../components/home/HomeCtaBand.astro';
+---
+<HomeLayout
+  title="FOCUS（フォーカス）｜勉強が苦手な中学生専門の個別指導塾"
+  description="勉強が苦手な中学生専門の個別指導塾フォーカス。1教科あたり月6,578円（税込）、入会金0円。講師は全員千葉大生。千葉市を中心に10教室。"
+>
+  <Hero />
+  <Reasons />
+  <Method />
+  <Price />
+  <Voices />
+  <Rooms />
+  <Flow />
+  <Faq />
+  <HomeCtaBand />
+</HomeLayout>

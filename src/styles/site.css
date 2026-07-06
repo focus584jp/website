@@ -1,0 +1,81 @@
+/* ============================================================
+   FOCUS 本番デザイン共通スタイル（トップページ hifi 由来）
+   正: docs/design/トップページ.dc.html
+   ワイヤー用 wireframe.css とは独立。hifi化したページはこちらを使う。
+   ============================================================ */
+:root {
+  --navy: #143778;
+  --navy-shadow: #0D2551;
+  --navy-mid: #2C55A0;
+  --navy-light: #4A7ACC;
+  --orange: #E67832;
+  --orange-shadow: #B95A1E;
+  --marker: #FFE869;
+  --pen-yellow: #FFD84D;
+  --sparkle: #FFC94A;
+  --ink: #333333;
+  --muted: #5B6B85;
+  --gray-1: #8A96A8;
+  --gray-2: #A9B2BE;
+  --gray-3: #7A8598;
+  --alt-bg: #F4F8FC;
+  --panel: #F2F4F7;
+  --blue-pale: #DDE7F7;
+  --blue-paler: #EFF5FD;
+  --line: #DBE3EE;
+  --font-body: 'Noto Sans JP', sans-serif;
+  --font-round: 'Zen Maru Gothic', sans-serif;
+  --font-tel: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', sans-serif;
+  --shadow-card: 0 1px 2px rgba(20, 42, 84, .08), 0 0 0 1px rgba(20, 55, 120, .08), 0 12px 24px rgba(20, 42, 84, .08);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* アンカースクロール時のヘッダー分オフセット */
+[id] { scroll-margin-top: 76px; }
+
+/* --- ナビリンク: ホバーでオレンジ＋下線が左から伸びる --- */
+.nav-hov { position: relative; display: inline-block; cursor: pointer; transition: color .2s; }
+.nav-hov::after {
+  content: ""; position: absolute; left: 0; bottom: -4px; width: 100%; height: 2.5px;
+  background: var(--orange); transform: scaleX(0); transform-origin: left; transition: transform .3s;
+}
+.nav-hov:hover { color: var(--orange); }
+.nav-hov:hover::after { transform: scaleX(1); }
+
+/* --- オレンジCTAの常時シャイン（左上→右下・6秒周期） --- */
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: ""; position: absolute; top: -150%; left: -120%; width: 60%; height: 400%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .5), transparent);
+  transform: skewX(-20deg); animation: btnShine 6s ease-in-out infinite;
+}
+@keyframes btnShine { 0% { left: -120%; top: -150%; } 30% { left: 140%; top: -50%; } 100% { left: 140%; top: -50%; } }
+
+/* 縦書きボタン用シャイン */
+.btn-shine-v { position: relative; overflow: hidden; }
+.btn-shine-v::after {
+  content: ""; position: absolute; left: -150%; top: -120%; width: 300%; height: 50%;
+  background: linear-gradient(210deg, transparent, rgba(255, 255, 255, .5), transparent);
+  transform: skewY(-25deg); animation: btnShineV 6s ease-in-out infinite;
+}
+@keyframes btnShineV { 0% { top: -120%; left: -150%; } 30% { top: 150%; left: 60%; } 100% { top: 150%; left: 60%; } }
+
+/* --- 沈み込みボタン（下影が0になり translateY） --- */
+.btn3d { transition: transform .1s, box-shadow .1s !important; }
+.btn3d-o:hover, .btn3d-o:active, .btn3d-o.pressed { transform: translateY(5px) !important; box-shadow: 0 0 0 var(--orange-shadow) !important; }
+.btn3d-n:hover, .btn3d-n:active, .btn3d-n.pressed { transform: translateY(5px) !important; box-shadow: 0 0 0 var(--navy-shadow) !important; }
+
+/* --- 白枠アウトラインボタン: ホバーで矢印が右へ --- */
+.btn-out .ar { transition: transform .2s; display: inline-block; }
+.btn-out:hover .ar { transform: translateX(5px); }
+
+/* --- 黄マーカー（インライン強調） --- */
+.mk { background: linear-gradient(transparent 60%, var(--marker) 60% 95%, transparent 95%); padding: 0 2px; }
