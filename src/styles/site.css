@@ -10,14 +10,12 @@
   --navy-light: #4A7ACC;
   --orange: #E67832;
   --orange-shadow: #B95A1E;
-  --marker: #FFE869;
+  --marker: #FFD84D; /* 見出しペンSVGと同色に統一（2026-07-07） */
   --pen-yellow: #FFD84D;
   --sparkle: #FFC94A;
   --ink: #333333;
   --muted: #5B6B85;
-  --gray-1: #8A96A8;
-  --gray-2: #A9B2BE;
-  --gray-3: #7A8598;
+  --gray-1: #8A96A8; /* 淡い文字はこの1段のみ（gray-2/3は2026-07-07に統合） */
   --alt-bg: #F4F8FC;
   --panel: #F2F4F7;
   --blue-pale: #DDE7F7;
