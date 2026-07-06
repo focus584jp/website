@@ -47,6 +47,8 @@ src/
 
 ## 規約
 
+- フォントは自己ホスト（fontsource。Noto Sans JP Variable＋Zen Maru Gothic 700/900）。Google Fonts外部CSSはレンダリングブロックするため使わない
+- GA4等の計測タグは未設置（測定ID入手後にCVイベント設計とセットで導入）
 - 内部リンクは必ず `u()`（`src/lib/path.ts`）を通す（GitHub Pagesのbase `/website` 対応）
 - 文言・教室・料金などのデータはコンポーネントに直書きせず `src/data/` に置く
 - デザイントークンは `src/styles/site.css` のCSS変数を使う。新しい色を発明しない（ブランド正本は `~/claude/design-system/`）

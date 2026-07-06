@@ -9,6 +9,8 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@fontsource-variable/noto-sans-jp": "^5.2.10",
+    "@fontsource/zen-maru-gothic": "^5.2.8",
     "astro": "^5.0.0"
   }
 }

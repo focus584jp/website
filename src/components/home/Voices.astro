@@ -65,9 +65,14 @@ import { voices } from '../../data/home';
   }
   .prev { left: 8px; }
   .next { right: 8px; }
-  .dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
-  .dots button { width: 9px; height: 9px; border-radius: 50%; border: none; padding: 0; cursor: pointer; background: #C6D4DF; }
-  .dots button.active { background: var(--navy); }
+  /* 見た目は9pxドットのまま、タップ領域を24pxに確保 */
+  .dots { display: flex; justify-content: center; margin-top: 8px; }
+  .dots button {
+    width: 24px; height: 24px; border: none; padding: 0; cursor: pointer;
+    background: none; display: grid; place-items: center;
+  }
+  .dots button::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #C6D4DF; }
+  .dots button.active::after { background: var(--navy); }
 </style>
 
 <script>
