@@ -42,6 +42,9 @@ import { u } from '../../lib/path';
   }
   .doc { background: var(--orange); color: #fff; box-shadow: 0 5px 0 var(--orange-shadow); }
   .consult { background: #fff; color: var(--navy); transition: transform .2s; }
+  /* SP・タブレットは下部固定バーと重複するため資料DL・無料相談は出さない（電話のみ） */
+  .buttons .doc, .buttons .consult { display: none; }
+  @media (min-width: 1025px) { .buttons .doc, .buttons .consult { display: flex; } }
   .consult:hover { transform: translateY(-2px); }
   .tel {
     background: transparent; border: 1.5px solid rgba(255, 255, 255, .55); color: #fff;
