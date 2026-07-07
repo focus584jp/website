@@ -136,7 +136,7 @@ import { u } from '../../lib/path';
   .lead { font-size: clamp(15px, 1.6vw, 16px); line-height: 2; color: var(--ink); margin: clamp(14px, 2vw, 20px) auto 0; max-width: 640px; }
 
   /* 左右比較: SPは縦積み（上=従来／下=フォーカス）、768px以上で横並び */
-  .compare-panel { background: rgba(242, 244, 247, .6); /* --panelの60%。新しいグレーは増やさない */ border-radius: 14px; padding: clamp(16px, 2.5vw, 26px) clamp(12px, 1.5vw, 20px); margin-top: clamp(14px, 2vw, 20px); }
+  .compare-panel { margin-top: clamp(14px, 2vw, 20px); } /* 背景なし。方眼ノート地に直接置く */
   .compare { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px; }
   .col { flex: 1; width: 100%; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 10px 16px; box-sizing: border-box; }
   /* フォーカス側は淡青＋ネイビー枠で「こちらが良い」を一目で伝える */
