@@ -85,10 +85,9 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
   }
   .tab.active { color: var(--navy); border-bottom-color: var(--navy); }
 
-  .panels { overflow: hidden; touch-action: pan-y; cursor: grab; }
-  .panels.dragging { cursor: grabbing; }
+  .panels { overflow: hidden; }
   .track { display: flex; transition: transform .3s ease; }
-  .panel { flex: 0 0 100%; padding: 16px; box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+  .panel { flex: 0 0 100%; padding: 16px; box-sizing: border-box; }
   .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   @media (min-width: 1025px) { .grid { grid-template-columns: repeat(3, 1fr); } }
 
@@ -111,20 +110,12 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
 </style>
 
 <script>
-  // --- タブ切替（クリック＋横スワイプ） ---
+  // --- タブ切替（上部タブのみ。スワイプ切替は縦スクロールと誤反応するため廃止） ---
   const tabs = [...document.querySelectorAll<HTMLElement>('[data-room-tab]')];
-  const panels = document.querySelector<HTMLElement>('[data-room-panels]');
   const track = document.querySelector<HTMLElement>('[data-room-track]');
-  let current: 'chiba' | 'other' = 'chiba';
-  let startX = 0;
-  let dragging = false;
 
-  function setTab(tab: 'chiba' | 'other', dragPx = 0, animate = true) {
-    current = tab;
-    if (track) {
-      track.style.transition = animate ? 'transform .3s ease' : 'none';
-      track.style.transform = `translateX(calc(${tab === 'chiba' ? 0 : -100}% + ${dragPx}px))`;
-    }
+  function setTab(tab: 'chiba' | 'other') {
+    if (track) track.style.transform = `translateX(${tab === 'chiba' ? 0 : -100}%)`;
     tabs.forEach((t) => {
       const active = t.dataset.roomTab === tab;
       t.classList.toggle('active', active);
@@ -133,29 +124,6 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
   }
 
   tabs.forEach((t) => t.addEventListener('click', () => setTab(t.dataset.roomTab as 'chiba' | 'other')));
-
-  panels?.addEventListener('pointerdown', (e) => {
-    startX = e.clientX;
-    dragging = true;
-    panels.classList.add('dragging');
-    try { panels.setPointerCapture(e.pointerId); } catch {}
-  });
-  panels?.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-    setTab(current, e.clientX - startX, false);
-  });
-  function endDrag(e: PointerEvent) {
-    if (!dragging) return;
-    dragging = false;
-    panels?.classList.remove('dragging');
-    const dx = e.clientX - startX;
-    let next = current;
-    if (dx <= -40) next = 'other';
-    else if (dx >= 40) next = 'chiba';
-    setTab(next);
-  }
-  panels?.addEventListener('pointerup', endDrag);
-  panels?.addEventListener('pointercancel', endDrag);
 
   // --- 現在地から最寄りの教室（座標は仮値。公開前に教室所在地へ差し替え） ---
   const nearBtn = document.querySelector<HTMLElement>('[data-nearest]');
