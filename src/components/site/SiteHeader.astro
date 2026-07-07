@@ -38,13 +38,13 @@ import { u } from '../../lib/path';
   <div class="panel">
     <div class="items">
       {nav.map((n, i) => (
-        <a href={`#${n.id}`} class="item" style={`transition-delay: ${0.12 + i * 0.04}s`} data-menu-close>
+        <a href={`#${n.id}`} class="item" data-menu-close>
           {n.label}
           <svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg>
         </a>
       ))}
     </div>
-    <div class="tel-wrap item" style="transition-delay:.36s">
+    <div class="tel-wrap item">
       <a href={phone.tel} class="tel-block">
         <p class="tel-title">電話でのお問い合わせ</p>
         <span class="tel-num">
@@ -102,11 +102,10 @@ import { u } from '../../lib/path';
   .panel {
     background: #fff; border-bottom: 2px solid var(--navy);
     padding: 8px 24px 24px; box-shadow: 0 12px 30px rgba(20, 55, 120, .12);
-    transform: translateY(-105%); transition: transform .38s cubic-bezier(.65, 0, .35, 1);
+    transform: translateY(-105%); transition: transform .25s cubic-bezier(.65, 0, .35, 1);
     position: relative; z-index: 1;
   }
   .items { display: flex; flex-direction: column; }
-  .item { opacity: 0; transform: translateY(-10px); transition: opacity .3s ease, transform .3s ease; }
   .items .item {
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
     font-size: 15px; font-weight: 700; color: var(--ink); text-decoration: none;
@@ -130,7 +129,6 @@ import { u } from '../../lib/path';
   }
   :global(body.menu-open) .sp-menu { pointer-events: auto; }
   :global(body.menu-open) .panel { transform: translateY(0); }
-  :global(body.menu-open) .item { opacity: 1; transform: translateY(0); }
   :global(body.menu-open) .backdrop { opacity: 1; }
 
   @media (min-width: 1025px) {
