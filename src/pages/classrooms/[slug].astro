@@ -1,51 +1,86 @@
 ---
-import WireframeLayout from '../../layouts/WireframeLayout.astro';
-import PageHero from '../../components/wireframe/PageHero.astro';
-import Section from '../../components/wireframe/Section.astro';
-import Box from '../../components/wireframe/Box.astro';
-import Lines from '../../components/wireframe/Lines.astro';
-import CtaBand from '../../components/wireframe/CtaBand.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import CtaBand from '../../components/site/CtaBand.astro';
 import { classrooms } from '../../data/classrooms';
 
 export function getStaticPaths() {
   return classrooms.map((c) => ({ params: { slug: c.slug }, props: { classroom: c } }));
 }
 const { classroom } = Astro.props;
+
+const rows = [
+  { th: 'エリア', td: classroom.area },
+  { th: '最寄駅', td: `${classroom.nearestStation} 徒歩${classroom.walkMinutes}分` },
+  { th: '住所', td: classroom.address },
+  { th: '電話', td: classroom.tel },
+  { th: '開校時間', td: classroom.hours },
+];
 ---
-<WireframeLayout title={classroom.name}>
+<SiteLayout
+  title={`${classroom.name}｜学習塾フォーカス`}
+  description={`学習塾フォーカス${classroom.name}のご案内。${classroom.nearestStation}から徒歩${classroom.walkMinutes}分。無料相談・体験授業を受け付けています。`}
+>
   <PageHero eyebrow="CLASSROOM" title={classroom.name} />
 
-  <Section title="基本情報">
-    <table class="wf-table">
-      <tbody>
-        <tr><th style="width:140px">エリア</th><td>{classroom.area}</td></tr>
-        <tr><th>最寄駅</th><td>{classroom.nearestStation}</td></tr>
-        <tr><th>住所</th><td>{classroom.address}</td></tr>
-        <tr><th>電話</th><td>{classroom.tel}</td></tr>
-        <tr><th>開校時間</th><td>{classroom.hours}</td></tr>
-      </tbody>
-    </table>
-  </Section>
-
-  <Section title="アクセス（地図）" alt={true}>
-    <Box label="Googleマップ（埋め込み予定）" h={240} />
-  </Section>
-
-  <Section title="対応中学校（ローカルSEOの要）">
-    <p style="color:var(--wf-muted)">{classroom.schools.join(' / ')}</p>
-  </Section>
-
-  <Section title="教室責任者 / 教室写真" alt={true}>
-    <div class="wf-cols">
-      <Box label="責任者の顔写真" h={200} />
-      <Lines n={5} head={true} />
+  <section class="info">
+    <div class="container">
+      <h2>基本情報</h2>
+      <table>
+        <tbody>
+          {rows.map((r) => <tr><th>{r.th}</th><td>{r.td}</td></tr>)}
+        </tbody>
+      </table>
+      <p class="note">※住所・電話・開校時間・対応中学校は準備中です（公開前に実データへ差し替え）</p>
     </div>
-    <div class="wf-grid-3" style="margin-top:20px">
-      <Box label="教室写真" h={120} />
-      <Box label="教室写真" h={120} />
-      <Box label="教室写真" h={120} />
-    </div>
-  </Section>
+  </section>
 
-  <CtaBand title={`${classroom.name}で無料相談・体験を受け付けています`} />
-</WireframeLayout>
+  <section class="schools">
+    <div class="container">
+      <h2>対応中学校</h2>
+      <div class="chips">
+        {classroom.schools.map((s) => <span class="chip">{s}</span>)}
+      </div>
+      <p class="body-text">上記以外の中学校にお通いの方も、お気軽にご相談ください。定期テスト対策は、お通いの中学校の進度・出題範囲に合わせて行います。</p>
+    </div>
+  </section>
+
+  <section class="map">
+    <div class="container">
+      <h2>アクセス</h2>
+      <div class="map-ph">
+        <p>Googleマップ（埋め込み予定）</p>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</SiteLayout>
+
+<style>
+  .container { max-width: 720px; margin: 0 auto; padding: clamp(40px, 6vw, 60px) 24px; }
+  h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
+    border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 16px;
+  }
+  .info { background: #fff; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid var(--line); padding: 13px 16px; font-size: 14.5px; color: var(--ink); text-align: left; }
+  th { background: var(--alt-bg); font-weight: 700; width: 110px; }
+  .note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; }
+
+  .schools { background: var(--alt-bg); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .chip {
+    background: var(--blue-pale); color: var(--navy); font-size: 13px; font-weight: 700;
+    border-radius: 999px; padding: 6px 14px;
+  }
+  .body-text { font-size: 14.5px; line-height: 1.9; color: var(--ink); margin: 0; }
+
+  .map { background: #fff; }
+  .map-ph {
+    height: 240px; border: 2px dashed var(--line); border-radius: 14px;
+    display: grid; place-items: center; background: var(--panel);
+  }
+  .map-ph p { font-size: 13px; color: var(--gray-1); margin: 0; }
+</style>

@@ -1,21 +1,26 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
-import CtaBand from '../components/wireframe/CtaBand.astro';
-const faqs = ['1対4で大丈夫？', '部活と両立できる？', '途中入塾でも追いつける？', '先生は選べる？', '料金以外に費用は？'];
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import FaqList from '../components/site/FaqList.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+import { faqs } from '../data/faqs';
 ---
-<WireframeLayout title="よくあるご質問">
+<SiteLayout
+  title="よくあるご質問｜学習塾フォーカス"
+  description="学習塾フォーカスによく寄せられるご質問と回答。料金・諸経費・講師・1対4の指導スタイル・部活との両立などにお答えします。"
+>
   <PageHero eyebrow="FAQ" title="よくあるご質問" />
-
-  <Section>
-    {faqs.map((q) => (
-      <details style="border:1px solid var(--wf-line);border-radius:6px;padding:14px 18px;margin-bottom:12px">
-        <summary style="cursor:pointer;font-size:14px">{q}</summary>
-        <div style="margin-top:12px"><div class="wf-lines"><span style="width:100%"></span><span style="width:90%"></span><span style="width:70%"></span></div></div>
-      </details>
-    ))}
-  </Section>
-
+  <section class="body">
+    <div class="container">
+      <FaqList faqs={faqs} />
+      <p class="note">ここにないご質問は、お電話または無料相談でお気軽にお尋ねください。</p>
+    </div>
+  </section>
   <CtaBand />
-</WireframeLayout>
+</SiteLayout>
+
+<style>
+  .body { background: #fff; }
+  .container { max-width: 680px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
+  .note { font-size: 14px; color: var(--muted); text-align: center; margin: 22px 0 0; }
+</style>

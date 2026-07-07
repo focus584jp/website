@@ -78,5 +78,32 @@ body {
 /* --- 黄マーカー（インライン強調） --- */
 .mk { background: linear-gradient(transparent 60%, var(--marker) 60% 95%, transparent 95%); padding: 0 2px; }
 
+/* --- フォーム（/document・/consult 共通） --- */
+.form-card {
+  max-width: 560px; margin: 0 auto; background: #fff; border-radius: 16px;
+  padding: clamp(22px, 4vw, 32px); box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 18px;
+}
+.f-field { display: flex; flex-direction: column; gap: 7px; }
+.f-field > span { font-size: 14px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.f-field em {
+  font-style: normal; font-size: 11px; font-weight: 800; color: #fff;
+  background: var(--orange); border-radius: 5px; padding: 2px 7px; line-height: 1.4;
+}
+.f-field input, .f-field select, .f-field textarea {
+  font-family: var(--font-body); font-size: 16px; color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: 10px; padding: 13px 14px; background: #fff;
+  outline: none; transition: border-color .15s; box-sizing: border-box; width: 100%;
+}
+.f-field input:focus, .f-field select:focus, .f-field textarea:focus { border-color: var(--navy); }
+.f-field ::placeholder { color: var(--gray-1); }
+.f-submit {
+  display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%;
+  font-family: var(--font-body); font-size: 16px; font-weight: 700; color: #fff;
+  background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow);
+  border: none; border-radius: 999px; padding: 16px; cursor: pointer; margin-top: 4px;
+}
+.f-note { font-size: 13px; line-height: 1.8; color: var(--muted); text-align: center; margin: 0; }
+
 /* --- 初回ペイント制御（SiteLayoutのbootスクリプトが使用） --- */
 .no-transition, .no-transition * { transition: none !important; }

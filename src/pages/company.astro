@@ -1,36 +1,60 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
-import Box from '../components/wireframe/Box.astro';
-import Lines from '../components/wireframe/Lines.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+
+// 文面はすべて確定待ち（公開前に差し替え必須）
+const companyRows = [
+  { th: '運営会社', td: '（準備中）' },
+  { th: '所在地', td: '（準備中）' },
+  { th: '設立', td: '（準備中）' },
+  { th: '事業内容', td: '個別指導塾「フォーカス」の運営' },
+];
 ---
-<WireframeLayout title="会社概要">
+<SiteLayout
+  title="会社概要｜学習塾フォーカス"
+  description="学習塾フォーカスの運営会社情報・プライバシーポリシー・特定商取引法に基づく表記。"
+  popup={false}
+>
   <PageHero eyebrow="COMPANY" title="会社概要" />
 
-  <Section title="会社情報">
-    <table class="wf-table">
-      <tbody>
-        <tr><th style="width:160px">運営会社</th><td>—</td></tr>
-        <tr><th>所在地</th><td>—</td></tr>
-        <tr><th>設立</th><td>—</td></tr>
-        <tr><th>事業内容</th><td>—</td></tr>
-      </tbody>
-    </table>
-  </Section>
-
-  <Section title="代表挨拶" alt={true}>
-    <div class="wf-cols">
-      <Box label="代表写真" h={200} />
-      <Lines n={6} head={true} />
+  <section class="sec">
+    <div class="container">
+      <h2>会社情報</h2>
+      <table>
+        <tbody>
+          {companyRows.map((r) => <tr><th>{r.th}</th><td>{r.td}</td></tr>)}
+        </tbody>
+      </table>
+      <p class="note">※会社情報は準備中です（公開前に確定文面へ差し替え）</p>
     </div>
-  </Section>
+  </section>
 
-  <Section title="講師採用方針（千葉大生のみ）">
-    <Lines n={4} />
-  </Section>
+  <section class="sec alt" id="privacy">
+    <div class="container">
+      <h2>プライバシーポリシー</h2>
+      <p class="body-text">（準備中）お預かりした個人情報の取り扱い方針をここに記載します。公開前に確定文面へ差し替えます。</p>
+    </div>
+  </section>
 
-  <Section title="プライバシーポリシー / 特定商取引法に基づく表記" alt={true}>
-    <Lines n={5} />
-  </Section>
-</WireframeLayout>
+  <section class="sec" id="tokushoho">
+    <div class="container">
+      <h2>特定商取引法に基づく表記</h2>
+      <p class="body-text">（準備中）特定商取引法に基づく表記をここに記載します。公開前に確定文面へ差し替えます。</p>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .sec { background: #fff; }
+  .sec.alt { background: var(--alt-bg); }
+  .container { max-width: 720px; margin: 0 auto; padding: clamp(40px, 6vw, 60px) 24px; }
+  h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
+    border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 16px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { border: 1px solid var(--line); padding: 13px 16px; font-size: 14.5px; color: var(--ink); text-align: left; }
+  th { background: var(--alt-bg); font-weight: 700; width: 120px; }
+  .note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; }
+  .body-text { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0; }
+</style>

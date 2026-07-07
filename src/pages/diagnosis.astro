@@ -1,78 +1,235 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
+// 相性診断（正: docs/design/相性診断.dc.html）。導入→全5問→結果の3画面をJSで切り替える
+import SiteLayout from '../layouts/SiteLayout.astro';
 import { u } from '../lib/path';
-
-// 相性診断（ワイヤー）。カードが1問ずつ切り替わる。
-// 回答をタップ＝次の質問へ（ラジオ＋:checkedのCSSステッパー）。中身はプレースホルダー。
-const questions = [
-  { q: 'お子さまは、家でひとりでも勉強を続けられそうですか？', opts: ['続けられそう', '正直むずかしい'] },
-  { q: '学校の定期テストで、平均点は取れていますか？', opts: ['取れている', '平均点は厳しい'] },
-  { q: '苦手なのは1〜2科目ですか？ 全体的ですか？', opts: ['1〜2科目', '全体的に苦手'] },
-  { q: '受験に向けて、5教科しっかりやりたいですか？', opts: ['5教科やりたい', 'まずは苦手から'] },
-];
 ---
-<WireframeLayout title="相性診断">
-  <PageHero eyebrow="DIAGNOSIS" title="うちの子に合う？ 相性診断" />
+<SiteLayout
+  title="30秒でわかる塾タイプ診断｜学習塾フォーカス"
+  description="お子さまのことを5問だけ教えてください。集団指導・個別指導など、ぴったりの「塾のタイプ」がその場で分かります。30秒・全5問の無料診断。"
+  popup={false}
+  fixedCta={false}
+>
+  <div class="stage">
+    <div class="inner">
 
-  <Section>
-    <p style="text-align:center;color:var(--wf-muted);margin:0 0 28px">
-      かんたんな質問に答えるだけ。お子さまにFOCUSが合うかどうかが分かります（約30秒）。
-    </p>
-
-    {/* ステップ管理用ラジオ（カードより前に置く） */}
-    {questions.map((_, i) => (
-      <input type="radio" name="diag-step" id={`ds${i + 1}`} checked={i === 0} class="wf-diag-radio" hidden />
-    ))}
-    <input type="radio" name="diag-step" id="ds-result" class="wf-diag-radio" hidden />
-
-    <div class="wf-diag">
-      {questions.map((item, i) => (
-        <div class="card" data-step={i + 1}>
-          <div class="prog">Q{i + 1}<span> / {questions.length}</span></div>
-          <h2 class="q">{item.q}</h2>
-          <div class="opts">
-            {item.opts.map((o) => (
-              <label class="opt" for={i + 1 < questions.length ? `ds${i + 2}` : 'ds-result'}>{o}</label>
-            ))}
-          </div>
-          {i > 0 && <label class="back" for={`ds${i}`}>← 前の質問へ</label>}
+      {/* ============ 導入 ============ */}
+      <div class="screen" data-screen="intro">
+        <div class="card intro-card">
+          <span class="badge">30秒・全5問</span>
+          <h1>うちの子、<br /><span class="mk">フォーカスに合う？</span></h1>
+          <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの「塾のタイプ」がその場で分かります。</p>
+          <button class="start btn3d btn3d-n" data-start>診断をはじめる →</button>
         </div>
-      ))}
-
-      {/* 結果（プレースホルダー） */}
-      <div class="card result" data-step="result">
-        <div class="prog">RESULT</div>
-        <h2 class="q">FOCUSが合うタイプです（結果テキストが入ります）</h2>
-        <p style="color:var(--wf-muted);margin:0 0 22px">診断結果の説明文がここに入ります。次のアクションへつなげます。</p>
-        <div class="result-cta">
-          <a class="wf-btn wf-btn-primary lg" href={u('/document')}>資料を受け取る</a>
-          <a class="wf-btn wf-btn-secondary lg" href={u('/consult')}>無料相談を申し込む</a>
-        </div>
-        <label class="back" for="ds1">← もう一度診断する</label>
       </div>
+
+      {/* ============ 設問 ============ */}
+      <div class="screen" data-screen="quiz" hidden>
+        <div class="quiz-head">
+          <span class="q-num">Q<span data-q-num>1</span> <span class="q-total">/ 5</span></span>
+          <div class="dots" data-dots></div>
+        </div>
+        <div class="card quiz-card" data-quiz-card>
+          <h2 data-q-text></h2>
+          <div class="choices" data-choices></div>
+        </div>
+        <button class="back" data-back hidden>← まえの質問にもどる</button>
+      </div>
+
+      {/* ============ 結果 ============ */}
+      <div class="screen" data-screen="result" hidden>
+        <div class="card result-card">
+          <div class="result-band">診断結果 — お子さまに合うのは…</div>
+          <div class="result-body">
+            <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
+            <h2><span class="mk" data-r-name></span></h2>
+            <div class="points" data-r-points></div>
+            <div class="fit-note" data-r-fit hidden>
+              <p>フォーカスは、まさにこのタイプの<br />「1対多数（最大1対4）の個別指導塾」です！</p>
+            </div>
+            <div class="other-note" data-r-note hidden><p></p></div>
+            <div class="result-cta">
+              <a href={u('/document')} class="btn-shine btn3d btn3d-o doc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+              <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む →</a>
+            </div>
+            <button class="back" data-restart>もう一度診断する</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </Section>
-</WireframeLayout>
+  </div>
+</SiteLayout>
 
 <style>
-  .wf-diag { max-width: 560px; margin: 0 auto; }
-  .wf-diag .card { display: none; border: 1px solid var(--wf-line); border-radius: 14px; padding: 32px 28px; text-align: center; }
-  /* 該当ステップのラジオがチェックされたカードだけ表示 */
-  #ds1:checked ~ .wf-diag .card[data-step="1"],
-  #ds2:checked ~ .wf-diag .card[data-step="2"],
-  #ds3:checked ~ .wf-diag .card[data-step="3"],
-  #ds4:checked ~ .wf-diag .card[data-step="4"],
-  #ds-result:checked ~ .wf-diag .card[data-step="result"] { display: block; }
+  .stage { background: var(--alt-bg); min-height: 70vh; padding: clamp(28px, 5vw, 48px) 20px clamp(48px, 7vw, 72px); }
+  .inner { max-width: 560px; margin: 0 auto; }
 
-  .wf-diag .prog { font-size: 14px; font-weight: 700; color: var(--orange-logo); letter-spacing: .08em; }
-  .wf-diag .prog span { color: var(--wf-muted); font-weight: 400; }
-  .wf-diag .q { font-size: 20px; line-height: 1.5; margin: 14px 0 26px; color: var(--wf-ink); }
-  .wf-diag .opts { display: flex; flex-direction: column; gap: 12px; }
-  .wf-diag .opt { display: block; padding: 16px; border: 1.5px solid var(--navy-logo); border-radius: 10px;
-    color: var(--navy-logo); font-weight: 700; font-size: 16px; cursor: pointer; transition: background .15s, color .15s; }
-  .wf-diag .opt:hover { background: var(--navy-logo); color: #fff; }
-  .wf-diag .back { display: inline-block; margin-top: 22px; font-size: 13px; color: var(--wf-muted); cursor: pointer; }
-  .wf-diag .result-cta { display: flex; flex-direction: column; gap: 12px; }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(20, 42, 84, .08); animation: cardIn .3s ease both;
+  }
+
+  .badge {
+    display: inline-block; font-size: 12.5px; font-weight: 800; color: var(--navy);
+    background: var(--blue-pale); border-radius: 999px; padding: 5px 16px;
+  }
+  .mk { background: linear-gradient(transparent 62%, var(--marker) 62% 94%, transparent 94%); padding: 0 4px; }
+
+  /* 導入 */
+  .intro-card { padding: 36px 28px; text-align: center; }
+  .intro-card h1 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 5.5vw, 30px);
+    line-height: 1.6; margin: 16px 0 0; color: var(--ink);
+  }
+  .intro-card .lead { font-size: 14px; line-height: 2; color: var(--muted); margin: 16px 0 0; }
+  .start {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; max-width: 320px; margin: 24px auto 0;
+    background: var(--navy); color: #fff; font-family: var(--font-body);
+    font-size: 16px; font-weight: 700; padding: 16px; border-radius: 999px; border: none;
+    cursor: pointer; box-shadow: 0 5px 0 var(--navy-shadow);
+  }
+
+  /* 設問 */
+  .quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .q-num { font: 900 14px ui-monospace, Menlo, monospace; color: var(--navy); letter-spacing: .1em; }
+  .q-total { color: #8FA9D0; }
+  .dots { display: flex; gap: 6px; }
+  .dots :global(span) { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .quiz-card { padding: 28px 24px; }
+  .quiz-card h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(18px, 4.4vw, 22px);
+    line-height: 1.7; margin: 0; color: var(--ink); text-align: center;
+  }
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+  .choices :global(button) {
+    display: block; width: 100%; text-align: center; background: #fff;
+    border: 1.5px solid var(--navy); color: var(--navy); font-family: var(--font-body);
+    font-size: 14.5px; font-weight: 700; padding: 14px 12px; border-radius: 999px;
+    cursor: pointer; transition: background .15s, color .15s;
+  }
+  .choices :global(button:hover) { background: var(--navy); color: #fff; }
+  .back {
+    display: block; margin: 16px auto 0; background: none; border: none;
+    font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--gray-1);
+    cursor: pointer; transition: color .15s;
+  }
+  .back:hover { color: var(--navy); }
+
+  /* 結果 */
+  .result-card { overflow: hidden; animation-duration: .35s; }
+  .result-band { background: var(--navy); padding: 18px 24px; text-align: center; font-size: 12.5px; font-weight: 800; color: #fff; letter-spacing: .06em; }
+  .result-body { padding: 28px 24px; text-align: center; }
+  .badge.fit { color: #fff; background: var(--orange); }
+  .result-body h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(21px, 5vw, 26px);
+    line-height: 1.6; margin: 14px 0 0; color: var(--ink);
+  }
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 18px auto 0; max-width: 420px; text-align: left; }
+  .points :global(div) { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.8; color: var(--ink); }
+  .points :global(.dot) { color: var(--orange); font-weight: 900; flex: none; }
+  .fit-note {
+    margin-top: 20px; background: #FFF8E1; border: 1.5px dashed #E6C94A;
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .fit-note p { font-size: 14px; font-weight: 800; color: var(--ink); margin: 0; line-height: 1.9; }
+  .other-note { margin-top: 20px; background: var(--alt-bg); border-radius: 12px; padding: 14px 16px; }
+  .other-note p { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.9; }
+  .result-cta { display: flex; flex-direction: column; gap: 11px; max-width: 360px; margin: 24px auto 0; }
+  .result-cta a {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    font-size: 15.5px; font-weight: 700; padding: 15px; border-radius: 999px; text-decoration: none; color: #fff;
+  }
+  .result-cta .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
+  .result-cta .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .result-cta + .back { margin-top: 18px; }
 </style>
+
+<script>
+  import { questions, types, resultType } from '../data/diagnosis';
+
+  type Step = 'intro' | number | 'result';
+  let step: Step = 'intro';
+  let answers: number[] = [];
+
+  const screens = {
+    intro: document.querySelector<HTMLElement>('[data-screen="intro"]')!,
+    quiz: document.querySelector<HTMLElement>('[data-screen="quiz"]')!,
+    result: document.querySelector<HTMLElement>('[data-screen="result"]')!,
+  };
+  const qNum = document.querySelector<HTMLElement>('[data-q-num]')!;
+  const qText = document.querySelector<HTMLElement>('[data-q-text]')!;
+  const choicesBox = document.querySelector<HTMLElement>('[data-choices]')!;
+  const dotsBox = document.querySelector<HTMLElement>('[data-dots]')!;
+  const backBtn = document.querySelector<HTMLElement>('[data-back]')!;
+  const quizCard = document.querySelector<HTMLElement>('[data-quiz-card]')!;
+
+  function show(name: 'intro' | 'quiz' | 'result') {
+    Object.entries(screens).forEach(([k, el]) => { el.hidden = k !== name; });
+  }
+
+  function renderQuiz(i: number) {
+    const q = questions[i];
+    qNum.textContent = String(i + 1);
+    qText.textContent = q.q;
+    choicesBox.replaceChildren(...q.choices.map((c, ci) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = c.label;
+      b.addEventListener('click', () => {
+        answers[i] = ci;
+        const next = i + 1;
+        if (next >= questions.length) { renderResult(); step = 'result'; show('result'); }
+        else { step = next; renderQuiz(next); }
+      });
+      return b;
+    }));
+    dotsBox.replaceChildren(...questions.map((_, di) => {
+      const s = document.createElement('span');
+      s.style.background = di < i ? '#143778' : di === i ? '#E67832' : '#C6D4DF';
+      return s;
+    }));
+    backBtn.hidden = i === 0;
+    // カード切り替えアニメーションを再生
+    quizCard.style.animation = 'none';
+    void quizCard.offsetHeight;
+    quizCard.style.animation = '';
+  }
+
+  function renderResult() {
+    const t = types[resultType(answers)];
+    const badge = document.querySelector<HTMLElement>('[data-r-badge]')!;
+    badge.textContent = `フォーカスとの相性 ${t.mark}`;
+    badge.classList.toggle('fit', t.fit);
+    document.querySelector<HTMLElement>('[data-r-name]')!.textContent = t.name;
+    document.querySelector<HTMLElement>('[data-r-points]')!.replaceChildren(...t.points.map((p) => {
+      const row = document.createElement('div');
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.textContent = '・';
+      const text = document.createElement('span');
+      text.textContent = p;
+      row.append(dot, text);
+      return row;
+    }));
+    document.querySelector<HTMLElement>('[data-r-fit]')!.hidden = !t.fit;
+    const noteBox = document.querySelector<HTMLElement>('[data-r-note]')!;
+    noteBox.hidden = t.fit;
+    noteBox.querySelector('p')!.textContent = t.note ?? '';
+  }
+
+  document.querySelector('[data-start]')?.addEventListener('click', () => {
+    step = 0; answers = [];
+    renderQuiz(0);
+    show('quiz');
+  });
+  backBtn.addEventListener('click', () => {
+    if (typeof step === 'number' && step > 0) { step -= 1; renderQuiz(step); }
+  });
+  document.querySelector('[data-restart]')?.addEventListener('click', () => {
+    step = 'intro'; answers = [];
+    show('intro');
+    window.scrollTo({ top: 0 });
+  });
+</script>

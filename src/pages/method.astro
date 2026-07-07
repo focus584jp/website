@@ -1,34 +1,81 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
-import Box from '../components/wireframe/Box.astro';
-import Lines from '../components/wireframe/Lines.astro';
-import CtaBand from '../components/wireframe/CtaBand.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+
+const steps = [
+  {
+    num: '01',
+    title: '「基礎から」学び直す',
+    body: [
+      '学校の授業が分からなくなる原因の多くは、いま習っている単元ではなく、その手前にあります。たとえば中2の一次関数でつまずく子は、中1の比例・反比例や正負の数に取りこぼしがあることがほとんどです。',
+      'フォーカスは学校の進度に無理に合わせず、お子さまがつまずいた場所まで戻ります。土台から積み木を積み直すように基礎を固めるから、その先の単元が「わかる！」に変わり、成績が確実に伸びていきます。',
+    ],
+  },
+  {
+    num: '02',
+    title: '「勉強のやり方」を身につける',
+    body: [
+      '答えややり方をただ解説する指導（Teaching）では、受ける側は受け身になりがちです。フォーカスの授業は、考え方を問いかけ、ヒントを与え、自分で答えまで導かせる指導（Coaching）。講師1人につき生徒は最大4人、「自分で解く時間」と「教わる時間」を行き来しながら進めます。',
+      '「なぜそうなるのか」を自分の頭で考えて答えにたどり着く経験を重ねると、解き方の丸暗記ではない、本当の理解が積み上がっていきます。',
+    ],
+  },
+  {
+    num: '03',
+    title: 'だから、「自立して学ぶ力」が育つ',
+    body: [
+      '自分で考えて解けた「できた！」の積み重ねは、お子さまの自信になります。自信がつくと、机に向かうこと自体のハードルが下がり、家庭学習の習慣が少しずつ育っていきます。',
+      '塾にいる時間だけ成績を上げるのではなく、自分で勉強を進められる子に育てること。それがフォーカスの指導のゴールです。',
+    ],
+  },
+];
 ---
-<WireframeLayout title="指導方針">
-  <PageHero eyebrow="METHOD" title="指導方針" />
+<SiteLayout
+  title="指導方針｜学習塾フォーカス"
+  description="学習塾フォーカスの指導方針。基礎から学び直し、問いかけ型のCoaching指導で「勉強のやり方」と自立して学ぶ力を育てます。"
+>
+  <PageHero
+    eyebrow="METHOD"
+    title="指導方針"
+    lead="フォーカスの指導は、シンプルな3つの積み重ねでできています。"
+  />
 
-  <Section eyebrow="STEP 01" title="まず、基礎から積み上げる">
-    <div class="wf-cols">
-      <Box label="図解イメージ" h={220} />
-      <Lines n={5} head={true} />
-    </div>
-  </Section>
-
-  <Section eyebrow="STEP 02" title="“勉強のやり方”を教えます" alt={true}>
-    <div class="wf-cols reverse">
-      <Box label="Teaching vs Coaching 図解" h={220} />
-      <Lines n={5} head={true} />
-    </div>
-  </Section>
-
-  <Section eyebrow="STEP 03" title="だから、自立する力が身につく">
-    <div class="wf-cols">
-      <Box label="図解イメージ" h={220} />
-      <Lines n={5} head={true} />
-    </div>
-  </Section>
+  {steps.map((s, i) => (
+    <section class:list={['step', { alt: i % 2 === 1 }]}>
+      <div class="container">
+        <div class="head">
+          <span class="step-pill">STEP {s.num}</span>
+          <h2>{s.title}</h2>
+        </div>
+        <div class="card">
+          {s.body.map((t) => <p>{t}</p>)}
+        </div>
+      </div>
+    </section>
+  ))}
 
   <CtaBand />
-</WireframeLayout>
+</SiteLayout>
+
+<style>
+  .step { background: #fff; }
+  .step.alt { background: var(--alt-bg); }
+  .container { max-width: 760px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) 24px; }
+  .head { text-align: center; margin-bottom: 22px; }
+  .step-pill {
+    display: inline-block; font: 800 12.5px var(--font-round); letter-spacing: .18em;
+    color: #fff; background: var(--orange); border-radius: 999px; padding: 6px 18px;
+  }
+  h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(21px, 3vw, 26px); color: var(--ink); margin: 12px 0 0; }
+  .card {
+    background: #fff; border-radius: 16px; padding: clamp(22px, 4vw, 32px);
+    box-shadow: var(--shadow-card);
+    /* 方眼ノート背景（トップの指導方針カードと同じモチーフ） */
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .card p { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0 0 14px; }
+  .card p:last-child { margin-bottom: 0; }
+</style>

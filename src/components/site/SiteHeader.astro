@@ -16,7 +16,7 @@ import { u } from '../../lib/path';
       {nav.map((n, i) => (
         <>
           {i > 0 && <span class="divider"></span>}
-          <a class="nav-hov" href={`#${n.id}`}>{n.label}</a>
+          <a class="nav-hov" href={u(`/#${n.id}`)}>{n.label}</a>
         </>
       ))}
     </nav>
@@ -38,7 +38,7 @@ import { u } from '../../lib/path';
   <div class="panel">
     <div class="items">
       {nav.map((n, i) => (
-        <a href={`#${n.id}`} class="item" data-menu-close>
+        <a href={u(`/#${n.id}`)} class="item" data-menu-close>
           {n.label}
           <svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg>
         </a>

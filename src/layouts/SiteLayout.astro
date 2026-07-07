@@ -11,7 +11,9 @@ import FixedCta from '../components/site/FixedCta.astro';
 import DiagnosisPopup from '../components/site/DiagnosisPopup.astro';
 import { u } from '../lib/path';
 
-const { title, description = '' } = Astro.props;
+// popup: 相性診断ポップアップ（診断・フォーム系ページでは出さない）
+// fixedCta: SP下部固定バー＋PC右端縦書きCTA（診断ページでは結果カードのCTAと重複するため出さない）
+const { title, description = '', popup = true, fixedCta = true } = Astro.props;
 // OGP用の絶対URL（LINE・SNS共有時に必須）
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
@@ -34,12 +36,12 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
-  <body>
+  <body class:list={{ 'no-fixed-cta': !fixedCta }}>
     <SiteHeader />
     <main><slot /></main>
     <SiteFooter />
-    <FixedCta />
-    <DiagnosisPopup />
+    {fixedCta && <FixedCta />}
+    {popup && <DiagnosisPopup />}
 
     <script>
       // ヒーロー通過判定 → body.past-hero（PC右端CTA・診断ポップアップの表示トリガー）

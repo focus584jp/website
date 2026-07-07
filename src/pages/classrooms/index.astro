@@ -1,38 +1,73 @@
 ---
-import WireframeLayout from '../../layouts/WireframeLayout.astro';
-import PageHero from '../../components/wireframe/PageHero.astro';
-import Section from '../../components/wireframe/Section.astro';
-import Box from '../../components/wireframe/Box.astro';
-import CtaBand from '../../components/wireframe/CtaBand.astro';
-import { classrooms } from '../../data/classrooms';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import CtaBand from '../../components/site/CtaBand.astro';
+import { classrooms, stationLabel } from '../../data/classrooms';
 import { u } from '../../lib/path';
 
-// エリア（市）ごとにグルーピング。教室が20・30と増えても見出し＋グリッドで整理できる構成。
+// エリア（市）ごとにグルーピング。教室が増えても見出し＋グリッドで整理できる構成
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
-<WireframeLayout title="教室一覧">
-  <PageHero eyebrow="CLASSROOMS" title="教室一覧" />
+<SiteLayout
+  title="教室一覧｜学習塾フォーカス"
+  description="学習塾フォーカスの教室一覧。千葉市（稲毛・西千葉・都賀・新検見川・稲毛海岸・蘇我・鎌取）を中心に、市川・市原・四街道の全10教室。"
+>
+  <PageHero
+    eyebrow="CLASSROOMS"
+    title="教室一覧"
+    lead="千葉市を中心に10教室。すべて駅から徒歩圏内です。"
+  />
 
-  <Section title="エリアマップ">
-    <Box label="エリアマップ（教室をプロット）" h={220} />
-  </Section>
-
-  <Section title="エリアから探す" alt={true}>
-    {regions.map((r) => (
-      <div style="margin-bottom:30px">
-        <h3 style="font-size:18px;color:var(--wf-ink);border-left:4px solid var(--navy-logo);padding-left:10px;margin:0 0 14px">{r}</h3>
-        <div class="wf-grid-3">
-          {classrooms.filter((c) => c.region === r).map((c) => (
-            <a class="wf-card" href={u(`/classrooms/${c.slug}`)} style="text-decoration:none;color:inherit">
-              <Box label="教室写真" h={110} />
-              <div style="font-weight:600;margin-top:10px">{c.name}</div>
-              <div style="color:var(--wf-muted);font-size:13px">{c.nearestStation}</div>
-            </a>
-          ))}
+  <section class="list">
+    <div class="container">
+      {regions.map((r) => (
+        <div class="region">
+          <h2>{r}</h2>
+          <div class="grid">
+            {classrooms.filter((c) => c.region === r).map((c) => (
+              <a class="room" href={u(`/classrooms/${c.slug}`)}>
+                <div class="room-main">
+                  <p class="room-name">{c.name}</p>
+                  <p class="room-access">{stationLabel(c)} 徒歩{c.walkMinutes}分</p>
+                </div>
+                <span class="arrow" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
+                </span>
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
-    ))}
-  </Section>
+      ))}
+      <p class="note">※徒歩分数は目安です</p>
+    </div>
+  </section>
 
-  <CtaBand title="お近くの教室で無料相談ができます" />
-</WireframeLayout>
+  <CtaBand />
+</SiteLayout>
+
+<style>
+  .list { background: #fff; }
+  .container { max-width: 900px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
+  .region { margin-bottom: 34px; }
+  h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
+    border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 14px;
+  }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .room {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
+    text-decoration: none; box-shadow: var(--shadow-card); transition: border-color .2s;
+  }
+  .room:hover { border-color: var(--navy); }
+  .room:hover .arrow svg { transform: translateX(3px); }
+  .room-name { font-family: var(--font-round); font-size: 17px; font-weight: 700; color: var(--ink); margin: 0; }
+  .room-access { font-size: 13.5px; color: var(--muted); margin: 4px 0 0; }
+  .arrow {
+    flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--navy);
+    display: grid; place-items: center;
+  }
+  .arrow svg { transition: transform .2s; }
+  .note { font-size: 12px; color: var(--gray-1); margin: 4px 0 0; }
+  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+</style>

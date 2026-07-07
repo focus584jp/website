@@ -1,35 +1,70 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
 import { u } from '../lib/path';
+
+const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 ---
-<WireframeLayout title="資料請求">
-  <PageHero eyebrow="DOCUMENT" title="資料請求（無料）" />
+<SiteLayout
+  title="資料ダウンロード｜学習塾フォーカス"
+  description="学習塾フォーカスのWEBパンフレットを無料でお送りします。面倒な住所入力は不要。携帯電話番号だけで、SMSでスマホに今すぐ届きます。"
+  popup={false}
+  fixedCta={false}
+>
+  <PageHero
+    eyebrow="DOCUMENT"
+    title="資料ダウンロード"
+    lead="面倒な住所入力は不要です。携帯電話番号だけで、WEBパンフレットがSMSでお手元のスマホへ今すぐ届きます。（約1分）"
+  />
 
-  <Section>
-    <p style="text-align:center;color:var(--wf-muted);margin:0 0 24px">携帯電話番号をご入力ください。SMSでデジタルパンフレット（PDF）のダウンロードリンクをお送りします。</p>
-    <form class="wf-form" onsubmit="return false">
-      <label class="wf-field">
-        <span>お子さまの学年（任意）</span>
-        <select>
-          <option>選択してください</option>
-          <option>小5</option><option>小6</option>
-          <option>中1</option><option>中2</option><option>中3</option>
-          <option>高校生</option>
-        </select>
-      </label>
-      <label class="wf-field">
-        <span>携帯電話番号<em>必須</em></span>
-        <input type="tel" placeholder="090-0000-0000" inputmode="numeric" />
-      </label>
-      <button type="submit" class="wf-btn wf-btn-primary lg" style="width:100%;margin-top:8px">資料を受け取る（SMSで送信）</button>
-      <p class="wf-note" style="text-align:center;margin-top:12px">しつこい勧誘のお電話はいたしません。SMSで資料（PDF）が届くだけです。</p>
-    </form>
-  </Section>
+  <section class="body">
+    <div class="container">
+      <form class="form-card" onsubmit="return false">
+        <label class="f-field">
+          <span>お子さまの学年（任意）</span>
+          <select>
+            <option>選択してください</option>
+            {grades.map((g) => <option>{g}</option>)}
+          </select>
+        </label>
+        <label class="f-field">
+          <span>携帯電話番号<em>必須</em></span>
+          <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
+        </label>
+        <button type="submit" class="f-submit btn-shine btn3d btn3d-o">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>
+          資料を受け取る（SMSで送信）
+        </button>
+        <p class="f-note">しつこい勧誘のお電話はいたしません。<br />SMSで資料（PDF）のリンクが届くだけです。</p>
+        <p class="f-note draft">※送信機能は準備中です（フォームはまだ動作しません）</p>
+      </form>
+    </div>
+  </section>
 
-  <Section title="直接お話を聞きたい方へ" alt={true}>
-    <p>資料だけでなく、お子さまの状況を相談したい方は、無料相談（来塾1時間・無料）もどうぞ。</p>
-    <p style="margin-top:14px"><a class="wf-btn wf-btn-secondary" href={u('/consult')}>無料相談はこちら</a></p>
-  </Section>
-</WireframeLayout>
+  <section class="consult-lead">
+    <div class="container">
+      <h2>直接お話を聞きたい方へ</h2>
+      <p>資料だけでなく、お子さまの状況を相談したい方は、無料相談もどうぞ。教室の雰囲気を知るための気軽な面談です。</p>
+      <a href={u('/consult')} class="btn3d btn3d-n consult-btn">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .body { background: #fff; }
+  .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; }
+  .draft { color: #C0392B; font-weight: 700; }
+
+  .consult-lead { background: var(--alt-bg); text-align: center; }
+  .consult-lead h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 2.6vw, 23px); color: var(--ink); margin: 0 0 12px; }
+  .consult-lead p { font-size: 15px; line-height: 2; color: var(--ink); margin: 0 auto 20px; max-width: 560px; }
+  .consult-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    background: var(--navy); color: #fff; box-shadow: 0 5px 0 var(--navy-shadow);
+    font-size: 15.5px; font-weight: 700; padding: 15px 34px; border-radius: 999px; text-decoration: none;
+  }
+  .circle {
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+</style>

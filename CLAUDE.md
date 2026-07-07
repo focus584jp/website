@@ -5,12 +5,11 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 
 ## いまの段階
 
-- **トップページ（/）と全体の見た目はhifi実装済み**（`docs/design/トップページ.dc.html` が正）
-- **下層ページはワイヤーフレーム段階**（/reason /method /price /faq /classrooms /document /consult /company /diagnosis）
+- **全ページhifi実装済み**（2026-07-07。トップ＝`docs/design/トップページ.dc.html`、相性診断＝`docs/design/相性診断.dc.html` が正。下層はワイヤー構造＋トップのトークンで実装）
+- ワイヤーフレーム層（components/wireframe・WireframeLayout・wireframe.css・tokens.css）は廃止済み（git履歴に残っている）
 - 次のタスク:
-  - 下層ページのhifi化（構造ガイドは `docs/design/ワイヤーフレーム.dc.html`、スタイルはトップのトークンを適用）
-  - 相性診断（`docs/design/相性診断.dc.html`、配点ロジック込み）のhifi化
-  - **問い合わせフォームの実装予定あり**（資料請求=SMS配布・無料相談予約。送信バックエンドは未定）
+  - **問い合わせフォームの送信実装**（資料請求=SMS配布・無料相談予約。送信バックエンドは未定。現在フォームUIのみで「※送信機能は準備中」表記）
+  - 会社概要・プライバシー・特商法の確定文面反映、教室詳細の実データ（住所・電話・対応中学）反映
 - 成果物の形: Astroビルドが `index.html`＋分離されたCSS/JSを出力する（メインページ=index.html、css/js別ファイルの要件はビルドで担保）
 
 ## 正本ドキュメント（docs/design/）
@@ -30,18 +29,15 @@ Claude Designプロジェクト「フォーカス公式サイト リニューア
 
 ```
 src/
-  pages/            ルーティング（index=hifi、他はワイヤー）
+  pages/            ルーティング（全ページhifi）
   layouts/
-    SiteLayout.astro       hifi用（フォント読込・ヘッダー/フッター/固定CTA/診断ポップアップ込み）
-    WireframeLayout.astro  ワイヤー用（hifi化が終わったページから順次 SiteLayout へ移行）
+    SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
-    site/           hifi共通（SiteHeader/SiteFooter/CtaBand/FixedCta/DiagnosisPopup/SectionHead）
+    site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/SectionHead/FaqList）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
-    wireframe/      ワイヤー用パーツ（hifi化完了後に廃止予定）
   styles/
-    site.css        hifiのデザイントークン＋共有ボタン（正。docs/design/README.mdのトークンと同期）
-    wireframe.css + tokens.css   ワイヤー用（tokens.cssはdesign-systemの旧同期コピー。凍結）
-  data/             コンテンツデータ（classrooms.ts / home.ts）。文言・数値はここに集約
+    site.css        デザイントークン＋共有ボタン＋フォーム（正。docs/design/README.mdのトークンと同期）
+  data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts）。文言・数値・配点はここに集約
   assets/home/      画像（astro:assetsで最適化される）
 ```
 

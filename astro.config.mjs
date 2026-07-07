@@ -4,4 +4,6 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   site: 'https://focus584jp.github.io',
   base: '/website',
+  // 画面内に入った内部リンクを先読みして遷移を体感ゼロに近づける（静的サイトなのでコスト小）
+  prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
 });

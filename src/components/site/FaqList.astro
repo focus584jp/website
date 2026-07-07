@@ -1,0 +1,61 @@
+---
+// FAQアコーディオン（排他開閉・grid-template-rows 0fr→1fr）。トップと/faqで共用
+import type { Faq } from '../../data/faqs';
+
+interface Props { faqs: Faq[] }
+const { faqs } = Astro.props;
+---
+<div class="card" data-faq>
+  {faqs.map((f, i) => (
+    <div class:list={['item', { last: i === faqs.length - 1 }]}>
+      <button aria-expanded="false" data-faq-toggle>
+        <span class="q-badge">Q</span>
+        <span class="q-text">{f.q}</span>
+        <span class="plus">＋</span>
+      </button>
+      <div class="answer">
+        <div class="answer-clip">
+          <p>{f.a}{f.draft && <span class="draft">（※仮の回答です）</span>}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .card { background: #fff; border-radius: 14px; padding: 4px 18px; box-shadow: 0 6px 16px rgba(20, 55, 120, .09); }
+  .item { border-bottom: 2px dashed #DFE9F1; }
+  .item.last { border-bottom: none; }
+  .item button {
+    display: flex; align-items: center; gap: 10px; width: 100%; padding: 15px 0;
+    background: none; border: none; text-align: left;
+    font-family: var(--font-body); font-size: 15px; font-weight: 700; color: var(--ink); cursor: pointer;
+  }
+  .q-badge {
+    flex: none; width: 24px; height: 24px; border-radius: 7px; background: var(--navy); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900;
+  }
+  .q-text { flex: 1; }
+  .plus { flex: none; color: var(--navy); font-weight: 900; font-size: 17px; transition: transform .3s; display: inline-block; }
+  .item.open .plus { transform: rotate(45deg); }
+  .answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
+  .item.open .answer { grid-template-rows: 1fr; }
+  .answer-clip { overflow: hidden; }
+  .answer p { font-size: 15px; line-height: 1.85; color: var(--ink); margin: 0; padding: 0 0 15px 34px; }
+  .draft { font-size: 12px; font-weight: 700; color: #C0392B; }
+</style>
+
+<script>
+  // 1問開くと他は閉じる（排他）
+  const items = [...document.querySelectorAll<HTMLElement>('[data-faq] .item')];
+  items.forEach((item) => {
+    item.querySelector('[data-faq-toggle]')?.addEventListener('click', () => {
+      const willOpen = !item.classList.contains('open');
+      items.forEach((it) => {
+        const open = it === item && willOpen;
+        it.classList.toggle('open', open);
+        it.querySelector('[data-faq-toggle]')?.setAttribute('aria-expanded', String(open));
+      });
+    });
+  });
+</script>

@@ -1,48 +1,153 @@
 ---
-import WireframeLayout from '../layouts/WireframeLayout.astro';
-import PageHero from '../components/wireframe/PageHero.astro';
-import Section from '../components/wireframe/Section.astro';
-import Box from '../components/wireframe/Box.astro';
-import Lines from '../components/wireframe/Lines.astro';
-import CtaBand from '../components/wireframe/CtaBand.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+
+// 教科数ごとの月額目安 ※2教科以上の実料金は公開前に要確認（現在は単純合算の仮値）
+const plans = [
+  { subjects: '1教科', taxed: '6,578', draft: false },
+  { subjects: '2教科', taxed: '13,156', draft: true },
+  { subjects: '3教科', taxed: '19,734', draft: true },
+  { subjects: '5教科', taxed: '32,890', draft: true },
+];
+
+const subjectChips = [
+  { label: '国語', bg: '#B0413E' },
+  { label: '数学', bg: '#2C55A0' },
+  { label: '英語', bg: '#B95A1E' },
+  { label: '理科', bg: '#1F6B3C' },
+  { label: '社会', bg: '#6B4FA3' },
+];
 ---
-<WireframeLayout title="料金">
-  <PageHero eyebrow="PRICE" title="料金" />
+<SiteLayout
+  title="料金｜学習塾フォーカス"
+  description="学習塾フォーカスの料金。1教科あたり月6,578円（税込）。入会金・設備管理費0円、授業料は中学3年間据え置きの明朗会計です。"
+>
+  <PageHero
+    eyebrow="PRICE"
+    title="料金"
+    lead="「個別指導は高い」の常識を破る、続けられる料金です。"
+  />
 
-  <Section eyebrow="PRICE" title="通常授業料">
-    <div class="wf-cols">
-      <div>
-        <div class="wf-bignum">5,980円</div>
-        <p style="color:var(--wf-muted);margin:4px 0 16px">1講座あたり（税抜・テキストが入ります）</p>
-        <Lines n={3} />
+  <section class="tuition">
+    <div class="container">
+      <div class="hero-card">
+        <p class="label">授業料（1教科あたり）</p>
+        <p class="value"><span class="unit">月</span><span class="num">6,578</span><span class="unit">円</span><span class="tax">（税込）</span></p>
+        <p class="untaxed">税抜 5,980円</p>
+        <div class="chips">
+          {subjectChips.map((c) => <span class="chip" style={`background:${c.bg}`}>{c.label}</span>)}
+        </div>
+        <p class="chips-note">5教科すべて同じ料金です</p>
       </div>
-      <Box label="授業料イメージ" h={200} />
+
+      <table class="plan-table">
+        <thead>
+          <tr><th>受講教科数</th><th>月額（税込）</th></tr>
+        </thead>
+        <tbody>
+          {plans.map((p) => (
+            <tr>
+              <td>{p.subjects}</td>
+              <td><strong>{p.taxed}円</strong>{p.draft && <span class="draft">※仮</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="table-note">※2教科以上の料金は確認中の仮値です（1教科分の単純合算で表示しています）</p>
     </div>
-  </Section>
+  </section>
 
-  {/* 「5教科でも集団塾並み」と「他塾比較」を統合 */}
-  <Section title="他塾と比べても、集団塾並み" alt={true}>
-    <table class="wf-table">
-      <thead><tr><th>受講数</th><th>フォーカス（月額）</th><th>他塾（個別）の目安</th></tr></thead>
-      <tbody>
-        <tr><td>3講座</td><td>—</td><td>—</td></tr>
-        <tr><td>5講座（5教科）</td><td>—（集団塾並み）</td><td>—</td></tr>
-      </tbody>
-    </table>
-    <p style="color:var(--wf-muted);font-size:13px;margin-top:12px">※5教科受けても集団塾と同じくらい。一般的な個別指導より大幅に安い（テキストが入ります）</p>
-  </Section>
-
-  <Section title="諸経費（明朗会計）">
-    <p style="margin:0 0 14px">入会金・設備管理費・維持費は<strong>一切いただきません。</strong>他塾でかかりがちな諸経費がほとんどなく、毎月の教材費とシステム利用料のみです。（金額のテキストが入ります）</p>
-    <Lines n={2} />
-  </Section>
-
-  <Section title="柔軟な受け方" alt={true}>
-    <div class="wf-cols">
-      <Box label="受け方イメージ" h={200} />
-      <Lines n={5} head={true} />
+  <section class="fees">
+    <div class="container">
+      <h2>諸経費は、一切かかりません</h2>
+      <div class="fee-cards">
+        <div class="fee-card"><p class="fee-name">入会金</p><p class="fee-value">0<span>円</span></p></div>
+        <div class="fee-card"><p class="fee-name">設備管理費</p><p class="fee-value">0<span>円</span></p></div>
+        <div class="fee-card"><p class="fee-name">授業料の値上げ</p><p class="fee-value">なし<span class="small">（中学3年間据え置き）</span></p></div>
+      </div>
+      <p class="fee-note">毎月かかるのは、授業料のほかは教材費とシステム利用料のみです。（金額は資料をご確認ください）</p>
     </div>
-  </Section>
+  </section>
 
-  <CtaBand title="資料請求でデジタルパンフをすぐお送りします" />
-</WireframeLayout>
+  <section class="compare">
+    <div class="container">
+      <h2>他塾と比べてください</h2>
+      <p class="compare-lead">1教科あたりの月額は、一般的な個別指導塾の約1/3。<br class="sp-br" />他塾の2教科分の料金で、5教科全部通えます。</p>
+      <table class="cmp-table">
+        <thead>
+          <tr><th></th><th class="focus-col">フォーカス</th><th>個別A社</th><th>個別B社</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1教科・月額</td>
+            <td class="focus-col"><strong>6,578円</strong></td>
+            <td>18,700円</td>
+            <td>15,400円</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="table-note">※他塾の金額は中学2年生・週1回コースの一般的な価格帯の例です（当社調べ・仮値。公開前に根拠を確定）</p>
+    </div>
+  </section>
+
+  <CtaBand />
+</SiteLayout>
+
+<style>
+  .container { max-width: 760px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) 24px; }
+  h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(20px, 2.8vw, 25px); color: var(--ink); text-align: center; margin: 0 0 24px; }
+
+  .tuition { background: #fff; }
+  .hero-card {
+    background: var(--blue-paler); border: 2.5px solid var(--navy); border-radius: 16px;
+    padding: clamp(24px, 4vw, 34px); text-align: center;
+  }
+  .label { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; }
+  .value { margin: 6px 0 0; line-height: 1; }
+  .num { font: 900 clamp(46px, 9vw, 58px) var(--font-round); color: var(--orange); letter-spacing: .01em; }
+  .unit { font: 700 clamp(16px, 3vw, 20px) var(--font-round); color: var(--ink); margin: 0 4px; }
+  .tax { font-size: 12px; color: var(--muted); }
+  .untaxed { font-size: 12.5px; color: var(--muted); margin: 8px 0 0; }
+  .chips { display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; margin-top: 16px; }
+  .chip { color: #fff; font-size: 12.5px; font-weight: 700; border-radius: 6px; padding: 4px 11px; }
+  .chips-note { font-size: 13px; font-weight: 700; color: var(--ink); margin: 10px 0 0; }
+
+  .plan-table { width: 100%; border-collapse: collapse; margin-top: 28px; }
+  .plan-table th, .plan-table td {
+    border: 1px solid var(--line); padding: 12px 16px; font-size: 15px; color: var(--ink); text-align: center;
+  }
+  .plan-table th { background: var(--navy); color: #fff; font-weight: 700; }
+  .plan-table strong { font-family: var(--font-round); font-weight: 900; }
+  .draft { font-size: 11px; color: #C0392B; font-weight: 700; margin-left: 6px; }
+  .table-note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; line-height: 1.7; }
+
+  .fees { background: var(--alt-bg); }
+  .fee-cards { display: flex; flex-direction: column; gap: 12px; }
+  .fee-card {
+    background: #fff; border-radius: 14px; box-shadow: var(--shadow-card);
+    padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .fee-name { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0; }
+  .fee-value { font: 900 26px var(--font-round); color: var(--navy); margin: 0; }
+  .fee-value span { font-size: 15px; }
+  .fee-value .small { font-size: 12px; font-weight: 700; color: var(--muted); margin-left: 4px; }
+  .fee-note { font-size: 13.5px; line-height: 1.9; color: var(--ink); text-align: center; margin: 20px 0 0; }
+  @media (min-width: 768px) {
+    .fee-cards { flex-direction: row; }
+    .fee-card { flex: 1; flex-direction: column; gap: 8px; justify-content: center; }
+  }
+
+  .compare { background: #fff; }
+  .compare-lead { font-size: 15px; line-height: 2; color: var(--ink); text-align: center; margin: 0 0 22px; }
+  .sp-br { display: inline; }
+  @media (min-width: 768px) { .sp-br { display: none; } }
+  .cmp-table { width: 100%; border-collapse: collapse; }
+  .cmp-table th, .cmp-table td {
+    border: 1px solid var(--line); padding: 12px 10px; font-size: 14.5px; color: var(--ink); text-align: center;
+  }
+  .cmp-table thead th { background: var(--panel); font-weight: 700; }
+  .cmp-table thead th.focus-col { background: var(--navy); color: #fff; }
+  .cmp-table td.focus-col { background: var(--blue-paler); }
+  .cmp-table td.focus-col strong { font: 900 20px var(--font-round); color: var(--orange); }
+</style>
