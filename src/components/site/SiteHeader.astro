@@ -34,7 +34,7 @@ import { u } from '../../lib/path';
 </header>
 
 {/* SPメニュー（上からスライドダウン） */}
-<div class="sp-menu" data-menu>
+<div class="sp-menu" data-menu style="visibility:hidden">
   <div class="panel">
     <div class="items">
       {nav.map((n, i) => (
@@ -157,4 +157,7 @@ import { u } from '../../lib/path';
   window.addEventListener('resize', () => {
     if (window.innerWidth > 1024) setMenu(false);
   });
+  // 初回ペイントのチラつき防止: CSS適用後にインラインの非表示を解除
+  const spMenu = document.querySelector<HTMLElement>('[data-menu]');
+  requestAnimationFrame(() => spMenu?.style.removeProperty('visibility'));
 </script>

@@ -51,6 +51,10 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
 
+      // 初回ペイントのチラつき防止: CSS適用後にPC右端CTAのインライン非表示を解除
+      const sideCta = document.querySelector<HTMLElement>('[data-side-cta]');
+      requestAnimationFrame(() => sideCta?.style.removeProperty('visibility'));
+
       // タッチでの「沈み込み」フィードバック（:hoverが効かない環境向け）
       window.addEventListener('pointerdown', (e) => {
         (e.target as Element | null)?.closest?.('.btn3d')?.classList.add('pressed');

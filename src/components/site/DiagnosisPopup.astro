@@ -3,7 +3,7 @@
 // ×で閉じたらセッション中は再表示しない（sessionStorage）
 import { u } from '../../lib/path';
 ---
-<div class="diag-popup" data-diag-popup>
+<div class="diag-popup" data-diag-popup style="visibility:hidden">
   <button class="close" aria-label="とじる" data-diag-close>
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg>
   </button>
@@ -71,5 +71,7 @@ import { u } from '../../lib/path';
       popup.classList.add('closed');
       sessionStorage.setItem(KEY, '1');
     });
+    // 初回ペイントのチラつき防止: CSS適用後にインラインの非表示を解除
+    requestAnimationFrame(() => popup.style.removeProperty('visibility'));
   }
 </script>
