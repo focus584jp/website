@@ -5,8 +5,14 @@ import { u } from '../../lib/path';
 ---
 <section class="cta-band">
   <div class="container">
-    <h2><span class="hl">まずは、話を聞きに来ませんか？</span></h2>
-    <p>無理な勧誘はいたしません。パンフだけでもお気軽に。</p>
+    <p class="eyebrow">CONTACT</p>
+    <h2>
+      <span class="hl">
+        まずは、話を聞きに来ませんか？
+        <svg viewBox="0 0 400 14" preserveAspectRatio="none" aria-hidden="true"><path d="M4 4 Q 120 0 396 3 L 393 10 Q 180 8 7 11 Z" fill="#FFD84D" opacity="0.95"></path></svg>
+      </span>
+    </h2>
+    <p class="sub">無理な勧誘は一切いたしません。<br class="sp-br" />「パンフレットだけ」でも大歓迎です。</p>
     <div class="buttons">
       <a href={u('/document')} class="btn-shine btn3d btn3d-o doc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
       <a href={u('/consult')} class="consult">無料相談を申し込む →</a>
@@ -18,9 +24,17 @@ import { u } from '../../lib/path';
 <style>
   .cta-band { background: var(--navy); }
   .container { max-width: 560px; margin: 0 auto; padding: clamp(48px, 7vw, 80px) 24px; text-align: center; }
+  .eyebrow {
+    font: 800 12px var(--font-round); color: var(--sparkle);
+    letter-spacing: .32em; margin: 0 0 8px;
+  }
   h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(22px, 3.2vw, 30px); color: #fff; margin: 0; }
-  .hl { background: linear-gradient(transparent 62%, rgba(255, 216, 77, .4) 62% 94%, transparent 94%); padding: 0 4px; }
-  p { font-size: 14px; color: #C9D6EE; margin: 14px 0 26px; }
+  /* 半透明マーカーは紺の上で濁るため廃止し、見出しの下に黄色のペン下線を敷く（ヒーローのキャッチと同じモチーフ） */
+  .hl { display: inline-block; position: relative; padding: 0 4px 10px; }
+  .hl svg { position: absolute; left: 2px; right: 2px; bottom: 0; width: calc(100% - 4px); height: 10px; }
+  .sub { font-size: 14px; color: var(--blue-pale); margin: 16px 0 26px; line-height: 1.9; }
+  .sp-br { display: inline; }
+  @media (min-width: 768px) { .sp-br { display: none; } }
   .buttons { display: flex; flex-direction: column; gap: 11px; max-width: 380px; margin: 0 auto; }
   .buttons a {
     display: flex; align-items: center; justify-content: center; gap: 9px;
@@ -30,7 +44,7 @@ import { u } from '../../lib/path';
   .consult { background: #fff; color: var(--navy); transition: transform .2s; }
   .consult:hover { transform: translateY(-2px); }
   .tel {
-    background: transparent; border: 1.5px solid rgba(255, 255, 255, .45); color: #fff;
+    background: transparent; border: 1.5px solid rgba(255, 255, 255, .55); color: #fff;
     font-size: 14.5px !important; padding: 14px !important; transition: background .2s;
   }
   .tel:hover { background: rgba(255, 255, 255, .08); }
