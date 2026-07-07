@@ -14,6 +14,7 @@ export const nav = [
   { id: 'price', label: '料金' },
   { id: 'voice', label: '保護者さまの声' },
   { id: 'rooms', label: '教室一覧' },
+  { id: 'flow', label: '入塾までの流れ' },
   { id: 'faq', label: 'よくあるご質問' },
 ];
 
