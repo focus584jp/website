@@ -4,12 +4,13 @@
 import SectionHead from '../site/SectionHead.astro';
 import { u } from '../../lib/path';
 
+// 教科チップは濃色ベタ＋白文字（淡青カードの上でも沈まないように。英語のみ黄＋濃黄文字）
 const subjectChip = {
-  国語: { bg: '#FBE4E4', color: '#B0413E' },
-  数学: { bg: '#DDE7F7', color: '#143778' },
-  英語: { bg: '#FFF59D', color: '#8A6D00' },
-  理科: { bg: '#D7ECDD', color: '#1F6B3C' },
-  社会: { bg: '#E8E0F5', color: '#6B4FA3' },
+  国語: { bg: '#B0413E', color: '#fff' },
+  数学: { bg: '#2C55A0', color: '#fff' },
+  英語: { bg: '#FFD84D', color: '#8A6D00' },
+  理科: { bg: '#1F6B3C', color: '#fff' },
+  社会: { bg: '#6B4FA3', color: '#fff' },
 } as const;
 type Subject = keyof typeof subjectChip;
 
@@ -142,7 +143,7 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
   .arrow { display: flex; align-items: center; }
   .band-focus {
     flex: 1.2; max-width: 340px; display: flex; flex-direction: column; justify-content: center; gap: clamp(9px, 1.2vw, 12px);
-    text-align: center; background: #fff; border: 2.5px solid var(--navy); border-radius: 12px;
+    text-align: center; background: var(--blue-paler); border: 2.5px solid var(--navy); border-radius: 12px;
     padding: clamp(14px, 2.2vw, 24px) clamp(7px, 1.2vw, 18px); box-shadow: 0 6px 16px rgba(20, 42, 84, .14); box-sizing: border-box;
   }
   .band-focus-title { font-size: clamp(13px, 1.7vw, 18px); font-weight: 900; color: var(--navy); font-family: var(--font-round); }
