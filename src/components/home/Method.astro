@@ -132,18 +132,27 @@ import { u } from '../../lib/path';
   h3 { font-family: var(--font-round); font-size: clamp(18px, 2.4vw, 23px); font-weight: 900; color: var(--ink); margin: 0; }
   .lead { font-size: clamp(15px, 1.6vw, 16px); line-height: 2; color: var(--ink); margin: clamp(14px, 2vw, 20px) auto 0; max-width: 640px; }
 
-  .compare-panel { background: var(--panel); border-radius: 14px; padding: clamp(16px, 2.5vw, 26px) clamp(8px, 1.5vw, 20px); margin-top: clamp(14px, 2vw, 20px); }
-  .compare { display: flex; align-items: stretch; justify-content: center; gap: clamp(8px, 1.5vw, 18px); }
-  .col { flex: 1; max-width: 360px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  /* 左右比較: SPは縦積み（上=従来／下=フォーカス）、768px以上で横並び */
+  .compare-panel { background: var(--panel); border-radius: 14px; padding: clamp(16px, 2.5vw, 26px) clamp(12px, 1.5vw, 20px); margin-top: clamp(14px, 2vw, 20px); }
+  .compare { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px; }
+  .col { flex: 1; width: 100%; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
   .col-head { display: flex; align-items: center; gap: 7px; font-size: clamp(13px, 1.4vw, 14px); font-weight: 800; }
   .col-head.ng { color: var(--ink); }
   .col-head.ok { color: var(--navy); }
   .illust { width: 100%; max-width: 210px; height: auto; margin-top: 4px; }
   .col-note { font-size: clamp(14px, 1.4vw, 14.5px); font-weight: 800; color: var(--ink); margin: 2px 0 0; text-align: center; line-height: 1.8; }
-  .v-dash { border-left: 2px dashed #C6D0DC; }
+  .v-dash { border-top: 2px dashed #C6D0DC; }
+  @media (min-width: 768px) {
+    .compare { flex-direction: row; gap: clamp(8px, 1.5vw, 18px); }
+    .v-dash { border-top: none; border-left: 2px dashed #C6D0DC; }
+  }
 
-  .style-compare { display: flex; gap: clamp(10px, 1.8vw, 18px); justify-content: center; margin-top: clamp(16px, 2.5vw, 24px); }
-  .style-box { flex: 1; min-width: 0; max-width: 350px; border-radius: 12px; padding: clamp(12px, 2.2vw, 22px) clamp(8px, 1.4vw, 14px); text-align: center; box-sizing: border-box; }
+  .style-compare { display: flex; flex-direction: column; gap: 16px; justify-content: center; margin-top: clamp(16px, 2.5vw, 24px); }
+  .style-box { flex: 1; min-width: 0; width: 100%; max-width: 350px; margin: 0 auto; border-radius: 12px; padding: clamp(16px, 2.2vw, 22px) clamp(12px, 1.4vw, 14px); text-align: center; box-sizing: border-box; }
+  @media (min-width: 768px) {
+    .style-compare { flex-direction: row; gap: clamp(10px, 1.8vw, 18px); }
+    .style-box { margin: 0; }
+  }
   .style-box.old { background: var(--panel); }
   .style-box.old .style-title { font-size: clamp(13px, 1.5vw, 14.5px); font-weight: 800; color: var(--gray-1); }
   .style-box.old .style-sub { font-size: clamp(11px, 1.3vw, 12px); font-weight: 700; color: var(--gray-1); margin-top: 2px; }
