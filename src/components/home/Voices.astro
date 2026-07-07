@@ -37,7 +37,9 @@ import { voices } from '../../data/home';
   .container { max-width: 1160px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 0; }
   .head-wrap { padding: 0 24px; }
   .carousel { position: relative; max-width: 640px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
-  .viewport { overflow: hidden; padding: 12px 0; }
+  .viewport { overflow: hidden; padding: 12px 0; touch-action: pan-y; cursor: grab; }
+  .viewport.dragging { cursor: grabbing; }
+  .viewport.dragging .card { transition: none; }
   .track { display: flex; align-items: stretch; transition: transform .45s cubic-bezier(.25, .8, .3, 1); }
   .card {
     flex: 0 0 62%; margin: 0 3%; box-sizing: border-box; background: #fff;
@@ -82,11 +84,13 @@ import { voices } from '../../data/home';
   const dots = [...document.querySelectorAll<HTMLElement>('[data-voice-dot]')];
   let idx = 0;
 
-  function render() {
+  // カード幅62% + 左右マージン3%×2 = 68%ピッチ。先頭カードの中心を34%位置に置く
+  const baseX = () => -(idx * 0.68 - 0.16) * (viewport?.clientWidth ?? 0);
+
+  function render(dragPx = 0, animate = true) {
     if (!viewport || !track) return;
-    // カード幅62% + 左右マージン3%×2 = 68%ピッチ。先頭カードの中心を34%位置に置く
-    const w = viewport.clientWidth;
-    track.style.transform = `translateX(${-(idx * 0.68 - 0.16) * w}px)`;
+    track.style.transition = animate ? '' : 'none';
+    track.style.transform = `translateX(${baseX() + dragPx}px)`;
     cards.forEach((c, i) => c.classList.toggle('active', i === idx));
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
   }
@@ -98,8 +102,46 @@ import { voices } from '../../data/home';
 
   document.querySelector('[data-voice-prev]')?.addEventListener('click', () => goTo(idx - 1));
   document.querySelector('[data-voice-next]')?.addEventListener('click', () => goTo(idx + 1));
-  cards.forEach((c) => c.addEventListener('click', () => goTo(Number(c.dataset.index))));
   dots.forEach((d) => d.addEventListener('click', () => goTo(Number(d.dataset.index))));
-  window.addEventListener('resize', render);
+  window.addEventListener('resize', () => render());
+
+  // --- 横スワイプ対応（縦スクロールは touch-action: pan-y でブラウザに委ねる） ---
+  let startX = 0;
+  let swiped = false;
+  let dragging = false;
+
+  viewport?.addEventListener('pointerdown', (e) => {
+    startX = e.clientX;
+    dragging = true;
+    swiped = false;
+  });
+  viewport?.addEventListener('pointermove', (e) => {
+    if (!dragging || !viewport) return;
+    const dx = e.clientX - startX;
+    if (!swiped && Math.abs(dx) > 8) {
+      swiped = true;
+      viewport.classList.add('dragging');
+      try { viewport.setPointerCapture(e.pointerId); } catch {}
+    }
+    if (swiped) render(dx, false);
+  });
+  function endSwipe(e: PointerEvent) {
+    if (!dragging) return;
+    dragging = false;
+    viewport?.classList.remove('dragging');
+    const dx = e.clientX - startX;
+    if (swiped && dx <= -50) goTo(idx + 1);
+    else if (swiped && dx >= 50) goTo(idx - 1);
+    else render(); // しきい値未満は元の位置へ戻す
+  }
+  viewport?.addEventListener('pointerup', endSwipe);
+  viewport?.addEventListener('pointercancel', endSwipe);
+
+  // カードタップでそのカードへ（スワイプ直後のクリックは無視）
+  cards.forEach((c) => c.addEventListener('click', () => {
+    if (swiped) return;
+    goTo(Number(c.dataset.index));
+  }));
+
   render();
 </script>
