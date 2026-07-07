@@ -1,11 +1,11 @@
 ---
-// 入塾までの流れ — 縦4ステップ（丸数字＋縦ライン接続）
+// 体験までの流れ — 縦3ステップ(丸数字＋縦ライン接続。ゴール=体験授業がオレンジ)
 import SectionHead from '../site/SectionHead.astro';
 import { flowSteps } from '../../data/home';
 ---
 <section id="flow" class="flow">
   <div class="container">
-    <SectionHead eyebrow="FLOW" title="入塾までの流れ" />
+    <SectionHead eyebrow="FLOW" title="体験までの流れ" />
     <div class="card">
       {flowSteps.map((s, i) => (
         <div class:list={['step', { last: i === flowSteps.length - 1 }]}>
