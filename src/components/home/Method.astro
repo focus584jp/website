@@ -37,7 +37,7 @@ import { u } from '../../lib/path';
               <p class="col-note">取りこぼしが増え …<br />成績が伸びなやむ</p>
             </div>
             <div class="v-dash"></div>
-            <div class="col">
+            <div class="col focus-col">
               <div class="col-head ok"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg>フォーカスでの成績の上がり方</div>
               <svg viewBox="0 0 210 150" class="illust">
                 <ellipse cx="105" cy="131" rx="92" ry="9" fill="#143778" opacity=".14"></ellipse>
@@ -85,7 +85,7 @@ import { u } from '../../lib/path';
               <p class="col-note">答えややり方を解説する指導<br />受ける側は受け身になりがち</p>
             </div>
             <div class="v-dash"></div>
-            <div class="col">
+            <div class="col focus-col">
               <div class="col-head ok"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg>フォーカスの学習スタイル</div>
               <div class="col-sub focus-sub">Coaching — 自立学習の質を最大化</div>
               <svg viewBox="0 0 240 100" class="illust illust-wide">
@@ -101,7 +101,7 @@ import { u } from '../../lib/path';
                 <text x="122" y="76" text-anchor="middle" font-size="11" font-weight="700" fill="#143778">回答</text>
                 <path d="M216 10 v-8 M224 14 l6 -6 M226 22 h8" stroke="#FFC94A" stroke-width="3" stroke-linecap="round"></path>
               </svg>
-              <p class="col-note">考え方を問いかけヒントを与え、<br />自分で答えまで導かせる指導</p>
+              <p class="col-note">考え方を問いかけ、ヒントを与え、<br />自分で答えまで導かせる指導</p>
             </div>
           </div>
         </div>
@@ -138,7 +138,9 @@ import { u } from '../../lib/path';
   /* 左右比較: SPは縦積み（上=従来／下=フォーカス）、768px以上で横並び */
   .compare-panel { background: var(--panel); border-radius: 14px; padding: clamp(16px, 2.5vw, 26px) clamp(12px, 1.5vw, 20px); margin-top: clamp(14px, 2vw, 20px); }
   .compare { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px; }
-  .col { flex: 1; width: 100%; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .col { flex: 1; width: 100%; max-width: 360px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 14px 10px 16px; box-sizing: border-box; }
+  /* フォーカス側は淡青＋ネイビー枠で「こちらが良い」を一目で伝える */
+  .focus-col { background: var(--blue-paler); border: 2px solid var(--navy); border-radius: 14px; box-shadow: 0 4px 12px rgba(20, 42, 84, .10); }
   .col-head { display: flex; align-items: center; gap: 8px; font-size: clamp(15px, 1.8vw, 16px); font-weight: 800; text-align: center; }
   .col-head.ng { color: var(--ink); }
   .col-head.ok { color: var(--navy); }
