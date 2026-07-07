@@ -77,3 +77,6 @@ body {
 
 /* --- 黄マーカー（インライン強調） --- */
 .mk { background: linear-gradient(transparent 60%, var(--marker) 60% 95%, transparent 95%); padding: 0 2px; }
+
+/* --- 初回ペイント制御（SiteLayoutのbootスクリプトが使用） --- */
+.no-transition, .no-transition * { transition: none !important; }

@@ -157,7 +157,4 @@ import { u } from '../../lib/path';
   window.addEventListener('resize', () => {
     if (window.innerWidth > 1024) setMenu(false);
   });
-  // 初回ペイントのチラつき防止: CSS適用後にインラインの非表示を解除
-  const spMenu = document.querySelector<HTMLElement>('[data-menu]');
-  requestAnimationFrame(() => spMenu?.style.removeProperty('visibility'));
 </script>

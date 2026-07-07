@@ -51,9 +51,25 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
 
-      // 初回ペイントのチラつき防止: CSS適用後にPC右端CTAのインライン非表示を解除
-      const sideCta = document.querySelector<HTMLElement>('[data-side-cta]');
-      requestAnimationFrame(() => sideCta?.style.removeProperty('visibility'));
+      // 初回ペイントのチラつき防止（オーバーレイの一元boot）:
+      // 遅い回線ではCSS適用前に素のHTMLが一瞬描画され、CSS適用時にtransitionが発火して
+      // メニュー等が「スッと引っ込む」動きに見える。そこで
+      // ①インラインのvisibility:hiddenで覆っておき ②CSSが実際に適用されたことを
+      // 計算スタイル（position:fixed）で確認してから ③transitionを殺した状態で表示解除する。
+      const overlays = [...document.querySelectorAll<HTMLElement>('[data-menu], [data-diag-popup], [data-side-cta]')];
+      (function boot() {
+        if (overlays.length === 0) return;
+        if (getComputedStyle(overlays[0]).position !== 'fixed') {
+          requestAnimationFrame(boot);
+          return;
+        }
+        overlays.forEach((el) => el.classList.add('no-transition'));
+        void document.body.offsetHeight; // reflowで隠し状態のtransformを遷移なしで確定
+        overlays.forEach((el) => el.style.removeProperty('visibility'));
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          overlays.forEach((el) => el.classList.remove('no-transition'));
+        }));
+      })();
 
       // タッチでの「沈み込み」フィードバック（:hoverが効かない環境向け）
       window.addEventListener('pointerdown', (e) => {

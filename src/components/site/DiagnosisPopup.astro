@@ -71,7 +71,5 @@ import { u } from '../../lib/path';
       popup.classList.add('closed');
       sessionStorage.setItem(KEY, '1');
     });
-    // 初回ペイントのチラつき防止: CSS適用後にインラインの非表示を解除
-    requestAnimationFrame(() => popup.style.removeProperty('visibility'));
   }
 </script>
