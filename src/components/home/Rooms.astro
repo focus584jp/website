@@ -96,11 +96,13 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
     display: flex; align-items: center; gap: 12px; background: #fff;
     border: 1px solid var(--line); border-radius: 12px; padding: 12px;
     text-decoration: none; box-sizing: border-box; transition: border-color .2s, background .2s;
+    min-width: 0; /* グリッド列が中身の最小幅に引っ張られて溢れないように */
   }
   .room:hover { border-color: var(--navy); background: #F8FAFD; }
   @media (min-width: 768px) { .room { padding: 14px 16px; } }
   .room-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-  .room-name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  /* 名前＋市名チップ: 入り切らないときはチップが2行目に折り返す（四街道教室対策） */
+  .room-name-row { display: flex; align-items: center; justify-content: space-between; gap: 2px 8px; flex-wrap: wrap; }
   .room-name { font-size: 13.5px; font-weight: 700; color: var(--ink); white-space: nowrap; }
   @media (min-width: 768px) { .room-name { font-size: 15px; } }
   .chip { font-size: 12px; font-weight: 700; color: var(--navy); background: var(--blue-pale); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
