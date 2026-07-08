@@ -23,6 +23,7 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="format-detection" content="telephone=no" />{/* 数字の自動電話リンク化を無効（明示的な tel: リンクは有効のまま） */}
     <meta name="robots" content="noindex, nofollow" />{/* 公開前：検索インデックス除外。ローンチ時に外す */}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
