@@ -26,12 +26,15 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
           <input type="text" placeholder="例：佐藤 由美" autocomplete="name" required />
         </label>
         <label class="f-field">
-          <span>携帯電話番号<em>必須</em></span>
-          <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
+          <span>お子さまの学年<em>必須</em></span>
+          <select required>
+            <option>選択してください</option>
+            {grades.map((g) => <option>{g}</option>)}
+          </select>
         </label>
         <label class="f-field">
-          <span>メールアドレス（任意）</span>
-          <input type="email" placeholder="example@email.com" autocomplete="email" />
+          <span>電話番号<em>必須</em></span>
+          <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
         </label>
         <label class="f-field">
           <span>ご希望の教室<em>必須</em></span>
@@ -39,21 +42,6 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
             <option>選択してください</option>
             {classrooms.map((c) => <option>{c.name}</option>)}
           </select>
-        </label>
-        <label class="f-field">
-          <span>お子さまの学年</span>
-          <select>
-            <option>選択してください</option>
-            {grades.map((g) => <option>{g}</option>)}
-          </select>
-        </label>
-        <label class="f-field">
-          <span>ご希望の日時（任意）</span>
-          <input type="text" placeholder="例：平日17時以降 / 土曜午前 など" />
-        </label>
-        <label class="f-field">
-          <span>ご相談内容（任意）</span>
-          <textarea rows="3" placeholder="例：数学が苦手で、テストが平均点に届きません…"></textarea>
         </label>
         <button type="submit" class="f-submit btn3d btn3d-n" style="background:var(--navy);box-shadow:0 5px 0 var(--navy-shadow)">この内容で無料相談を申し込む</button>
         <p class="f-note">送信後、ご希望の教室からご連絡し、日時を確定します。</p>

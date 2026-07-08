@@ -72,8 +72,8 @@ import { u } from '../../lib/path';
   .sub {
     font-family: var(--font-round); font-weight: 700; font-size: clamp(14px, 3.7vw, 16px);
     color: #3E4A5E; margin: 20px 0 0; line-height: 1.8;
-    /* 写真の上でも読めるように白いハローを敷く */
-    text-shadow: 0 0 6px #fff, 0 0 12px rgba(255, 255, 255, .9), 0 0 20px rgba(255, 255, 255, .7);
+    /* 写真の上でも読めるように白いハローを敷く（2行目がズボンに重なっても読めるよう濃いめ） */
+    text-shadow: 0 0 5px #fff, 0 0 5px #fff, 0 0 10px #fff, 0 0 16px #fff, 0 0 24px rgba(255, 255, 255, .95), 0 0 34px rgba(255, 255, 255, .85);
   }
   .sub span { white-space: nowrap; }
 

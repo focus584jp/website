@@ -1,4 +1,6 @@
 ---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageHero from '../../components/site/PageHero.astro';
 import CtaBand from '../../components/site/CtaBand.astro';
@@ -9,13 +11,27 @@ export function getStaticPaths() {
 }
 const { classroom } = Astro.props;
 
-const rows = [
-  { th: 'エリア', td: classroom.area },
-  { th: '最寄駅', td: `${classroom.nearestStation} 徒歩${classroom.walkMinutes}分` },
-  { th: '住所', td: classroom.address },
-  { th: '電話', td: classroom.tel },
-  { th: '開校時間', td: classroom.hours },
-];
+// 教室風景の写真: src/assets/classrooms/<slug>/ に画像を置くと自動でギャラリー表示される。
+const photoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/classrooms/**/*.{jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const photos = Object.entries(photoModules)
+  .filter(([path]) => path.includes(`/classrooms/${classroom.slug}/`))
+  .sort((a, b) => a[0].localeCompare(b[0]))
+  .map(([, mod]) => mod.default);
+const photosPlaceholder = photos.length === 0;
+
+// 対応中学校: データが入れば表示、無ければダミーのチップを表示する。
+const DUMMY_SCHOOLS = ['◯◯中学校', '△△中学校', '□□中学校'];
+const schoolsPlaceholder = classroom.schools.length === 0;
+const schools = schoolsPlaceholder ? DUMMY_SCHOOLS : classroom.schools;
+
+// 表示用住所: 郵便番号と「千葉県」を除く
+const displayAddress = classroom.address.replace(/^〒\d{3}-\d{4}\s*/, '').replace(/^千葉県/, '');
+
+// Googleマップ: 「フォーカス〇〇教室」で検索して登録地点を中央に表示（APIキー不要）
+const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカス${classroom.name}`)}&z=17&hl=ja&output=embed`;
 ---
 <SiteLayout
   title={`${classroom.name}｜学習塾フォーカス`}
@@ -26,12 +42,63 @@ const rows = [
   <section class="info">
     <div class="container">
       <h2>基本情報</h2>
-      <table>
-        <tbody>
-          {rows.map((r) => <tr><th>{r.th}</th><td>{r.td}</td></tr>)}
-        </tbody>
-      </table>
-      <p class="note">※住所・電話・開校時間・対応中学校は準備中です（公開前に実データへ差し替え）</p>
+      <div class="info-grid">
+        <ul class="info-list">
+          <li class="info-item">
+            <span class="info-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              <span class="info-label">電話番号</span>
+            </span>
+            <div class="info-val">
+              <a class="tel-link" href={`tel:${classroom.tel.replace(/-/g, '')}`}>{classroom.tel}</a>
+              <span class="info-sub">受付 {classroom.hours}</span>
+            </div>
+          </li>
+          <li class="info-item">
+            <span class="info-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+              <span class="info-label">住所</span>
+            </span>
+            <div class="info-val">{displayAddress}</div>
+          </li>
+          <li class="info-item">
+            <span class="info-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="3" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m18 22-2-3"></path><path d="M8 15h.01"></path><path d="M16 15h.01"></path></svg>
+              <span class="info-label">アクセス</span>
+            </span>
+            <div class="info-val">{classroom.nearestStation} 徒歩{classroom.walkMinutes}分</div>
+          </li>
+        </ul>
+        <div class="info-map">
+          <iframe
+            src={mapSrc}
+            title={`${classroom.name}の地図`}
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+            style="width:100%;height:300px;border:0;display:block;"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="photos">
+    <div class="container">
+      <h2>教室の様子</h2>
+      <div class="gallery">
+        {photosPlaceholder
+          ? [0, 1, 2].map(() => (
+              <div class="photo-ph">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+                <span>写真準備中</span>
+              </div>
+            ))
+          : photos.map((p, i) => (
+              <Image src={p} alt={`${classroom.name}の様子${i + 1}`} widths={[400, 800]} sizes="(min-width: 768px) 33vw, 50vw" class="photo" />
+            ))}
+      </div>
+      {photosPlaceholder && <p class="ph-note">※教室写真は準備中です（後日、実際の写真に差し替え）</p>}
     </div>
   </section>
 
@@ -39,18 +106,10 @@ const rows = [
     <div class="container">
       <h2>対応中学校</h2>
       <div class="chips">
-        {classroom.schools.map((s) => <span class="chip">{s}</span>)}
+        {schools.map((s) => <span class:list={['chip', { 'chip-ph': schoolsPlaceholder }]}>{s}</span>)}
       </div>
+      {schoolsPlaceholder && <p class="ph-note">※対応中学校は準備中です（後日、実際の中学校名に差し替え）</p>}
       <p class="body-text">上記以外の中学校にお通いの方も、お気軽にご相談ください。定期テスト対策は、お通いの中学校の進度・出題範囲に合わせて行います。</p>
-    </div>
-  </section>
-
-  <section class="map">
-    <div class="container">
-      <h2>アクセス</h2>
-      <div class="map-ph">
-        <p>Googleマップ（埋め込み予定）</p>
-      </div>
     </div>
   </section>
 
@@ -58,29 +117,63 @@ const rows = [
 </SiteLayout>
 
 <style>
-  .container { max-width: 720px; margin: 0 auto; padding: clamp(40px, 6vw, 60px) 24px; }
+  .container { max-width: 960px; margin: 0 auto; padding: clamp(40px, 6vw, 60px) 24px; }
   h2 {
     font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
     border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 16px;
   }
-  .info { background: #fff; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { border: 1px solid var(--line); padding: 13px 16px; font-size: 14.5px; color: var(--ink); text-align: left; }
-  th { background: var(--alt-bg); font-weight: 700; width: 110px; }
-  .note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; }
 
-  .schools { background: var(--alt-bg); }
+  /* 基本情報 ＋ 地図 */
+  .info { background: #fff; }
+  .info-grid { display: flex; flex-direction: column; gap: 20px; }
+
+  .info-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .info-item {
+    display: grid; grid-template-columns: 54px 1fr; gap: 14px; align-items: center;
+    padding: 16px 0; border-bottom: 1px solid var(--line);
+  }
+  .info-item:first-child { padding-top: 4px; }
+  .info-item:last-child { border-bottom: 0; padding-bottom: 4px; }
+  .info-ic { display: flex; flex-direction: column; align-items: center; gap: 5px; color: var(--navy); }
+  .info-ic svg { width: 24px; height: 24px; }
+  .info-label { font-size: 10.5px; font-weight: 800; color: var(--muted); letter-spacing: .02em; }
+  .info-val { font-size: 14.5px; line-height: 1.7; color: var(--ink); padding-top: 3px; }
+  .tel-link {
+    font-family: var(--font-tel); font-size: 21px; font-weight: 800; letter-spacing: .02em;
+    color: var(--navy); text-decoration: none;
+  }
+  .tel-link:hover { text-decoration: underline; }
+  .info-sub { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+
+  .info-map { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; line-height: 0; }
+
+  @media (min-width: 1024px) {
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+    /* PC: 左に基本情報、右に地図（source順のまま） */
+  }
+
+  /* 教室の様子 */
+  .photos { background: var(--alt-bg); }
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .photo { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; }
+  .photo-ph {
+    aspect-ratio: 4 / 3; border-radius: 14px; background: var(--panel);
+    border: 1px dashed var(--line); color: var(--gray-1);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+  }
+  .photo-ph span { font-size: 12px; font-weight: 600; }
+  @media (min-width: 768px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+
+  /* 対応中学校 */
+  .schools { background: #fff; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
   .chip {
     background: var(--blue-pale); color: var(--navy); font-size: 13px; font-weight: 700;
     border-radius: 999px; padding: 6px 14px;
   }
+  .chip-ph { background: var(--panel); color: var(--gray-1); border: 1px dashed var(--line); }
   .body-text { font-size: 14.5px; line-height: 1.9; color: var(--ink); margin: 0; }
 
-  .map { background: #fff; }
-  .map-ph {
-    height: 240px; border: 2px dashed var(--line); border-radius: 14px;
-    display: grid; place-items: center; background: var(--panel);
-  }
-  .map-ph p { font-size: 13px; color: var(--gray-1); margin: 0; }
+  /* 準備中ノート */
+  .ph-note { font-size: 12px; color: #C0392B; font-weight: 700; margin: 12px 0 0; line-height: 1.7; }
 </style>

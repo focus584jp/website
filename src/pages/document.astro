@@ -2,6 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import { u } from '../lib/path';
+import { classrooms } from '../data/classrooms';
 
 const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 ---
@@ -21,15 +22,26 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
     <div class="container">
       <form class="form-card" onsubmit="return false">
         <label class="f-field">
-          <span>お子さまの学年（任意）</span>
-          <select>
+          <span>保護者さまのお名前<em>必須</em></span>
+          <input type="text" placeholder="例：佐藤 由美" autocomplete="name" required />
+        </label>
+        <label class="f-field">
+          <span>お子さまの学年<em>必須</em></span>
+          <select required>
             <option>選択してください</option>
             {grades.map((g) => <option>{g}</option>)}
           </select>
         </label>
         <label class="f-field">
-          <span>携帯電話番号<em>必須</em></span>
+          <span>電話番号<em>必須</em></span>
           <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
+        </label>
+        <label class="f-field">
+          <span>お近くの教室<em>必須</em></span>
+          <select required>
+            <option>選択してください</option>
+            {classrooms.map((c) => <option>{c.name}</option>)}
+          </select>
         </label>
         <button type="submit" class="f-submit btn-shine btn3d btn3d-o">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>

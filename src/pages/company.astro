@@ -1,18 +1,11 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
-
-// 文面はすべて確定待ち（公開前に差し替え必須）
-const companyRows = [
-  { th: '運営会社', td: '（準備中）' },
-  { th: '所在地', td: '（準備中）' },
-  { th: '設立', td: '（準備中）' },
-  { th: '事業内容', td: '個別指導塾「フォーカス」の運営' },
-];
+import { companyInfo, history, privacyPolicy } from '../data/company';
 ---
 <SiteLayout
   title="会社概要｜学習塾フォーカス"
-  description="学習塾フォーカスの運営会社情報・プライバシーポリシー・特定商取引法に基づく表記。"
+  description="学習塾フォーカス（株式会社フォーカス）の会社概要・沿革・プライバシーポリシー。"
   popup={false}
 >
   <PageHero eyebrow="COMPANY" title="会社概要" />
@@ -22,24 +15,55 @@ const companyRows = [
       <h2>会社情報</h2>
       <table>
         <tbody>
-          {companyRows.map((r) => <tr><th>{r.th}</th><td>{r.td}</td></tr>)}
+          {companyInfo.map((r) => (
+            <tr>
+              <th>{r.label}</th>
+              <td>
+                {r.items ? (
+                  <ul class="cell-list">{r.items.map((i) => <li>{i}</li>)}</ul>
+                ) : (
+                  <span>{r.value}{r.flag && <span class="flag">{r.flag}</span>}{r.caution && <span class="cell-caution">※{r.caution}</span>}</span>
+                )}
+                {r.note && <span class="cell-note">{r.note}</span>}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <p class="note">※会社情報は準備中です（公開前に確定文面へ差し替え）</p>
+      <p class="note">※ 資料請求・無料相談など保護者さまのお問い合わせは、0120-267-140（受付 16:00〜22:00／日曜定休）へお願いします。</p>
     </div>
   </section>
 
-  <section class="sec alt" id="privacy">
+  <section class="sec alt">
+    <div class="container">
+      <h2>沿革</h2>
+      <div class="timeline">
+        {history.map((h) => (
+          <div class="tl-item">
+            <div class="tl-date">{h.date}</div>
+            <div class="tl-body">
+              {h.events.map((e) => <p>{e}</p>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="privacy">
     <div class="container">
       <h2>プライバシーポリシー</h2>
-      <p class="body-text">（準備中）お預かりした個人情報の取り扱い方針をここに記載します。公開前に確定文面へ差し替えます。</p>
-    </div>
-  </section>
-
-  <section class="sec" id="tokushoho">
-    <div class="container">
-      <h2>特定商取引法に基づく表記</h2>
-      <p class="body-text">（準備中）特定商取引法に基づく表記をここに記載します。公開前に確定文面へ差し替えます。</p>
+      {privacyPolicy.map((s) => (
+        <div class="clause">
+          {s.heading && <h3>{s.heading}</h3>}
+          {s.paragraphs?.map((p) => <p class="body-text">{p}</p>)}
+          {s.items && (
+            <ul class="list">
+              {s.items.map((i) => <li>{i}</li>)}
+            </ul>
+          )}
+        </div>
+      ))}
     </div>
   </section>
 </SiteLayout>
@@ -52,9 +76,54 @@ const companyRows = [
     font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
     border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 16px;
   }
+
+  /* 会社情報テーブル */
   table { width: 100%; border-collapse: collapse; }
-  th, td { border: 1px solid var(--line); padding: 13px 16px; font-size: 14.5px; color: var(--ink); text-align: left; }
-  th { background: var(--alt-bg); font-weight: 700; width: 120px; }
-  .note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; }
-  .body-text { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0; }
+  th, td { border: 1px solid var(--line); padding: 13px 16px; font-size: 14.5px; color: var(--ink); text-align: left; vertical-align: top; }
+  th { background: var(--alt-bg); font-weight: 700; width: 108px; white-space: nowrap; }
+  .cell-list { margin: 0; padding-left: 1.3em; }
+  .cell-list li { line-height: 1.9; }
+  .cell-note { display: block; margin-top: 6px; font-size: 12px; color: var(--gray-1); line-height: 1.7; }
+  .cell-caution { margin-left: 8px; font-size: 12px; font-weight: 700; color: #C0392B; }
+  .flag {
+    display: inline-block; margin-left: 8px; font-size: 11px; font-weight: 700;
+    color: #C0392B; background: #FDECEC; padding: 2px 8px; border-radius: 999px; vertical-align: middle;
+  }
+  .note { font-size: 12px; color: var(--gray-1); margin: 12px 0 0; line-height: 1.7; }
+
+  /* 沿革タイムライン */
+  .timeline { display: flex; flex-direction: column; }
+  .tl-item { display: grid; grid-template-columns: 84px 1fr; gap: 16px; }
+  .tl-date {
+    font-size: 13px; font-weight: 700; color: var(--navy); white-space: nowrap;
+    text-align: right; padding-bottom: 22px; font-variant-numeric: tabular-nums;
+  }
+  .tl-body {
+    position: relative; padding: 0 0 22px 22px;
+  }
+  .tl-body::before {  /* 縦線 */
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--line); transform: translateX(-50%);
+  }
+  .tl-body::after {  /* 丸（縦線の中心軸に重ねる） */
+    content: ''; position: absolute; left: 0; top: 8px;
+    width: 9px; height: 9px; border-radius: 50%; background: var(--navy);
+    box-shadow: 0 0 0 3px var(--alt-bg); transform: translateX(-50%);
+  }
+  .tl-item:last-child .tl-body::before { bottom: auto; height: 10px; }
+  .tl-item:last-child .tl-body { padding-bottom: 0; }
+  .tl-body p { margin: 0 0 4px; font-size: 14px; line-height: 1.8; color: var(--ink); }
+  .tl-body p:last-child { margin-bottom: 0; }
+
+  /* プライバシーポリシー */
+  .clause { margin-bottom: 22px; }
+  .clause:last-of-type { margin-bottom: 0; }
+  h3 {
+    font-family: var(--font-round); font-weight: 700; font-size: 15.5px; color: var(--ink);
+    margin: 0 0 8px;
+  }
+  .body-text { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0 0 6px; }
+  .body-text:last-child { margin-bottom: 0; }
+  .list { margin: 6px 0 0; padding-left: 1.4em; }
+  .list li { font-size: 14.5px; line-height: 1.9; color: var(--ink); }
 </style>
