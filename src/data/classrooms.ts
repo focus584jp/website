@@ -7,21 +7,16 @@ export interface Classroom {
   walkMinutes: number; // 最寄り駅からの徒歩分数（2026-07-07 全教室実値反映）
   lat: number;         // 「現在地から最寄りの教室」用の座標 ※駅座標の仮値。公開前に教室所在地でジオコーディングして差し替え
   lng: number;
-  address: string;    // 〒＋住所（2026-07-08 現行サイトより実データ反映）
+  address: string;    // 〒＋住所（2026-07-08 現行サイトより実データ反映。ビル名の前は全角スペース）
   tel: string;        // 教室直通番号（050）。共通フリーダイヤルは 0120-267-140
-  schools: string[];  // 対応中学校（現状データなし。掲載時にセクションが自動表示される）
+  schools: string[];  // 対応中学校（未掲載の教室は空。掲載時にセクションが自動表示される）
   hours: string;      // 受付時間
 }
 
 const HOURS = '16:00〜22:00（日曜定休）';
 
+// 並び順（2026-07-09）: 千葉市は西千葉を中心に近い順、千葉市以外は 四街道→五井→妙典
 export const classrooms: Classroom[] = [
-  {
-    slug: 'inage', name: '稲毛教室', region: '千葉市', area: '千葉市稲毛区',
-    nearestStation: 'JR稲毛駅', walkMinutes: 3, lat: 35.6363, lng: 140.0868,
-    address: '〒263-0043 千葉県千葉市稲毛区小仲台6-2-16　統葉第二ビル3階',
-    tel: '050-5370-0360', schools: [], hours: HOURS,
-  },
   {
     slug: 'nishi-chiba', name: '西千葉教室', region: '千葉市', area: '千葉市稲毛区',
     nearestStation: 'JR西千葉駅', walkMinutes: 1, lat: 35.6218, lng: 140.1015,
@@ -29,10 +24,10 @@ export const classrooms: Classroom[] = [
     tel: '050-5358-4457', schools: [], hours: HOURS,
   },
   {
-    slug: 'tsuga', name: '都賀教室', region: '千葉市', area: '千葉市若葉区',
-    nearestStation: 'JR都賀駅', walkMinutes: 1, lat: 35.6322, lng: 140.1428,
-    address: '〒264-0026 千葉県千葉市若葉区西都賀3-1-7　海浜不動産第3ビル2階',
-    tel: '050-5490-8247', schools: [], hours: HOURS,
+    slug: 'inage', name: '稲毛教室', region: '千葉市', area: '千葉市稲毛区',
+    nearestStation: 'JR稲毛駅', walkMinutes: 3, lat: 35.6363, lng: 140.0868,
+    address: '〒263-0043 千葉県千葉市稲毛区小仲台6-2-16　統葉第二ビル3階',
+    tel: '050-5370-0360', schools: [], hours: HOURS,
   },
   {
     slug: 'shin-kemigawa', name: '新検見川教室', region: '千葉市', area: '千葉市花見川区',
@@ -47,6 +42,12 @@ export const classrooms: Classroom[] = [
     tel: '050-5526-9164', schools: ['高洲中', '磯辺中', '高浜中', '稲浜中', '幸町第一中', '真砂中'], hours: HOURS,
   },
   {
+    slug: 'tsuga', name: '都賀教室', region: '千葉市', area: '千葉市若葉区',
+    nearestStation: 'JR都賀駅', walkMinutes: 1, lat: 35.6322, lng: 140.1428,
+    address: '〒264-0026 千葉県千葉市若葉区西都賀3-1-7　海浜不動産第3ビル2階',
+    tel: '050-5490-8247', schools: [], hours: HOURS,
+  },
+  {
     slug: 'soga', name: '蘇我教室', region: '千葉市', area: '千葉市中央区',
     nearestStation: 'JR蘇我駅', walkMinutes: 1, lat: 35.5817, lng: 140.1313,
     address: '〒260-0842 千葉県千葉市中央区南町2-15-3　第三山一ビル4階',
@@ -59,10 +60,10 @@ export const classrooms: Classroom[] = [
     tel: '050-5530-2760', schools: ['有吉中', '泉谷中', 'おゆみ野南中', '生浜中', '誉田中', '白井中', '川戸中', 'ちはら台南中'], hours: HOURS,
   },
   {
-    slug: 'myoden', name: '妙典教室', region: '市川市', area: '市川市',
-    nearestStation: '東京メトロ妙典駅', walkMinutes: 6, lat: 35.6789, lng: 139.9273,
-    address: '〒272-0114 千葉県市川市塩焼2-2-65　櫻井ビル3階',
-    tel: '050-5370-0359', schools: ['妙典中', '第七中', '福栄中', '塩浜学園中'], hours: HOURS,
+    slug: 'yotsukaido', name: '四街道教室', region: '四街道市', area: '四街道市',
+    nearestStation: 'JR四街道駅', walkMinutes: 3, lat: 35.6700, lng: 140.1682,
+    address: '〒284-0044 千葉県四街道市和良比256-102　ラインビル21 3階',
+    tel: '050-5530-0960', schools: [], hours: HOURS,
   },
   {
     slug: 'goi', name: '五井教室', region: '市原市', area: '市原市',
@@ -71,10 +72,10 @@ export const classrooms: Classroom[] = [
     tel: '050-5526-9166', schools: ['五井中', '千種中', '若葉中', '国分寺台中', '国分寺台西中', '八幡中', '東海中'], hours: HOURS,
   },
   {
-    slug: 'yotsukaido', name: '四街道教室', region: '四街道市', area: '四街道市',
-    nearestStation: 'JR四街道駅', walkMinutes: 3, lat: 35.6700, lng: 140.1682,
-    address: '〒284-0044 千葉県四街道市和良比256-102　ラインビル21 3階',
-    tel: '050-5530-0960', schools: [], hours: HOURS,
+    slug: 'myoden', name: '妙典教室', region: '市川市', area: '市川市',
+    nearestStation: '東京メトロ妙典駅', walkMinutes: 6, lat: 35.6789, lng: 139.9273,
+    address: '〒272-0114 千葉県市川市塩焼2-2-65　櫻井ビル3階',
+    tel: '050-5370-0359', schools: ['妙典中', '第七中', '福栄中', '塩浜学園中'], hours: HOURS,
   },
 ];
 

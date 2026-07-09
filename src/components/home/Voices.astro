@@ -1,8 +1,15 @@
 ---
 // 04 保護者さまの声 — 中央拡大カルーセル（前後ボタン・カードタップ・ドット）
-// ※全件仮文面 — 公開前に実物へ差し替え必須
+// ※文面は仮 — 公開前に実物へ差し替え必須。アイコンは設定済み（4番目=父親、他は母親）
+import { Image } from 'astro:assets';
 import SectionHead from '../site/SectionHead.astro';
 import { voices } from '../../data/home';
+import v1 from '../../assets/home/voices/voice-1.png';
+import v2 from '../../assets/home/voices/voice-2.png';
+import v3 from '../../assets/home/voices/voice-3.png';
+import v4 from '../../assets/home/voices/voice-4.png';
+import v5 from '../../assets/home/voices/voice-5.png';
+const avatars = [v1, v2, v3, v4, v5];
 ---
 <section id="voice" class="voice">
   <div class="container">
@@ -13,7 +20,7 @@ import { voices } from '../../data/home';
           {voices.map((v, i) => (
             <div class="card" data-voice-card data-index={i}>
               <div class="meta">
-                <div class="avatar"></div>
+                <span class="avatar"><Image src={avatars[i]} alt="" width={128} height={128} class="avatar-img" loading="lazy" /></span>
                 <div class="names"><span class="who">{v.who}</span><span class="draft">※仮の内容です</span></div>
               </div>
               <p>{v.text}</p>
@@ -36,13 +43,13 @@ import { voices } from '../../data/home';
   .voice { background: var(--alt-bg); }
   .container { max-width: 1160px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 0; }
   .head-wrap { padding: 0 24px; }
-  .carousel { position: relative; max-width: 640px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
+  .carousel { position: relative; max-width: 680px; margin: 0 auto; padding: 0 24px; box-sizing: border-box; }
   .viewport { overflow: hidden; padding: 12px 0; touch-action: pan-y; cursor: grab; }
   .viewport.dragging { cursor: grabbing; }
   .viewport.dragging .card { transition: none; }
   .track { display: flex; align-items: stretch; transition: transform .45s cubic-bezier(.25, .8, .3, 1); }
   .card {
-    flex: 0 0 62%; margin: 0 3%; box-sizing: border-box; background: #fff;
+    flex: 0 0 70%; margin: 0 3%; box-sizing: border-box; background: #fff;
     border: 1px solid var(--line); border-radius: 14px; padding: 22px;
     display: flex; flex-direction: column; gap: 12px; min-height: 170px; cursor: pointer;
     transform: scale(.85); opacity: .5; transition: transform .45s, opacity .45s;
@@ -50,9 +57,12 @@ import { voices } from '../../data/home';
   .card.active { transform: scale(1); opacity: 1; }
   .meta { display: flex; align-items: center; gap: 12px; }
   .avatar {
-    width: 48px; height: 48px; border-radius: 50%;
-    background: repeating-linear-gradient(45deg, #F2F1EE 0 6px, #E7E5E0 6px 12px);
-    border: 1.5px dashed #B4AEA2; flex: none;
+    width: 64px; height: 64px; border-radius: 50%; flex: none; overflow: hidden;
+    background: #F4F1EA; border: 1px solid var(--line);
+  }
+  .avatar-img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center top;
+    display: block; transform: scale(1.32); transform-origin: center 24%;
   }
   .names { display: flex; flex-direction: column; }
   .who { font-size: 14px; font-weight: 700; color: var(--ink); }
@@ -84,8 +94,8 @@ import { voices } from '../../data/home';
   const dots = [...document.querySelectorAll<HTMLElement>('[data-voice-dot]')];
   let idx = 0;
 
-  // カード幅62% + 左右マージン3%×2 = 68%ピッチ。先頭カードの中心を34%位置に置く
-  const baseX = () => -(idx * 0.68 - 0.16) * (viewport?.clientWidth ?? 0);
+  // カード幅70% + 左右マージン3%×2 = 76%ピッチ。先頭カードの中心を38%位置に置く
+  const baseX = () => -(idx * 0.76 - 0.12) * (viewport?.clientWidth ?? 0);
 
   function render(dragPx = 0, animate = true) {
     if (!viewport || !track) return;

@@ -39,6 +39,9 @@ body {
 /* アンカースクロール時のヘッダー分オフセット */
 [id] { scroll-margin-top: 76px; }
 
+/* タップ操作要素のダブルタップ拡大を無効化（誤って拡大されるのを防止。ピンチ拡大は維持） */
+a, button, [role="button"], select { touch-action: manipulation; }
+
 /* --- ナビリンク: ホバーでオレンジ＋下線が左から伸びる --- */
 .nav-hov { position: relative; display: inline-block; cursor: pointer; transition: color .2s; }
 .nav-hov::after {
