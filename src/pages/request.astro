@@ -1,10 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
+import LeadForm from '../components/site/LeadForm.astro';
 import { u } from '../lib/path';
-import { classrooms } from '../data/classrooms';
-
-const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 ---
 <SiteLayout
   title="資料ダウンロード｜学習塾フォーカス"
@@ -12,43 +10,14 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
   fixedCta={false}
 >
   <PageHero
-    eyebrow="DOCUMENT"
+    eyebrow="REQUEST"
     title="資料ダウンロード"
     lead="面倒な住所入力は不要です。携帯電話番号だけで、WEBパンフレットがSMSでお手元のスマホへ今すぐ届きます。（約1分）"
   />
 
   <section class="body">
     <div class="container">
-      <form class="form-card" onsubmit="return false">
-        <label class="f-field">
-          <span>保護者さまのお名前<em>必須</em></span>
-          <input type="text" placeholder="例：佐藤 由美" autocomplete="name" required />
-        </label>
-        <label class="f-field">
-          <span>お子さまの学年<em>必須</em></span>
-          <select required>
-            <option>選択してください</option>
-            {grades.map((g) => <option>{g}</option>)}
-          </select>
-        </label>
-        <label class="f-field">
-          <span>電話番号<em>必須</em></span>
-          <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
-        </label>
-        <label class="f-field">
-          <span>お近くの教室<em>必須</em></span>
-          <select required>
-            <option>選択してください</option>
-            {classrooms.map((c) => <option>{c.name}</option>)}
-          </select>
-        </label>
-        <button type="submit" class="f-submit btn-shine btn3d btn3d-o">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>
-          資料を受け取る（SMSで送信）
-        </button>
-        <p class="f-note">しつこい勧誘のお電話はいたしません。<br />SMSで資料（PDF）のリンクが届くだけです。</p>
-        <p class="f-note draft">※送信機能は準備中です（フォームはまだ動作しません）</p>
-      </form>
+      <LeadForm variant="request" />
     </div>
   </section>
 
@@ -64,7 +33,6 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 <style>
   .body { background: #fff; }
   .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; }
-  .draft { color: #C0392B; font-weight: 700; }
 
   .consult-lead { background: var(--alt-bg); text-align: center; }
   .consult-lead h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 2.6vw, 23px); color: var(--ink); margin: 0 0 12px; }

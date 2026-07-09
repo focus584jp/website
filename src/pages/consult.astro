@@ -1,10 +1,8 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
-import { classrooms } from '../data/classrooms';
+import LeadForm from '../components/site/LeadForm.astro';
 import { phone } from '../data/home';
-
-const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 ---
 <SiteLayout
   title="無料相談のお申し込み｜学習塾フォーカス"
@@ -19,33 +17,7 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 
   <section class="body">
     <div class="container">
-      <form class="form-card" onsubmit="return false">
-        <label class="f-field">
-          <span>保護者さまのお名前<em>必須</em></span>
-          <input type="text" placeholder="例：佐藤 由美" autocomplete="name" required />
-        </label>
-        <label class="f-field">
-          <span>お子さまの学年<em>必須</em></span>
-          <select required>
-            <option>選択してください</option>
-            {grades.map((g) => <option>{g}</option>)}
-          </select>
-        </label>
-        <label class="f-field">
-          <span>電話番号<em>必須</em></span>
-          <input type="tel" placeholder="090-0000-0000" inputmode="numeric" autocomplete="tel" required />
-        </label>
-        <label class="f-field">
-          <span>ご希望の教室<em>必須</em></span>
-          <select required>
-            <option>選択してください</option>
-            {classrooms.map((c) => <option>{c.name}</option>)}
-          </select>
-        </label>
-        <button type="submit" class="f-submit btn3d btn3d-n" style="background:var(--navy);box-shadow:0 5px 0 var(--navy-shadow)">この内容で無料相談を申し込む</button>
-        <p class="f-note">送信後、ご希望の教室からご連絡し、日時を確定します。</p>
-        <p class="f-note draft">※送信機能は準備中です（フォームはまだ動作しません）</p>
-      </form>
+      <LeadForm variant="consult" />
 
       <div class="tel-block">
         <p class="tel-label">お電話でのお申し込みはこちら</p>
@@ -62,7 +34,6 @@ const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
 <style>
   .body { background: #fff; }
   .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; }
-  .draft { color: #C0392B; font-weight: 700; }
 
   .tel-block { text-align: center; margin-top: 34px; }
   .tel-label { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; }

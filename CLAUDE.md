@@ -8,8 +8,8 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 - **全ページhifi実装済み**（2026-07-07。トップ＝`docs/design/トップページ.dc.html`、相性診断＝`docs/design/相性診断.dc.html` が正。下層はワイヤー構造＋トップのトークンで実装）
 - ワイヤーフレーム層（components/wireframe・WireframeLayout・wireframe.css・tokens.css）は廃止済み（git履歴に残っている）
 - 次のタスク:
-  - **問い合わせフォームの送信実装**（資料請求=SMS配布・無料相談予約。送信バックエンドは未定。現在フォームUIのみで「※送信機能は準備中」表記）
-  - 会社概要・プライバシー・特商法の確定文面反映、教室詳細の実データ（住所・電話・対応中学）反映
+  - **問い合わせフォームの送信実装（GAS）**（資料請求 /request=SMS配布・無料相談 /consult=予約。フロントは入力→確認→完了の3ステップ実装済み＝components/site/LeadForm.astro、設計は docs/superpowers/specs/2026-07-10-form-confirm-step-design.md。本番は送信ボタンdisabled＋「※準備中」表記、DEVは ?step=confirm|done で画面確認可）
+  - 教室詳細の実データ残り（教室写真。対応中学・会社概要・プライバシーは反映済み）
 - 成果物の形: Astroビルドが `index.html`＋分離されたCSS/JSを出力する（メインページ=index.html、css/js別ファイルの要件はビルドで担保）
 
 ## 正本ドキュメント（docs/design/）
@@ -33,11 +33,11 @@ src/
   layouts/
     SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
-    site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/SectionHead/FaqList）
+    site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/SectionHead/FaqList/LeadForm）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
   styles/
     site.css        デザイントークン＋共有ボタン＋フォーム（正。docs/design/README.mdのトークンと同期）
-  data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts）。文言・数値・配点はここに集約
+  data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts / forms.ts）。文言・数値・配点はここに集約
   assets/home/      画像（astro:assetsで最適化される）
 ```
 

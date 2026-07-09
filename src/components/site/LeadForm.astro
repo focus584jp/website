@@ -1,0 +1,223 @@
+---
+// フォーム2種共通の3ステップフォーム（入力→確認→完了。ページ内切替）。
+// 文言・バリアント定義は src/data/forms.ts。ベースの見た目は site.css の .form-card / .f-field / .f-submit。
+// 送信バックエンド（GAS）は未接続: 本番は送信ボタンdisabled＋「準備中」表記、DEVのみ完了画面まで進める。
+// 設計: docs/superpowers/specs/2026-07-10-form-confirm-step-design.md
+import { classrooms } from '../../data/classrooms';
+import { grades, leadForms, type LeadFormVariant } from '../../data/forms';
+
+interface Props { variant: LeadFormVariant }
+const { variant } = Astro.props;
+const cfg = leadForms[variant];
+const isDev = import.meta.env.DEV;
+
+const submitClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
+const STEPS = ['入力', '確認', '完了'];
+---
+<div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern}>
+  <ol class="steps" aria-label="お申し込みの手順">
+    {STEPS.map((label, i) => (
+      <li class:list={['step', { 'is-current': i === 0 }]} data-step>
+        <span class="s-num">{i + 1}</span>{label}
+      </li>
+    ))}
+  </ol>
+
+  {/* --- 1. 入力 --- */}
+  <form class="form-card" data-view="input" novalidate tabindex="-1">
+    <label class="f-field" data-field="name">
+      <span>保護者さまのお名前<em>必須</em></span>
+      <input type="text" name="name" placeholder="例：佐藤 由美" autocomplete="name" required />
+      <p class="f-err" hidden>お名前を入力してください</p>
+    </label>
+    <label class="f-field" data-field="grade">
+      <span>お子さまの学年<em>必須</em></span>
+      <select name="grade" required>
+        <option value="">選択してください</option>
+        {grades.map((g) => <option value={g}>{g}</option>)}
+      </select>
+      <p class="f-err" hidden>学年を選択してください</p>
+    </label>
+    <label class="f-field" data-field="phone">
+      <span>{cfg.phoneLabel}<em>必須</em></span>
+      <input type="tel" name="phone" placeholder={cfg.phonePlaceholder} inputmode="numeric" autocomplete="tel" required />
+      <p class="f-err" hidden>{cfg.phoneError}</p>
+    </label>
+    <label class="f-field" data-field="classroom">
+      <span>{cfg.classroomLabel}<em>必須</em></span>
+      <select name="classroom" required>
+        <option value="">選択してください</option>
+        {classrooms.map((c) => <option value={c.name}>{c.name}</option>)}
+      </select>
+      <p class="f-err" hidden>教室を選択してください</p>
+    </label>
+    <button type="submit" class:list={submitClass}>
+      入力内容を確認する
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
+    </button>
+    <p class="f-note" set:html={cfg.note} />
+    {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
+  </form>
+
+  {/* --- 2. 確認 --- */}
+  <div class="form-card" data-view="confirm" hidden tabindex="-1">
+    <p class="confirm-lead">この内容でよろしいですか？</p>
+    <dl class="confirm-list">
+      <div class="row"><dt>保護者さまのお名前</dt><dd data-out="name"></dd></div>
+      <div class="row"><dt>お子さまの学年</dt><dd data-out="grade"></dd></div>
+      <div class="row"><dt>{cfg.phoneLabel}</dt><dd data-out="phone"></dd></div>
+      <div class="row"><dt>{cfg.classroomLabel}</dt><dd data-out="classroom"></dd></div>
+    </dl>
+    <button type="button" class:list={submitClass} data-send disabled={!isDev}>
+      {variant === 'request' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>}
+      {cfg.submitLabel}
+    </button>
+    {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
+    <button type="button" class="back-btn" data-back>← 入力画面に戻って修正する</button>
+  </div>
+
+  {/* --- 3. 完了 --- */}
+  <div class="form-card done-view" data-view="done" hidden tabindex="-1">
+    <svg class="done-ic" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+    <p class="done-title">{cfg.doneTitle}</p>
+    <p class="done-body">{cfg.doneBody}</p>
+  </div>
+</div>
+
+<style>
+  .lead-form { scroll-margin-top: 84px; }
+  [data-view]:focus { outline: none; }
+  /* .form-card の display:flex が hidden 属性（UAスタイル）に勝ってしまうため明示する */
+  [data-view][hidden] { display: none; }
+
+  /* ステップ表示 */
+  .steps { list-style: none; display: flex; justify-content: center; align-items: center; gap: 10px; margin: 0 0 20px; padding: 0; }
+  .step { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--gray-1); }
+  .step:not(:first-child)::before { content: ""; width: 18px; height: 1.5px; background: var(--line); margin-right: 10px; }
+  .s-num {
+    width: 22px; height: 22px; border-radius: 50%; background: #E3E9F0; color: var(--muted);
+    display: grid; place-items: center; font-size: 12px; font-weight: 800;
+  }
+  .step.is-current { color: var(--navy); }
+  .step.is-current .s-num { background: var(--navy); color: #fff; }
+  .step.is-done .s-num { background: var(--orange); color: #fff; }
+
+  /* 紺バリアント（.f-submit のデフォルトは橙） */
+  .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+
+  /* バリデーションエラー */
+  .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
+  .f-field.is-error :is(input, select) { border-color: #C0392B; }
+
+  .note-draft { color: #C0392B; font-weight: 700; }
+
+  /* 確認画面 */
+  .confirm-lead { font-size: 16.5px; font-weight: 800; color: var(--ink); text-align: center; margin: 0; }
+  .confirm-list { margin: 0; display: flex; flex-direction: column; }
+  .confirm-list .row { display: flex; flex-direction: column; gap: 2px; padding: 12px 2px; border-bottom: 1px solid var(--line); }
+  .confirm-list .row:first-child { padding-top: 0; }
+  .confirm-list dt { font-size: 12.5px; font-weight: 700; color: var(--muted); }
+  .confirm-list dd { margin: 0; font-size: 17px; font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
+  .back-btn {
+    background: none; border: none; cursor: pointer; padding: 6px;
+    font: 700 14px var(--font-body); color: var(--navy); text-decoration: underline; text-underline-offset: 3px;
+  }
+
+  /* 完了画面 */
+  .done-view { text-align: center; align-items: center; gap: 12px; padding-top: clamp(30px, 5vw, 40px); padding-bottom: clamp(30px, 5vw, 40px); }
+  .done-ic { color: var(--orange); }
+  .done-title { font-family: var(--font-round); font-weight: 900; font-size: 20px; color: var(--ink); margin: 0; }
+  .done-body { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0; max-width: 400px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lead-form]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('form[data-view="input"]');
+    const confirmView = root.querySelector<HTMLElement>('[data-view="confirm"]');
+    const doneView = root.querySelector<HTMLElement>('[data-view="done"]');
+    if (!form || !confirmView || !doneView) return;
+    const views = { input: form, confirm: confirmView, done: doneView };
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    const phonePattern = new RegExp(root.dataset.phonePattern ?? '');
+
+    const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
+    // 全角数字→半角に直してから数字だけ取り出す（判定・表示は正規化後の値で行う）
+    const toHalf = (s: string) => s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+    const phoneDigits = () => toHalf(field('phone').value).replace(/\D/g, '');
+    const fmtPhone = (d: string) =>
+      d.length === 11 ? `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
+      : d.length === 10 ? `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6)}`
+      : d;
+
+    function setError(name: string, on: boolean) {
+      const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
+      wrap?.classList.toggle('is-error', on);
+      const err = wrap?.querySelector<HTMLElement>('.f-err');
+      if (err) err.hidden = !on;
+    }
+
+    function validate(): boolean {
+      const checks: Array<[string, boolean]> = [
+        ['name', field('name').value.trim().length > 0],
+        ['grade', field('grade').value !== ''],
+        ['phone', phonePattern.test(phoneDigits())],
+        ['classroom', field('classroom').value !== ''],
+      ];
+      let firstBad: string | null = null;
+      for (const [name, ok] of checks) {
+        setError(name, !ok);
+        if (!ok) firstBad ??= name;
+      }
+      if (firstBad) field(firstBad).focus();
+      return !firstBad;
+    }
+
+    function fillConfirm() {
+      const values: Record<string, string> = {
+        name: field('name').value.trim(),
+        grade: field('grade').value,
+        phone: fmtPhone(phoneDigits()),
+        classroom: field('classroom').value,
+      };
+      for (const [k, v] of Object.entries(values)) {
+        const dd = confirmView!.querySelector<HTMLElement>(`[data-out="${k}"]`);
+        if (dd) dd.textContent = v;
+      }
+    }
+
+    const ORDER = ['input', 'confirm', 'done'] as const;
+    function show(name: (typeof ORDER)[number]) {
+      const cur = ORDER.indexOf(name);
+      ORDER.forEach((k, i) => {
+        views[k].hidden = k !== name;
+        steps[i]?.classList.toggle('is-current', i === cur);
+        steps[i]?.classList.toggle('is-done', i < cur);
+      });
+      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      views[name].focus({ preventScroll: true });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      fillConfirm();
+      show('confirm');
+    });
+    confirmView.querySelector('[data-back]')?.addEventListener('click', () => show('input'));
+    // GAS接続時: ここで fetch → 成功したら show('done') に差し替える（specの「GAS接続時のメモ」参照）
+    confirmView.querySelector('[data-send]')?.addEventListener('click', () => show('done'));
+
+    // DEV専用: ?step=confirm|done でサンプル値を流し込んで直接表示（動作確認用。本番ビルドでは除去される）
+    if (import.meta.env.DEV) {
+      const step = new URLSearchParams(location.search).get('step');
+      if (step === 'confirm' || step === 'done') {
+        field('name').value = '佐藤 由美';
+        field('grade').value = '中2';
+        field('phone').value = '０９０-1234-5678';
+        (field('classroom') as HTMLSelectElement).selectedIndex = 1;
+        fillConfirm();
+        show(step);
+      }
+    }
+  });
+</script>
