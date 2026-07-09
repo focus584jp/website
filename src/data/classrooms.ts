@@ -21,19 +21,19 @@ export const classrooms: Classroom[] = [
     slug: 'nishi-chiba', name: '西千葉教室', region: '千葉市', area: '千葉市稲毛区',
     nearestStation: 'JR西千葉駅', walkMinutes: 1, lat: 35.6218, lng: 140.1015,
     address: '〒263-0022 千葉県千葉市稲毛区弥生町2-21　ポップスクエア西千葉ビル3階',
-    tel: '050-5358-4457', schools: [], hours: HOURS,
+    tel: '050-5358-4457', schools: ['轟町中', '緑町中', '都賀中', '新宿中', '千葉大学教育学部附属中'], hours: HOURS,
   },
   {
     slug: 'inage', name: '稲毛教室', region: '千葉市', area: '千葉市稲毛区',
     nearestStation: 'JR稲毛駅', walkMinutes: 3, lat: 35.6363, lng: 140.0868,
     address: '〒263-0043 千葉県千葉市稲毛区小仲台6-2-16　統葉第二ビル3階',
-    tel: '050-5370-0360', schools: [], hours: HOURS,
+    tel: '050-5370-0360', schools: ['稲毛中', '小中台中', '緑が丘中', '朝日ヶ丘中', '千草台中', '草野中', '千葉大学教育学部附属中'], hours: HOURS,
   },
   {
     slug: 'shin-kemigawa', name: '新検見川教室', region: '千葉市', area: '千葉市花見川区',
     nearestStation: 'JR新検見川駅', walkMinutes: 1, lat: 35.6624, lng: 140.0641,
     address: '〒262-0022 千葉県千葉市花見川区南花園2-2-24　篠田ビル2階',
-    tel: '050-5526-1648', schools: [], hours: HOURS,
+    tel: '050-5526-1648', schools: ['花園中', '幕張中', '朝日ヶ丘中', '真砂中'], hours: HOURS,
   },
   {
     slug: 'inage-kaigan', name: '稲毛海岸教室', region: '千葉市', area: '千葉市美浜区',
@@ -45,7 +45,7 @@ export const classrooms: Classroom[] = [
     slug: 'tsuga', name: '都賀教室', region: '千葉市', area: '千葉市若葉区',
     nearestStation: 'JR都賀駅', walkMinutes: 1, lat: 35.6322, lng: 140.1428,
     address: '〒264-0026 千葉県千葉市若葉区西都賀3-1-7　海浜不動産第3ビル2階',
-    tel: '050-5490-8247', schools: [], hours: HOURS,
+    tel: '050-5490-8247', schools: ['若松中', 'みつわ台中', '貝塚中', '山王中', '千城台南中', '千城台西中', '加曽利中', '椿森中', '旭中'], hours: HOURS,
   },
   {
     slug: 'soga', name: '蘇我教室', region: '千葉市', area: '千葉市中央区',
@@ -63,7 +63,7 @@ export const classrooms: Classroom[] = [
     slug: 'yotsukaido', name: '四街道教室', region: '四街道市', area: '四街道市',
     nearestStation: 'JR四街道駅', walkMinutes: 3, lat: 35.6700, lng: 140.1682,
     address: '〒284-0044 千葉県四街道市和良比256-102　ラインビル21 3階',
-    tel: '050-5530-0960', schools: [], hours: HOURS,
+    tel: '050-5530-0960', schools: ['四街道中', '四街道北中', '四街道西中', '旭中', '山王中', '若松中', '千代田中'], hours: HOURS,
   },
   {
     slug: 'goi', name: '五井教室', region: '市原市', area: '市原市',
