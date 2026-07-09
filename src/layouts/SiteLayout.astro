@@ -11,9 +11,9 @@ import FixedCta from '../components/site/FixedCta.astro';
 import DiagnosisPopup from '../components/site/DiagnosisPopup.astro';
 import { u } from '../lib/path';
 
-// popup: 相性診断ポップアップ（診断・フォーム系ページでは出さない）
+// popup: 相性診断ポップアップ（トップページのみ出す。デフォルトは非表示）
 // fixedCta: SP下部固定バー＋PC右端縦書きCTA（診断ページでは結果カードのCTAと重複するため出さない）
-const { title, description = '', popup = true, fixedCta = true } = Astro.props;
+const { title, description = '', popup = false, fixedCta = true } = Astro.props;
 // OGP用の絶対URL（LINE・SNS共有時に必須）
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
