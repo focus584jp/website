@@ -75,20 +75,19 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
   }
   .near-btn:hover { background: var(--navy); color: #fff; }
 
-  /* フォルダタブ型: アクティブは白く前面に、下のパネルと繋がる。非アクティブはグレーで奥に */
-  .tabs-card { background: transparent; }
-  .tablist { display: flex; }
+  /* フォルダタブ（上品版）: 選択＝白く浮き出し＋上に細ネイビー線＋やわらかい影＋パネルと接続。非選択＝薄グレーで奥に */
+  .tabs-card { background: transparent; padding-top: 4px; }
+  .tablist { display: flex; gap: 6px; align-items: flex-end; }
   .tab {
-    flex: 1; padding: 14px 8px; background: var(--alt-bg);
+    flex: 1; padding: 13px 8px 15px; background: var(--alt-bg);
     border: 1.5px solid var(--line); border-bottom: none; border-radius: 12px 12px 0 0;
-    font-family: var(--font-body); font-size: 17px; font-weight: 800; color: var(--muted);
-    cursor: pointer; transition: color .25s, background .25s;
+    font-family: var(--font-body); font-size: 16px; font-weight: 800; color: var(--muted);
+    cursor: pointer; transition: color .25s, background .25s, padding .2s;
   }
-  .tab + .tab { margin-left: -1.5px; }
   .tab.active {
-    background: #fff; color: var(--navy);
+    background: #fff; color: var(--navy); padding-top: 15px; padding-bottom: 16px;
     position: relative; z-index: 2;
-    box-shadow: inset 0 3px 0 var(--navy), 0 -2px 6px rgba(20, 42, 84, .07);
+    box-shadow: inset 0 3px 0 var(--navy), 0 -4px 10px rgba(20, 42, 84, .07);
   }
 
   .panels {

@@ -60,10 +60,9 @@ const avatars = [v1, v2, v3, v4, v5];
     position: relative; width: 64px; height: 64px; border-radius: 50%; flex: none; overflow: hidden;
     background: #F4F1EA; border: 1px solid var(--line);
   }
-  /* 円より一回り大きく置いて余白をトリミング（transform拡大は使わず＝ぼやけ防止） */
+  /* 元画像を頭位置基準でトリミング済みなので、そのまま円に収める */
   .avatar-img {
-    position: absolute; width: 84px; height: 84px; left: -10px; top: -7px;
-    object-fit: cover; display: block;
+    width: 100%; height: 100%; object-fit: cover; display: block;
   }
   .names { display: flex; flex-direction: column; }
   .who { font-size: 14px; font-weight: 700; color: var(--ink); }
