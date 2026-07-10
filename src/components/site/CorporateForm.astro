@@ -1,0 +1,184 @@
+---
+// 企業・お取引向けの問い合わせフォーム（会社概要ページ内）。
+// 送信先は lead-api（form: 'corporate'）→ 中央管理表「企業問い合わせ」シート＋Slack通知。
+// 保護者向けのLeadFormと違い確認ステップなしの1段構成（送信中スピナー→紙飛行機→完了表示は共通の作法）。
+import { LEAD_API_URL } from '../../data/forms';
+
+const isDev = import.meta.env.DEV;
+const formEnabled = isDev || LEAD_API_URL !== '';
+---
+<div class="corp-form" data-corp-form data-api={LEAD_API_URL}>
+  <form class="form-card" data-view="input" novalidate>
+    <label class="f-field" data-field="company">
+      <span>会社名<em>必須</em></span>
+      <input type="text" name="company" placeholder="例：株式会社◯◯" autocomplete="organization" required />
+      <p class="f-err" hidden>会社名を入力してください</p>
+    </label>
+    <label class="f-field" data-field="person">
+      <span>ご担当者名<em>必須</em></span>
+      <input type="text" name="person" placeholder="例：佐藤 太郎" autocomplete="name" required />
+      <p class="f-err" hidden>ご担当者名を入力してください</p>
+    </label>
+    <label class="f-field" data-field="email">
+      <span>メールアドレス<em>必須</em></span>
+      <input type="email" name="email" placeholder="例：info@example.co.jp" autocomplete="email" required />
+      <p class="f-err" hidden>メールアドレスの形式を確認してください</p>
+    </label>
+    <label class="f-field" data-field="phone">
+      <span>電話番号（任意）</span>
+      <input type="tel" name="phone" placeholder="例：043-000-0000" inputmode="numeric" autocomplete="tel" />
+      <p class="f-err" hidden>電話番号（10〜11桁）を確認してください</p>
+    </label>
+    <label class="f-field" data-field="message">
+      <span>お問い合わせ内容<em>必須</em></span>
+      <textarea name="message" rows="6" maxlength="1000" placeholder="お問い合わせの内容をご記入ください（1000文字以内）" required></textarea>
+      <p class="f-err" hidden>お問い合わせ内容を入力してください</p>
+    </label>
+    <div class="hp-wrap" aria-hidden="true">
+      <input type="text" name="hp" tabindex="-1" autocomplete="off" />
+    </div>
+    <button type="submit" class="f-submit navy" data-send disabled={!formEnabled}>
+      <span class="send-layer send-idle">送信する</span>
+      <span class="send-layer send-busy" hidden><span class="spinner" aria-hidden="true"></span>送信しています…</span>
+      <span class="send-layer send-fly" hidden aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+      </span>
+    </button>
+    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です</p>}
+    <p class="f-note send-error" data-send-error hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
+    <p class="f-note">ご返信はメールにて差し上げます。</p>
+  </form>
+
+  <div class="form-card done-view" data-view="done" hidden tabindex="-1">
+    <svg class="done-ic" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+    <p class="done-title">お問い合わせを受け付けました</p>
+    <p class="done-body">内容を確認のうえ、ご入力いただいたメールアドレスあてにご連絡いたします。</p>
+  </div>
+</div>
+
+<style>
+  [data-view][hidden] { display: none; }
+  .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
+  .f-field.is-error :is(input, textarea) { border-color: #C0392B; }
+  .note-draft, .send-error { color: #C0392B; font-weight: 700; }
+
+  .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .is-sending { background: var(--gray-1); box-shadow: 0 5px 0 #6E7A8C; cursor: default; }
+  .send-layer { display: flex; align-items: center; justify-content: center; gap: 9px; }
+  .send-layer[hidden] { display: none; }
+  .spinner {
+    width: 17px; height: 17px; border-radius: 50%; flex: none;
+    border: 2.5px solid rgba(255, 255, 255, .35); border-top-color: #fff;
+    animation: cf-spin .7s linear infinite;
+  }
+  @keyframes cf-spin { to { transform: rotate(360deg); } }
+  .send-fly svg { animation: cf-fly .7s ease-in forwards; }
+  @keyframes cf-fly {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    15% { transform: translate(-6px, 3px) rotate(8deg); opacity: 1; }
+    100% { transform: translate(130px, -80px) rotate(-14deg); opacity: 0; }
+  }
+
+  form[data-view='input'] { position: relative; }
+  .hp-wrap { position: absolute; left: -9999px; top: 0; width: 1px; height: 1px; overflow: hidden; }
+
+  .done-view { text-align: center; align-items: center; gap: 12px; padding-top: 36px; padding-bottom: 36px; }
+  .done-ic { color: var(--success-text); }
+  .done-title { font-family: var(--font-round); font-weight: 900; font-size: 20px; color: var(--ink); margin: 0; }
+  .done-body { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0; max-width: 400px; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-corp-form]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('form[data-view="input"]');
+    const doneView = root.querySelector<HTMLElement>('[data-view="done"]');
+    const errEl = root.querySelector<HTMLElement>('[data-send-error]');
+    const sendBtn = root.querySelector<HTMLButtonElement>('[data-send]');
+    if (!form || !doneView || !sendBtn) return;
+
+    const api = root.dataset.api ?? '';
+    const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement;
+    const toHalf = (s: string) => s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    const sendState = (state: 'idle' | 'busy' | 'fly') => {
+      sendBtn.querySelectorAll<HTMLElement>('.send-layer').forEach((el) => {
+        el.hidden = !el.classList.contains(`send-${state}`);
+      });
+      sendBtn.classList.toggle('is-sending', state !== 'idle');
+    };
+
+    function setError(name: string, on: boolean) {
+      const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
+      wrap?.classList.toggle('is-error', on);
+      const err = wrap?.querySelector<HTMLElement>('.f-err');
+      if (err) err.hidden = !on;
+    }
+
+    function validate(): boolean {
+      const phoneDigits = toHalf(field('phone').value).replace(/\D/g, '');
+      const checks: Array<[string, boolean]> = [
+        ['company', field('company').value.trim().length > 0],
+        ['person', field('person').value.trim().length > 0],
+        ['email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field('email').value.trim())],
+        ['phone', phoneDigits === '' || /^0\d{9,10}$/.test(phoneDigits)], // 任意
+        ['message', field('message').value.trim().length > 0],
+      ];
+      let firstBad: string | null = null;
+      for (const [name, ok] of checks) {
+        setError(name, !ok);
+        if (!ok) firstBad ??= name;
+      }
+      if (firstBad) field(firstBad).focus();
+      return !firstBad;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+      sendBtn.disabled = true;
+      if (errEl) errEl.hidden = true;
+      sendState('busy');
+
+      let ok = true;
+      if (api) {
+        try {
+          const payload = {
+            form: 'corporate',
+            company: field('company').value.trim(),
+            person: field('person').value.trim(),
+            email: field('email').value.trim(),
+            phone: toHalf(field('phone').value).replace(/\D/g, ''),
+            message: field('message').value.trim(),
+            env: location.hostname === 'focus584jp.github.io' ? 'production' : 'staging',
+            hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
+          };
+          const res = await fetch(api, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          });
+          ok = res.ok && (await res.json()).ok === true;
+        } catch {
+          ok = false;
+        }
+      } else {
+        await wait(900); // API未設定（DEVデモ）
+      }
+
+      if (!ok) {
+        sendState('idle');
+        sendBtn.disabled = false;
+        if (errEl) errEl.hidden = false;
+        return;
+      }
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        sendState('fly');
+        await wait(700);
+      }
+      form.hidden = true;
+      doneView.hidden = false;
+      doneView.focus({ preventScroll: true });
+    });
+  });
+</script>

@@ -11,6 +11,7 @@ export interface CompanyRow {
   note?: string;
   /** 値の横に赤字（※付き）で添える注意書き */
   caution?: string;
+  href?: string; // 指定時は value をリンクにする
   /** 未確定・要確認の項目に付けるバッジ文言 */
   flag?: string;
 }
@@ -33,7 +34,7 @@ export const companyInfo: CompanyRow[] = [
   },
   { label: '従業員数', value: '72名（2026年7月現在）' },
   { label: '法人番号', value: '5040003014690' },
-  { label: '代表電話', value: '050-5444-4127', caution: '営業・セールスのお電話はご遠慮ください', note: '受付 10:00〜17:00（土日祝定休）' },
+  { label: 'お問い合わせ', value: '企業・お取引に関するお問い合わせはこちら', href: '#contact', note: '営業のご案内もフォームからお願いします（お電話でのご案内はご遠慮ください）' },
 ];
 
 export interface HistoryItem {
