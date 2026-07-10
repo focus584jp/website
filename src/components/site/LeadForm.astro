@@ -4,19 +4,21 @@
 // 送信バックエンド（GAS）は未接続: 本番は送信ボタンdisabled＋「準備中」表記、DEVのみ完了画面まで進める。
 // 設計: docs/superpowers/specs/2026-07-10-form-confirm-step-design.md
 import { classrooms } from '../../data/classrooms';
-import { grades, leadForms, type LeadFormVariant } from '../../data/forms';
+import { grades, leadForms, LEAD_API_URL, type LeadFormVariant } from '../../data/forms';
 
 interface Props { variant: LeadFormVariant }
 const { variant } = Astro.props;
 const cfg = leadForms[variant];
 const isDev = import.meta.env.DEV;
+// APIが未設定の間は本番の送信ボタンをdisabled＋「準備中」表記のまま公開できる
+const formEnabled = isDev || LEAD_API_URL !== '';
 
 // 「次へ進む」はアウトライン（白地＋紺枠）で統一し、塗り＋立体3D（request=橙/consult=紺）は確認画面の最終送信ボタンだけに使う
 const nextClass = ['f-submit', 'flat'];
 const sendClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
 const STEPS = ['入力', '確認', '完了'];
 ---
-<div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern}>
+<div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern} data-variant={variant} data-api={LEAD_API_URL}>
   <ol class="steps" aria-label="お申し込みの手順">
     {STEPS.map((label, i) => (
       <li class:list={['step', { 'is-current': i === 0 }]} data-step>
@@ -56,12 +58,16 @@ const STEPS = ['入力', '確認', '完了'];
       </select>
       <p class="f-err" hidden>教室を選択してください</p>
     </label>
+    {/* honeypot: botよけの隠しフィールド（人間には見えない。入力されていたらサーバ側でspam扱い） */}
+    <div class="hp-wrap" aria-hidden="true">
+      <input type="text" name="hp" tabindex="-1" autocomplete="off" />
+    </div>
     <button type="submit" class:list={nextClass}>
       入力内容を確認する
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
     </button>
     {cfg.note && <p class="f-note" set:html={cfg.note} />}
-    {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
+    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
   </form>
 
   {/* --- 2. 確認 --- */}
@@ -73,7 +79,7 @@ const STEPS = ['入力', '確認', '完了'];
       <div class="row"><dt>{cfg.phoneLabel}</dt><dd data-out="phone"></dd></div>
       <div class="row"><dt>{cfg.classroomLabel}</dt><dd data-out="classroom"></dd></div>
     </dl>
-    <button type="button" class:list={sendClass} data-send disabled={!isDev}>
+    <button type="button" class:list={sendClass} data-send disabled={!formEnabled}>
       <span class="send-layer send-idle">
         {variant === 'request' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>}
         {cfg.submitLabel}
@@ -85,7 +91,8 @@ const STEPS = ['入力', '確認', '完了'];
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
       </span>
     </button>
-    {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
+    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
+    <p class="f-note send-error" data-send-error hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
     <button type="button" class="back-btn" data-back>← 入力画面に戻って修正する</button>
   </div>
 
@@ -131,6 +138,11 @@ const STEPS = ['入力', '確認', '完了'];
   .f-field.is-error :is(input, select) { border-color: #C0392B; }
 
   .note-draft { color: #C0392B; font-weight: 700; }
+  .send-error { color: #C0392B; font-weight: 700; }
+
+  /* honeypot: 視覚・タブ順から隠す（display:noneだとbotが埋めないことがあるため画面外へ） */
+  form[data-view='input'] { position: relative; }
+  .hp-wrap { position: absolute; left: -9999px; top: 0; width: 1px; height: 1px; overflow: hidden; }
 
   /* 確認画面 */
   .confirm-lead { font-size: 16.5px; font-weight: 800; color: var(--ink); text-align: center; margin: 0; }
@@ -274,13 +286,53 @@ const STEPS = ['入力', '確認', '完了'];
     const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
     backBtn?.addEventListener('click', () => show('input'));
+
+    const api = root.dataset.api ?? '';
+    const variant = root.dataset.variant ?? '';
+    const errEl = confirmView.querySelector<HTMLElement>('[data-send-error]');
+
     sendBtn?.addEventListener('click', async () => {
       // 二重送信防止: 押した瞬間に無効化してスピナー表示（戻るも止める）
       sendBtn.disabled = true;
       if (backBtn) backBtn.disabled = true;
+      if (errEl) errEl.hidden = true;
       sendState('busy');
-      // GAS接続時: この擬似待ちを fetch に差し替える（失敗時は sendState('idle')＋disabled解除＋エラー表示）
-      await wait(900);
+
+      let ok = true;
+      if (api) {
+        // lead-api（GAS Web App）へ送信。text/plain は CORS プリフライト回避の定石
+        try {
+          const payload = {
+            form: variant,
+            name: field('name').value.trim(),
+            grade: field('grade').value,
+            phone: phoneDigits(),
+            classroom: field('classroom').value,
+            env: location.hostname === 'focus584jp.github.io' ? 'production' : 'staging',
+            hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
+          };
+          const res = await fetch(api, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          });
+          ok = res.ok && (await res.json()).ok === true;
+        } catch {
+          ok = false;
+        }
+      } else {
+        await wait(900); // API未設定（DEVデモ）: 成功の体で完了画面まで確認できる
+      }
+
+      if (!ok) {
+        // 失敗: ボタンを戻してエラー表示（そのまま再試行できる）
+        sendState('idle');
+        sendBtn.disabled = false;
+        if (backBtn) backBtn.disabled = false;
+        if (errEl) errEl.hidden = false;
+        return;
+      }
+
       // 送信完了 → 紙飛行機が飛んで完了画面へ
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         sendState('fly');

@@ -1,7 +1,13 @@
 // フォーム2種（資料請求 /request・無料相談 /consult）の文言・バリデーション定義。
 // 表示・判定は components/site/LeadForm.astro が行う。
 
-export const grades = ['小5', '小6', '中1', '中2', '中3', '高校生'];
+export const grades = ['小5', '小6', '中1', '中2', '中3', 'その他'];
+
+/**
+ * リード受付API（focus/lead-api の GAS Web App /exec URL）。
+ * 空文字の間は送信ボタンが disabled＋「※準備中」表記になる（デプロイ後にURLを設定して有効化）。
+ */
+export const LEAD_API_URL = '';
 
 export type LeadFormVariant = 'request' | 'consult';
 
@@ -31,7 +37,8 @@ export const leadForms: Record<LeadFormVariant, LeadFormCopy> = {
     phoneError: '090などで始まる携帯電話番号（11桁）を入力してください',
     submitLabel: '資料を受け取る',
     doneTitle: '送信しました',
-    doneBody: '携帯電話番号あてに、資料（PDF）のリンクをお送りしました。数分待っても届かない場合は、番号をご確認のうえ、もう一度お試しください。',
+    // SMS自動送信は未実装（資料完成・プロバイダ選定後に対応）。当面は教室からの折り返し案内
+    doneBody: 'お申し込みを受け付けました。ご入力いただいた携帯電話番号あてに、担当教室より資料のご案内をお送りします。',
     theme: 'orange',
   },
   consult: {
