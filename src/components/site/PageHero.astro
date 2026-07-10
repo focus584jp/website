@@ -1,9 +1,13 @@
 ---
 // 下層ページの見出しバンド: 英字ラベル → h1（黄色蛍光ペンSVG）→ リード文（任意）
+// 「ノートの1ページ」モチーフ: 方眼地＋スパイラル綴じ（パンチ穴＋ワイヤー）＋文房具の線画（鉛筆・三角定規）
+// リード文はページ次第（フォーム系=安心材料として載せる／内容が直下と重複するページ=省略）
 interface Props { eyebrow: string; title: string; lead?: string }
 const { eyebrow, title, lead } = Astro.props;
 ---
 <div class="page-hero">
+  <svg class="deco deco-pencil" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg>
+  <svg class="deco deco-ruler" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20 V4 L20 20 Z"></path><path d="M8.5 16 V10.5 L14 16 Z"></path></svg>
   <p class="eyebrow">{eyebrow}</p>
   <h1>
     <span class="title-wrap">
@@ -18,9 +22,24 @@ const { eyebrow, title, lead } = Astro.props;
 
 <style>
   .page-hero {
-    text-align: center; background: var(--alt-bg);
-    padding: clamp(36px, 5.5vw, 56px) 24px;
+    position: relative; overflow: hidden; text-align: center;
+    background-color: var(--alt-bg);
+    /* 方眼ノート地＋上端にスパイラル綴じ（パンチ穴＋ワイヤーの弧）をbackgroundで重ねる */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='24' viewBox='0 0 38 24'%3E%3Cellipse cx='19' cy='18' rx='3.4' ry='2.5' fill='rgba(20,55,120,0.16)'/%3E%3Cpath d='M15.4 18 C15.4 6.5, 22.6 6.5, 22.6 18' fill='none' stroke='rgba(44,85,160,0.5)' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E"),
+      linear-gradient(rgba(74, 122, 204, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
+    background-repeat: repeat-x, repeat, repeat;
+    background-position: center 5px, 0 0, 0 0;
+    background-size: 38px 24px, 22px 22px, 22px 22px;
+    padding: clamp(50px, 7.5vw, 70px) 24px clamp(36px, 5.5vw, 56px);
   }
+
+  /* 文房具の線画（うっすら。テキストの外側に配置） */
+  .deco { position: absolute; opacity: .32; }
+  .deco-pencil { width: 52px; height: 52px; left: 14px; bottom: 14px; transform: rotate(-18deg); }
+  .deco-ruler { width: 50px; height: 50px; right: 14px; top: 34px; transform: rotate(10deg); }
+
   .eyebrow {
     font: 800 clamp(11px, 1.3vw, 13px) var(--font-round);
     color: var(--orange); letter-spacing: .32em; margin: 0 0 6px;
