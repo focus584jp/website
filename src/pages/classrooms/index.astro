@@ -12,11 +12,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
   title="教室一覧｜学習塾フォーカス"
   description="学習塾フォーカスの教室一覧。千葉市（稲毛・西千葉・都賀・新検見川・稲毛海岸・蘇我・鎌取）を中心に、市川・市原・四街道の全10教室。"
 >
-  <PageHero
-    eyebrow="CLASSROOMS"
-    title="教室一覧"
-    lead="千葉市を中心に10教室。すべて駅から徒歩圏内です。"
-  />
+  <PageHero eyebrow="CLASSROOMS" title="教室一覧" deco="classroom" />
 
   <section class="list">
     <div class="container">
@@ -27,18 +23,15 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
             {classrooms.filter((c) => c.region === r).map((c) => (
               <a class="room" href={u(`/classrooms/${c.slug}`)}>
                 <div class="room-main">
-                  <p class="room-name">{c.name}</p>
+                  <p class="room-name">{c.name.replace(/教室$/, '')}</p>
                   <p class="room-access">{stationLabel(c)} 徒歩{c.walkMinutes}分</p>
                 </div>
-                <span class="arrow" aria-hidden="true">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
-                </span>
+                <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
               </a>
             ))}
           </div>
         </div>
       ))}
-      <p class="note">※徒歩分数は目安です</p>
     </div>
   </section>
 
@@ -53,21 +46,22 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
     font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
     border-left: 4px solid var(--navy); padding-left: 12px; margin: 0 0 14px;
   }
-  .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  /* スマホ2列・PC3列のコンパクトカード（左の紺アクセントで「押せる」ことを示す） */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .room {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0;
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px;
-    text-decoration: none; box-shadow: var(--shadow-card); transition: border-color .2s;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    min-width: 0; background: #fff;
+    border: 1px solid var(--line); border-left: 4px solid var(--navy); border-radius: 12px;
+    padding: 13px 14px; text-decoration: none; box-shadow: var(--shadow-card);
+    transition: border-color .2s, transform .15s;
   }
-  .room:hover { border-color: var(--navy); }
-  .room:hover .arrow svg { transform: translateX(3px); }
-  .room-name { font-family: var(--font-round); font-size: 17px; font-weight: 700; color: var(--ink); margin: 0; }
-  .room-access { font-size: 13.5px; color: var(--muted); margin: 4px 0 0; }
-  .arrow {
-    flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--navy);
-    display: grid; place-items: center;
+  .room:hover { border-color: var(--navy); transform: translateY(-2px); }
+  .room:active { transform: translateY(0); }
+  .room-name { font-family: var(--font-round); font-size: 16.5px; font-weight: 900; color: var(--ink); margin: 0; }
+  .room-access { font-size: 12px; font-weight: 700; color: var(--muted); margin: 5px 0 0; white-space: nowrap; }
+  .ar {
+    flex: none; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--navy); display: grid; place-items: center;
   }
-  .arrow svg { transition: transform .2s; }
-  .note { font-size: 12px; color: var(--gray-1); margin: 4px 0 0; }
-  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px) { .grid { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
 </style>

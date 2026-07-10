@@ -35,7 +35,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
                     <span class="room-name">{r.name}</span>
                     <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
                   </div>
-                  <span class="ar">→</span>
+                  <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
                 </a>
               ))}
             </div>
@@ -51,7 +51,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
                     </div>
                     <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
                   </div>
-                  <span class="ar">→</span>
+                  <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
                 </a>
               ))}
             </div>
@@ -114,7 +114,10 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
   @media (min-width: 768px) { .room-name { font-size: 15px; } }
   .chip { font-size: 12px; font-weight: 700; color: var(--navy); background: var(--blue-pale); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
   .room-access { font-size: 12px; color: var(--muted); line-height: 1.7; }
-  .room .ar { flex: none; color: var(--navy); font-weight: 900; font-size: 16px; }
+  .room .ar {
+    flex: none; width: 24px; height: 24px; border-radius: 50%;
+    background: var(--navy); display: grid; place-items: center;
+  }
 </style>
 
 <script>

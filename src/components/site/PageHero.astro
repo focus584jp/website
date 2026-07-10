@@ -5,7 +5,7 @@
 // リード文はページ次第（フォーム系=安心材料として載せる／内容が直下と重複するページ=省略）
 import flagLine from '../../assets/focus-flag-line.svg?raw'; // FOCUS旗ロゴの線画（design-system/assets/logo が正本）
 
-interface Props { eyebrow: string; title: string; lead?: string; deco?: 'study' | 'faq' | 'price' | 'company' }
+interface Props { eyebrow: string; title: string; lead?: string; deco?: 'study' | 'faq' | 'price' | 'company' | 'classroom' }
 const { eyebrow, title, lead, deco = 'study' } = Astro.props;
 ---
 <div class="page-hero">
@@ -37,6 +37,14 @@ const { eyebrow, title, lead, deco = 'study' } = Astro.props;
       <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.8 7.5 12 11.7 15.2 7.5"></path><path d="M12 11.7 V17"></path><path d="M9.2 13h5.6"></path><path d="M9.2 15.4h5.6"></path></svg>
       {/* 電卓 */}
       <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
+    </>
+  )}
+  {deco === 'classroom' && (
+    <>
+      {/* 地図ピン */}
+      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      {/* 電車 */}
+      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="16" x="4" y="3" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m18 22-2-3"></path><path d="M8 15h.01"></path><path d="M16 15h.01"></path></svg>
     </>
   )}
   {deco === 'company' && (
