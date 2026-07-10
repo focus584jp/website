@@ -1,7 +1,7 @@
 // フォーム2種（資料請求 /request・無料相談 /consult）の文言・バリデーション定義。
 // 表示・判定は components/site/LeadForm.astro が行う。
 
-export const grades = ['小5', '小6', '中1', '中2', '中3', 'その他'];
+export const grades = ['小6', '中1', '中2', '中3', 'その他'];
 
 /**
  * リード受付API（focus/lead-api の GAS Web App /exec URL）。

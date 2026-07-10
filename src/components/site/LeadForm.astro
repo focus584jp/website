@@ -54,7 +54,8 @@ const STEPS = ['入力', '確認', '完了'];
       <span>{cfg.classroomLabel}<em>必須</em></span>
       <select name="classroom" required>
         <option value="">選択してください</option>
-        {classrooms.map((c) => <option value={c.name}>{c.name}</option>)}
+        {/* 表示・送信値とも「西千葉」形式（末尾の「教室」なし。API側は教室マスタ照合時に有無を吸収） */}
+        {classrooms.map((c) => <option value={c.name.replace(/教室$/, '')}>{c.name.replace(/教室$/, '')}</option>)}
       </select>
       <p class="f-err" hidden>教室を選択してください</p>
     </label>
