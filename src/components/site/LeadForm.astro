@@ -11,14 +11,19 @@ const { variant } = Astro.props;
 const cfg = leadForms[variant];
 const isDev = import.meta.env.DEV;
 
-const submitClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
+// 「次へ進む」はフラットな紺で統一し、立体3D＋テーマ色（request=橙）は確認画面の最終送信ボタンだけに使う
+const nextClass = ['f-submit', 'flat'];
+const sendClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
 const STEPS = ['入力', '確認', '完了'];
 ---
 <div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern}>
   <ol class="steps" aria-label="お申し込みの手順">
     {STEPS.map((label, i) => (
       <li class:list={['step', { 'is-current': i === 0 }]} data-step>
-        <span class="s-num">{i + 1}</span>{label}
+        <span class="s-num">
+          <span class="s-n">{i + 1}</span>
+          <svg class="s-ck" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+        </span>{label}
       </li>
     ))}
   </ol>
@@ -51,11 +56,11 @@ const STEPS = ['入力', '確認', '完了'];
       </select>
       <p class="f-err" hidden>教室を選択してください</p>
     </label>
-    <button type="submit" class:list={submitClass}>
+    <button type="submit" class:list={nextClass}>
       入力内容を確認する
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
     </button>
-    <p class="f-note" set:html={cfg.note} />
+    {cfg.note && <p class="f-note" set:html={cfg.note} />}
     {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
   </form>
 
@@ -68,9 +73,17 @@ const STEPS = ['入力', '確認', '完了'];
       <div class="row"><dt>{cfg.phoneLabel}</dt><dd data-out="phone"></dd></div>
       <div class="row"><dt>{cfg.classroomLabel}</dt><dd data-out="classroom"></dd></div>
     </dl>
-    <button type="button" class:list={submitClass} data-send disabled={!isDev}>
-      {variant === 'request' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>}
-      {cfg.submitLabel}
+    <button type="button" class:list={sendClass} data-send disabled={!isDev}>
+      <span class="send-layer send-idle">
+        {variant === 'request' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>}
+        {cfg.submitLabel}
+      </span>
+      <span class="send-layer send-busy" hidden>
+        <span class="spinner" aria-hidden="true"></span>送信しています…
+      </span>
+      <span class="send-layer send-fly" hidden aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+      </span>
     </button>
     {!isDev && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
     <button type="button" class="back-btn" data-back>← 入力画面に戻って修正する</button>
@@ -100,10 +113,17 @@ const STEPS = ['入力', '確認', '完了'];
   }
   .step.is-current { color: var(--navy); }
   .step.is-current .s-num { background: var(--navy); color: #fff; }
-  .step.is-done .s-num { background: var(--orange); color: #fff; }
+  /* 完了済みステップはグレー丸＋チェック（番号と差し替え。控えめに=緑は完了画面のみ） */
+  .s-ck { display: none; }
+  .step.is-done .s-num { background: var(--gray-1); }
+  .step.is-done .s-n { display: none; }
+  .step.is-done .s-ck { display: block; }
 
   /* 紺バリアント（.f-submit のデフォルトは橙） */
   .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  /* フラットな進行ボタン（立体3DはCV用ボタン専用） */
+  .flat { background: var(--navy); box-shadow: none; }
+  .flat:active { transform: translateY(1px); }
 
   /* バリデーションエラー */
   .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
@@ -122,10 +142,28 @@ const STEPS = ['入力', '確認', '完了'];
     background: none; border: none; cursor: pointer; padding: 6px;
     font: 700 14px var(--font-body); color: var(--navy); text-decoration: underline; text-underline-offset: 3px;
   }
+  .back-btn:disabled { opacity: .45; cursor: default; }
+
+  /* 送信ボタンの状態レイヤー（通常/送信中/紙飛行機） */
+  .is-sending { background: var(--gray-1); box-shadow: 0 5px 0 #6E7A8C; cursor: default; }
+  .send-layer { display: flex; align-items: center; justify-content: center; gap: 9px; }
+  .send-layer[hidden] { display: none; }
+  .spinner {
+    width: 17px; height: 17px; border-radius: 50%; flex: none;
+    border: 2.5px solid rgba(255, 255, 255, .35); border-top-color: #fff;
+    animation: lf-spin .7s linear infinite;
+  }
+  @keyframes lf-spin { to { transform: rotate(360deg); } }
+  .send-fly svg { animation: lf-fly .7s ease-in forwards; }
+  @keyframes lf-fly {
+    0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+    15% { transform: translate(-6px, 3px) rotate(8deg); opacity: 1; } /* ひと呼吸ためてから飛ぶ */
+    100% { transform: translate(130px, -80px) rotate(-14deg); opacity: 0; }
+  }
 
   /* 完了画面 */
   .done-view { text-align: center; align-items: center; gap: 12px; padding-top: clamp(30px, 5vw, 40px); padding-bottom: clamp(30px, 5vw, 40px); }
-  .done-ic { color: var(--orange); }
+  .done-ic { color: var(--success-text); }
   .done-title { font-family: var(--font-round); font-weight: 900; font-size: 20px; color: var(--ink); margin: 0; }
   .done-body { font-size: 14.5px; line-height: 2; color: var(--ink); margin: 0; max-width: 400px; }
 </style>
@@ -148,6 +186,27 @@ const STEPS = ['入力', '確認', '完了'];
       d.length === 11 ? `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
       : d.length === 10 ? `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6)}`
       : d;
+
+    // 携帯番号（070/080/090）は入力中に自動でハイフンを挿入する。
+    // 固定電話（consultのみ許容）は市外局番で桁割りが異なり誤整形になるため数字のまま。
+    const phoneInput = field('phone') as HTMLInputElement;
+    phoneInput.addEventListener('input', () => {
+      const d = toHalf(phoneInput.value).replace(/\D/g, '').slice(0, 11);
+      phoneInput.value = /^0[789]0/.test(d)
+        ? d.length <= 3 ? d
+        : d.length <= 7 ? `${d.slice(0, 3)}-${d.slice(3)}`
+        : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
+        : d;
+    });
+    // ハイフン直後でバックスペースしたときは、手前の数字ごと消す（ハイフンが再挿入されて消せなくなるのを防ぐ）
+    phoneInput.addEventListener('keydown', (e) => {
+      const p = phoneInput.selectionStart ?? 0;
+      if (e.key === 'Backspace' && p > 1 && phoneInput.selectionEnd === p && phoneInput.value[p - 1] === '-') {
+        e.preventDefault();
+        phoneInput.value = phoneInput.value.slice(0, p - 2) + phoneInput.value.slice(p);
+        phoneInput.dispatchEvent(new Event('input')); // 再整形
+      }
+    });
 
     function setError(name: string, on: boolean) {
       const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
@@ -203,20 +262,51 @@ const STEPS = ['入力', '確認', '完了'];
       fillConfirm();
       show('confirm');
     });
-    confirmView.querySelector('[data-back]')?.addEventListener('click', () => show('input'));
-    // GAS接続時: ここで fetch → 成功したら show('done') に差し替える（specの「GAS接続時のメモ」参照）
-    confirmView.querySelector('[data-send]')?.addEventListener('click', () => show('done'));
+    const sendBtn = confirmView.querySelector<HTMLButtonElement>('[data-send]');
+    const backBtn = confirmView.querySelector<HTMLButtonElement>('[data-back]');
+    const sendState = (state: 'idle' | 'busy' | 'fly') => {
+      sendBtn?.querySelectorAll<HTMLElement>('.send-layer').forEach((el) => {
+        el.hidden = !el.classList.contains(`send-${state}`);
+      });
+      sendBtn?.classList.toggle('is-sending', state !== 'idle'); // 送信中〜紙飛行機の間はグレー
+    };
+    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    // DEV専用: ?step=confirm|done でサンプル値を流し込んで直接表示（動作確認用。本番ビルドでは除去される）
+    backBtn?.addEventListener('click', () => show('input'));
+    sendBtn?.addEventListener('click', async () => {
+      // 二重送信防止: 押した瞬間に無効化してスピナー表示（戻るも止める）
+      sendBtn.disabled = true;
+      if (backBtn) backBtn.disabled = true;
+      sendState('busy');
+      // GAS接続時: この擬似待ちを fetch に差し替える（失敗時は sendState('idle')＋disabled解除＋エラー表示）
+      await wait(900);
+      // 送信完了 → 紙飛行機が飛んで完了画面へ
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        sendState('fly');
+        await wait(700);
+      }
+      show('done');
+      sendState('idle'); // 「修正する」で戻って再送信するケースに備えて復帰
+      sendBtn.disabled = false;
+      if (backBtn) backBtn.disabled = false;
+    });
+
+    // DEV専用: ?step=confirm|busy|done でサンプル値を流し込んで直接表示（動作確認用。本番ビルドでは除去される）
     if (import.meta.env.DEV) {
       const step = new URLSearchParams(location.search).get('step');
-      if (step === 'confirm' || step === 'done') {
+      if (step === 'confirm' || step === 'busy' || step === 'done') {
         field('name').value = '佐藤 由美';
         field('grade').value = '中2';
         field('phone').value = '０９０-1234-5678';
         (field('classroom') as HTMLSelectElement).selectedIndex = 1;
         fillConfirm();
-        show(step);
+        if (step === 'busy') {
+          show('confirm');
+          if (sendBtn) sendBtn.disabled = true;
+          sendState('busy');
+        } else {
+          show(step);
+        }
       }
     }
   });

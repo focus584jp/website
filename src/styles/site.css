@@ -16,6 +16,8 @@
   --ink: #333333;
   --muted: #5B6B85;
   --gray-1: #8A96A8; /* 淡い文字はこの1段のみ（gray-2/3は2026-07-07に統合） */
+  --success-text: #2E7D4F; /* 成功・完了（design-system/tokens.css と同期） */
+  --success-bg: #DFF0E5;
   --alt-bg: #F4F8FC;
   --panel: #F2F4F7;
   --blue-pale: #DDE7F7;

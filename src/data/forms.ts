@@ -15,8 +15,8 @@ export interface LeadFormCopy {
   phoneError: string;
   /** 確認画面の送信ボタン（最終CTA） */
   submitLabel: string;
-  /** 入力画面のボタン下の補足 */
-  note: string;
+  /** 入力画面のボタン下の補足（不要なら省略） */
+  note?: string;
   doneTitle: string;
   doneBody: string;
   theme: 'orange' | 'navy';
@@ -26,19 +26,18 @@ export const leadForms: Record<LeadFormVariant, LeadFormCopy> = {
   request: {
     classroomLabel: 'お近くの教室',
     phoneLabel: '携帯電話番号',
-    phonePlaceholder: '090-0000-0000',
+    phonePlaceholder: '例：090-0000-0000',
     phonePattern: '^0[789]0\\d{8}$', // SMS送付先のため携帯のみ（070/080/090の11桁）
     phoneError: '090などで始まる携帯電話番号（11桁）を入力してください',
-    submitLabel: '資料を受け取る（SMSで送信）',
-    note: 'しつこい勧誘のお電話はいたしません。<br />SMSで資料（PDF）のリンクが届くだけです。',
+    submitLabel: '資料を受け取る',
     doneTitle: '送信しました',
-    doneBody: 'SMSで資料（PDF）のリンクをお送りしました。数分待っても届かない場合は、携帯電話番号をご確認のうえ、もう一度お試しください。',
+    doneBody: '携帯電話番号あてに、資料（PDF）のリンクをお送りしました。数分待っても届かない場合は、番号をご確認のうえ、もう一度お試しください。',
     theme: 'orange',
   },
   consult: {
     classroomLabel: 'ご希望の教室',
     phoneLabel: '電話番号',
-    phonePlaceholder: '090-0000-0000',
+    phonePlaceholder: '例：090-0000-0000',
     phonePattern: '^0\\d{9,10}$', // 固定電話も可（市外局番からの10〜11桁）
     phoneError: '電話番号（市外局番からの10〜11桁）を入力してください',
     submitLabel: 'この内容で無料相談を申し込む',
