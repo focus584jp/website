@@ -2,33 +2,39 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import CtaBand from '../components/site/CtaBand.astro';
+import MethodCompare from '../components/site/MethodCompare.astro';
 
+// 本文の強調はグローバルの .mk（黄マーカー）を set:html で使う
 const steps = [
   {
     num: '01',
     title: '基礎から学び直す',
     body: [
-      '学校の授業が分からなくなる原因の多くは、いま習っている単元ではなく、その手前にあります。たとえば中2の一次関数でつまずく子は、中1の比例・反比例や正負の数に取りこぼしがあることがほとんどです。',
-      'フォーカスは学校の進度に無理に合わせず、お子さまがつまずいた場所まで戻ります。土台から積み木を積み直すように基礎を固めるから、その先の単元が「わかる！」に変わり、成績が確実に伸びていきます。',
+      '学校の授業が分からなくなる原因の多くは、いま習っている単元ではなく、<span class="mk">その手前</span>にあります。たとえば中2の一次関数でつまずく子は、中1の比例・反比例や正負の数に取りこぼしがあることがほとんどです。',
+      'フォーカスは学校の進度に無理に合わせず、<span class="mk">お子さまがつまずいた場所まで戻ります</span>。土台から積み木を積み直すように基礎を固めるから、その先の単元が「わかる！」に変わり、成績が確実に伸びていきます。',
     ],
+    compare: 'blocks' as const,
   },
   {
     num: '02',
     title: '勉強のやり方を身につける',
     body: [
-      '答えややり方をただ解説する指導（Teaching）では、受ける側は受け身になりがちです。フォーカスの授業は、考え方を問いかけ、ヒントを与え、自分で答えまで導かせる指導（Coaching）。講師1人につき生徒は最大4人、自分で解く時間と教わる時間を行き来しながら進めます。',
+      '答えややり方をただ解説する指導（Teaching）では、受ける側は受け身になりがちです。フォーカスの授業は、考え方を問いかけ、ヒントを与え、<span class="mk">自分で答えまで導かせる指導（Coaching）</span>。講師1人につき生徒は最大4人、自分で解く時間と教わる時間を行き来しながら進めます。',
       '「なぜそうなるのか」を自分の頭で考えて答えにたどり着く経験を重ねると、解き方の丸暗記ではない、本当の理解が積み上がっていきます。',
     ],
+    compare: 'talk' as const,
   },
   {
     num: '03',
     title: 'だから、自立して学ぶ力が育つ',
     body: [
-      '自分で考えて解けた「できた！」の積み重ねは、お子さまの自信になります。自信がつくと、机に向かうこと自体のハードルが下がり、家庭学習の習慣が少しずつ育っていきます。',
-      '塾にいる時間だけ成績を上げるのではなく、自分で勉強を進められる子に育てること。それがフォーカスの指導のゴールです。',
+      '自分で考えて解けた「できた！」の積み重ねは、お子さまの自信になります。自信がつくと、机に向かうこと自体のハードルが下がり、<span class="mk">家庭学習の習慣</span>が少しずつ育っていきます。塾にいる時間だけ成績を上げることが、フォーカスの目的ではありません。',
     ],
+    compare: null,
   },
 ];
+
+const overview = ['基礎から学び直す', '勉強のやり方を身につける', '自立して学ぶ力が育つ'];
 ---
 <SiteLayout
   title="指導方針｜学習塾フォーカス"
@@ -37,18 +43,39 @@ const steps = [
   <PageHero
     eyebrow="METHOD"
     title="指導方針"
-    lead="フォーカスの指導は、シンプルな3つの積み重ねでできています。"
+    lead="フォーカスの指導は、シンプルな<span class='mk'>3つの積み重ね</span>でできています。"
   />
 
+  {/* 3ステップの全体像（丸数字＋点線コネクタ） */}
+  <section class="overview">
+    <div class="container">
+      <ol class="flow">
+        {overview.map((t, i) => (
+          <li class="flow-item">
+            <span class="flow-num">{i + 1}</span>
+            <span class="flow-t">{t}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
   {steps.map((s, i) => (
-    <section class:list={['step', { alt: i % 2 === 1 }]}>
+    <section class:list={['step', { alt: i % 2 === 0 }]}>
       <div class="container">
         <div class="head">
           <span class="step-pill">STEP {s.num}</span>
           <h2>{s.title}</h2>
         </div>
-        <div class="card">
-          {s.body.map((t) => <p>{t}</p>)}
+        <div class="note-card">
+          {s.body.map((t) => <p class="body-p" set:html={t} />)}
+          {s.compare && <MethodCompare variant={s.compare} />}
+          {i === 2 && (
+            <div class="goal">
+              <span class="goal-label">フォーカスの指導のゴール</span>
+              <p class="goal-text"><span class="mk">自分で勉強を進められる子</span>に育てること</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -58,24 +85,59 @@ const steps = [
 </SiteLayout>
 
 <style>
+  .container { max-width: 860px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
+
+  /* 全体像 */
+  .overview { background: #fff; }
+  .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); }
+  .flow { list-style: none; margin: 0 auto; padding: 0; max-width: 400px; }
+  .flow-item { position: relative; display: flex; align-items: center; gap: 14px; padding-bottom: 18px; }
+  .flow-item:last-child { padding-bottom: 0; }
+  .flow-item:not(:last-child)::before {
+    content: ""; position: absolute; left: 17px; top: 40px; bottom: 2px;
+    border-left: 2.5px dotted var(--navy-light);
+  }
+  .flow-num {
+    width: 35px; height: 35px; border-radius: 50%; background: var(--navy); color: #fff; flex: none;
+    display: grid; place-items: center; font-family: var(--font-round); font-size: 16px; font-weight: 900;
+  }
+  .flow-t { font-family: var(--font-round); font-size: clamp(16px, 4vw, 18px); font-weight: 900; color: var(--ink); }
+
+  /* 各ステップ */
   .step { background: #fff; }
   .step.alt { background: var(--alt-bg); }
-  .container { max-width: 760px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) 24px; }
   .head { text-align: center; margin-bottom: 22px; }
   .step-pill {
     display: inline-block; font: 800 12.5px var(--font-round); letter-spacing: .18em;
     color: #fff; background: var(--orange); border-radius: 999px; padding: 6px 18px;
   }
   h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(21px, 3vw, 26px); color: var(--ink); margin: 12px 0 0; }
-  .card {
-    background: #fff; border-radius: 16px; padding: clamp(22px, 4vw, 32px);
-    box-shadow: var(--shadow-card);
-    /* 方眼ノート背景（トップの指導方針カードと同じモチーフ） */
+
+  /* 方眼ノート地カード（トップのMethodと同モチーフ） */
+  .note-card {
+    background-color: #fff;
     background-image:
       linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
       linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
     background-size: 24px 24px;
+    border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3.5vw, 32px);
+    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
   }
-  .card p { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0 0 14px; }
-  .card p:last-child { margin-bottom: 0; }
+  .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 14px; max-width: 640px; }
+  .body-p:last-of-type { margin-bottom: 0; }
+
+  /* ゴール囲み（STEP03の締め） */
+  .goal {
+    margin: 20px auto 0; max-width: 480px; text-align: center;
+    background: var(--blue-paler); border: 2px solid var(--navy); border-radius: 14px;
+    padding: 18px 20px; box-shadow: 0 4px 12px rgba(20, 42, 84, .10);
+  }
+  .goal-label {
+    display: inline-block; font-size: 12px; font-weight: 800; color: #fff;
+    background: var(--navy); border-radius: 999px; padding: 3px 14px;
+  }
+  .goal-text {
+    font-family: var(--font-round); font-size: clamp(16.5px, 4.4vw, 20px); font-weight: 900;
+    color: var(--ink); line-height: 1.9; margin: 10px 0 0;
+  }
 </style>
