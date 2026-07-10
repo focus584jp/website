@@ -7,7 +7,7 @@ export const grades = ['小5', '小6', '中1', '中2', '中3', 'その他'];
  * リード受付API（focus/lead-api の GAS Web App /exec URL）。
  * 空文字の間は送信ボタンが disabled＋「※準備中」表記になる（デプロイ後にURLを設定して有効化）。
  */
-export const LEAD_API_URL = '';
+export const LEAD_API_URL = 'https://script.google.com/macros/s/AKfycbxRYOlfsfb0Aj12rzJj8TpjkrDryPN347mHV4vIYyuNMYJRlpGWD6-87699KluKaYDb/exec';
 
 export type LeadFormVariant = 'request' | 'consult';
 
