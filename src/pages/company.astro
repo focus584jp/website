@@ -7,7 +7,7 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
   title="会社概要｜学習塾フォーカス"
   description="学習塾フォーカス（株式会社フォーカス）の会社概要・沿革・プライバシーポリシー。"
 >
-  <PageHero eyebrow="COMPANY" title="会社概要" />
+  <PageHero eyebrow="COMPANY" title="会社概要" deco="company" />
 
   <section class="sec">
     <div class="container">
@@ -105,12 +105,12 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
   }
   .tl-body::before {  /* 縦線 */
     content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--line); transform: translateX(-50%);
+    width: 2px; background: var(--blue-pale); transform: translateX(-50%);
   }
-  .tl-body::after {  /* 丸（縦線の中心軸に重ねる） */
-    content: ''; position: absolute; left: 0; top: 8px;
-    width: 9px; height: 9px; border-radius: 50%; background: var(--navy);
-    box-shadow: 0 0 0 3px var(--alt-bg); transform: translateX(-50%);
+  .tl-body::after {  /* 橙ドット（白フチ＋淡青リング。styleguideのタイムライン仕様） */
+    content: ''; position: absolute; left: 0; top: 5px; width: 11px; height: 11px;
+    border-radius: 50%; background: var(--orange); transform: translateX(-50%);
+    box-shadow: 0 0 0 3px var(--alt-bg), 0 0 0 4.5px var(--blue-pale);
   }
   .tl-item:last-child .tl-body::before { bottom: auto; height: 10px; }
   .tl-item:last-child .tl-body { padding-bottom: 0; }
