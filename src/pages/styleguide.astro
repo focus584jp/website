@@ -1,0 +1,348 @@
+---
+// 下層ページ用デザインキットのカタログ（社内確認用・どこからもリンクしない）。
+// ここで部品の見た目を確定させてから各下層ページへ展開する。確定後も生きたデザイン基準として残す。
+import SiteLayout from '../layouts/SiteLayout.astro';
+import SectionHead from '../components/site/SectionHead.astro';
+
+// トップのPrice.astroと同じ教科チップ定義（確定したら共通化を検討）
+const subjectChip = {
+  国語: '#B0413E',
+  数学: '#2C55A0',
+  英語: '#B95A1E',
+  理科: '#1F6B3C',
+  社会: '#6B4FA3',
+} as const;
+
+const swatches = [
+  ['--navy', '#143778', '構造・信頼・見出し'],
+  ['--orange', '#E67832', 'CV・強調（乱用しない）'],
+  ['--marker', '#FFD84D', 'キーワードの蛍光マーカー'],
+  ['--ink', '#333333', '本文'],
+  ['--muted', '#5B6B85', '補足'],
+  ['--alt-bg', '#F4F8FC', 'セクション交互背景'],
+  ['--blue-pale', '#DDE7F7', 'チップ・淡い面'],
+  ['--success-text', '#2E7D4F', '成功・完了'],
+];
+---
+<SiteLayout title="デザインガイド（下層部品）｜社内用" fixedCta={false}>
+  <div class="sg">
+    <header class="sg-head">
+      <h1>下層デザインキット</h1>
+      <p>下層ページで使う部品カタログ（社内確認用・未リンク）。ルール: 背景は白⇄淡青を交互／橙=CV・強調のみ／黄マーカー=キーワード／各ページに最低1つは図解・イラスト・写真。</p>
+    </header>
+
+    {/* ============ A. 見出しの型 ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">A. セクション見出し（トップと同型・下層の基本形）</p>
+      <SectionHead eyebrow="SECTION" title="セクション見出し" />
+      <p class="sg-label">A2. ページ内の小見出し（左ボーダー式・情報系ブロック用）</p>
+      <h2 class="sg-h2">ページ内の小見出し</h2>
+    </section>
+
+    {/* ============ B. カラー ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">B. カラートークン</p>
+      <div class="sw-grid">
+        {swatches.map(([name, hex, use]) => (
+          <div class="sw">
+            <span class="sw-chip" style={`background:${hex}`}></span>
+            <span class="sw-name">{name}</span>
+            <span class="sw-use">{use}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {/* ============ C. インライン強調 ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">C. インライン強調（マーカー・波線・橙字）</p>
+      <p class="sg-sample-text">勉強が苦手でも大丈夫。<span class="mk">基礎から学び直す</span>から、成績が<span class="wavy">確実に</span>変わる。1教科あたり<strong class="og">月6,578円</strong>。</p>
+    </section>
+
+    {/* ============ D. ボタン ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">D. ボタン（橙=資料請求CV／紺=相談CV／アウトライン=フォーム内の進行）</p>
+      <div class="btn-row">
+        <button class="sgbtn btn3d btn3d-o">資料をダウンロード</button>
+        <button class="sgbtn sgbtn-n btn3d btn3d-n">無料相談を申し込む</button>
+        <button class="sgbtn sgbtn-line">入力内容を確認する →</button>
+      </div>
+    </section>
+
+    {/* ============ E. チップ・バッジ ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">E. チップ＆バッジ（教科5色・POINT丸数字・必須・淡青チップ）</p>
+      <div class="chip-row">
+        {Object.entries(subjectChip).map(([s, bg]) => <span class="s-chip" style={`background:${bg}`}>{s}</span>)}
+      </div>
+      <div class="chip-row">
+        <span class="point-badge"><span class="pb-top">POINT</span><span class="pb-num">01</span></span>
+        <span class="req">必須</span>
+        <span class="pale-chip">若松中</span>
+        <span class="pale-chip">みつわ台中</span>
+      </div>
+    </section>
+
+    {/* ============ F. カード ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">F. カード（白カード＋影／方眼ノート地／淡青カード）</p>
+      <div class="card-stack">
+        <div class="sg-card">白カード＋影（--shadow-card）。情報ブロックの基本。</div>
+        <div class="sg-card grid-paper">方眼ノート地。図解・学びの文脈を演出する面に使う。</div>
+        <div class="sg-card pale">淡青カード（--blue-paler）。補足・引用・ポイント囲みに。</div>
+      </div>
+    </section>
+
+    {/* ============ G. 吹き出し ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">G. 吹き出し（結論・ひとこと強調。1ページ1〜2回まで）</p>
+      <div class="bubble"><span class="bubble-tail"></span>1教科あたり、他塾の<span class="big">半分以下</span>！</div>
+    </section>
+
+    {/* ============ H. ステップ連結（新規：指導方針・流れ用） ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">H. ステップ連結（丸数字＋点線コネクタ）</p>
+      <ol class="steps">
+        {[
+          ['基礎から学び直す', 'つまずいた単元まで戻って、わかるところからやり直します。'],
+          ['勉強のやり方を身につける', '答えを教えるのではなく、考え方をコーチングします。'],
+          ['自立して学ぶ力が育つ', '自分で解けた「できた！」の積み重ねが自信になります。'],
+        ].map(([t, d], i) => (
+          <li class="step">
+            <span class="step-num">{i + 1}</span>
+            <div class="step-body">
+              <h3>{t}</h3>
+              <p>{d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    {/* ============ I. Qバッジアコーディオン（新規：FAQ用） ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">I. Qバッジアコーディオン（タップで開閉・Aバッジ付き回答）</p>
+      <details class="qa" open>
+        <summary><span class="q-badge">Q</span>勉強が本当に苦手でも大丈夫ですか？<span class="qa-ic" aria-hidden="true"></span></summary>
+        <div class="qa-a"><span class="a-badge">A</span><p>大丈夫です。フォーカスは<span class="mk">勉強が苦手な中学生専門</span>の塾です。つまずいた単元まで戻って、基礎から積み上げます。</p></div>
+      </details>
+      <details class="qa">
+        <summary><span class="q-badge">Q</span>授業料のほかに費用はかかりますか？<span class="qa-ic" aria-hidden="true"></span></summary>
+        <div class="qa-a"><span class="a-badge">A</span><p>入会金・設備管理費は0円です。教材費・システム利用料として月1,375円（税込）をいただいています。</p></div>
+      </details>
+    </section>
+
+    {/* ============ J. 教室カード（新規：教室一覧用） ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">J. 教室カード（駅バッジ・徒歩分・タップで詳細へ）</p>
+      <a class="room-card" href="#">
+        <div class="rc-main">
+          <span class="rc-name">西千葉</span>
+          <span class="rc-access"><span class="rc-station">JR西千葉駅</span>徒歩1分</span>
+        </div>
+        <span class="rc-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+      </a>
+    </section>
+
+    {/* ============ K. 0円カード＋注記（新規：料金用） ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">K. 0円カード＋注記の型（料金ページ）</p>
+      <div class="zero-row">
+        <div class="zero-card"><span class="zc-label">入会金</span><span class="zc-val"><em>0</em>円</span></div>
+        <div class="zero-card"><span class="zc-label">設備管理費</span><span class="zc-val"><em>0</em>円</span></div>
+      </div>
+      <p class="note-line">※教材費・システム利用料として月1,375円（税込）がかかります。</p>
+    </section>
+
+    {/* ============ L. タイムライン（新規：沿革用） ============ */}
+    <section class="sg-sec alt">
+      <p class="sg-label">L. タイムライン（沿革）</p>
+      <ol class="tl">
+        {[
+          ['2017.6', '西千葉に1教室目を開校'],
+          ['2020.1', '合同会社フォーカス設立'],
+          ['2024.10', '株式会社化。千葉県内10教室に'],
+        ].map(([y, t]) => (
+          <li class="tl-item"><span class="tl-year">{y}</span><span class="tl-text">{t}</span></li>
+        ))}
+      </ol>
+    </section>
+
+    {/* ============ M. データ表の型 ============ */}
+    <section class="sg-sec">
+      <p class="sg-label">M. データ表（見出し行・ゼブラ・強調列）</p>
+      <table class="sg-table">
+        <thead>
+          <tr><th></th><th class="hl">フォーカス</th><th>個別A社</th><th>個別B社</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1教科・月額</td><td class="hl"><strong>6,578円</strong></td><td>20,400円</td><td>16,500円</td></tr>
+          <tr><td>入会金</td><td class="hl"><strong>0円</strong></td><td>22,000円</td><td>11,000円</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+</SiteLayout>
+
+<style define:vars={{}}>
+  .sg { max-width: 720px; margin: 0 auto; padding: 28px 20px 80px; }
+  .sg-head h1 { font-family: var(--font-round); font-weight: 900; font-size: 24px; color: var(--navy); margin: 0 0 8px; }
+  .sg-head p { font-size: 13px; line-height: 1.9; color: var(--muted); margin: 0; }
+
+  .sg-sec { padding: 26px 18px; margin: 18px -18px 0; border-radius: 14px; }
+  .sg-sec.alt { background: var(--alt-bg); }
+  .sg-label {
+    font: 700 11.5px ui-monospace, Menlo, monospace; color: #7A8AA6;
+    letter-spacing: .04em; margin: 0 0 14px; padding-bottom: 6px; border-bottom: 1px dashed var(--line);
+  }
+
+  /* A2 小見出し */
+  .sg-h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: 19px; color: var(--navy);
+    border-left: 4px solid var(--navy); padding-left: 12px; margin: 8px 0 0;
+  }
+
+  /* B スウォッチ */
+  .sw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sw { display: flex; align-items: center; gap: 8px; font-size: 11.5px; }
+  .sw-chip { width: 26px; height: 26px; border-radius: 8px; flex: none; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
+  .sw-name { font-weight: 700; color: var(--ink); }
+  .sw-use { color: var(--gray-1); }
+
+  /* C インライン強調 */
+  .sg-sample-text { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0; }
+  .wavy { text-decoration: underline wavy var(--orange) 2px; text-underline-offset: 4px; }
+  .og { color: var(--orange); }
+
+  /* D ボタン */
+  .btn-row { display: flex; flex-direction: column; gap: 14px; max-width: 320px; }
+  .sgbtn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 700; color: #fff;
+    background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow);
+    border: none; border-radius: 999px; padding: 14px; cursor: pointer;
+  }
+  .sgbtn-n { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .sgbtn-line { background: #fff; color: var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+
+  /* E チップ・バッジ */
+  .chip-row { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px; }
+  .s-chip { color: #fff; font-size: 13px; font-weight: 800; border-radius: 999px; padding: 4px 12px; }
+  .point-badge {
+    width: 52px; height: 52px; border-radius: 50%; background: var(--navy); color: #fff;
+    display: inline-flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1;
+  }
+  .pb-top { font-size: 8px; font-weight: 800; letter-spacing: .14em; }
+  .pb-num { font-family: var(--font-round); font-size: 17px; font-weight: 900; }
+  .req { font-size: 11px; font-weight: 800; color: #fff; background: var(--orange); border-radius: 5px; padding: 2px 7px; }
+  .pale-chip { background: var(--blue-pale); color: var(--navy); font-size: 13px; font-weight: 700; border-radius: 999px; padding: 5px 13px; }
+
+  /* F カード */
+  .card-stack { display: flex; flex-direction: column; gap: 12px; }
+  .sg-card { background: #fff; border-radius: 14px; padding: 18px; font-size: 13.5px; color: var(--ink); box-shadow: var(--shadow-card); }
+  .grid-paper {
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+    background-size: 14px 14px; background-color: #fff;
+  }
+  .sg-card.pale { background: var(--blue-paler); box-shadow: none; border: 1px solid var(--blue-pale); }
+
+  /* G 吹き出し */
+  .bubble {
+    position: relative; display: inline-block; background: var(--orange); color: #fff;
+    font-family: var(--font-round); font-weight: 900; font-size: 16px;
+    border-radius: 11px; padding: 11px 20px; box-shadow: 0 3px 10px rgba(230, 120, 50, .3);
+  }
+  .bubble .big { font-size: 1.25em; }
+  .bubble-tail {
+    position: absolute; left: 26px; top: -8px; width: 0; height: 0;
+    border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 9px solid var(--orange);
+  }
+
+  /* H ステップ連結 */
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .step { position: relative; display: flex; gap: 14px; padding-bottom: 22px; }
+  .step:last-child { padding-bottom: 0; }
+  .step:not(:last-child)::before {
+    content: ""; position: absolute; left: 17px; top: 40px; bottom: 4px;
+    border-left: 2.5px dotted var(--navy-light);
+  }
+  .step-num {
+    width: 35px; height: 35px; border-radius: 50%; background: var(--navy); color: #fff; flex: none;
+    display: grid; place-items: center; font-family: var(--font-round); font-size: 16px; font-weight: 900;
+  }
+  .step-body h3 { font-family: var(--font-round); font-weight: 900; font-size: 16px; color: var(--ink); margin: 6px 0 4px; }
+  .step-body p { font-size: 13.5px; line-height: 1.9; color: var(--muted); margin: 0; }
+
+  /* I Qアコーディオン */
+  .qa { background: #fff; border-radius: 14px; box-shadow: var(--shadow-card); margin-bottom: 12px; overflow: hidden; }
+  .qa summary {
+    display: flex; align-items: center; gap: 11px; cursor: pointer; list-style: none;
+    font-size: 14.5px; font-weight: 700; color: var(--ink); padding: 15px 16px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .q-badge, .a-badge {
+    width: 27px; height: 27px; border-radius: 50%; flex: none;
+    display: grid; place-items: center; font-family: var(--font-round); font-size: 13.5px; font-weight: 900;
+  }
+  .q-badge { background: var(--navy); color: #fff; }
+  .a-badge { background: var(--orange); color: #fff; }
+  .qa-ic { margin-left: auto; position: relative; width: 14px; height: 14px; flex: none; }
+  .qa-ic::before, .qa-ic::after { content: ""; position: absolute; inset: 0; margin: auto; background: var(--orange); border-radius: 2px; }
+  .qa-ic::before { width: 14px; height: 2.5px; }
+  .qa-ic::after { width: 2.5px; height: 14px; transition: transform .2s; }
+  .qa[open] .qa-ic::after { transform: scaleY(0); }
+  .qa-a { display: flex; gap: 11px; padding: 0 16px 16px; }
+  .qa-a p { font-size: 14px; line-height: 1.95; color: var(--ink); margin: 2px 0 0; }
+
+  /* J 教室カード */
+  .room-card {
+    display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px;
+    box-shadow: var(--shadow-card); padding: 16px; text-decoration: none;
+    border-left: 5px solid var(--navy);
+  }
+  .rc-main { display: flex; flex-direction: column; gap: 4px; }
+  .rc-name { font-family: var(--font-round); font-size: 17px; font-weight: 900; color: var(--ink); }
+  .rc-access { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--muted); }
+  .rc-station { background: var(--blue-pale); color: var(--navy); border-radius: 6px; padding: 2px 8px; font-size: 12px; }
+  .rc-arrow {
+    margin-left: auto; width: 30px; height: 30px; border-radius: 50%; flex: none;
+    background: var(--navy); color: #fff; display: grid; place-items: center;
+  }
+
+  /* K 0円カード */
+  .zero-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .zero-card {
+    background: #fff; border: 2px solid var(--navy); border-radius: 14px; padding: 14px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+  }
+  .zc-label { font-size: 13px; font-weight: 800; color: var(--ink); }
+  .zc-val { font-size: 15px; font-weight: 800; color: var(--ink); }
+  .zc-val em { font-style: normal; font-family: var(--font-round); font-size: 34px; font-weight: 900; color: var(--orange); margin-right: 2px; }
+  .note-line { font-size: 12px; color: var(--muted); margin: 10px 0 0; line-height: 1.8; }
+
+  /* L タイムライン */
+  .tl { list-style: none; margin: 0; padding: 0 0 0 6px; }
+  .tl-item { position: relative; display: flex; gap: 16px; padding: 0 0 20px 22px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: ""; position: absolute; left: 0; top: 7px; width: 11px; height: 11px;
+    border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px var(--blue-pale);
+  }
+  .tl-item:not(:last-child)::after {
+    content: ""; position: absolute; left: 4.5px; top: 22px; bottom: 2px; width: 2px; background: var(--blue-pale);
+  }
+  .tl-year { font-family: var(--font-tel); font-size: 14px; font-weight: 800; color: var(--navy); flex: none; width: 62px; }
+  .tl-text { font-size: 14px; color: var(--ink); line-height: 1.7; }
+
+  /* M データ表 */
+  .sg-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .sg-table th, .sg-table td { padding: 11px 8px; text-align: center; border-bottom: 1px solid var(--line); }
+  .sg-table thead th { background: var(--navy); color: #fff; font-weight: 800; font-size: 12.5px; }
+  .sg-table thead th:first-child { background: transparent; }
+  .sg-table tbody tr:nth-child(even) td { background: #FAFCFF; }
+  .sg-table td:first-child { text-align: left; font-weight: 700; color: var(--muted); font-size: 12.5px; }
+  .sg-table .hl { background: var(--blue-paler) !important; color: var(--navy); font-weight: 800; }
+  .sg-table thead th.hl { background: var(--orange) !important; color: #fff; }
+</style>
