@@ -11,7 +11,7 @@ const { variant } = Astro.props;
 const cfg = leadForms[variant];
 const isDev = import.meta.env.DEV;
 
-// 「次へ進む」はフラットな紺で統一し、立体3D＋テーマ色（request=橙）は確認画面の最終送信ボタンだけに使う
+// 「次へ進む」はアウトライン（白地＋紺枠）で統一し、塗り＋立体3D（request=橙/consult=紺）は確認画面の最終送信ボタンだけに使う
 const nextClass = ['f-submit', 'flat'];
 const sendClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
 const STEPS = ['入力', '確認', '完了'];
@@ -121,8 +121,9 @@ const STEPS = ['入力', '確認', '完了'];
 
   /* 紺バリアント（.f-submit のデフォルトは橙） */
   .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
-  /* フラットな進行ボタン（立体3DはCV用ボタン専用） */
-  .flat { background: var(--navy); box-shadow: none; }
+  /* 進行ボタンはアウトライン（塗り＋立体3DはCV用ボタン専用） */
+  .flat { background: #fff; color: var(--navy); border: 2px solid var(--navy); box-shadow: none; }
+  .flat svg { stroke: var(--navy); }
   .flat:active { transform: translateY(1px); }
 
   /* バリデーションエラー */
