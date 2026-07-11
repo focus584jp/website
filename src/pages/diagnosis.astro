@@ -15,9 +15,9 @@ import { u } from '../lib/path';
       <div class="screen" data-screen="intro">
         <div class="card intro-card">
           <span class="badge">30秒・全5問</span>
-          <h1>うちの子、<br /><span class="mk">フォーカスに合う？</span></h1>
+          <h1>うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></h1>
           <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの塾のタイプがその場で分かります。</p>
-          <button class="start btn3d btn3d-n" data-start>診断をはじめる →</button>
+          <button class="start btn3d btn3d-n" data-start>診断をはじめる<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></button>
         </div>
       </div>
 
@@ -77,6 +77,17 @@ import { u } from '../lib/path';
 
   /* 導入 */
   .intro-card { padding: 36px 28px; text-align: center; }
+  /* 学びノートのモチーフ（方眼地） */
+  .intro-card, .quiz-card {
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .circle {
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
   .intro-card h1 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 5.5vw, 30px);
     line-height: 1.6; margin: 16px 0 0; color: var(--ink);
@@ -94,21 +105,36 @@ import { u } from '../lib/path';
   .quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .q-num { font: 900 14px ui-monospace, Menlo, monospace; color: var(--navy); letter-spacing: .1em; }
   .q-total { color: #8FA9D0; }
-  .dots { display: flex; gap: 6px; }
-  .dots :global(span) { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  /* 進捗はセグメントバー（済=紺 / 現在=橙 / 未=グレー） */
+  .dots { display: flex; gap: 5px; flex: 1; max-width: 200px; margin-left: 16px; }
+  .dots :global(span) { flex: 1; height: 7px; border-radius: 4px; background: #DCE4EE; }
+  .dots :global(span.done) { background: var(--navy); }
+  .dots :global(span.now) { background: var(--orange); }
   .quiz-card { padding: 28px 24px; }
   .quiz-card h2 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(18px, 4.4vw, 22px);
     line-height: 1.7; margin: 0; color: var(--ink); text-align: center;
   }
   .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+  /* 選択肢はA/B/Cバッジ付きの左寄せカード */
   .choices :global(button) {
-    display: block; width: 100%; text-align: center; background: #fff;
-    border: 1.5px solid var(--navy); color: var(--navy); font-family: var(--font-body);
-    font-size: 14.5px; font-weight: 700; padding: 14px 12px; border-radius: 999px;
-    cursor: pointer; transition: background .15s, color .15s;
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    background: #fff; border: 1.5px solid var(--line); color: var(--ink);
+    font-family: var(--font-body); font-size: 14.5px; font-weight: 700; line-height: 1.6;
+    padding: 13px 14px; border-radius: 12px; cursor: pointer;
+    box-shadow: var(--shadow-card);
+    transition: border-color .15s, background .15s, transform .12s;
   }
-  .choices :global(button:hover) { background: var(--navy); color: #fff; }
+  .choices :global(button:hover) { border-color: var(--navy); background: var(--blue-paler); }
+  .choices :global(button:active) { transform: translateY(1px); }
+  .choices :global(.ch-b) {
+    flex: none; width: 27px; height: 27px; border-radius: 50%;
+    background: var(--blue-pale); color: var(--navy);
+    display: grid; place-items: center;
+    font-family: var(--font-round); font-size: 13.5px; font-weight: 900;
+    transition: background .15s, color .15s;
+  }
+  .choices :global(button:hover .ch-b) { background: var(--navy); color: #fff; }
   .back {
     display: block; margin: 16px auto 0; background: none; border: none;
     font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--gray-1);
@@ -175,7 +201,13 @@ import { u } from '../lib/path';
     choicesBox.replaceChildren(...q.choices.map((c, ci) => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.textContent = c.label;
+      const badge = document.createElement('span');
+      badge.className = 'ch-b';
+      badge.textContent = String.fromCharCode(65 + ci); // A, B, C…
+      const label = document.createElement('span');
+      label.className = 'ch-t';
+      label.textContent = c.label;
+      b.append(badge, label);
       b.addEventListener('click', () => {
         answers[i] = ci;
         const next = i + 1;
@@ -186,7 +218,7 @@ import { u } from '../lib/path';
     }));
     dotsBox.replaceChildren(...questions.map((_, di) => {
       const s = document.createElement('span');
-      s.style.background = di < i ? '#143778' : di === i ? '#E67832' : '#C6D4DF';
+      s.className = di < i ? 'done' : di === i ? 'now' : '';
       return s;
     }));
     backBtn.hidden = i === 0;
