@@ -1,0 +1,291 @@
+---
+// 塾タイプ診断の本体（導入→全5問→結果）。/diagnosis ページとモーダル（DiagnosisPopup内）の両方から使う。
+// 配点・タイプ定義は src/data/diagnosis.ts。
+import { u } from '../../lib/path';
+---
+  <div class="stage" data-diag-app>
+    <div class="inner">
+
+      {/* ============ 導入 ============ */}
+      <div class="screen" data-screen="intro">
+        <div class="card intro-card">
+          <span class="badge">30秒・全5問</span>
+          <h1>うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></h1>
+          <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの塾のタイプがその場で分かります。</p>
+          <button class="start btn3d btn3d-n" data-start>診断をはじめる<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></button>
+        </div>
+      </div>
+
+      {/* ============ 設問 ============ */}
+      <div class="screen" data-screen="quiz" hidden>
+        <div class="quiz-head">
+          <span class="q-num"><span data-q-num>1</span> <span class="q-total">/ 5</span></span>
+          <div class="prog" aria-hidden="true">
+            <div class="prog-fill" data-prog>
+              <svg class="prog-pen" viewBox="0 0 24 24" fill="none" stroke="#8A96A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.66 14.66 L14.66 5.66 L18.34 9.34 L9.34 18.34 Z"></path><path d="M8.4 15.6 L15.6 8.4"></path><path d="M5.66 14.66 L4 20 L9.34 18.34"></path><path d="M4 20 L4.7 17.75 L6.25 19.3 Z" fill="#8A96A8" stroke="none"></path></svg>
+            </div>
+          </div>
+        </div>
+        <div class="card quiz-card" data-quiz-card>
+          <span class="q-badge" aria-hidden="true">Q</span>
+          <h2 data-q-text></h2>
+          <div class="choices" data-choices></div>
+        </div>
+        <button class="back" data-back hidden>← 前の質問に戻る</button>
+      </div>
+
+      {/* ============ 結果 ============ */}
+      <div class="screen" data-screen="result" hidden>
+        <div class="card result-card">
+          <div class="result-band">診断結果 — お子さまに合うのは…</div>
+          <div class="result-body">
+            <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
+            <h2><span class="mk" data-r-name></span></h2>
+            <div class="points" data-r-points></div>
+            <div class="fit-note" data-r-fit hidden>
+              <p>フォーカスは、まさにこのタイプの<br />「1対多数（最大1対4）の個別指導塾」です！</p>
+            </div>
+            <div class="other-note" data-r-note hidden><p></p></div>
+            <div class="result-cta">
+              <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+              <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む →</a>
+            </div>
+            <button class="back" data-restart>もう一度診断する</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<style>
+  .stage { background: var(--alt-bg); min-height: 70vh; padding: clamp(28px, 5vw, 48px) 20px clamp(48px, 7vw, 72px); }
+  .inner { max-width: 560px; margin: 0 auto; }
+
+  @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 18px;
+    box-shadow: 0 4px 18px rgba(20, 42, 84, .08); animation: cardIn .3s ease both;
+  }
+
+  .badge {
+    display: inline-block; font-size: 12.5px; font-weight: 800; color: var(--navy);
+    background: var(--blue-pale); border-radius: 999px; padding: 5px 16px;
+  }
+  .mk { background: linear-gradient(transparent 62%, var(--marker) 62% 94%, transparent 94%); padding: 0 4px; }
+
+  /* 導入 */
+  .intro-card { padding: 36px 28px; text-align: center; }
+  /* 学びノートのモチーフ（方眼地） */
+  .intro-card, .quiz-card {
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .circle {
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .intro-card h1 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 5.5vw, 30px);
+    line-height: 1.6; margin: 16px 0 0; color: var(--ink);
+  }
+  .intro-card .lead { font-size: 14px; line-height: 2; color: var(--muted); margin: 16px 0 0; }
+  .start {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; max-width: 320px; margin: 24px auto 0;
+    background: var(--navy); color: #fff; font-family: var(--font-body);
+    font-size: 16px; font-weight: 700; padding: 16px; border-radius: 999px; border: none;
+    cursor: pointer; box-shadow: 0 5px 0 var(--navy-shadow);
+  }
+
+  /* 設問 */
+  .quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .q-num { font: 900 14px ui-monospace, Menlo, monospace; color: var(--navy); letter-spacing: .1em; }
+  .q-total { color: #8FA9D0; }
+  /* 進捗バー: 鉛筆が線を引いていく（塗り=紺のグラデ・先端に橙の鉛筆） */
+  .prog { flex: 1; max-width: 200px; margin-left: 16px; height: 6px; border-radius: 3px; background: #DCE4EE; }
+  .prog-fill {
+    position: relative; height: 100%; width: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--navy-light));
+    transition: width .4s cubic-bezier(.3, .8, .3, 1);
+  }
+  .prog-pen {
+    position: absolute; right: -8px; top: -20px; width: 24px; height: 24px;
+  }
+  .quiz-card { padding: 24px 24px 28px; }
+  .q-badge {
+    display: grid; place-items: center; width: 36px; height: 36px; margin: 0 auto 10px;
+    border-radius: 50%; background: var(--navy); color: #fff;
+    font-family: var(--font-round); font-size: 17px; font-weight: 900;
+  }
+  .quiz-card h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(18px, 4.4vw, 22px);
+    line-height: 1.7; margin: 0; color: var(--ink); text-align: center;
+  }
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
+  /* 選択肢はA/B/Cバッジ付きの左寄せカード */
+  .choices :global(button) {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    background: #fff; border: 1.5px solid var(--line); color: var(--ink);
+    font-family: var(--font-body); font-size: 14.5px; font-weight: 700; line-height: 1.6;
+    padding: 13px 14px; border-radius: 12px; cursor: pointer;
+    box-shadow: var(--shadow-card);
+    transition: border-color .15s, background .15s, transform .12s;
+  }
+  .choices :global(button:hover) { border-color: var(--navy); background: var(--blue-paler); }
+  .choices :global(button:active) { transform: translateY(1px); }
+  .choices :global(.ch-b) {
+    flex: none; width: 27px; height: 27px; border-radius: 50%;
+    background: var(--blue-pale); color: var(--navy);
+    display: grid; place-items: center;
+    font-family: var(--font-round); font-size: 13.5px; font-weight: 900;
+    transition: background .15s, color .15s;
+  }
+  .choices :global(button:hover .ch-b) { background: var(--navy); color: #fff; }
+  .back {
+    display: block; margin: 16px auto 0; background: none; border: none;
+    font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--gray-1);
+    cursor: pointer; transition: color .15s;
+  }
+  .back:hover { color: var(--navy); }
+
+  /* 結果 */
+  .result-card { overflow: hidden; animation-duration: .35s; }
+  .result-band { background: var(--navy); padding: 18px 24px; text-align: center; font-size: 12.5px; font-weight: 800; color: #fff; letter-spacing: .06em; }
+  .result-body { padding: 28px 24px; text-align: center; }
+  .badge.fit { color: #fff; background: var(--orange); }
+  .result-body h2 {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(21px, 5vw, 26px);
+    line-height: 1.6; margin: 14px 0 0; color: var(--ink);
+  }
+  .points { display: flex; flex-direction: column; gap: 8px; margin: 18px auto 0; max-width: 420px; text-align: left; }
+  .points :global(div) { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.8; color: var(--ink); }
+  .points :global(.dot) { color: var(--orange); font-weight: 900; flex: none; }
+  .fit-note {
+    margin-top: 20px; background: #FFF8E1; border: 1.5px dashed #E6C94A;
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .fit-note p { font-size: 14px; font-weight: 800; color: var(--ink); margin: 0; line-height: 1.9; }
+  .other-note { margin-top: 20px; background: var(--alt-bg); border-radius: 12px; padding: 14px 16px; }
+  .other-note p { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.9; }
+  .result-cta { display: flex; flex-direction: column; gap: 11px; max-width: 360px; margin: 24px auto 0; }
+  .result-cta a {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    font-size: 15.5px; font-weight: 700; padding: 15px; border-radius: 999px; text-decoration: none; color: #fff;
+  }
+  .result-cta .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
+  .result-cta .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .result-cta + .back { margin-top: 18px; }
+</style>
+
+<script>
+  import { questions, types, resultType } from '../../data/diagnosis';
+
+  document.querySelectorAll<HTMLElement>('[data-diag-app]').forEach((root) => {
+  
+  type Step = 'intro' | number | 'result';
+  let step: Step = 'intro';
+  let answers: number[] = [];
+
+  const screens = {
+    intro: root.querySelector<HTMLElement>('[data-screen="intro"]')!,
+    quiz: root.querySelector<HTMLElement>('[data-screen="quiz"]')!,
+    result: root.querySelector<HTMLElement>('[data-screen="result"]')!,
+  };
+  const qNum = root.querySelector<HTMLElement>('[data-q-num]')!;
+  const qText = root.querySelector<HTMLElement>('[data-q-text]')!;
+  const choicesBox = root.querySelector<HTMLElement>('[data-choices]')!;
+  const progFill = root.querySelector<HTMLElement>('[data-prog]')!;
+  const backBtn = root.querySelector<HTMLElement>('[data-back]')!;
+  const quizCard = root.querySelector<HTMLElement>('[data-quiz-card]')!;
+
+  function show(name: 'intro' | 'quiz' | 'result') {
+    Object.entries(screens).forEach(([k, el]) => { el.hidden = k !== name; });
+  }
+
+  function renderQuiz(i: number) {
+    const q = questions[i];
+    qNum.textContent = String(i + 1);
+    qText.textContent = q.q;
+    choicesBox.replaceChildren(...q.choices.map((c, ci) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      const badge = document.createElement('span');
+      badge.className = 'ch-b';
+      badge.textContent = String.fromCharCode(65 + ci); // A, B, C…
+      const label = document.createElement('span');
+      label.className = 'ch-t';
+      label.textContent = c.label;
+      b.append(badge, label);
+      b.addEventListener('click', () => {
+        answers[i] = ci;
+        const next = i + 1;
+        if (next >= questions.length) { renderResult(); step = 'result'; show('result'); }
+        else { step = next; renderQuiz(next); }
+      });
+      return b;
+    }));
+    progFill.style.width = `${((i + 1) / questions.length) * 100}%`;
+    backBtn.hidden = i === 0;
+    // カード切り替えアニメーションを再生
+    quizCard.style.animation = 'none';
+    void quizCard.offsetHeight;
+    quizCard.style.animation = '';
+  }
+
+  function renderResult() {
+    const t = types[resultType(answers)];
+    const badge = root.querySelector<HTMLElement>('[data-r-badge]')!;
+    badge.textContent = `フォーカスとの相性 ${t.mark}`;
+    badge.classList.toggle('fit', t.fit);
+    root.querySelector<HTMLElement>('[data-r-name]')!.textContent = t.name;
+    root.querySelector<HTMLElement>('[data-r-points]')!.replaceChildren(...t.points.map((p) => {
+      const row = document.createElement('div');
+      const dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.textContent = '・';
+      const text = document.createElement('span');
+      text.textContent = p;
+      row.append(dot, text);
+      return row;
+    }));
+    root.querySelector<HTMLElement>('[data-r-fit]')!.hidden = !t.fit;
+    const noteBox = root.querySelector<HTMLElement>('[data-r-note]')!;
+    noteBox.hidden = t.fit;
+    noteBox.querySelector('p')!.textContent = t.note ?? '';
+  }
+
+  // DEV専用: ?quiz=<n> で設問画面を直接表示（動作確認用。本番ビルドでは除去される）
+  if (import.meta.env.DEV) {
+    const q = new URLSearchParams(location.search).get('quiz');
+    if (q !== null) {
+      const n = Math.min(Math.max(Number(q) || 0, 0), questions.length - 1);
+      step = n; answers = [];
+      renderQuiz(n);
+      show('quiz');
+    }
+  }
+
+  root.querySelector('[data-start]')?.addEventListener('click', () => {
+    step = 0; answers = [];
+    renderQuiz(0);
+    show('quiz');
+  });
+  backBtn.addEventListener('click', () => {
+    if (typeof step === 'number' && step > 0) { step -= 1; renderQuiz(step); }
+  });
+  root.querySelector('[data-restart]')?.addEventListener('click', () => {
+    step = 'intro'; answers = [];
+    show('intro');
+    window.scrollTo({ top: 0 });
+  });
+
+  // モーダル側から開き直すときに導入画面へ戻す
+  root.addEventListener('diag-reset', () => {
+    step = 'intro'; answers = [];
+    show('intro');
+  });
+  });
+</script>

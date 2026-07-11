@@ -1,7 +1,8 @@
 ---
 // 相性診断ポップアップ — ヒーロー通過後に表示（SP: 右下から / PC: 左下から）
 // ×で閉じたらセッション中は再表示しない（sessionStorage）
-import { u } from '../../lib/path';
+// CTAはページ遷移せず、その場でモーダル（DiagnosisApp）を開く
+import DiagnosisApp from './DiagnosisApp.astro';
 ---
 <div class="diag-popup" data-diag-popup style="visibility:hidden">
   <button class="close" aria-label="とじる" data-diag-close>
@@ -18,7 +19,18 @@ import { u } from '../../lib/path';
       <p>うちの子に合う塾は、<span class="mk">どのタイプ？</span></p>
     </div>
   </div>
-  <a href={u('/diagnosis')} class="go">30秒でわかる塾タイプ診断 →</a>
+  <button type="button" class="go" data-diag-open>30秒でわかる塾タイプ診断 →</button>
+</div>
+
+{/* 診断モーダル（ポップアップのCTAから開く） */}
+<div class="diag-modal" data-diag-modal>
+  <div class="dm-ov" data-dm-close></div>
+  <div class="dm-sheet" role="dialog" aria-modal="true" aria-label="塾タイプ診断">
+    <button type="button" class="dm-x" data-dm-close aria-label="閉じる">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg>
+    </button>
+    <DiagnosisApp />
+  </div>
 </div>
 
 <style>
@@ -56,10 +68,35 @@ import { u } from '../../lib/path';
   .text p { font-family: var(--font-round); font-size: 14px; font-weight: 900; color: var(--ink); margin: 0; line-height: 1.6; }
   .text .mk { white-space: nowrap; } /* 「どのタイプ？」の途中で折り返さない */
   .go {
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%;
     background: var(--navy); color: #fff; font-size: 14.5px; font-weight: 700; padding: 13px;
     border-radius: 999px; text-decoration: none; margin-top: 12px; box-shadow: 0 3px 0 var(--navy-shadow);
+    border: none; cursor: pointer; font-family: var(--font-body);
   }
+
+  /* 診断モーダル */
+  .diag-modal {
+    position: fixed; inset: 0; z-index: 120; padding: 14px;
+    display: none; align-items: center; justify-content: center;
+  }
+  .diag-modal.is-open { display: flex; }
+  .dm-ov { position: absolute; inset: 0; background: rgba(16, 24, 34, .6); animation: dm-fade .25s ease; }
+  .dm-sheet {
+    position: relative; width: 100%; max-width: 560px;
+    max-height: calc(100dvh - 28px); overflow-y: auto; -webkit-overflow-scrolling: touch;
+    background: var(--alt-bg); border-radius: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+    animation: dm-zoom .25s ease;
+  }
+  .dm-x {
+    position: sticky; top: 10px; margin-left: auto; margin-right: 10px; z-index: 2;
+    width: 32px; height: 32px; background: #fff; border: 2px solid var(--navy); border-radius: 50%;
+    color: var(--navy); cursor: pointer; display: grid; place-items: center; padding: 0;
+    box-shadow: 0 2px 6px rgba(20, 42, 84, .2);
+  }
+  /* モーダル内は診断ステージの余白を詰める */
+  .dm-sheet :global(.stage) { min-height: auto; padding: 4px 16px 26px; }
+  @keyframes dm-fade { from { opacity: 0; } }
+  @keyframes dm-zoom { from { opacity: 0; transform: scale(.92); } }
 </style>
 
 <script>
@@ -70,6 +107,29 @@ import { u } from '../../lib/path';
     popup.querySelector('[data-diag-close]')?.addEventListener('click', () => {
       popup.classList.add('closed');
       sessionStorage.setItem(KEY, '1');
+    });
+  }
+
+  // 診断モーダルの開閉
+  const modal = document.querySelector<HTMLElement>('[data-diag-modal]');
+  if (modal) {
+    const open = () => {
+      modal.querySelector('[data-diag-app]')?.dispatchEvent(new Event('diag-reset')); // 常に導入から
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', onKey);
+    };
+    const close = () => {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', onKey);
+    };
+    function onKey(e: KeyboardEvent) { if (e.key === 'Escape') close(); }
+    document.querySelector('[data-diag-open]')?.addEventListener('click', open);
+    // DEV専用: ?diag でモーダルを自動オープン（本番ビルドでは除去される）
+    if (import.meta.env.DEV && new URLSearchParams(location.search).has('diag')) open();
+    modal.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('[data-dm-close]')) close();
     });
   }
 </script>
