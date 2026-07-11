@@ -1,7 +1,7 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
-import CorporateForm from '../components/site/CorporateForm.astro';
+import { u } from '../lib/path';
 import { companyInfo, history, privacyPolicy } from '../data/company';
 ---
 <SiteLayout
@@ -22,7 +22,7 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
                 {r.items ? (
                   <ul class="cell-list">{r.items.map((i) => <li>{i}</li>)}</ul>
                 ) : r.href ? (
-                  <a class="cell-link" href={r.href}>{r.value}</a>
+                  <a class="cell-link" href={r.href.startsWith('/') ? u(r.href) : r.href}>{r.value}</a>
                 ) : (
                   <span>{r.value}{r.flag && <span class="flag">{r.flag}</span>}{r.caution && <span class="cell-caution">※{r.caution}</span>}</span>
                 )}
@@ -32,7 +32,7 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
           ))}
         </tbody>
       </table>
-      <p class="note">※ 資料請求・無料相談など保護者さまのお問い合わせは、0120-267-140（受付 16:00〜22:00／日曜定休）へお願いします。</p>
+      <p class="note">※ 保護者さまのお問い合わせは、0120-267-140（受付 16:00〜22:00／日曜定休）へお願いします。</p>
     </div>
   </section>
 
@@ -52,15 +52,7 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
     </div>
   </section>
 
-  <section class="sec" id="contact">
-    <div class="container">
-      <h2>お問い合わせ</h2>
-      <p class="contact-lead">企業・お取引に関するお問い合わせは、以下のフォームからお願いいたします。<br />※資料請求・無料相談など保護者さまのお問い合わせは 0120-267-140 へお願いします。</p>
-      <CorporateForm />
-    </div>
-  </section>
-
-  <section class="sec alt" id="privacy">
+  <section class="sec" id="privacy">
     <div class="container">
       <h2>プライバシーポリシー</h2>
       {privacyPolicy.map((s) => (
@@ -104,7 +96,6 @@ import { companyInfo, history, privacyPolicy } from '../data/company';
   }
   .note { font-size: 12px; color: var(--gray-1); margin: 12px 0 0; line-height: 1.7; }
   .cell-link { color: var(--navy); font-weight: 700; text-underline-offset: 3px; }
-  .contact-lead { font-size: 14px; line-height: 2; color: var(--ink); margin: 0 0 18px; }
 
   /* 沿革タイムライン */
   .timeline { display: flex; flex-direction: column; }

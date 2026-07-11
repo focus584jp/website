@@ -1,0 +1,27 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import CorporateForm from '../components/site/CorporateForm.astro';
+---
+<SiteLayout
+  title="お問い合わせ｜学習塾フォーカス"
+  description="株式会社フォーカスへの企業・お取引に関するお問い合わせフォーム。"
+  fixedCta={false}
+>
+  <PageHero
+    eyebrow="CONTACT"
+    title="お問い合わせ"
+    deco="company"
+    lead="企業・お取引に関するお問い合わせは、以下のフォームからお願いいたします。<br />※資料請求・無料相談は各フォーム、保護者さまのお問い合わせは 0120-267-140 へどうぞ。"
+  />
+  <section class="body">
+    <div class="container">
+      <CorporateForm />
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .body { background: #fff; }
+  .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; }
+</style>

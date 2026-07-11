@@ -25,7 +25,7 @@ const formEnabled = isDev || LEAD_API_URL !== '';
       <p class="f-err" hidden>メールアドレスの形式を確認してください</p>
     </label>
     <label class="f-field" data-field="phone">
-      <span>電話番号（任意）</span>
+      <span>電話番号<em class="opt">任意</em></span>
       <input type="tel" name="phone" placeholder="例：043-000-0000" inputmode="numeric" autocomplete="tel" />
       <p class="f-err" hidden>電話番号（10〜11桁）を確認してください</p>
     </label>
@@ -58,6 +58,7 @@ const formEnabled = isDev || LEAD_API_URL !== '';
 
 <style>
   [data-view][hidden] { display: none; }
+  .opt { background: var(--navy); } /* 任意バッジは必須（橙）と同形・ネイビー */
   .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
   .f-field.is-error :is(input, textarea) { border-color: #C0392B; }
   .note-draft, .send-error { color: #C0392B; font-weight: 700; }

@@ -34,7 +34,7 @@ export const companyInfo: CompanyRow[] = [
   },
   { label: '従業員数', value: '72名（2026年7月現在）' },
   { label: '法人番号', value: '5040003014690' },
-  { label: 'お問い合わせ', value: '企業・お取引に関するお問い合わせはこちら', href: '#contact', note: '営業のご案内もフォームからお願いします（お電話でのご案内はご遠慮ください）' },
+  { label: 'お問い合わせ', value: '企業・お取引に関するお問い合わせはこちら', href: '/contact' },
 ];
 
 export interface HistoryItem {
