@@ -52,7 +52,9 @@ export interface DiagnosisType {
   mark: string;
   fit: boolean; // true = FOCUSのタイプ（E）
   points: string[];
-  note?: string; // 非FOCUSタイプに添える前向きな一言
+  note?: string;
+  /** 授業料の相場（任意表示） */
+  price?: string; // 非FOCUSタイプに添える前向きな一言
 }
 
 export const types: Record<string, DiagnosisType> = {
@@ -72,9 +74,9 @@ export const types: Record<string, DiagnosisType> = {
     note: '集団のペースが合わないと感じたら、一人ひとりの進度に合わせて進めるフォーカスをご検討ください。',
   },
   D: {
-    name: '1対少数の個別指導塾', mark: '◎', fit: false,
-    points: ['「手取り足取り指導を受けたい」お子さま向け', '分からない部分をすぐに質問できる', 'オーダーメイドで学習を進められるが、授業料も高い'],
-    note: 'フォーカスなら、質問しやすさはそのままに1教科 月6,578円（税込）。個別指導でありながら、複数教科を受けても負担を抑えられます。',
+    name: '1対少数の個別指導塾', mark: '○', fit: false,
+    points: ['「手取り足取り指導を受けたい」お子さま向け', '分からない部分をすぐに質問できる', '先生1人に対して生徒の数が少ない分、授業料も高い'],
+    note: '1対多数（最大1対4）のフォーカスなら、質問しやすさはそのままに1教科 月6,578円（税込）。個別指導でありながら、複数教科を受けても負担を抑えられます。',
   },
   E: {
     name: '1対多数の個別指導塾', mark: '◎', fit: true,

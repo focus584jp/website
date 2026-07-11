@@ -35,18 +35,19 @@ import { u } from '../../lib/path';
       {/* ============ 結果 ============ */}
       <div class="screen" data-screen="result" hidden>
         <div class="card result-card">
-          <div class="result-band">診断結果 — お子さまに合うのは…</div>
+          <div class="result-band">診断結果 — お子さまは…</div>
           <div class="result-body">
-            <h2><span class="mk" data-r-name></span></h2>
+            <h2><span class="mk" data-r-name></span><span class="t-suffix">タイプ</span></h2>
             <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
             <div class="points" data-r-points></div>
+            <p class="r-price" data-r-price hidden></p>
             <div class="fit-note" data-r-fit hidden>
               <p>フォーカスは、勉強が苦手な中学生を専門とする<br />1対多数（最大1対4）の個別指導塾です。</p>
             </div>
             <div class="other-note" data-r-note hidden><p></p></div>
             <div class="result-cta">
               <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
-              <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む →</a>
+              <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
             </div>
             <button class="back" data-restart>もう一度診断する</button>
           </div>
@@ -148,7 +149,7 @@ import { u } from '../../lib/path';
 
   /* 結果 */
   .result-card { overflow: hidden; animation-duration: .35s; }
-  .result-band { background: var(--navy); padding: 18px 24px; text-align: center; font-size: 12.5px; font-weight: 800; color: #fff; letter-spacing: .06em; }
+  .result-band { background: var(--navy); padding: 18px 24px; text-align: center; font-size: 15px; font-weight: 800; color: #fff; letter-spacing: .06em; }
   .result-body { padding: 28px 24px; text-align: center; }
   .badge.fit { color: #fff; background: var(--orange); }
   .result-body h2 {
@@ -156,16 +157,17 @@ import { u } from '../../lib/path';
     line-height: 1.6; margin: 0; color: var(--ink);
   }
   .result-body .badge { margin-top: 14px; }
+  .t-suffix { font-size: .58em; font-weight: 900; margin-left: 3px; }
   .points { display: flex; flex-direction: column; gap: 8px; margin: 18px auto 0; max-width: 420px; text-align: left; }
-  .points :global(div) { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.8; color: var(--ink); }
+  .points :global(div) { display: flex; gap: 8px; align-items: flex-start; font-size: 14.5px; line-height: 1.9; color: var(--ink); }
   .points :global(.dot) { color: var(--orange); font-weight: 900; flex: none; }
   .fit-note {
     margin-top: 20px; background: #FFF8E1; border: 1.5px dashed #E6C94A;
     border-radius: 12px; padding: 14px 16px;
   }
-  .fit-note p { font-size: 14px; font-weight: 800; color: var(--ink); margin: 0; line-height: 1.9; }
+  .fit-note p { font-size: 15px; font-weight: 800; color: var(--ink); margin: 0; line-height: 1.9; }
   .other-note { margin-top: 20px; background: var(--alt-bg); border-radius: 12px; padding: 14px 16px; }
-  .other-note p { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.9; }
+  .other-note p { font-size: 14.5px; color: var(--muted); margin: 0; line-height: 1.9; }
   .result-cta { display: flex; flex-direction: column; gap: 11px; max-width: 360px; margin: 24px auto 0; }
   .result-cta a {
     display: flex; align-items: center; justify-content: center; gap: 9px;
@@ -173,6 +175,14 @@ import { u } from '../../lib/path';
   }
   .result-cta .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
   .result-cta .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  .result-cta .circle {
+    width: 20px; height: 20px; border-radius: 50%; background: #fff;
+    display: flex; align-items: center; justify-content: center; flex: none;
+  }
+  .r-price {
+    display: inline-block; margin: 16px auto 0; font-size: 12.5px; font-weight: 700;
+    color: var(--muted); background: var(--panel); border-radius: 999px; padding: 6px 16px;
+  }
   .result-cta + .back { margin-top: 18px; }
 </style>
 
@@ -247,6 +257,9 @@ import { u } from '../../lib/path';
       row.append(dot, text);
       return row;
     }));
+    const priceEl = root.querySelector<HTMLElement>('[data-r-price]')!;
+    priceEl.hidden = !t.price;
+    priceEl.textContent = t.price ? `授業料の相場：${t.price}` : '';
     root.querySelector<HTMLElement>('[data-r-fit]')!.hidden = !t.fit;
     const noteBox = root.querySelector<HTMLElement>('[data-r-note]')!;
     noteBox.hidden = t.fit;
