@@ -255,7 +255,11 @@ import { u } from '../../lib/path';
   // DEV専用: ?quiz=<n> で設問画面を直接表示（動作確認用。本番ビルドでは除去される）
   if (import.meta.env.DEV) {
     const q = new URLSearchParams(location.search).get('quiz');
-    if (q !== null) {
+    if (q === 'done') {
+      answers = questions.map(() => 0); // 全問A選択の結果画面（レイアウト確認用）
+      renderResult();
+      show('result');
+    } else if (q !== null) {
       const n = Math.min(Math.max(Number(q) || 0, 0), questions.length - 1);
       step = n; answers = [];
       renderQuiz(n);
