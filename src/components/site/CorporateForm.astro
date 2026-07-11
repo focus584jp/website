@@ -31,7 +31,7 @@ const formEnabled = isDev || LEAD_API_URL !== '';
     </label>
     <label class="f-field" data-field="message">
       <span>お問い合わせ内容<em>必須</em></span>
-      <textarea name="message" rows="6" maxlength="1000" placeholder="お問い合わせの内容をご記入ください（1000文字以内）" required></textarea>
+      <textarea name="message" rows="6" maxlength="500" placeholder="お問い合わせの内容をご記入ください（500文字以内）" required></textarea>
       <p class="f-err" hidden>お問い合わせ内容を入力してください</p>
     </label>
     <div class="hp-wrap" aria-hidden="true">
@@ -46,12 +46,13 @@ const formEnabled = isDev || LEAD_API_URL !== '';
     </button>
     {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です</p>}
     <p class="f-note send-error" data-send-error hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
+    <p class="f-note">内容を確認のうえ、関心のあるお問い合わせにのみご返信いたします。<br />あらかじめご了承ください。</p>
   </form>
 
   <div class="form-card done-view" data-view="done" hidden tabindex="-1">
     <svg class="done-ic" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
     <p class="done-title">お問い合わせを受け付けました</p>
-    <p class="done-body">内容を確認のうえ、ご入力いただいたメールアドレスあてにご連絡いたします。</p>
+    <p class="done-body">内容を確認のうえ、関心のあるお問い合わせにはメールにてご返信いたします。</p>
   </div>
 </div>
 
@@ -100,6 +101,30 @@ const formEnabled = isDev || LEAD_API_URL !== '';
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement;
     const toHalf = (s: string) => s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
     const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    // 電話番号の自動ハイフン（携帯=3-4-4 / 03・06=2-4-4 / 他の固定10桁=3-3-4の近似）
+    const phoneInput = field('phone') as HTMLInputElement;
+    const fmtPhone = (d: string) => {
+      if (/^0[789]0/.test(d)) {
+        return d.length <= 3 ? d : d.length <= 7 ? `${d.slice(0, 3)}-${d.slice(3)}` : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7, 11)}`;
+      }
+      if (/^0[36]/.test(d) && d.length >= 2) {
+        return d.length <= 2 ? d : d.length <= 6 ? `${d.slice(0, 2)}-${d.slice(2)}` : `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6, 10)}`;
+      }
+      return d.length <= 3 ? d : d.length <= 6 ? `${d.slice(0, 3)}-${d.slice(3)}` : `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6, 10)}`;
+    };
+    phoneInput.addEventListener('input', () => {
+      const d = toHalf(phoneInput.value).replace(/\D/g, '').slice(0, 11);
+      phoneInput.value = fmtPhone(d);
+    });
+    phoneInput.addEventListener('keydown', (e) => {
+      const p = phoneInput.selectionStart ?? 0;
+      if (e.key === 'Backspace' && p > 1 && phoneInput.selectionEnd === p && phoneInput.value[p - 1] === '-') {
+        e.preventDefault();
+        phoneInput.value = phoneInput.value.slice(0, p - 2) + phoneInput.value.slice(p);
+        phoneInput.dispatchEvent(new Event('input'));
+      }
+    });
 
     const sendState = (state: 'idle' | 'busy' | 'fly') => {
       sendBtn.querySelectorAll<HTMLElement>('.send-layer').forEach((el) => {
