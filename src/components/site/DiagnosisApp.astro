@@ -37,11 +37,11 @@ import { u } from '../../lib/path';
         <div class="card result-card">
           <div class="result-band">診断結果 — お子さまに合うのは…</div>
           <div class="result-body">
-            <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
             <h2><span class="mk" data-r-name></span></h2>
+            <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
             <div class="points" data-r-points></div>
             <div class="fit-note" data-r-fit hidden>
-              <p>フォーカスは、まさにこのタイプの<br />「1対多数（最大1対4）の個別指導塾」です！</p>
+              <p>フォーカスは、勉強が苦手な中学生を専門とする<br />1対多数（最大1対4）の個別指導塾です。</p>
             </div>
             <div class="other-note" data-r-note hidden><p></p></div>
             <div class="result-cta">
@@ -153,8 +153,9 @@ import { u } from '../../lib/path';
   .badge.fit { color: #fff; background: var(--orange); }
   .result-body h2 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(21px, 5vw, 26px);
-    line-height: 1.6; margin: 14px 0 0; color: var(--ink);
+    line-height: 1.6; margin: 0; color: var(--ink);
   }
+  .result-body .badge { margin-top: 14px; }
   .points { display: flex; flex-direction: column; gap: 8px; margin: 18px auto 0; max-width: 420px; text-align: left; }
   .points :global(div) { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; line-height: 1.8; color: var(--ink); }
   .points :global(.dot) { color: var(--orange); font-weight: 900; flex: none; }
@@ -230,8 +231,8 @@ import { u } from '../../lib/path';
     quizCard.style.animation = '';
   }
 
-  function renderResult() {
-    const t = types[resultType(answers)];
+  function renderResult(forced?: string) {
+    const t = types[forced ?? resultType(answers)];
     const badge = root.querySelector<HTMLElement>('[data-r-badge]')!;
     badge.textContent = `フォーカスとの相性 ${t.mark}`;
     badge.classList.toggle('fit', t.fit);
@@ -256,8 +257,10 @@ import { u } from '../../lib/path';
   if (import.meta.env.DEV) {
     const q = new URLSearchParams(location.search).get('quiz');
     if (q === 'done') {
-      answers = questions.map(() => 0); // 全問A選択の結果画面（レイアウト確認用）
-      renderResult();
+      // ?quiz=done&t=A〜E で任意タイプの結果を直接表示（文言確認用）
+      const t = new URLSearchParams(location.search).get('t') ?? undefined;
+      answers = questions.map(() => 0);
+      renderResult(t && 'ABCDE'.includes(t) ? t : undefined);
       show('result');
     } else if (q !== null) {
       const n = Math.min(Math.max(Number(q) || 0, 0), questions.length - 1);
