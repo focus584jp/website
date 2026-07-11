@@ -24,14 +24,15 @@ import { u } from '../lib/path';
       {/* ============ 設問 ============ */}
       <div class="screen" data-screen="quiz" hidden>
         <div class="quiz-head">
-          <span class="q-num">Q<span data-q-num>1</span> <span class="q-total">/ 5</span></span>
+          <span class="q-num"><span data-q-num>1</span> <span class="q-total">/ 5</span></span>
           <div class="dots" data-dots></div>
         </div>
         <div class="card quiz-card" data-quiz-card>
+          <span class="q-badge" aria-hidden="true">Q</span>
           <h2 data-q-text></h2>
           <div class="choices" data-choices></div>
         </div>
-        <button class="back" data-back hidden>← まえの質問にもどる</button>
+        <button class="back" data-back hidden>← 前の質問に戻る</button>
       </div>
 
       {/* ============ 結果 ============ */}
@@ -110,7 +111,12 @@ import { u } from '../lib/path';
   .dots :global(span) { flex: 1; height: 7px; border-radius: 4px; background: #DCE4EE; }
   .dots :global(span.done) { background: var(--navy); }
   .dots :global(span.now) { background: var(--orange); }
-  .quiz-card { padding: 28px 24px; }
+  .quiz-card { padding: 24px 24px 28px; }
+  .q-badge {
+    display: grid; place-items: center; width: 36px; height: 36px; margin: 0 auto 10px;
+    border-radius: 50%; background: var(--navy); color: #fff;
+    font-family: var(--font-round); font-size: 17px; font-weight: 900;
+  }
   .quiz-card h2 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(18px, 4.4vw, 22px);
     line-height: 1.7; margin: 0; color: var(--ink); text-align: center;
