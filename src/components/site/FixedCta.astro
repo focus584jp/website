@@ -1,16 +1,19 @@
 ---
 // 固定CTA — SP(≤1024px): 下部バー常時表示 / PC(>1024px): 右端縦書き（ヒーロー通過後にスライドイン）
 import { u } from '../../lib/path';
+import { ctaLabels } from '../../data/home';
+import Icon from './Icon.astro';
+import ArrowCircle from './ArrowCircle.astro';
 ---
 <div class="sp-cta">
-  <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む →</a>
-  <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
+  <a href={u('/consult')} class="btn3d btn3d-n consult">{ctaLabels.consult} →</a>
+  <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><Icon name="download" size={14} stroke="#fff" strokeWidth={2.6} />{ctaLabels.doc}</a>
 </div>
 
 <div class="side-cta" data-side-cta style="visibility:hidden">
   {/* アイコンは文末（下側）に置く。無料相談の矢印は白丸＋紺矢印 */}
-  <a href={u('/consult')} class="v-btn consult-v">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
-  <a href={u('/request')} class="v-btn doc-v btn-shine-v">資料をダウンロード<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg></a>
+  <a href={u('/consult')} class="v-btn consult-v">{ctaLabels.consult}<ArrowCircle /></a>
+  <a href={u('/request')} class="v-btn doc-v btn-shine-v">{ctaLabels.doc}<Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} /></a>
 </div>
 
 <style>
@@ -44,10 +47,6 @@ import { u } from '../../lib/path';
   .v-btn:hover { transform: translateX(-4px); }
   .consult-v { background: var(--navy); }
   .doc-v { background: var(--orange); }
-  .circle {
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    display: flex; align-items: center; justify-content: center; flex: none;
-  }
 
   @media (min-width: 1025px) {
     .sp-cta { display: none; }

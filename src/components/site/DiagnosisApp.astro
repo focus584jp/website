@@ -2,6 +2,9 @@
 // 塾タイプ診断の本体（導入→全5問→結果）。/diagnosis ページとモーダル（DiagnosisPopup内）の両方から使う。
 // 配点・タイプ定義は src/data/diagnosis.ts。
 import { u } from '../../lib/path';
+import { ctaLabels } from '../../data/home';
+import Icon from './Icon.astro';
+import ArrowCircle from './ArrowCircle.astro';
 ---
   <div class="stage" data-diag-app>
     <div class="inner">
@@ -12,7 +15,7 @@ import { u } from '../../lib/path';
           <span class="badge">30秒・全5問</span>
           <h1>うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></h1>
           <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの塾のタイプがその場で分かります。</p>
-          <button class="start btn3d btn3d-n" data-start>診断をはじめる<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></button>
+          <button class="start btn3d btn3d-n" data-start>診断をはじめる<ArrowCircle /></button>
         </div>
       </div>
 
@@ -45,8 +48,8 @@ import { u } from '../../lib/path';
             </div>
             <div class="other-note" data-r-note hidden><p></p></div>
             <div class="result-cta">
-              <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
-              <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
+              <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><Icon name="download" size={15} stroke="#fff" strokeWidth={2.6} />{ctaLabels.doc}</a>
+              <a href={u('/consult')} class="btn3d btn3d-n consult">{ctaLabels.consult}<ArrowCircle /></a>
             </div>
             <button class="back" data-restart>もう一度診断する</button>
           </div>
@@ -80,10 +83,6 @@ import { u } from '../../lib/path';
       linear-gradient(rgba(74, 122, 204, .08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
     background-size: 22px 22px;
-  }
-  .circle {
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    display: flex; align-items: center; justify-content: center; flex: none;
   }
   .intro-card h1 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 5.5vw, 30px);
@@ -178,10 +177,6 @@ import { u } from '../../lib/path';
   }
   .result-cta .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
   .result-cta .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
-  .result-cta .circle {
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    display: flex; align-items: center; justify-content: center; flex: none;
-  }
   .result-cta + .back { margin-top: 18px; }
 </style>
 

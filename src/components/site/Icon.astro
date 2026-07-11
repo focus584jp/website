@@ -1,0 +1,24 @@
+---
+// サイト共通のインラインSVGアイコン（Lucide線画準拠。絵文字禁止規約のアイコン置き場）。
+// サイズ・色は使用箇所ごとに異なるため、propsをすべて明示必須にしている。
+// 注: 親のscoped CSSがsvg要素を直接セレクタで触る箇所（LeadFormの送信アニメ・教室詳細の.info-ic・
+//     Priceのマーカー下線）は、子コンポーネント化するとスコープが外れるためインラインSVGのまま残している。
+const paths = {
+  /** 右向き矢印 */
+  'arrow-right': ['M4 12h15', 'm13 6 6 6-6 6'],
+  /** 資料ダウンロード（下向き矢印＋受け皿） */
+  download: ['M12 3v11', 'm7 10 5 5 5-5', 'M4 21h16'],
+  /** 受話器 */
+  phone: ['M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z'],
+} as const;
+
+interface Props {
+  name: keyof typeof paths;
+  /** 一辺のpx（width/height） */
+  size: number;
+  stroke: string;
+  strokeWidth: number;
+}
+const { name, size, stroke, strokeWidth } = Astro.props;
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} stroke-width={strokeWidth} stroke-linecap="round" stroke-linejoin="round">{paths[name].map((d) => <path d={d}></path>)}</svg>

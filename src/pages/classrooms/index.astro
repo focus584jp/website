@@ -2,6 +2,7 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageHero from '../../components/site/PageHero.astro';
 import CtaBand from '../../components/site/CtaBand.astro';
+import Icon from '../../components/site/Icon.astro';
 import { classrooms, stationLabel } from '../../data/classrooms';
 import { u } from '../../lib/path';
 
@@ -26,7 +27,7 @@ const regions = [...new Set(classrooms.map((c) => c.region))];
                   <p class="room-name">{c.name.replace(/教室$/, '')}</p>
                   <p class="room-access">{stationLabel(c)} 徒歩{c.walkMinutes}分</p>
                 </div>
-                <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+                <span class="ar" aria-hidden="true"><Icon name="arrow-right" size={12} stroke="#fff" strokeWidth={2.8} /></span>
               </a>
             ))}
           </div>

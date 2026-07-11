@@ -2,6 +2,7 @@
 // 03 料金 — 3社比較カード＋吹き出し＋「5教科全部通える」訴求
 // 他塾金額の根拠・「当社調べ」表記は /price ページで担保（公開前に要確認）
 import SectionHead from '../site/SectionHead.astro';
+import Icon from '../site/Icon.astro';
 import { u } from '../../lib/path';
 
 // 教科チップは濃色ベタ＋白文字（淡青カードの上でも沈まないように）
@@ -65,7 +66,7 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
           <div class="chips"><span class="chip" style={chip('数学', 'sm')}>数学</span><span class="chip" style={chip('英語', 'sm')}>英語</span></div>
           <div class="band-other-note">2教科で 約33,000円</div>
         </div>
-        <div class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></div>
+        <div class="arrow"><Icon name="arrow-right" size={20} stroke="#E67832" strokeWidth={3} /></div>
         <div class="band-focus">
           <div class="band-focus-title">フォーカスなら</div>
           <div class="chip-rows">

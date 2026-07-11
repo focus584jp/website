@@ -2,7 +2,9 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import LeadForm from '../components/site/LeadForm.astro';
+import ArrowCircle from '../components/site/ArrowCircle.astro';
 import { u } from '../lib/path';
+import { ctaLabels } from '../data/home';
 ---
 <SiteLayout
   title="資料ダウンロード｜学習塾フォーカス"
@@ -21,7 +23,7 @@ import { u } from '../lib/path';
     <div class="container">
       <h2>直接お話を聞きたい方へ</h2>
       <p>資料だけでなく、お子さまの状況を相談したい方は、無料相談もどうぞ。教室の雰囲気を知るための気軽な面談です。</p>
-      <a href={u('/consult')} class="btn3d btn3d-n consult-btn">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
+      <a href={u('/consult')} class="btn3d btn3d-n consult-btn">{ctaLabels.consult}<ArrowCircle /></a>
     </div>
   </section>
 </SiteLayout>
@@ -37,9 +39,5 @@ import { u } from '../lib/path';
     display: inline-flex; align-items: center; justify-content: center; gap: 9px;
     background: var(--navy); color: #fff; box-shadow: 0 5px 0 var(--navy-shadow);
     font-size: 15.5px; font-weight: 700; padding: 15px 34px; border-radius: 999px; text-decoration: none;
-  }
-  .circle {
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    display: flex; align-items: center; justify-content: center; flex: none;
   }
 </style>

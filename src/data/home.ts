@@ -7,6 +7,12 @@ export const phone = {
   hours: '受付時間 16:00〜22:00（日曜定休）',
 };
 
+/** サイト共通のCTAラベル（ヒーロー・CTAバンド・固定CTA・診断結果・フォーム導線で共用） */
+export const ctaLabels = {
+  doc: '資料をダウンロード',
+  consult: '無料相談を申し込む',
+};
+
 /** ヘッダー・SPメニューのナビ（トップページ内アンカー） */
 export const nav = [
   { id: 'reason', label: '選ばれる理由' },

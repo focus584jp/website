@@ -1,19 +1,21 @@
 ---
 // CTAバンド — ＼ お気軽にお問い合わせください ／ ＋ 資料DL / 無料相談 / 電話番号
-import { phone } from '../../data/home';
+import { phone, ctaLabels } from '../../data/home';
 import { u } from '../../lib/path';
+import Icon from './Icon.astro';
+import ArrowCircle from './ArrowCircle.astro';
 ---
 <section class="cta-band">
   <div class="container">
     <h2 class="lead-in"><span class="slash">＼</span>お気軽にお問い合わせください<span class="slash">／</span></h2>
     <div class="buttons">
-      <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>資料をダウンロード</a>
-      <a href={u('/consult')} class="btn3d btn3d-n consult">無料相談を申し込む<span class="circle"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span></a>
+      <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />{ctaLabels.doc}</a>
+      <a href={u('/consult')} class="btn3d btn3d-n consult">{ctaLabels.consult}<ArrowCircle /></a>
     </div>
     <div class="tel-block">
       <p class="tel-label">お電話でのお問い合わせはこちら</p>
       <a href={phone.tel} class="tel-num">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        <Icon name="phone" size={22} stroke="#E67832" strokeWidth={2.2} />
         {phone.display}
       </a>
       <p class="tel-hours">{phone.hours}</p>
@@ -37,10 +39,6 @@ import { u } from '../../lib/path';
   }
   .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
   .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
-  .circle {
-    width: 20px; height: 20px; border-radius: 50%; background: #fff;
-    display: flex; align-items: center; justify-content: center; flex: none;
-  }
 
   .tel-block { margin-top: 26px; }
   .tel-label { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; }

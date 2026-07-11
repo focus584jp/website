@@ -1,6 +1,7 @@
 ---
 // 05 教室一覧 — 千葉市/千葉市以外タブ（スワイプ切替対応）＋現在地から最寄り検索
 import SectionHead from '../site/SectionHead.astro';
+import Icon from '../site/Icon.astro';
 import { classrooms, stationLabel } from '../../data/classrooms';
 import { u } from '../../lib/path';
 
@@ -35,7 +36,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
                     <span class="room-name">{r.name}</span>
                     <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
                   </div>
-                  <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+                  <span class="ar" aria-hidden="true"><Icon name="arrow-right" size={12} stroke="#fff" strokeWidth={2.8} /></span>
                 </a>
               ))}
             </div>
@@ -51,7 +52,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
                     </div>
                     <span class="room-access">{stationLabel(r)}<br />徒歩{r.walkMinutes}分</span>
                   </div>
-                  <span class="ar" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
+                  <span class="ar" aria-hidden="true"><Icon name="arrow-right" size={12} stroke="#fff" strokeWidth={2.8} /></span>
                 </a>
               ))}
             </div>
