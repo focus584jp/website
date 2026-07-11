@@ -52,9 +52,7 @@ export interface DiagnosisType {
   mark: string;
   fit: boolean; // true = FOCUSのタイプ（E）
   points: string[];
-  note?: string;
-  /** 授業料の相場（任意表示） */
-  price?: string; // 非FOCUSタイプに添える前向きな一言
+  note?: string; // 非FOCUSタイプに添える前向きな一言
 }
 
 export const types: Record<string, DiagnosisType> = {

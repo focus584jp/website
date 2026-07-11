@@ -40,7 +40,6 @@ import { u } from '../../lib/path';
             <h2><span class="mk" data-r-name></span><span class="t-suffix">タイプ</span></h2>
             <span class="badge" data-r-badge>フォーカスとの相性 ◎</span>
             <div class="points" data-r-points></div>
-            <p class="r-price" data-r-price hidden></p>
             <div class="fit-note" data-r-fit hidden>
               <p>フォーカスは、勉強が苦手な中学生を専門とする<br />1対多数（最大1対4）の個別指導塾です。</p>
             </div>
@@ -146,6 +145,7 @@ import { u } from '../../lib/path';
     cursor: pointer; transition: color .15s;
   }
   .back:hover { color: var(--navy); }
+  .back[hidden] { display: none; } /* display:block が hidden 属性に勝つのを打ち消す（1問目で非表示にするため） */
 
   /* 結果 */
   .result-card { overflow: hidden; animation-duration: .35s; }
@@ -178,10 +178,6 @@ import { u } from '../../lib/path';
   .result-cta .circle {
     width: 20px; height: 20px; border-radius: 50%; background: #fff;
     display: flex; align-items: center; justify-content: center; flex: none;
-  }
-  .r-price {
-    display: inline-block; margin: 16px auto 0; font-size: 12.5px; font-weight: 700;
-    color: var(--muted); background: var(--panel); border-radius: 999px; padding: 6px 16px;
   }
   .result-cta + .back { margin-top: 18px; }
 </style>
@@ -257,9 +253,6 @@ import { u } from '../../lib/path';
       row.append(dot, text);
       return row;
     }));
-    const priceEl = root.querySelector<HTMLElement>('[data-r-price]')!;
-    priceEl.hidden = !t.price;
-    priceEl.textContent = t.price ? `授業料の相場：${t.price}` : '';
     root.querySelector<HTMLElement>('[data-r-fit]')!.hidden = !t.fit;
     const noteBox = root.querySelector<HTMLElement>('[data-r-note]')!;
     noteBox.hidden = t.fit;
@@ -294,7 +287,10 @@ import { u } from '../../lib/path';
   root.querySelector('[data-restart]')?.addEventListener('click', () => {
     step = 'intro'; answers = [];
     show('intro');
-    window.scrollTo({ top: 0 });
+    // モーダル内ではシートだけを先頭へ戻す（背景ページは動かさない）。単体ページではページ先頭へ
+    const dialog = root.closest<HTMLElement>('[role="dialog"]');
+    if (dialog) dialog.scrollTo({ top: 0 });
+    else window.scrollTo({ top: 0 });
   });
 
   // モーダル側から開き直すときに導入画面へ戻す
