@@ -25,7 +25,11 @@ import { u } from '../lib/path';
       <div class="screen" data-screen="quiz" hidden>
         <div class="quiz-head">
           <span class="q-num"><span data-q-num>1</span> <span class="q-total">/ 5</span></span>
-          <div class="dots" data-dots></div>
+          <div class="prog" aria-hidden="true">
+            <div class="prog-fill" data-prog>
+              <svg class="prog-pen" viewBox="0 0 24 24" fill="none" stroke="#E67832" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.66 14.66 L14.66 5.66 L18.34 9.34 L9.34 18.34 Z"></path><path d="M8.4 15.6 L15.6 8.4"></path><path d="M5.66 14.66 L4 20 L9.34 18.34"></path><path d="M4 20 L4.7 17.75 L6.25 19.3 Z" fill="#E67832" stroke="none"></path></svg>
+            </div>
+          </div>
         </div>
         <div class="card quiz-card" data-quiz-card>
           <span class="q-badge" aria-hidden="true">Q</span>
@@ -106,11 +110,16 @@ import { u } from '../lib/path';
   .quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .q-num { font: 900 14px ui-monospace, Menlo, monospace; color: var(--navy); letter-spacing: .1em; }
   .q-total { color: #8FA9D0; }
-  /* 進捗はセグメントバー（済=紺 / 現在=橙 / 未=グレー） */
-  .dots { display: flex; gap: 5px; flex: 1; max-width: 200px; margin-left: 16px; }
-  .dots :global(span) { flex: 1; height: 7px; border-radius: 4px; background: #DCE4EE; }
-  .dots :global(span.done) { background: var(--navy); }
-  .dots :global(span.now) { background: var(--orange); }
+  /* 進捗バー: 鉛筆が線を引いていく（塗り=紺のグラデ・先端に橙の鉛筆） */
+  .prog { flex: 1; max-width: 200px; margin-left: 16px; height: 6px; border-radius: 3px; background: #DCE4EE; }
+  .prog-fill {
+    position: relative; height: 100%; width: 0; border-radius: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--navy-light));
+    transition: width .4s cubic-bezier(.3, .8, .3, 1);
+  }
+  .prog-pen {
+    position: absolute; right: -8px; top: -20px; width: 24px; height: 24px;
+  }
   .quiz-card { padding: 24px 24px 28px; }
   .q-badge {
     display: grid; place-items: center; width: 36px; height: 36px; margin: 0 auto 10px;
@@ -192,7 +201,7 @@ import { u } from '../lib/path';
   const qNum = document.querySelector<HTMLElement>('[data-q-num]')!;
   const qText = document.querySelector<HTMLElement>('[data-q-text]')!;
   const choicesBox = document.querySelector<HTMLElement>('[data-choices]')!;
-  const dotsBox = document.querySelector<HTMLElement>('[data-dots]')!;
+  const progFill = document.querySelector<HTMLElement>('[data-prog]')!;
   const backBtn = document.querySelector<HTMLElement>('[data-back]')!;
   const quizCard = document.querySelector<HTMLElement>('[data-quiz-card]')!;
 
@@ -222,11 +231,7 @@ import { u } from '../lib/path';
       });
       return b;
     }));
-    dotsBox.replaceChildren(...questions.map((_, di) => {
-      const s = document.createElement('span');
-      s.className = di < i ? 'done' : di === i ? 'now' : '';
-      return s;
-    }));
+    progFill.style.width = `${((i + 1) / questions.length) * 100}%`;
     backBtn.hidden = i === 0;
     // カード切り替えアニメーションを再生
     quizCard.style.animation = 'none';
@@ -254,6 +259,17 @@ import { u } from '../lib/path';
     const noteBox = document.querySelector<HTMLElement>('[data-r-note]')!;
     noteBox.hidden = t.fit;
     noteBox.querySelector('p')!.textContent = t.note ?? '';
+  }
+
+  // DEV専用: ?quiz=<n> で設問画面を直接表示（動作確認用。本番ビルドでは除去される）
+  if (import.meta.env.DEV) {
+    const q = new URLSearchParams(location.search).get('quiz');
+    if (q !== null) {
+      const n = Math.min(Math.max(Number(q) || 0, 0), questions.length - 1);
+      step = n; answers = [];
+      renderQuiz(n);
+      show('quiz');
+    }
   }
 
   document.querySelector('[data-start]')?.addEventListener('click', () => {
