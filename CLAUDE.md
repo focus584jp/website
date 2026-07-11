@@ -62,3 +62,8 @@ src/
 
 - 基本ローカル確認（`npm run dev`）。**pushはユーザーの指示があったときのみ**（push→GitHub Actionsで自動デプロイ）
 - 公開ローンチ時: noindex解除（SiteLayout）・仮データ差し替え・法務表記（当社調べ等）を確認
+- **視覚回帰チェック（scripts/）**: リファクタなど「見た目を変えない」変更の検証に使う
+  1. 変更前に `npm run build && bash scripts/screenshot-pages.sh <before>` でベースライン撮影（全ページ×SP500px/PC1280px）
+  2. 変更後に再ビルド→ `bash scripts/screenshot-pages.sh <after>` → `python3 scripts/compare-shots.py <before> <after>`
+  3. 教室ページのGoogleマップ・フォント微差は撮影ノイズ。疑わしければ同じビルドを2回撮って切り分ける
+- devサーバーは編集を重ねるとscoped CSSがHMRで古くなることがある→表示が怪しいときは再起動、最終確認はビルド出力で
