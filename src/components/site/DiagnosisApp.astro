@@ -129,7 +129,6 @@ import { u } from '../../lib/path';
     box-shadow: var(--shadow-card);
     transition: border-color .15s, background .15s, transform .12s;
   }
-  .choices :global(button:hover) { border-color: var(--navy); background: var(--blue-paler); }
   .choices :global(button:active) { transform: translateY(1px); }
   .choices :global(.ch-b) {
     flex: none; width: 27px; height: 27px; border-radius: 50%;
@@ -138,13 +137,17 @@ import { u } from '../../lib/path';
     font-family: var(--font-round); font-size: 13.5px; font-weight: 900;
     transition: background .15s, color .15s;
   }
-  .choices :global(button:hover .ch-b) { background: var(--navy); color: #fff; }
+  /* hoverはポインタ環境のみ。タッチではタップ後にhoverが張り付き、次の設問の同じ位置のボタンに色が残るため */
+  @media (hover: hover) {
+    .choices :global(button:hover) { border-color: var(--navy); background: var(--blue-paler); }
+    .choices :global(button:hover .ch-b) { background: var(--navy); color: #fff; }
+    .back:hover { color: var(--navy); }
+  }
   .back {
     display: block; margin: 16px auto 0; background: none; border: none;
     font-family: var(--font-body); font-size: 13px; font-weight: 700; color: var(--gray-1);
     cursor: pointer; transition: color .15s;
   }
-  .back:hover { color: var(--navy); }
   .back[hidden] { display: none; } /* display:block が hidden 属性に勝つのを打ち消す（1問目で非表示にするため） */
 
   /* 結果 */
