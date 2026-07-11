@@ -5,11 +5,13 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 
 ## いまの段階
 
-- **全ページhifi実装済み**（2026-07-07。トップ＝`docs/design/トップページ.dc.html`、相性診断＝`docs/design/相性診断.dc.html` が正。下層はワイヤー構造＋トップのトークンで実装）
+- **全ページhifi実装済み・公開済み**（2026-07-07。トップ＝`docs/design/トップページ.dc.html`、相性診断＝`docs/design/相性診断.dc.html` が正。下層は2026-07-10〜11にデザイン展開済み: PageHero方眼ノート地＋ページ別アイコン・指導方針・教室一覧・沿革・診断モーダル化）
+- **フォーム送信は本番稼働中**（2026-07-10〜。資料請求 /request・無料相談 /consult＝LeadForm.astro 3ステップ、企業問い合わせ /contact＝CorporateForm.astro。送信先は focus/lead-api の GAS Web App。設計は docs/superpowers/specs/2026-07-10-form-confirm-step-design.md。DEVは ?step=confirm|busy|done で画面確認可）
 - ワイヤーフレーム層（components/wireframe・WireframeLayout・wireframe.css・tokens.css）は廃止済み（git履歴に残っている）
 - 次のタスク:
-  - **問い合わせフォームの送信実装（GAS）**（資料請求 /request=SMS配布・無料相談 /consult=予約。フロントは入力→確認→完了の3ステップ実装済み＝components/site/LeadForm.astro、設計は docs/superpowers/specs/2026-07-10-form-confirm-step-design.md。本番は送信ボタンdisabled＋「※準備中」表記、DEVは ?step=confirm|done で画面確認可）
-  - 教室詳細の実データ残り（教室写真。対応中学・会社概要・プライバシーは反映済み）
+  - 下層デザイン展開の残り: **料金ページ本文 → FAQページ本文**（部品カタログ /styleguide が基準）
+  - GA4導入（測定ID受領待ち。CVイベント=LeadForm完了画面）
+  - 実データ差し替え（教室写真・保護者の声ほか。一覧は docs/design/README.md 末尾の公開前TODO）
 - 成果物の形: Astroビルドが `index.html`＋分離されたCSS/JSを出力する（メインページ=index.html、css/js別ファイルの要件はビルドで担保）
 
 ## 正本ドキュメント（docs/design/）
@@ -33,8 +35,10 @@ src/
   layouts/
     SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
-    site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/SectionHead/FaqList/LeadForm）
+    site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/DiagnosisApp/
+                    SectionHead/FaqList/LeadForm/CorporateForm/MethodCompare/Icon/ArrowCircle）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
+    classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/
     site.css        デザイントークン＋共有ボタン＋フォーム（正。docs/design/README.mdのトークンと同期）
   data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts / forms.ts）。文言・数値・配点はここに集約
@@ -48,7 +52,7 @@ src/
 - 内部リンクは必ず `u()`（`src/lib/path.ts`）を通す（GitHub Pagesのbase `/website` 対応）
 - 文言・教室・料金などのデータはコンポーネントに直書きせず `src/data/` に置く
 - デザイントークンは `src/styles/site.css` のCSS変数を使う。新しい色を発明しない（ブランド正本は `~/claude/design-system/`）
-- 絵文字禁止。アイコンはインラインSVG（Lucide線画準拠）
+- 絵文字禁止。アイコンはインラインSVG（Lucide線画準拠）。**共通アイコンは components/site/Icon.astro に集約**（arrow-right/download/phone。新規アイコンはここへ追加）。白丸＋紺矢印は ArrowCircle.astro。例外: 親のscoped CSSがsvgを直接触る箇所（LeadForm送信アニメ・教室詳細info-ic等）はインラインのまま
 - ブレークポイント: <768 SP / 768–1024 タブレット / >1024 PC
 - **読ませる本文は15px標準（clamp下限も14px以上）・色は var(--ink) #333333**。ターゲット（40代保護者・スマホ）の可読性基準。#8A96A8（gray-1）は装飾的な補足のみ（駅・徒歩など実用情報にはmuted以上を使う）
 - **最低フォントサイズ 12px**（clampの下限も12px以上）。例外は「高密度な比較カード内の補足（税込等）」「装飾英字ラベル」「アイコン補助ラベル（ハンバーガーのメニュー等）」のみ最低10px
