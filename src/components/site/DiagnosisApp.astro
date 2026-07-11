@@ -21,9 +21,7 @@ import { u } from '../../lib/path';
         <div class="quiz-head">
           <span class="q-num"><span data-q-num>1</span> <span class="q-total">/ 5</span></span>
           <div class="prog" aria-hidden="true">
-            <div class="prog-fill" data-prog>
-              <svg class="prog-pen" viewBox="0 0 24 24" fill="none" stroke="#8A96A8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.66 14.66 L14.66 5.66 L18.34 9.34 L9.34 18.34 Z"></path><path d="M8.4 15.6 L15.6 8.4"></path><path d="M5.66 14.66 L4 20 L9.34 18.34"></path><path d="M4 20 L4.7 17.75 L6.25 19.3 Z" fill="#8A96A8" stroke="none"></path></svg>
-            </div>
+            <div class="prog-fill" data-prog></div>
           </div>
         </div>
         <div class="card quiz-card" data-quiz-card>
@@ -104,15 +102,12 @@ import { u } from '../../lib/path';
   .quiz-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .q-num { font: 900 14px ui-monospace, Menlo, monospace; color: var(--navy); letter-spacing: .1em; }
   .q-total { color: #8FA9D0; }
-  /* 進捗バー: 鉛筆が線を引いていく（塗り=紺のグラデ・先端に橙の鉛筆） */
+  /* 進捗バー（塗り=紺のグラデ） */
   .prog { flex: 1; max-width: 200px; margin-left: 16px; height: 6px; border-radius: 3px; background: #DCE4EE; }
   .prog-fill {
     position: relative; height: 100%; width: 0; border-radius: 3px;
     background: linear-gradient(90deg, var(--navy), var(--navy-light));
     transition: width .4s cubic-bezier(.3, .8, .3, 1);
-  }
-  .prog-pen {
-    position: absolute; right: -8px; top: -20px; width: 24px; height: 24px;
   }
   .quiz-card { padding: 24px 24px 28px; }
   .q-badge {
