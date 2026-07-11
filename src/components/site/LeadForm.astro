@@ -65,7 +65,7 @@ const STEPS = ['入力', '確認', '完了'];
     </div>
     <button type="submit" class:list={nextClass}>
       入力内容を確認する
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg>
+      <span class="ar-c" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
     </button>
     {cfg.note && <p class="f-note" set:html={cfg.note} />}
     {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
@@ -131,7 +131,10 @@ const STEPS = ['入力', '確認', '完了'];
   .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
   /* 進行ボタンはアウトライン（塗り＋立体3DはCV用ボタン専用） */
   .flat { background: #fff; color: var(--navy); border: 2px solid var(--navy); box-shadow: none; }
-  .flat svg { stroke: var(--navy); }
+  .ar-c {
+    width: 20px; height: 20px; border-radius: 50%; background: var(--navy); flex: none;
+    display: flex; align-items: center; justify-content: center;
+  }
   .flat:active { transform: translateY(1px); }
 
   /* バリデーションエラー */

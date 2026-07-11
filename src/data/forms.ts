@@ -48,7 +48,6 @@ export const leadForms: Record<LeadFormVariant, LeadFormCopy> = {
     phonePattern: '^0\\d{9,10}$', // 固定電話も可（市外局番からの10〜11桁）
     phoneError: '電話番号（市外局番からの10〜11桁）を入力してください',
     submitLabel: 'この内容で無料相談を申し込む',
-    note: '送信後、ご希望の教室からご連絡し、日時を確定します。',
     doneTitle: 'お申し込みを受け付けました',
     doneBody: 'ご希望の教室から折り返しご連絡し、日時を確定します。今しばらくお待ちください。',
     theme: 'navy',
