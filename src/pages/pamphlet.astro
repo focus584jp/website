@@ -1,0 +1,57 @@
+---
+// デジタルパンフレットの公開ページ。資料請求のSMSで送るURLの着地先。
+// PDF本体は public/pamphlet.pdf（現在は仮。正式版ができたら同名で差し替えればURLは不変）
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Icon from '../components/site/Icon.astro';
+import ArrowCircle from '../components/site/ArrowCircle.astro';
+import { u } from '../lib/path';
+import { ctaLabels } from '../data/home';
+---
+<SiteLayout
+  title="デジタルパンフレット｜学習塾フォーカス"
+  description="学習塾フォーカスのデジタルパンフレット。指導方針・料金・教室の様子をまとめた紹介資料をご覧いただけます。"
+  fixedCta={false}
+>
+  <PageHero eyebrow="PAMPHLET" title="デジタルパンフレット" deco="request" />
+
+  <section class="body">
+    <div class="container">
+      <p class="lead">フォーカスの指導方針・料金・教室の様子をまとめた紹介資料です。<br class="pc-br" />下のボタンからご覧ください。</p>
+      <a href={u('/pamphlet.pdf')} target="_blank" rel="noopener" class="btn-shine btn3d btn3d-o open-btn"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />パンフレットを見る（PDF）</a>
+      <p class="temp-note">※現在は仮の資料を表示しています（正式版に差し替え予定）</p>
+    </div>
+  </section>
+
+  <section class="consult-lead">
+    <div class="container">
+      <h2>資料を読んで気になったら</h2>
+      <p>お子さまの状況に合わせたご案内は、無料相談でどうぞ。教室の雰囲気を知るための気軽な面談です。無理な勧誘は一切いたしません。</p>
+      <a href={u('/consult')} class="btn3d btn3d-n consult-btn">{ctaLabels.consult}<ArrowCircle /></a>
+    </div>
+  </section>
+</SiteLayout>
+
+<style>
+  .body { background: #fff; }
+  .body .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; text-align: center; }
+  .lead { font-size: 15px; line-height: 2; color: var(--ink); margin: 0 0 24px; }
+  .pc-br { display: none; }
+  @media (min-width: 768px) { .pc-br { display: inline; } }
+  .open-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    background: var(--orange); color: #fff; box-shadow: 0 5px 0 var(--orange-shadow);
+    font-size: 16px; font-weight: 700; padding: 17px 36px; border-radius: 999px; text-decoration: none;
+  }
+  .temp-note { font-size: 12.5px; color: #C0392B; margin: 16px 0 0; }
+
+  .consult-lead { background: var(--alt-bg); text-align: center; }
+  .consult-lead .container { max-width: 720px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px; }
+  .consult-lead h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 2.6vw, 23px); color: var(--ink); margin: 0 0 12px; }
+  .consult-lead p { font-size: 15px; line-height: 2; color: var(--ink); margin: 0 auto 20px; max-width: 560px; }
+  .consult-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    background: var(--navy); color: #fff; box-shadow: 0 5px 0 var(--navy-shadow);
+    font-size: 15.5px; font-weight: 700; padding: 15px 34px; border-radius: 999px; text-decoration: none;
+  }
+</style>
