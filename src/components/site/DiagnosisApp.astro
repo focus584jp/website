@@ -188,6 +188,12 @@ import ArrowCircle from './ArrowCircle.astro';
   }
   .result-cta .doc { background: var(--orange); box-shadow: 0 5px 0 var(--orange-shadow); }
   .result-cta .consult { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
+  /* スマホは2ボタンを横並びに（結果画面を短くする）。360px未満の極小幅は収まらないため縦のまま */
+  @media (min-width: 360px) and (max-width: 767px) {
+    .result-cta { flex-direction: row; max-width: none; gap: 8px; }
+    .result-cta a { flex: 1; font-size: clamp(12px, 3.6vw, 13.5px); padding: 14px 4px; gap: 5px; white-space: nowrap; }
+    .result-cta :global(.circle) { width: 18px; height: 18px; }
+  }
   .result-cta + .back { margin-top: 18px; }
 </style>
 
