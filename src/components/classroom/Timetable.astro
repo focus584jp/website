@@ -1,0 +1,91 @@
+---
+// 時間割（教室詳細ページ）。例の生徒A〜Dの色分けで「通う曜日・時間帯を選べる」ことを伝える。
+// データは src/data/timetable.ts（全教室共通）。
+import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from '../../data/timetable';
+---
+<div class="tt">
+  <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。たとえば、こんな通い方をしています。</p>
+
+  <div class="tt-grid">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th class="corner"></th>
+          {timetableDays.map((d) => <th class="day">{d}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {timetableRows.map((r) => (
+          <tr class:list={{ seasonal: r.seasonal }}>
+            <th class="time">{r.time}</th>
+            {r.cells.map((c) => <td class={c ? `p-${c.toLowerCase()}` : ''}>{c}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <p class="lg-title">（例）こんな生徒たちが通っています</p>
+      {timetablePersonas.map((p) => (
+        <div class:list={['lg-item', `p-${p.key.toLowerCase()}`]}>
+          <span class="lg-key">{p.key}</span>
+          <span class="lg-text">{p.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <ul class="notes">
+    {timetableNotes.map((nt) => <li>{nt}</li>)}
+  </ul>
+</div>
+
+<style>
+  .tt-lead { font-size: 14.5px; line-height: 1.9; color: var(--ink); margin: 0 0 18px; }
+
+  .tbl { width: 100%; border-collapse: separate; border-spacing: 4px; table-layout: fixed; }
+  .tbl th.corner { width: 66px; background: none; }
+  .tbl .day {
+    background: var(--navy); color: #fff; font-family: var(--font-round);
+    font-size: 13.5px; font-weight: 900; padding: 8px 0; border-radius: 7px;
+  }
+  .tbl .time {
+    background: var(--panel); color: var(--muted); font-size: 12px; font-weight: 700;
+    padding: 0 6px; border-radius: 7px; white-space: nowrap;
+  }
+  .tbl td {
+    background: var(--alt-bg); border-radius: 7px; text-align: center; height: 36px;
+    font-family: var(--font-round); font-size: 13.5px; font-weight: 900; color: var(--ink);
+  }
+  .tbl tr.seasonal td { background: #E4E9F0; }
+  .tbl tr.seasonal .time { color: var(--gray-1); }
+
+  /* 例の生徒の色（デザイントークンの淡色4種） */
+  .p-a { background: #FBDECB; } /* 淡橙 */
+  .p-b { background: var(--blue-pale); } /* 淡青 */
+  .p-c { background: #FCF3D7; } /* 淡黄 */
+  .p-d { background: var(--success-bg); } /* 淡緑 */
+
+  .legend { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .lg-title { font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 2px; }
+  .lg-item {
+    display: flex; align-items: center; gap: 10px;
+    border-radius: 10px; padding: 10px 12px;
+    font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5;
+  }
+  .lg-key {
+    width: 25px; height: 25px; border-radius: 50%; background: rgba(255, 255, 255, .8);
+    display: grid; place-items: center; flex: none;
+    font-family: var(--font-round); font-size: 13px; font-weight: 900; color: var(--ink);
+  }
+
+  .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .notes li { font-size: 12.5px; color: var(--muted); line-height: 1.8; padding-left: 1.4em; text-indent: -1.4em; }
+  .notes li::before { content: '※ '; }
+
+  /* PC: 左に時間割、右に例の生徒 */
+  @media (min-width: 1024px) {
+    .tt-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 32px; align-items: center; }
+    .legend { margin-top: 0; }
+  }
+</style>

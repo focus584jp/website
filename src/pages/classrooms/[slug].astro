@@ -4,6 +4,7 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageHero from '../../components/site/PageHero.astro';
 import CtaBand from '../../components/site/CtaBand.astro';
 import PhotoGallery from '../../components/classroom/PhotoGallery.astro';
+import Timetable from '../../components/classroom/Timetable.astro';
 import { classrooms } from '../../data/classrooms';
 
 export function getStaticPaths() {
@@ -91,6 +92,13 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカ
     </div>
   </section>
 
+  <section class="timetable">
+    <div class="container">
+      <h2>時間割</h2>
+      <Timetable />
+    </div>
+  </section>
+
   <section class="schools">
     <div class="container">
       <h2>対応中学校</h2>
@@ -144,8 +152,11 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカ
   /* 教室の様子（ギャラリー本体は components/classroom/PhotoGallery.astro） */
   .photos { background: var(--alt-bg); }
 
+  /* 時間割（本体は components/classroom/Timetable.astro） */
+  .timetable { background: #fff; }
+
   /* 対応中学校 */
-  .schools { background: #fff; }
+  .schools { background: var(--alt-bg); }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
   .chip {
     background: var(--blue-pale); color: var(--navy); font-size: 13px; font-weight: 700;
