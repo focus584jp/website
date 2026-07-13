@@ -47,6 +47,7 @@ const cellEntries = (time: string, day: string) =>
 
     {/* PC用の切替カード（説明4枚を常時表示。SPではチップ式=上のswを使う） */}
     <div class="legend">
+      <p class="lg-title">（例）タップして、生徒ごとの通い方を見る</p>
       {timetablePersonas.map((p) => (
         <button type="button" class:list={['lg-item', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">
           <span class="lg-key">{p.key}</span>
@@ -167,6 +168,7 @@ const cellEntries = (time: string, day: string) =>
 
   /* PC用の切替カード（SPでは非表示） */
   .legend { display: none; }
+  .lg-title { font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 2px; }
   .lg-item {
     display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
     background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 11px 13px;
