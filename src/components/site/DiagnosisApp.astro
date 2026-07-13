@@ -122,6 +122,7 @@ import ArrowCircle from './ArrowCircle.astro';
   .quiz-card h2 {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(18px, 4.4vw, 22px);
     line-height: 1.7; margin: 0; color: var(--ink); text-align: center;
+    white-space: pre-line; /* 設問文の \n を改行として表示（diagnosis.ts で改行位置を指定） */
   }
   .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
   /* 選択肢はA/B/Cバッジ付きの左寄せカード */
