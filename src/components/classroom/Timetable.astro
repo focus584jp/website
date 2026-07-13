@@ -4,7 +4,7 @@
 import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from '../../data/timetable';
 ---
 <div class="tt">
-  <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。たとえば、こんな通い方をしています。</p>
+  <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。</p>
 
   <div class="tt-grid">
     <table class="tbl">
@@ -50,21 +50,29 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
     font-size: 13.5px; font-weight: 900; padding: 8px 0; border-radius: 7px;
   }
   .tbl .time {
-    background: var(--panel); color: var(--muted); font-size: 12px; font-weight: 700;
-    padding: 0 6px; border-radius: 7px; white-space: nowrap;
+    background: var(--panel); color: var(--navy); font-size: 13px; font-weight: 800;
+    font-family: var(--font-tel); padding: 0 4px; border-radius: 7px; white-space: nowrap;
   }
   .tbl td {
-    background: var(--alt-bg); border-radius: 7px; text-align: center; height: 36px;
-    font-family: var(--font-round); font-size: 13.5px; font-weight: 900; color: var(--ink);
+    background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px;
+    font-family: var(--font-round); font-size: 15.5px; font-weight: 900;
   }
   .tbl tr.seasonal td { background: #E4E9F0; }
   .tbl tr.seasonal .time { color: var(--gray-1); }
 
-  /* 例の生徒の色（デザイントークンの淡色4種） */
-  .p-a { background: #FBDECB; } /* 淡橙 */
-  .p-b { background: var(--blue-pale); } /* 淡青 */
-  .p-c { background: #FCF3D7; } /* 淡黄 */
-  .p-d { background: var(--success-bg); } /* 淡緑 */
+  /* 例の生徒の色（面=デザイントークンの淡色4種、文字=対応する濃色。凡例のバッジ文字も同色） */
+  .tbl td.p-a { background: #FBDECB; color: var(--orange-shadow); } /* 淡橙 */
+  .tbl td.p-b { background: var(--blue-pale); color: var(--navy); } /* 淡青 */
+  .tbl td.p-c { background: #FCF3D7; color: #9A6A12; } /* 淡黄（文字=warning-text） */
+  .tbl td.p-d { background: var(--success-bg); color: var(--success-text); } /* 淡緑 */
+  .lg-item.p-a .lg-key { color: var(--orange-shadow); }
+  .lg-item.p-b .lg-key { color: var(--navy); }
+  .lg-item.p-c .lg-key { color: #9A6A12; }
+  .lg-item.p-d .lg-key { color: var(--success-text); }
+  .lg-item.p-a { background: #FBDECB; }
+  .lg-item.p-b { background: var(--blue-pale); }
+  .lg-item.p-c { background: #FCF3D7; }
+  .lg-item.p-d { background: var(--success-bg); }
 
   .legend { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
   .lg-title { font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 2px; }
@@ -74,9 +82,9 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
     font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5;
   }
   .lg-key {
-    width: 25px; height: 25px; border-radius: 50%; background: rgba(255, 255, 255, .8);
+    width: 25px; height: 25px; border-radius: 50%; background: rgba(255, 255, 255, .88);
     display: grid; place-items: center; flex: none;
-    font-family: var(--font-round); font-size: 13px; font-weight: 900; color: var(--ink);
+    font-family: var(--font-round); font-size: 13px; font-weight: 900;
   }
 
   .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
