@@ -84,7 +84,7 @@ import DiagnosisApp from './DiagnosisApp.astro';
   .dm-sheet {
     position: relative; width: 100%; max-width: 560px;
     max-height: calc(100dvh - 28px); overflow-y: auto; -webkit-overflow-scrolling: touch;
-    background: var(--alt-bg); border-radius: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+    background: #fff; border-radius: 18px; box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
     animation: dm-zoom .25s ease;
   }
   .dm-x {
@@ -93,8 +93,15 @@ import DiagnosisApp from './DiagnosisApp.astro';
     color: var(--navy); cursor: pointer; display: grid; place-items: center; padding: 0;
     box-shadow: 0 2px 6px rgba(20, 42, 84, .2);
   }
-  /* モーダル内は診断ステージの余白を詰める */
-  .dm-sheet :global(.stage) { min-height: auto; padding: 4px 16px 26px; }
+  /* モーダル内はシート自体を1枚のカードとして使う: 内側カードの枠・影・角丸を外して
+     「カード in カード」の二重枠を解消し、横幅を広く使う（/diagnosis 単体ページは従来どおり） */
+  .dm-sheet :global(.stage) { background: #fff; min-height: auto; padding: 0 0 10px; }
+  .dm-sheet :global(.card) { border: none; box-shadow: none; border-radius: 0; }
+  .dm-sheet :global(.intro-card) { padding: 18px 22px 34px; }
+  .dm-sheet :global(.quiz-head) { margin: 2px 0 14px; padding: 0 54px 0 22px; } /* 右は✕ボタンを避ける */
+  .dm-sheet :global(.quiz-card) { padding: 20px 22px 28px; }
+  .dm-sheet :global(.back) { margin-bottom: 8px; }
+  .dm-sheet :global(.result-body) { padding: 26px 22px; }
   @keyframes dm-fade { from { opacity: 0; } }
   @keyframes dm-zoom { from { opacity: 0; transform: scale(.92); } }
 </style>
@@ -114,7 +121,9 @@ import DiagnosisApp from './DiagnosisApp.astro';
   const modal = document.querySelector<HTMLElement>('[data-diag-modal]');
   if (modal) {
     const open = () => {
-      modal.querySelector('[data-diag-app]')?.dispatchEvent(new Event('diag-reset')); // 常に導入から
+      // DEVで ?quiz= 指定時はリセットしない（?diag&quiz=n でモーダル内の設問/結果画面を直接確認するため）
+      const keepDevState = import.meta.env.DEV && new URLSearchParams(location.search).has('quiz');
+      if (!keepDevState) modal.querySelector('[data-diag-app]')?.dispatchEvent(new Event('diag-reset')); // 常に導入から
       modal.classList.add('is-open');
       document.body.style.overflow = 'hidden';
       document.addEventListener('keydown', onKey);

@@ -19,6 +19,8 @@ export interface LeadFormCopy {
   /** 電話番号の判定パターン。正規化後（半角数字のみ）に対して判定する */
   phonePattern: string;
   phoneError: string;
+  /** 確認画面の電話番号の下に出す注意書き（誤入力防止。不要なら省略） */
+  phoneConfirmNote?: string;
   /** 確認画面の送信ボタン（最終CTA） */
   submitLabel: string;
   /** 入力画面のボタン下の補足（不要なら省略） */
@@ -35,6 +37,8 @@ export const leadForms: Record<LeadFormVariant, LeadFormCopy> = {
     phonePlaceholder: '例：090-0000-0000',
     phonePattern: '^0[789]0\\d{8}$', // SMS送付先のため携帯のみ（070/080/090の11桁）
     phoneError: '090などで始まる携帯電話番号（11桁）を入力してください',
+    // SMS自動送付の有効化後は「資料のURLをお送りします」に更新する（誤番号だと第三者に届くため強めに確認を促す）
+    phoneConfirmNote: '※この番号宛てに資料のご案内が届きます。お間違いがないかご確認ください',
     submitLabel: '資料を受け取る',
     doneTitle: '送信しました',
     // SMS自動送信は未実装（資料完成・プロバイダ選定後に対応）。当面は教室からの折り返し案内
