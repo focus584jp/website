@@ -37,8 +37,8 @@ export const timetablePersonas: TimetablePersona[] = [
     slots: [
       { day: '月', time: '17:00〜', subject: '英語' },
       { day: '水', time: '17:00〜', subject: '国語' },
-      { day: '木', time: '17:00〜', subject: '数学' },
-      { day: '金', time: '17:00〜', subject: '英語' },
+      { day: '木', time: '17:00〜', subject: '英語' },
+      { day: '金', time: '17:00〜', subject: '数学' },
     ],
   },
   {
@@ -47,8 +47,8 @@ export const timetablePersonas: TimetablePersona[] = [
     slots: [
       { day: '月', time: '19:00〜', subject: '数学' },
       { day: '月', time: '20:00〜', subject: '英語' },
-      { day: '木', time: '20:00〜', subject: '理科' },
-      { day: '金', time: '20:00〜', subject: '数学' },
+      { day: '木', time: '20:00〜', subject: '数学' },
+      { day: '金', time: '20:00〜', subject: '理科' },
     ],
   },
   {
