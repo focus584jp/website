@@ -66,6 +66,6 @@ export const timetablePersonas: TimetablePersona[] = [
 ];
 
 export const timetableNotes = [
-  '毎学期、予定調査表によるスケジュール確認を行いますので、通塾可能な時間帯に授業をお受けいただくことができます。',
+  '毎学期、予定調査表でご予定を確認し、授業日程の見直しを行います。',
   '14:00〜、15:00〜は講習期間中のみ開講となります。',
 ];
