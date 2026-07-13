@@ -12,6 +12,17 @@ const cellEntries = (time: string, day: string) =>
 <div class="tt" data-tt>
   <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。</p>
 
+  {/* 切替チップ（時間割の上に置き、スクロールせずに切り替えられるようにする） */}
+  <p class="sw-cap">（例）タップして、生徒ごとの通い方を見る</p>
+  <div class="sw">
+    {timetablePersonas.map((p) => (
+      <button type="button" class:list={['sw-btn', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">{p.key}</button>
+    ))}
+  </div>
+  {timetablePersonas.map((p) => (
+    <p class:list={['sw-desc', `p-${p.key.toLowerCase()}`]} data-desc={p.key}><b>{p.key}</b>{p.label}</p>
+  ))}
+
   <div class="tt-grid">
     <table class="tbl">
       <thead>
@@ -33,16 +44,6 @@ const cellEntries = (time: string, day: string) =>
         ))}
       </tbody>
     </table>
-
-    <div class="legend">
-      <p class="lg-title">（例）タップすると、生徒ごとの通い方が見られます</p>
-      {timetablePersonas.map((p) => (
-        <button type="button" class:list={['lg-item', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">
-          <span class="lg-key">{p.key}</span>
-          <span class="lg-text">{p.label}</span>
-        </button>
-      ))}
-    </div>
   </div>
 
   <ul class="notes">
@@ -54,6 +55,7 @@ const cellEntries = (time: string, day: string) =>
   // 凡例のA〜Dをタップ → その生徒の受講例（科目）だけを時間割に表示する（初期表示はA）
   document.querySelectorAll<HTMLElement>('[data-tt]').forEach((root) => {
     const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-persona]')];
+    const descs = [...root.querySelectorAll<HTMLElement>('[data-desc]')];
     const cells = [...root.querySelectorAll<HTMLTableCellElement>('tbody td')];
     const PCLASSES = ['p-a', 'p-b', 'p-c', 'p-d'];
     function select(key: string) {
@@ -62,6 +64,7 @@ const cellEntries = (time: string, day: string) =>
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-pressed', String(on));
       });
+      descs.forEach((d) => d.classList.toggle('on', d.dataset.desc === key));
       cells.forEach((td) => {
         const span = td.querySelector<HTMLElement>(`[data-p="${key}"]`);
         td.querySelectorAll<HTMLElement>('.pk').forEach((s) => s.classList.toggle('on', s === span));
@@ -97,8 +100,9 @@ const cellEntries = (time: string, day: string) =>
     background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px;
     transition: background .2s;
   }
-  .tbl tr.seasonal td { background: #E4E9F0; }
-  .tbl tr.seasonal .time { color: var(--gray-1); }
+  /* 講習期間のみの行は低くして全体の縦を圧縮 */
+  .tbl tr.seasonal td { background: #E4E9F0; height: 24px; }
+  .tbl tr.seasonal .time { color: var(--gray-1); font-size: 11px; }
 
   /* セル内の科目（選択中の生徒のものだけ .on で表示。JSが切り替える） */
   .pk { display: none; font-family: var(--font-round); font-size: 13px; font-weight: 900; letter-spacing: .04em; }
@@ -110,31 +114,31 @@ const cellEntries = (time: string, day: string) =>
   .tbl td.p-c { background: #FCF3D7; color: #9A6A12; } /* 淡黄（文字=warning-text） */
   .tbl td.p-d { background: var(--success-bg); color: var(--success-text); } /* 淡緑 */
 
-  .lg-item.p-a .lg-key { background: #FBDECB; color: var(--orange-shadow); }
-  .lg-item.p-b .lg-key { background: var(--blue-pale); color: var(--navy); }
-  .lg-item.p-c .lg-key { background: #FCF3D7; color: #9A6A12; }
-  .lg-item.p-d .lg-key { background: var(--success-bg); color: var(--success-text); }
-  .lg-item.is-active.p-a { background: #FBDECB; }
-  .lg-item.is-active.p-b { background: var(--blue-pale); }
-  .lg-item.is-active.p-c { background: #FCF3D7; }
-  .lg-item.is-active.p-d { background: var(--success-bg); }
-  .lg-item.is-active .lg-key { background: rgba(255, 255, 255, .88); }
+  /* 切替チップ（時間割の上。1画面内で切替→時間割の変化が見える） */
+  .sw-cap { font-size: 12.5px; font-weight: 700; color: var(--muted); text-align: center; margin: 0 0 8px; }
+  .sw { display: flex; justify-content: center; gap: 12px; margin: 0 0 10px; }
+  .sw-btn {
+    width: 42px; height: 42px; border-radius: 50%; border: none; padding: 0;
+    font-family: var(--font-round); font-size: 16.5px; font-weight: 900;
+    cursor: pointer; opacity: .42; transition: opacity .2s, transform .2s, box-shadow .2s;
+  }
+  .sw-btn.is-active { opacity: 1; transform: scale(1.12); box-shadow: 0 3px 10px rgba(20, 42, 84, .25); }
+  .sw-btn.p-a { background: #FBDECB; color: var(--orange-shadow); }
+  .sw-btn.p-b { background: var(--blue-pale); color: var(--navy); }
+  .sw-btn.p-c { background: #FCF3D7; color: #9A6A12; }
+  .sw-btn.p-d { background: var(--success-bg); color: var(--success-text); }
 
-  .legend { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
-  .lg-title { font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 2px; }
-  .lg-item {
-    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
-    background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px;
-    font-family: var(--font-body); font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5;
-    cursor: pointer; transition: background .2s, border-color .2s;
+  /* 選択中の生徒の説明（1行。JSが .on を付け外し） */
+  .sw-desc {
+    display: none; text-align: center; border-radius: 10px; padding: 8px 12px; margin: 0 0 14px;
+    font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.6;
   }
-  .lg-item.is-active { border-color: transparent; box-shadow: var(--shadow-card); }
-  .lg-key {
-    width: 25px; height: 25px; border-radius: 50%;
-    display: grid; place-items: center; flex: none;
-    font-family: var(--font-round); font-size: 13px; font-weight: 900;
-    transition: background .2s;
-  }
+  .sw-desc.on { display: block; }
+  .sw-desc b { font-family: var(--font-round); font-weight: 900; margin-right: 8px; }
+  .sw-desc.p-a { background: #FBDECB; } .sw-desc.p-a b { color: var(--orange-shadow); }
+  .sw-desc.p-b { background: var(--blue-pale); } .sw-desc.p-b b { color: var(--navy); }
+  .sw-desc.p-c { background: #FCF3D7; } .sw-desc.p-c b { color: #9A6A12; }
+  .sw-desc.p-d { background: var(--success-bg); } .sw-desc.p-d b { color: var(--success-text); }
 
   .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
   .notes li { font-size: 12.5px; color: var(--muted); line-height: 1.8; padding-left: 1.4em; text-indent: -1.4em; }
@@ -149,9 +153,6 @@ const cellEntries = (time: string, day: string) =>
     .pk { font-size: 11.5px; letter-spacing: 0; }
   }
 
-  /* PC: 左に時間割、右に例の生徒 */
-  @media (min-width: 1024px) {
-    .tt-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 32px; align-items: center; }
-    .legend { margin-top: 0; }
-  }
+  /* PC: 中央寄せの1カラム（チップ→時間割の縦の流れをそのまま） */
+  .tt { max-width: 620px; margin-inline: auto; }
 </style>
