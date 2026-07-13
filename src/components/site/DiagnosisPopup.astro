@@ -102,7 +102,7 @@ import DiagnosisApp from './DiagnosisApp.astro';
   .dm-sheet :global(.quiz-head) { margin: 0; padding: 14px 54px 14px 22px; } /* 右は✕ボタンを避ける */
   .dm-sheet :global(.quiz-card) { padding: 20px 22px 28px; }
   .dm-sheet :global(.back) { margin-bottom: 16px; }
-  .dm-sheet :global(.result-body) { padding: 22px 22px 24px; }
+  .dm-sheet :global(.result-body) { padding: 22px 22px 8px; } /* 下は「もう一度診断する」のmargin-bottomと合わせて計24px */
   @keyframes dm-fade { from { opacity: 0; } }
   @keyframes dm-zoom { from { opacity: 0; transform: scale(.92); } }
 </style>
