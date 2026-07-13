@@ -1,9 +1,9 @@
 ---
-// 時間割（教室詳細ページ）。例の生徒A〜Dの色分けで「通う曜日・時間帯を選べる」ことを伝える。
+// 時間割（教室詳細ページ）。例の生徒A〜Dをタップで切り替え、選んだ生徒の受講例だけを表示する。
 // データは src/data/timetable.ts（全教室共通）。
 import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from '../../data/timetable';
 ---
-<div class="tt">
+<div class="tt" data-tt>
   <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。</p>
 
   <div class="tt-grid">
@@ -18,19 +18,19 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
         {timetableRows.map((r) => (
           <tr class:list={{ seasonal: r.seasonal }}>
             <th class="time">{r.time}</th>
-            {r.cells.map((c) => <td class={c ? `p-${c.toLowerCase()}` : ''}>{c}</td>)}
+            {r.cells.map((c) => <td class={c ? `p-${c.toLowerCase()}` : ''} data-p={c || null}>{c}</td>)}
           </tr>
         ))}
       </tbody>
     </table>
 
     <div class="legend">
-      <p class="lg-title">（例）こんな生徒たちが通っています</p>
+      <p class="lg-title">（例）タップすると、生徒ごとの通い方が見られます</p>
       {timetablePersonas.map((p) => (
-        <div class:list={['lg-item', `p-${p.key.toLowerCase()}`]}>
+        <button type="button" class:list={['lg-item', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">
           <span class="lg-key">{p.key}</span>
           <span class="lg-text">{p.label}</span>
-        </div>
+        </button>
       ))}
     </div>
   </div>
@@ -39,6 +39,30 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
     {timetableNotes.map((nt) => <li>{nt}</li>)}
   </ul>
 </div>
+
+<script>
+  // 凡例のA〜Dをタップ → その生徒の受講例だけを時間割に表示する（初期表示はA）
+  document.querySelectorAll<HTMLElement>('[data-tt]').forEach((root) => {
+    const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-persona]')];
+    const cells = [...root.querySelectorAll<HTMLElement>('td[data-p]')];
+    function select(key: string) {
+      btns.forEach((b) => {
+        const on = b.dataset.persona === key;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      cells.forEach((c) => c.classList.toggle('is-dim', c.dataset.p !== key));
+    }
+    btns.forEach((b) => b.addEventListener('click', () => select(b.dataset.persona ?? '')));
+    select('A');
+
+    // DEV専用: ?tt=B〜D で切替状態を直接表示（動作確認用。本番ビルドでは除去される）
+    if (import.meta.env.DEV) {
+      const q = new URLSearchParams(location.search).get('tt');
+      if (q) select(q.toUpperCase());
+    }
+  });
+</script>
 
 <style>
   .tt-lead { font-size: 14.5px; line-height: 1.9; color: var(--ink); margin: 0 0 18px; }
@@ -56,35 +80,43 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
   .tbl td {
     background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px;
     font-family: var(--font-round); font-size: 15.5px; font-weight: 900;
+    transition: background .2s, color .2s;
   }
   .tbl tr.seasonal td { background: #E4E9F0; }
   .tbl tr.seasonal .time { color: var(--gray-1); }
 
-  /* 例の生徒の色（面=デザイントークンの淡色4種、文字=対応する濃色。凡例のバッジ文字も同色） */
+  /* 例の生徒の色（面=デザイントークンの淡色4種、文字=対応する濃色。凡例のバッジも同色） */
   .tbl td.p-a { background: #FBDECB; color: var(--orange-shadow); } /* 淡橙 */
   .tbl td.p-b { background: var(--blue-pale); color: var(--navy); } /* 淡青 */
   .tbl td.p-c { background: #FCF3D7; color: #9A6A12; } /* 淡黄（文字=warning-text） */
   .tbl td.p-d { background: var(--success-bg); color: var(--success-text); } /* 淡緑 */
-  .lg-item.p-a .lg-key { color: var(--orange-shadow); }
-  .lg-item.p-b .lg-key { color: var(--navy); }
-  .lg-item.p-c .lg-key { color: #9A6A12; }
-  .lg-item.p-d .lg-key { color: var(--success-text); }
-  .lg-item.p-a { background: #FBDECB; }
-  .lg-item.p-b { background: var(--blue-pale); }
-  .lg-item.p-c { background: #FCF3D7; }
-  .lg-item.p-d { background: var(--success-bg); }
+  /* 選択外の生徒のコマは空きセルと同じ見た目に（JSが is-dim を付け外し） */
+  .tbl td.is-dim { background: var(--alt-bg); color: transparent; }
+
+  .lg-item.p-a .lg-key { background: #FBDECB; color: var(--orange-shadow); }
+  .lg-item.p-b .lg-key { background: var(--blue-pale); color: var(--navy); }
+  .lg-item.p-c .lg-key { background: #FCF3D7; color: #9A6A12; }
+  .lg-item.p-d .lg-key { background: var(--success-bg); color: var(--success-text); }
+  .lg-item.is-active.p-a { background: #FBDECB; }
+  .lg-item.is-active.p-b { background: var(--blue-pale); }
+  .lg-item.is-active.p-c { background: #FCF3D7; }
+  .lg-item.is-active.p-d { background: var(--success-bg); }
+  .lg-item.is-active .lg-key { background: rgba(255, 255, 255, .88); }
 
   .legend { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
   .lg-title { font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 2px; }
   .lg-item {
-    display: flex; align-items: center; gap: 10px;
-    border-radius: 10px; padding: 10px 12px;
-    font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5;
+    display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px;
+    font-family: var(--font-body); font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.5;
+    cursor: pointer; transition: background .2s, border-color .2s;
   }
+  .lg-item.is-active { border-color: transparent; box-shadow: var(--shadow-card); }
   .lg-key {
-    width: 25px; height: 25px; border-radius: 50%; background: rgba(255, 255, 255, .88);
+    width: 25px; height: 25px; border-radius: 50%;
     display: grid; place-items: center; flex: none;
     font-family: var(--font-round); font-size: 13px; font-weight: 900;
+    transition: background .2s;
   }
 
   .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
