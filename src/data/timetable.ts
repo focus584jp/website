@@ -1,33 +1,68 @@
-// 教室ページの時間割（全教室共通）。例の生徒A〜Dで「通う曜日・時間帯を選べる」ことを見せる。
+// 教室ページの時間割（全教室共通）。例の生徒A〜Dをタップで切り替え、その生徒の受講例（科目つき）を表示する。
+// 同じコマに複数の生徒が重なってよい（1対4の個別指導なので現実もそう。表示は選択中の生徒のみ）。
 // 見た目は components/classroom/Timetable.astro。
-
-export interface TimetableRow {
-  time: string;
-  /** 講習期間中のみ開講の時間帯（グレー表示） */
-  seasonal?: boolean;
-  /** 月〜金の例の生徒キー（'' = 空き） */
-  cells: string[];
-}
 
 export const timetableDays = ['月', '火', '水', '木', '金'];
 
-export const timetableRows: TimetableRow[] = [
-  { time: '14:00〜', seasonal: true, cells: ['', '', '', '', ''] },
-  { time: '15:00〜', seasonal: true, cells: ['', '', '', '', ''] },
-  { time: '16:00〜', cells: ['', '', '', '', ''] },
-  { time: '17:00〜', cells: ['', 'B', 'B', 'B', 'B'] },
-  { time: '18:00〜', cells: ['A', '', 'A', '', 'D'] },
-  { time: '19:00〜', cells: ['A', 'D', 'A', '', 'D'] },
-  { time: '20:00〜', cells: ['C', 'D', '', 'D', ''] },
-  { time: '21:00〜', cells: ['C', '', 'D', 'C', 'C'] },
+/** 行（時間帯）。seasonal = 講習期間中のみ開講（グレー表示） */
+export const timetableTimes: { time: string; seasonal?: boolean }[] = [
+  { time: '14:00〜', seasonal: true },
+  { time: '15:00〜', seasonal: true },
+  { time: '16:00〜' },
+  { time: '17:00〜' },
+  { time: '18:00〜' },
+  { time: '19:00〜' },
+  { time: '20:00〜' },
+  { time: '21:00〜' },
 ];
 
+export interface PersonaSlot { day: string; time: string; subject: string }
+export interface TimetablePersona { key: string; label: string; slots: PersonaSlot[] }
+
 /** 例の生徒（色は Timetable.astro の .p-a〜.p-d と対応） */
-export const timetablePersonas = [
-  { key: 'A', label: '他の習い事と勉強を両立したい' },
-  { key: 'B', label: '学習習慣をしっかり身に付けたい' },
-  { key: 'C', label: '中学2年生で部活を第一に考えたい' },
-  { key: 'D', label: '中学3年生で高校受験に向けて頑張りたい' },
+export const timetablePersonas: TimetablePersona[] = [
+  {
+    key: 'A',
+    label: '他の習い事と勉強を両立したい',
+    slots: [
+      { day: '火', time: '18:00〜', subject: '数学' },
+      { day: '火', time: '19:00〜', subject: '英語' },
+      { day: '金', time: '18:00〜', subject: '数学' },
+      { day: '金', time: '19:00〜', subject: '英語' },
+    ],
+  },
+  {
+    key: 'B',
+    label: '学習習慣をしっかり身に付けたい',
+    slots: [
+      { day: '火', time: '17:00〜', subject: '数学' },
+      { day: '水', time: '17:00〜', subject: '英語' },
+      { day: '木', time: '17:00〜', subject: '数学' },
+      { day: '金', time: '17:00〜', subject: '英語' },
+    ],
+  },
+  {
+    key: 'C',
+    label: '中学2年生で部活を第一に考えたい',
+    slots: [
+      { day: '月', time: '19:00〜', subject: '数学' },
+      { day: '月', time: '20:00〜', subject: '英語' },
+      { day: '木', time: '20:00〜', subject: '数学' },
+      { day: '金', time: '20:00〜', subject: '英語' },
+    ],
+  },
+  {
+    key: 'D',
+    label: '中学3年生で高校受験に向けて頑張りたい',
+    slots: [
+      { day: '月', time: '19:00〜', subject: '英語' },
+      { day: '月', time: '20:00〜', subject: '数学' },
+      { day: '水', time: '21:00〜', subject: '理科' },
+      { day: '木', time: '20:00〜', subject: '社会' },
+      { day: '金', time: '18:00〜', subject: '数学' },
+      { day: '金', time: '19:00〜', subject: '国語' },
+    ],
+  },
 ];
 
 export const timetableNotes = [

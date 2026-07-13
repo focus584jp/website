@@ -1,7 +1,13 @@
 ---
-// 時間割（教室詳細ページ）。例の生徒A〜Dをタップで切り替え、選んだ生徒の受講例だけを表示する。
-// データは src/data/timetable.ts（全教室共通）。
-import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from '../../data/timetable';
+// 時間割（教室詳細ページ）。例の生徒A〜Dをタップで切り替え、選んだ生徒の受講例（科目つき）だけを表示する。
+// データは src/data/timetable.ts（全教室共通）。同じコマに複数の生徒が重なってよい（表示は選択中の生徒のみ）。
+import { timetableDays, timetableTimes, timetablePersonas, timetableNotes } from '../../data/timetable';
+
+// (時間帯×曜日) → その枠に入っている生徒たち（キーと科目）
+const cellEntries = (time: string, day: string) =>
+  timetablePersonas.flatMap((p) =>
+    p.slots.filter((s) => s.time === time && s.day === day).map((s) => ({ key: p.key, subject: s.subject })),
+  );
 ---
 <div class="tt" data-tt>
   <p class="tt-lead">部活や習い事に合わせて、通う曜日・時間帯を選べます。</p>
@@ -15,10 +21,14 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
         </tr>
       </thead>
       <tbody>
-        {timetableRows.map((r) => (
+        {timetableTimes.map((r) => (
           <tr class:list={{ seasonal: r.seasonal }}>
             <th class="time">{r.time}</th>
-            {r.cells.map((c) => <td class={c ? `p-${c.toLowerCase()}` : ''} data-p={c || null}>{c}</td>)}
+            {timetableDays.map((d) => (
+              <td>
+                {cellEntries(r.time, d).map((e) => <span class="pk" data-p={e.key}>{e.subject}</span>)}
+              </td>
+            ))}
           </tr>
         ))}
       </tbody>
@@ -41,17 +51,23 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
 </div>
 
 <script>
-  // 凡例のA〜Dをタップ → その生徒の受講例だけを時間割に表示する（初期表示はA）
+  // 凡例のA〜Dをタップ → その生徒の受講例（科目）だけを時間割に表示する（初期表示はA）
   document.querySelectorAll<HTMLElement>('[data-tt]').forEach((root) => {
     const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-persona]')];
-    const cells = [...root.querySelectorAll<HTMLElement>('td[data-p]')];
+    const cells = [...root.querySelectorAll<HTMLTableCellElement>('tbody td')];
+    const PCLASSES = ['p-a', 'p-b', 'p-c', 'p-d'];
     function select(key: string) {
       btns.forEach((b) => {
         const on = b.dataset.persona === key;
         b.classList.toggle('is-active', on);
         b.setAttribute('aria-pressed', String(on));
       });
-      cells.forEach((c) => c.classList.toggle('is-dim', c.dataset.p !== key));
+      cells.forEach((td) => {
+        const span = td.querySelector<HTMLElement>(`[data-p="${key}"]`);
+        td.querySelectorAll<HTMLElement>('.pk').forEach((s) => s.classList.toggle('on', s === span));
+        PCLASSES.forEach((c) => td.classList.remove(c));
+        if (span) td.classList.add(`p-${key.toLowerCase()}`);
+      });
     }
     btns.forEach((b) => b.addEventListener('click', () => select(b.dataset.persona ?? '')));
     select('A');
@@ -79,19 +95,20 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
   }
   .tbl td {
     background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px;
-    font-family: var(--font-round); font-size: 15.5px; font-weight: 900;
-    transition: background .2s, color .2s;
+    transition: background .2s;
   }
   .tbl tr.seasonal td { background: #E4E9F0; }
   .tbl tr.seasonal .time { color: var(--gray-1); }
+
+  /* セル内の科目（選択中の生徒のものだけ .on で表示。JSが切り替える） */
+  .pk { display: none; font-family: var(--font-round); font-size: 13px; font-weight: 900; letter-spacing: .04em; }
+  .pk.on { display: inline; }
 
   /* 例の生徒の色（面=デザイントークンの淡色4種、文字=対応する濃色。凡例のバッジも同色） */
   .tbl td.p-a { background: #FBDECB; color: var(--orange-shadow); } /* 淡橙 */
   .tbl td.p-b { background: var(--blue-pale); color: var(--navy); } /* 淡青 */
   .tbl td.p-c { background: #FCF3D7; color: #9A6A12; } /* 淡黄（文字=warning-text） */
   .tbl td.p-d { background: var(--success-bg); color: var(--success-text); } /* 淡緑 */
-  /* 選択外の生徒のコマは空きセルと同じ見た目に（JSが is-dim を付け外し） */
-  .tbl td.is-dim { background: var(--alt-bg); color: transparent; }
 
   .lg-item.p-a .lg-key { background: #FBDECB; color: var(--orange-shadow); }
   .lg-item.p-b .lg-key { background: var(--blue-pale); color: var(--navy); }
@@ -122,6 +139,15 @@ import { timetableDays, timetableRows, timetablePersonas, timetableNotes } from 
   .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
   .notes li { font-size: 12.5px; color: var(--muted); line-height: 1.8; padding-left: 1.4em; text-indent: -1.4em; }
   .notes li::before { content: '※ '; }
+
+  /* 極小スマホ（〜399px）: 科目2文字が収まるように詰める */
+  @media (max-width: 399px) {
+    .tbl { border-spacing: 3px; }
+    .tbl th.corner { width: 56px; }
+    .tbl .time { font-size: 11.5px; }
+    .tbl .day { font-size: 12.5px; }
+    .pk { font-size: 11.5px; letter-spacing: 0; }
+  }
 
   /* PC: 左に時間割、右に例の生徒 */
   @media (min-width: 1024px) {
