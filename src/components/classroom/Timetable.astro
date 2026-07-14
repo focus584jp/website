@@ -13,7 +13,7 @@ const cellEntries = (time: string, day: string) =>
   <p class="tt-lead">部活や習い事のスケジュールを確認したうえで、無理なく通える曜日・時間帯を一緒に決めていきます。</p>
 
   {/* 切替チップ（時間割の上に置き、スクロールせずに切り替えられるようにする） */}
-  <p class="sw-cap">（例）タップして、生徒ごとの通い方を見る</p>
+  <p class="sw-cap">A〜Dをタップすると、4人の通い方の例が見られます</p>
   <div class="sw">
     {timetablePersonas.map((p) => (
       <button type="button" class:list={['sw-btn', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">{p.key}</button>
@@ -47,7 +47,7 @@ const cellEntries = (time: string, day: string) =>
 
     {/* PC用の切替カード（説明4枚を常時表示。SPではチップ式=上のswを使う） */}
     <div class="legend">
-      <p class="lg-title">（例）タップして、生徒ごとの通い方を見る</p>
+      <p class="lg-title">（例）お子さまに近いタイプをタップしてみてください</p>
       {timetablePersonas.map((p) => (
         <button type="button" class:list={['lg-item', `p-${p.key.toLowerCase()}`]} data-persona={p.key} aria-pressed="false">
           <span class="lg-key">{p.key}</span>
