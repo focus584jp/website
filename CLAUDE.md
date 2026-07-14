@@ -8,10 +8,7 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 - **全ページhifi実装済み・公開済み**（2026-07-07。トップ＝`docs/design/トップページ.dc.html`、相性診断＝`docs/design/相性診断.dc.html` が正。下層は2026-07-10〜11にデザイン展開済み: PageHero方眼ノート地＋ページ別アイコン・指導方針・教室一覧・沿革・診断モーダル化）
 - **フォーム送信は本番稼働中**（2026-07-10〜。資料請求 /request・無料相談 /consult＝LeadForm.astro 3ステップ、企業問い合わせ /contact＝CorporateForm.astro。送信先は focus/lead-api の GAS Web App。設計は docs/superpowers/specs/2026-07-10-form-confirm-step-design.md。DEVは ?step=confirm|busy|done で画面確認可）
 - ワイヤーフレーム層（components/wireframe・WireframeLayout・wireframe.css・tokens.css）は廃止済み（git履歴に残っている）
-- 次のタスク:
-  - 下層デザイン展開の残り: **料金ページ本文 → FAQページ本文**（部品カタログ /styleguide が基準）
-  - GA4導入（測定ID受領待ち。CVイベント=LeadForm完了画面）
-  - 実データ差し替え（教室写真・保護者の声ほか。一覧は docs/design/README.md 末尾の公開前TODO）
+- 次のタスク: **`docs/TODO.md` が正本**（2026-07-14整理。ページ作り込み／実データ化／機能／公開前仕上げの4分類）
 - 成果物の形: Astroビルドが `index.html`＋分離されたCSS/JSを出力する（メインページ=index.html、css/js別ファイルの要件はビルドで担保）
 
 ## 正本ドキュメント（docs/design/）
