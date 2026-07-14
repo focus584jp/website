@@ -25,9 +25,9 @@ export const timetablePersonas: TimetablePersona[] = [
     key: 'A',
     label: '初めての塾でまずはペースをつかみたい',
     slots: [
-      { day: '火', time: '18:00〜', subject: '国語' },
-      { day: '金', time: '18:00〜', subject: '数学' },
-      { day: '金', time: '19:00〜', subject: '英語' },
+      { day: '月', time: '18:00〜', subject: '国語' },
+      { day: '木', time: '18:00〜', subject: '数学' },
+      { day: '木', time: '19:00〜', subject: '英語' },
     ],
   },
   {
