@@ -14,7 +14,7 @@ const fullImages = await Promise.all(photos.map((p) => getImage({ src: p, width:
 
 // ダミー時の拡大用サンプル画像（SVGをdata URIで埋め込み。実写真投入で使われなくなる）
 const isPlaceholder = photos.length === 0;
-const PH_COUNT = 3;
+const PH_COUNT = 4;
 const phFull = (i: number) =>
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
@@ -37,7 +37,7 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
         ))
       : photos.map((p, i) => (
           <button type="button" class="th" data-full={fullImages[i].src} aria-label={`${roomName}の様子${i + 1}を拡大表示`}>
-            <Image src={p} alt={`${roomName}の様子${i + 1}`} widths={[400, 800]} sizes="(min-width: 768px) 33vw, 50vw" class="photo" />
+            <Image src={p} alt={`${roomName}の様子${i + 1}`} widths={[400, 800]} sizes="(min-width: 768px) 25vw, 50vw" class="photo" />
           </button>
         ))}
 
@@ -65,7 +65,7 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
 
 <style>
   .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  @media (min-width: 768px) { .gallery { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px) { .gallery { grid-template-columns: repeat(4, 1fr); } }
 
   .th { padding: 0; border: 0; background: none; display: block; border-radius: 14px; cursor: zoom-in; }
   .th:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
