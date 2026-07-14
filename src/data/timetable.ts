@@ -23,7 +23,7 @@ export interface TimetablePersona { key: string; label: string; slots: PersonaSl
 export const timetablePersonas: TimetablePersona[] = [
   {
     key: 'A',
-    label: '他の習い事と勉強を両立したい',
+    label: '初めての塾でまずはペースをつかみたい',
     slots: [
       { day: '火', time: '18:00〜', subject: '国語' },
       { day: '金', time: '18:00〜', subject: '数学' },
@@ -32,34 +32,34 @@ export const timetablePersonas: TimetablePersona[] = [
   },
   {
     key: 'B',
-    label: '学習習慣をしっかり身に付けたい',
+    label: '習い事やクラブと勉強を両立したい',
     slots: [
-      { day: '月', time: '17:00〜', subject: '英語' },
-      { day: '水', time: '17:00〜', subject: '国語' },
-      { day: '木', time: '17:00〜', subject: '英語' },
-      { day: '金', time: '17:00〜', subject: '数学' },
+      { day: '月', time: '17:00〜', subject: '数学' },
+      { day: '月', time: '18:00〜', subject: '英語' },
+      { day: '木', time: '17:00〜', subject: '数学' },
+      { day: '木', time: '18:00〜', subject: '英語' },
     ],
   },
   {
     key: 'C',
-    label: '中学2年生で部活を第一に考えたい',
+    label: '部活帰りに塾で頑張りたい',
     slots: [
-      { day: '月', time: '19:00〜', subject: '数学' },
-      { day: '月', time: '20:00〜', subject: '英語' },
-      { day: '木', time: '20:00〜', subject: '数学' },
+      { day: '月', time: '20:00〜', subject: '数学' },
+      { day: '水', time: '20:00〜', subject: '英語' },
       { day: '金', time: '20:00〜', subject: '理科' },
+      { day: '金', time: '21:00〜', subject: '社会' },
     ],
   },
   {
     key: 'D',
-    label: '中学3年生で高校受験に向けて頑張りたい',
+    label: '高校受験に向けてしっかり対策したい',
     slots: [
-      { day: '月', time: '19:00〜', subject: '英語' },
-      { day: '月', time: '20:00〜', subject: '数学' },
+      { day: '月', time: '19:00〜', subject: '数学' },
+      { day: '月', time: '20:00〜', subject: '英語' },
+      { day: '水', time: '20:00〜', subject: '数学' },
       { day: '水', time: '21:00〜', subject: '理科' },
-      { day: '木', time: '20:00〜', subject: '数学' },
-      { day: '金', time: '18:00〜', subject: '社会' },
-      { day: '金', time: '19:00〜', subject: '国語' },
+      { day: '木', time: '20:00〜', subject: '国語' },
+      { day: '金', time: '20:00〜', subject: '社会' },
     ],
   },
 ];
