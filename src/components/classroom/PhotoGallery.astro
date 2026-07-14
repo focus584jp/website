@@ -45,11 +45,11 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
       <div class="ov" data-close></div>
       <figure class="fig">
         <img class="big" data-big alt="" decoding="async" />
+        <button type="button" class="ctl x" data-close aria-label="閉じる">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
         <figcaption class="cp" data-cap></figcaption>
       </figure>
-      <button type="button" class="ctl x" data-close aria-label="閉じる">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
-      </button>
       {count > 1 && (
         <>
           <button type="button" class="ctl lnav prev" data-prev aria-label="前の写真へ">
@@ -104,7 +104,7 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     background: rgba(255, 255, 255, .94); color: var(--navy);
     display: grid; place-items: center; box-shadow: 0 2px 10px rgba(0, 0, 0, .35);
   }
-  .x { top: max(14px, env(safe-area-inset-top)); right: 14px; }
+  .x { top: -14px; right: -12px; } /* 画像の右上角に重ねる（.figが画像幅にフィットする前提） */
   .lnav { top: 50%; transform: translateY(-50%); }
   .prev { left: 10px; }
   .next { right: 10px; }
