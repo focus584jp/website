@@ -13,7 +13,7 @@ import DiagnosisApp from './DiagnosisApp.astro';
     <div class="text">
       <div class="vs-row">
         <span class="chip group">集団指導？</span>
-        <span class="vs">vs</span>
+        <span class="vs">or</span>
         <span class="chip solo">個別指導？</span>
       </div>
       <p>うちの子に合う塾は、<span class="mk">どのタイプ？</span></p>
@@ -57,7 +57,7 @@ import DiagnosisApp from './DiagnosisApp.astro';
   .body { display: flex; align-items: center; gap: 10px; }
   .icon {
     flex: none; width: 36px; height: 36px; border-radius: 50%;
-    background: #FFF8E1; border: 2px dashed #E6C94A; display: grid; place-items: center;
+    background: var(--panel); border: 2px dashed var(--gray-1); display: grid; place-items: center;
   }
   .text { display: flex; flex-direction: column; gap: 6px; min-width: 0; align-items: flex-start; }
   .vs-row { display: flex; align-items: center; gap: 6px; }
