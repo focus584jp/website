@@ -2,8 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import CtaBand from '../components/site/CtaBand.astro';
-import BlocksBeforeAfter from '../components/site/BlocksBeforeAfter.astro';
-import MethodCompare from '../components/site/MethodCompare.astro';
+import BeforeAfterSlider from '../components/site/BeforeAfterSlider.astro';
 
 // 本文の強調はグローバルの .mk（黄マーカー）を set:html で使う
 const steps = [
@@ -67,8 +66,7 @@ const overview = ['基礎から学び直す', '勉強のやり方を身につけ
         </div>
         <div class="note-card">
           {s.body.map((t) => <p class="body-p" set:html={t} />)}
-          {s.compare === 'blocks' && <BlocksBeforeAfter />}
-          {s.compare === 'talk' && <MethodCompare />}
+          {s.compare && <BeforeAfterSlider variant={s.compare} />}
           {i === 2 && (
             <div class="goal">
               <span class="goal-label">フォーカスの指導のゴール</span>
