@@ -33,7 +33,9 @@ src/
     SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
     site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/DiagnosisApp/
-                    SectionHead/FaqList/LeadForm/CorporateForm/MethodCompare/Icon/ArrowCircle）
+                    SectionHead/FaqList/LeadForm/CorporateForm/MethodCompare/BlocksBeforeAfter/Icon/ArrowCircle）
+                    ※BlocksBeforeAfter=積み木のBefore/Afterスライダー（MethodCompareの旧blocks variantを置き換え。
+                    　ドラッグで境界を越えたブロックが起き上がる。トップMethodと/methodで共用）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/

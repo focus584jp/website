@@ -1,7 +1,8 @@
 ---
-// 02 指導方針 — 方眼ノート地の白カード2枚（特徴1: 積み木比較 / 特徴2: Teaching vs Coaching）
-// 比較図解は /method 詳細ページと共用（site/MethodCompare.astro）
+// 02 指導方針 — 方眼ノート地の白カード2枚（特徴1: 積み木Before/Afterスライダー / 特徴2: Teaching vs Coaching）
+// 図解は /method 詳細ページと共用（site/BlocksBeforeAfter.astro・site/MethodCompare.astro）
 import SectionHead from '../site/SectionHead.astro';
+import BlocksBeforeAfter from '../site/BlocksBeforeAfter.astro';
 import MethodCompare from '../site/MethodCompare.astro';
 import { u } from '../../lib/path';
 ---
@@ -16,7 +17,7 @@ import { u } from '../../lib/path';
           <h3>基礎から学び直す</h3>
         </div>
         <p class="lead">「わからない」を残したまま先を急いでも、取りこぼしが増えるだけ。フォーカスでは、つまずいた場所まで戻って土台を固め直します。基礎から丁寧に積み重ねることで「できる！」が増え、確実な成績アップへとつながります。</p>
-        <MethodCompare variant="blocks" />
+        <BlocksBeforeAfter />
       </div>
 
       <div class="note-card">
@@ -25,7 +26,7 @@ import { u } from '../../lib/path';
           <h3>勉強のやり方を身につける</h3>
         </div>
         <p class="lead">答えを教えてもらうだけの勉強では、家での自立学習には繋がりません。フォーカスでは、対話を通して「自ら考える力」を引き出します。勉強のやり方が根本から変わるから、塾の外でもひとりで学べるようになります。</p>
-        <MethodCompare variant="talk" />
+        <MethodCompare />
       </div>
 
     </div>

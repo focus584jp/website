@@ -1,0 +1,210 @@
+---
+// 指導方針「基礎から学び直す」のBefore/After比較スライダー。トップのMethodセクションと /method 詳細ページで共用。
+// 積み木は1組だけ持ち、境界（つまみ）を越えたブロックが「グレー・崩れ → 紺・正位置」へ起き上がる。
+// Before=基礎（下段）が1個抜け、その連鎖で上が崩れて1個は穴に挟まっている。After=現行の完成ピラミッド。
+// 操作はカード全面の Pointer Events（タップ位置へジャンプ+ドラッグ追従）。range はキーボード・SR用。
+---
+<div class="bba" data-blocks-ba>
+  <div class="card">
+    <div class="sw">
+      <div class="hd v-before">
+        <span class="mark mk-ng"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3.2" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg></span>
+        無理に学校の進度に合わせると…
+      </div>
+      <div class="hd v-after">
+        <span class="mark mk-ok"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg></span>
+        フォーカスでの成績の上がり方
+      </div>
+    </div>
+
+    <div class="fig">
+      {/* 積み木1組。data-cx はブロック中心のviewBox x座標（境界越え判定に使う） */}
+      <svg viewBox="0 0 210 158" role="img" aria-label="学校の進度に合わせるだけだと基礎が抜けて崩れた積み木が、つまずいた場所から積み直すと完成していく比較図">
+        <ellipse cx="105" cy="139" rx="92" ry="9" fill="#2B3242" opacity=".13"></ellipse>
+        {/* 下段4（3番目は基礎の抜けで Before では存在しない） */}
+        <rect class="blk row1" data-cx="45" x="28" y="104" width="34" height="34" rx="2"></rect>
+        <rect class="blk row1" data-cx="83" x="66" y="104" width="34" height="34" rx="2"></rect>
+        <rect class="blk row1 gap-blk" data-cx="121" x="104" y="104" width="34" height="34" rx="2"></rect>
+        <rect class="blk row1" data-cx="159" x="142" y="104" width="34" height="34" rx="2"></rect>
+        {/* 中段3（Before では基礎の穴の上で傾く） */}
+        <rect class="blk row2 tilt-xs" data-cx="64" x="47" y="66" width="34" height="34" rx="2"></rect>
+        <rect class="blk row2 tilt-m" data-cx="102" x="85" y="66" width="34" height="34" rx="2"></rect>
+        <rect class="blk row2 tilt-s" data-cx="118" x="123" y="66" width="34" height="34" rx="2"></rect>
+        {/* 上段2（Before では左は大きく傾き、右は基礎の穴まで崩れ落ちて挟まっている） */}
+        <rect class="blk row3 tilt-l" data-cx="83" x="66" y="28" width="34" height="34" rx="2"></rect>
+        <rect class="blk row3 fall-r" data-cx="125" x="104" y="28" width="34" height="34" rx="2"></rect>
+        {/* Before専用: グラグラ線（連動するブロックと同じ data-cx） */}
+        <g class="deco only-b" data-cx="83" stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+          <path d="M56 30 l-8 6 4 9 -8 6 4 9"></path>
+          <path d="M44 26 l-8 6 4 9 -8 6 4 9"></path>
+        </g>
+        <g class="deco only-b" data-cx="140" stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+          <path d="M158 36 l8 6 -4 9 8 6 -4 9"></path>
+          <path d="M170 30 l8 6 -4 9 8 6 -4 9"></path>
+        </g>
+        {/* After専用: キラキラ（位置決めは親g。CSS transformのscaleがtranslate属性を上書きしないよう分離） */}
+        <g fill="#FFC94A">
+          <g transform="translate(48,34)"><path class="deco only-a" data-cx="70" d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z"></path></g>
+          <g transform="translate(160,22)"><path class="deco only-a" data-cx="104" d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z"></path></g>
+          <g transform="translate(172,54)"><path class="deco only-a" data-cx="100" d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z"></path></g>
+        </g>
+      </svg>
+
+      <input class="rng" type="range" min="0" max="100" step="0.1" value="93" aria-label="Before / After の比較位置（左右キーでも動かせます）" />
+      <div class="bar" aria-hidden="true">
+        <span class="knob">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l-5 6 5 6"></path><path d="M15 6l5 6-5 6"></path></svg>
+        </span>
+      </div>
+    </div>
+
+    <div class="sw note">
+      <p class="v-before">取りこぼしが増え …<br />成績が伸びなやむ</p>
+      <p class="v-after">正しく基礎を積み重ねて …<br /><span class="mk">苦手を克服！</span></p>
+    </div>
+  </div>
+  <p class="hint">← つまみを左右にドラッグ →</p>
+</div>
+
+<style>
+  .bba { --pos: 93%; width: 100%; max-width: 400px; margin: clamp(14px, 2vw, 20px) auto 0; }
+
+  /* カード全体が優勢側に応じて変わる: ✗優勢=グレー地 ⇄ ◯優勢=淡青地+紺枠。
+     カード全面がドラッグ面（pan-y で縦スクロールは通す） */
+  .card {
+    border-radius: 14px; padding: 16px 12px 18px; box-sizing: border-box;
+    display: flex; flex-direction: column; gap: 6px;
+    border: 2px solid var(--navy); background: var(--blue-paler);
+    box-shadow: 0 4px 12px rgba(20, 42, 84, .10);
+    transition: background .35s ease, border-color .35s ease, box-shadow .35s ease;
+    overflow: hidden; /* カード全高に伸ばしたバーを角丸内にクリップ */
+    touch-action: pan-y; cursor: ew-resize;
+  }
+  .bba.st-before .card {
+    background: #EEF1F5; border-color: #DFE5EC;
+    box-shadow: 0 3px 10px rgba(43, 50, 66, .08);
+  }
+  /* ✗⇄◯で切り替わる見出し・注釈は同セルに重ねてクロスフェード（バーより手前にして文字を隠さない） */
+  .sw { display: grid; position: relative; z-index: 1; }
+  .sw > * { grid-area: 1 / 1; transition: opacity .3s ease; }
+  .bba.st-before .v-after { opacity: 0; }
+  .bba:not(.st-before) .v-before { opacity: 0; }
+
+  .hd {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    font-size: 15px; font-weight: 800; text-align: center;
+  }
+  .hd.v-before { color: var(--ink); }
+  .hd.v-after { color: var(--navy); }
+  /* ✗＝赤丸バッジ、◯＝淡青丸バッジ（MethodCompare の mark と同寸） */
+  .mark { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; }
+  .mark.mk-ng { background: #FBE0E0; }
+  .mark.mk-ok { background: #E3ECFB; }
+
+  .fig { position: relative; aspect-ratio: 210 / 158; }
+  .fig > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+  /* --- 積み木は1組だけ。境界（--pos）を越えたブロックに .is-after が付き、色・姿勢が遷移する --- */
+  .blk {
+    transform-box: fill-box; transform-origin: center;
+    transition: fill .3s ease, transform .4s cubic-bezier(.34, 1.45, .64, 1), opacity .3s ease;
+  }
+  /* 段ごとの色: Before=グレー3階調 → After=紺3階調 */
+  .row1 { fill: #7E8A9C; }
+  .row2 { fill: #96A1B1; }
+  .row3 { fill: #ACB6C4; }
+  .row1.is-after { fill: var(--navy); }
+  .row2.is-after { fill: var(--navy-mid); }
+  .row3.is-after { fill: var(--navy-light); }
+  /* Before時の崩れ姿勢 → After時に正位置へ起き上がる */
+  .tilt-l { transform: translate(-4px, 12px) rotate(-21deg); }
+  .tilt-m { transform: translate(3px, 8px) rotate(11deg); }   /* 基礎の穴の上で右に沈み込む */
+  .tilt-s { transform: translate(-2px, 6px) rotate(-9deg); }  /* 穴側（左）へ傾く */
+  .tilt-xs { transform: translateY(2px) rotate(-6deg); }
+  /* 上段右は支えを失い、基礎の抜けた穴にひし形で挟まっている */
+  .fall-r { transform: translate(10px, 68px) rotate(45deg); }
+  .tilt-l.is-after, .tilt-m.is-after, .tilt-s.is-after, .tilt-xs.is-after, .fall-r.is-after { transform: none; }
+  /* 基礎の抜けブロック: Before時は存在しない → 境界を越えるとふわっと出現 */
+  .gap-blk { opacity: 0; transform: translateY(-12px) scale(.7); }
+  .gap-blk.is-after { opacity: 1; transform: none; }
+  /* Before専用の飾り（グラグラ線）と After専用の飾り（キラキラ） */
+  .deco { transition: opacity .25s ease, transform .3s ease; }
+  .only-b { opacity: 1; }
+  .only-b.is-after { opacity: 0; }
+  .only-a { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.4); }
+  .only-a.is-after { opacity: 1; transform: scale(1); }
+
+  /* 境界バー: カード全高（上下に大きくはみ出し、card の overflow:hidden でクリップ）。
+     白ベース＋うっすら紺の輪郭で、淡地・紺ブロックのどちらの上でも見える */
+  .bar {
+    position: absolute; top: -120px; bottom: -120px; left: var(--pos);
+    width: 3px; margin-left: -1.5px; background: #fff;
+    box-shadow: 0 0 0 1.5px rgba(20, 55, 120, .30);
+    pointer-events: none;
+  }
+  .knob {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--navy); box-sizing: border-box;
+    display: grid; place-items: center;
+    box-shadow: 0 2px 8px rgba(29, 42, 54, .30);
+  }
+  /* range はキーボード・スクリーンリーダー用に残す（ポインタ操作は .card 全面のドラッグが受ける） */
+  .rng {
+    position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+    opacity: 0; pointer-events: none;
+  }
+  .rng:focus-visible ~ .bar .knob { outline: 3px solid var(--navy-light); outline-offset: 2px; }
+
+  .note p {
+    font-family: var(--font-body);
+    font-size: 15px; font-weight: 800; color: var(--ink); line-height: 1.8;
+    text-align: center; margin: 2px 0 0;
+  }
+  .hint { font-size: 12px; font-weight: 700; color: var(--gray-1); text-align: center; margin: 8px 0 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blk, .deco, .sw > *, .card { transition: none; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-blocks-ba]').forEach((box) => {
+    const rng = box.querySelector('.rng') as HTMLInputElement;
+    const card = box.querySelector('.card') as HTMLElement;
+    const fig = box.querySelector('.fig') as HTMLElement;
+    const cells = box.querySelectorAll<SVGElement>('[data-cx]');
+    const VB_W = 210; // viewBox幅（data-cx の座標系）
+    const setPos = (v: number | string) => {
+      box.style.setProperty('--pos', v + '%');
+      const p = parseFloat(String(v));
+      const borderX = (p / 100) * VB_W;
+      // 境界より右にあるブロック・飾りが After 状態になる
+      cells.forEach((el) => el.classList.toggle('is-after', parseFloat(el.dataset.cx!) > borderX));
+      // 優勢側で見出し・注釈・カード地色を切り替える
+      box.classList.toggle('st-before', p > 50);
+    };
+
+    // キーボード（range標準の←→）
+    rng.addEventListener('input', () => setPos(rng.value));
+    setPos(rng.value);
+
+    // ポインタ操作: カードのどこを触ってもその位置へジャンプし、そのままドラッグで追従
+    // （座標→%変換はバー位置と同じ fig 幅基準）
+    const setFromX = (clientX: number) => {
+      const r = fig.getBoundingClientRect();
+      const p = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
+      rng.value = String(p);
+      setPos(p);
+    };
+    card.addEventListener('pointerdown', (e) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      card.setPointerCapture(e.pointerId);
+      setFromX(e.clientX);
+    });
+    card.addEventListener('pointermove', (e) => {
+      if (!card.hasPointerCapture(e.pointerId)) return;
+      setFromX(e.clientX);
+    });
+  });
+</script>
