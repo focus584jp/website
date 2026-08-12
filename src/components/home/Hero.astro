@@ -2,7 +2,7 @@
 // ヒーロー: 実写写真＋白グラデ、ラベル、手書きキャッチ画像、料金カード、CTA（PCのみ。SP/タブレットは下部固定CTAが担う）
 import { Image } from 'astro:assets';
 import heroWide from '../../assets/home/hero-photo-crop2.jpg';
-import heroNarrow from '../../assets/home/hero-photo-sp-small.png';
+import heroNarrow from '../../assets/home/hero-photo-sp.jpg';
 import heroCatch from '../../assets/home/hero-catch-small.png';
 import { u } from '../../lib/path';
 import { ctaLabels } from '../../data/home';
@@ -11,8 +11,8 @@ import ArrowCircle from '../site/ArrowCircle.astro';
 ---
 <section class="hero" id="top">
   <div class="wrap">
-    <Image src={heroNarrow} alt="階段をのぼる生徒と先生" widths={[480, 736]} sizes="86vw" class="photo-narrow" loading="eager" />
-    <Image src={heroWide} alt="階段をのぼる生徒と先生" widths={[768, 1100, 1500]} sizes="100vw" class="photo-wide" loading="eager" />
+    <Image src={heroNarrow} alt="階段をのぼる生徒と先生" widths={[480, 736, 1320]} sizes="86vw" class="photo-narrow" loading="eager" />
+    <Image src={heroWide} alt="階段をのぼる生徒と先生" widths={[768, 1100, 1500, 2200, 2880]} sizes="100vw" class="photo-wide" loading="eager" />
     <div class="fade" aria-hidden="true"></div>
 
     <div class="text">
