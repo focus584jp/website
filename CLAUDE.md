@@ -38,6 +38,7 @@ src/
                     　variant: 'blocks'=積み木／'talk'=Teaching vs Coaching。ドラッグで境界を越えた要素が
                     　✗状態→◯状態に遷移する。トップMethodと/methodで共用）
                     ※RatioCycle=1対4の巡回アニメ図解（/method POINT03用。先生が4席を循環し「演習」⇄「解説」が切替）
+                    ※TeacherFilter=講師選考のフィルター図解（/method POINT04用。応募10人→厳しい選考カード→採用3人+約30%）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/
