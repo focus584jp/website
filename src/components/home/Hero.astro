@@ -11,7 +11,7 @@ import ArrowCircle from '../site/ArrowCircle.astro';
 ---
 <section class="hero" id="top">
   <div class="wrap">
-    <Image src={heroNarrow} alt="階段をのぼる生徒と先生" widths={[480, 736, 1320]} sizes="86vw" class="photo-narrow" loading="eager" />
+    <Image src={heroNarrow} alt="階段をのぼる生徒と先生" widths={[580, 890, 1600, 1812]} sizes="104vw" class="photo-narrow" loading="eager" />
     <Image src={heroWide} alt="階段をのぼる生徒と先生" widths={[768, 1100, 1500, 2200, 2880]} sizes="100vw" class="photo-wide" loading="eager" />
     <div class="fade" aria-hidden="true"></div>
 
@@ -48,7 +48,8 @@ import ArrowCircle from '../site/ArrowCircle.astro';
     position: relative; max-width: 1440px; margin: 0 auto; overflow: hidden;
     display: flex; align-items: stretch; min-height: auto;
   }
-  .photo-narrow { position: absolute; top: 0; right: -3%; width: 86%; height: auto; display: block; }
+  /* クロップ左端〜右端がCSS 104%に対応（右-3%はみ出しで左端は画面0%）。人物の位置は幅86%時代と同一 */
+  .photo-narrow { position: absolute; top: 0; right: -3%; width: 104%; height: auto; display: block; }
   .photo-wide {
     display: none; position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; object-position: right top; transform-origin: right top; transform: translateX(9%);
