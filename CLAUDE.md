@@ -33,10 +33,11 @@ src/
     SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
     site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/DiagnosisApp/
-                    SectionHead/FaqList/LeadForm/CorporateForm/BeforeAfterSlider/Icon/ArrowCircle）
+                    SectionHead/FaqList/LeadForm/CorporateForm/BeforeAfterSlider/RatioCycle/Icon/ArrowCircle）
                     ※BeforeAfterSlider=指導方針のBefore/Afterスライダー（旧MethodCompareの2カード比較を置き換え。
                     　variant: 'blocks'=積み木／'talk'=Teaching vs Coaching。ドラッグで境界を越えた要素が
                     　✗状態→◯状態に遷移する。トップMethodと/methodで共用）
+                    ※RatioCycle=1対4の巡回アニメ図解（/method POINT03用。先生が4席を循環し「演習」⇄「解説」が切替）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/

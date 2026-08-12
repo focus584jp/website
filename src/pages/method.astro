@@ -3,80 +3,115 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import CtaBand from '../components/site/CtaBand.astro';
 import BeforeAfterSlider from '../components/site/BeforeAfterSlider.astro';
+import RatioCycle from '../components/site/RatioCycle.astro';
+import { u } from '../lib/path';
 
+// 4本柱構成（2026-08-13 現行サイト focus584.net/teaching/ を参考に再設計）。
 // 本文の強調はグローバルの .mk（黄マーカー）を set:html で使う
-const steps = [
+const pillars = [
   {
     num: '01',
+    id: 'learn-from-basics',
+    navLabel: '基礎から学び直す',
     title: '基礎から学び直す',
     body: [
       '学校の授業が分からなくなる原因の多くは、いま習っている単元ではなく、<span class="mk">その手前</span>にあります。たとえば中2の一次関数でつまずく子は、中1の比例・反比例や正負の数に取りこぼしがあることがほとんどです。',
-      'フォーカスは学校の進度に無理に合わせず、<span class="mk">お子さまがつまずいた場所まで戻ります</span>。土台から積み木を積み直すように基礎を固めるから、その先の単元が「わかる！」に変わり、成績が確実に伸びていきます。',
+      'フォーカスは学年にとらわれず、<span class="mk">お子さまがつまずいた場所まで戻ります</span>。必要なら小学生の範囲まで。土台から積み木を積み直すように基礎を固めるから、その先の単元が「わかる！」に変わり、学校の授業についていけない心配もなくなります。',
     ],
-    compare: 'blocks' as const,
+    fig: 'blocks' as const,
   },
   {
     num: '02',
+    id: 'learn-how-to-study',
+    navLabel: '勉強のやり方を身につける',
     title: '勉強のやり方を身につける',
     body: [
-      '答えややり方をただ解説する指導（Teaching）では、受ける側は受け身になりがちです。フォーカスの授業は、考え方を問いかけ、ヒントを与え、<span class="mk">自分で答えまで導かせる指導（Coaching）</span>。講師1人につき生徒は最大4人、自分で解く時間と教わる時間を行き来しながら進めます。',
-      '「なぜそうなるのか」を自分の頭で考えて答えにたどり着く経験を重ねると、解き方の丸暗記ではない、本当の理解が積み上がっていきます。',
+      '答えややり方をただ解説する指導（Teaching）では、受ける側は受け身になりがちです。フォーカスの授業は、考え方を問いかけ、ヒントを与え、<span class="mk">自分で答えまで導かせる指導（Coaching）</span>。自分の頭で考えて答えにたどり着く経験を重ねることで、解き方の丸暗記ではない、本当の理解が積み上がっていきます。',
+      '自分で解けた「できた！」の積み重ねは、お子さまの自信になります。勉強のやり方が身につくと家庭学習の質が変わり、<span class="mk">塾の外でもひとりで学べる</span>ようになります。',
     ],
-    compare: 'talk' as const,
+    fig: 'talk' as const,
   },
   {
     num: '03',
-    title: 'だから、自立して学ぶ力が育つ',
+    id: 'one-to-four',
+    navLabel: '1対4の個別指導',
+    title: '講師1人に、生徒は最大4人',
     body: [
-      '自分で考えて解けた「できた！」の積み重ねは、お子さまの自信になります。自信がつくと、机に向かうこと自体のハードルが下がり、<span class="mk">家庭学習の習慣</span>が少しずつ育っていきます。塾にいる時間だけ成績を上げることが、フォーカスの目的ではありません。',
+      'フォーカスの授業は、講師1人につき生徒は最大4人。先生が来たら1対1で解説、それ以外の時間は自分の力で演習。<span class="mk">「演習」と「解説」を行き来</span>しながら進みます。',
+      '教わったことをすぐ自分の手で試すから、聞くだけの受け身になりません。先生がすぐ近くにいるので、集団塾のように「質問できないまま先へ進む」こともありません。',
     ],
-    compare: null,
+    fig: 'ratio' as const,
+  },
+  {
+    num: '04',
+    id: 'teachers',
+    navLabel: '千葉大生の講師陣',
+    title: '選び抜かれた千葉大生講師陣',
+    body: [
+      'フォーカスには、<span class="mk">千葉大学の講師しか在籍していません</span>。それでも、応募してくれた千葉大生を全員採用するわけではありません。',
+      '選考で重視するのは、学力よりも<span class="mk">勉強が苦手な子に寄り添えるか</span>。姿勢や教え方を厳しくチェックし、採用するのは約30%です。',
+    ],
+    fig: 'teachers' as const,
   },
 ];
-
-const overview = ['基礎から学び直す', '勉強のやり方を身につける', '自立して学ぶ力が育つ'];
 ---
 <SiteLayout
   title="指導方針｜学習塾フォーカス"
-  description="学習塾フォーカスの指導方針。基礎から学び直し、問いかけ型のCoaching指導で勉強のやり方と自立して学ぶ力を育てます。"
+  description="学習塾フォーカスの指導方針。基礎からの学び直し、勉強のやり方が身につくCoaching指導、1対4の個別指導、選び抜かれた千葉大生講師陣で成績を上げます。"
 >
-  {/* リード文なし: 直下の3ステップ概要が同じ内容を視覚で伝えるため */}
+  {/* リード文なし: 直下の「どのように成績が上がるの？」+4本柱概要が内容を視覚で伝えるため */}
   <PageHero eyebrow="METHOD" title="指導方針" />
 
-  {/* 3ステップの全体像（丸数字＋点線コネクタ） */}
+  {/* 4本柱の全体像（丸数字＋点線コネクタ。タップで各セクションへ） */}
   <section class="overview">
     <div class="container">
+      <h2 class="q-title">どのように成績が上がるの？</h2>
       <ol class="flow">
-        {overview.map((t, i) => (
+        {pillars.map((p, i) => (
           <li class="flow-item">
-            <span class="flow-num">{i + 1}</span>
-            <span class="flow-t">{t}</span>
+            <a href={`#${p.id}`} class="flow-link">
+              <span class="flow-num">{i + 1}</span>
+              <span class="flow-t">{p.navLabel}</span>
+            </a>
           </li>
         ))}
       </ol>
     </div>
   </section>
 
-  {steps.map((s, i) => (
-    <section class:list={['step', { alt: i % 2 === 0 }]}>
+  {pillars.map((p, i) => (
+    <section id={p.id} class:list={['pillar', { alt: i % 2 === 0 }]}>
       <div class="container">
         <div class="head">
-          <span class="step-pill">STEP {s.num}</span>
-          <h2>{s.title}</h2>
+          <span class="pillar-pill">POINT {p.num}</span>
+          <h2>{p.title}</h2>
         </div>
         <div class="note-card">
-          {s.body.map((t) => <p class="body-p" set:html={t} />)}
-          {s.compare && <BeforeAfterSlider variant={s.compare} />}
-          {i === 2 && (
-            <div class="goal">
-              <span class="goal-label">フォーカスの指導のゴール</span>
-              <p class="goal-text"><span class="mk">自分で勉強を進められる子</span>に育てること</p>
+          {p.body.map((t) => <p class="body-p" set:html={t} />)}
+          {p.fig === 'blocks' && <BeforeAfterSlider variant="blocks" />}
+          {p.fig === 'talk' && <BeforeAfterSlider variant="talk" />}
+          {p.fig === 'ratio' && <RatioCycle />}
+          {/* ④の図解は検討中（同心円・ピラミッド案は不採用）。決まるまでバッジ+採用率の簡易表示 */}
+          {p.fig === 'teachers' && (
+            <div class="teacher-fig">
+              <span class="t-badge">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"></path></svg>
+                千葉大学の講師のみ在籍
+              </span>
+              <p class="rate"><span class="rate-label">講師採用率</span><span class="rate-num"><span class="rate-approx">約</span>30<span class="rate-unit">%</span></span></p>
             </div>
           )}
         </div>
       </div>
     </section>
   ))}
+
+  {/* 指導方針を読んだ人の次の関心は料金（現行サイト踏襲の導線） */}
+  <section class="next">
+    <div class="container next-c">
+      <a href={u('/price')} class="btn-out">授業料を見る<span class="ar">→</span></a>
+    </div>
+  </section>
 
   <CtaBand />
 </SiteLayout>
@@ -87,24 +122,34 @@ const overview = ['基礎から学び直す', '勉強のやり方を身につけ
   /* 全体像 */
   .overview { background: #fff; }
   .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); }
+  .q-title {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
+    color: var(--ink); text-align: center; margin: 0 0 clamp(20px, 3.5vw, 28px);
+  }
+  .q-title::after {
+    content: ""; display: block; width: 148px; height: 8px; margin: 4px auto 0;
+    background: linear-gradient(transparent 0, var(--marker) 0 88%, transparent 88%);
+    transform: skewX(-18deg);
+  }
   .flow { list-style: none; margin: 0 auto; padding: 0; max-width: 400px; }
-  .flow-item { position: relative; display: flex; align-items: center; gap: 14px; padding-bottom: 18px; }
+  .flow-item { position: relative; padding-bottom: 18px; }
   .flow-item:last-child { padding-bottom: 0; }
   .flow-item:not(:last-child)::before {
     content: ""; position: absolute; left: 17px; top: 40px; bottom: 2px;
     border-left: 2.5px dotted var(--navy-light);
   }
+  .flow-link { display: flex; align-items: center; gap: 14px; text-decoration: none; }
   .flow-num {
     width: 35px; height: 35px; border-radius: 50%; background: var(--navy); color: #fff; flex: none;
     display: grid; place-items: center; font-family: var(--font-round); font-size: 16px; font-weight: 900;
   }
   .flow-t { font-family: var(--font-round); font-size: clamp(16px, 4vw, 18px); font-weight: 900; color: var(--ink); }
 
-  /* 各ステップ */
-  .step { background: #fff; }
-  .step.alt { background: var(--alt-bg); }
+  /* 各柱 */
+  .pillar { background: #fff; }
+  .pillar.alt { background: var(--alt-bg); }
   .head { text-align: center; margin-bottom: 22px; }
-  .step-pill {
+  .pillar-pill {
     display: inline-block; font: 800 12.5px var(--font-round); letter-spacing: .18em;
     color: #fff; background: var(--orange); border-radius: 999px; padding: 6px 18px;
   }
@@ -123,18 +168,28 @@ const overview = ['基礎から学び直す', '勉強のやり方を身につけ
   .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 14px; max-width: 640px; }
   .body-p:last-of-type { margin-bottom: 0; }
 
-  /* ゴール囲み（STEP03の締め） */
-  .goal {
-    margin: 20px auto 0; max-width: 480px; text-align: center;
-    background: var(--blue-paler); border: 2px solid var(--navy); border-radius: 14px;
-    padding: 18px 20px; box-shadow: 0 4px 12px rgba(20, 42, 84, .10);
+  /* ④ 講師陣の簡易図（正式な図解が決まるまでの表示） */
+  .teacher-fig {
+    margin: clamp(14px, 2vw, 20px) auto 0; max-width: 400px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
   }
-  .goal-label {
-    display: inline-block; font-size: 12px; font-weight: 800; color: #fff;
-    background: var(--navy); border-radius: 999px; padding: 3px 14px;
+  .t-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--navy); color: #fff; border-radius: 999px; padding: 7px 16px;
+    font-family: var(--font-round); font-size: 13.5px; font-weight: 800;
   }
-  .goal-text {
-    font-family: var(--font-round); font-size: clamp(16.5px, 4.4vw, 20px); font-weight: 900;
-    color: var(--ink); line-height: 1.9; margin: 10px 0 0;
+  .rate { display: flex; align-items: baseline; gap: 10px; margin: 0; }
+  .rate-label { font-size: 14px; font-weight: 800; color: var(--ink); }
+  .rate-num { font-family: var(--font-round); font-size: 42px; font-weight: 900; color: var(--orange); line-height: 1; }
+  .rate-approx { font-size: 18px; margin-right: 2px; }
+  .rate-unit { font-size: 20px; }
+
+  /* 授業料への導線 */
+  .next { background: #fff; }
+  .next-c { display: flex; justify-content: center; padding-top: clamp(28px, 4vw, 40px); padding-bottom: clamp(40px, 6vw, 56px); }
+  .btn-out {
+    display: flex; align-items: center; justify-content: center; min-width: 200px; gap: 8px;
+    border: 2px solid var(--navy); color: var(--navy); background: #fff;
+    font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 999px; text-decoration: none;
   }
 </style>
