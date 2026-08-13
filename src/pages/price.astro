@@ -45,21 +45,22 @@ const feeRows = [
     <div class="container">
       <SectionHead eyebrow="FEES" title="諸経費" />
       <div class="note-card">
-        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、季節講習費…。フォーカスで授業料のほかに毎月かかるのは、<span class="mk">教材費・システム利用料の1,375円（税込）だけ</span>。入会金・設備管理費は0円で、授業料の値上げも中学3年間ありません。</p>
+        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、季節講習費…。フォーカスで授業料のほかに毎月かかるのは、<span class="mk">教材費・システム利用料の1,375円（税込）だけ</span>。入会金・設備管理費は0円で、学年による授業料の値上げなども一切ありません。</p>
 
         {/* 積み上げくらべ: 授業料の上に諸経費が積み上がる一般的な塾 vs ほぼ授業料だけのフォーカス。
             ◯側は「必ずかかるのは」の言い回しで任意オプション（季節講習等）の存在と両立させる（詳細はその他オプションで） */}
         <div class="stk">
           <div class="stk-col">
             <p class="stk-cap">授業料のほかにも<br />いろいろかかる</p>
-            {/* 重さの表現: 詰まった段間隔・強めの傾き・押しつぶされた授業料（シワ線）・たわむ地面 */}
+            {/* 重さの表現: 詰まった段間隔・強めの傾き・圧のシワ線・たわむ地面
+                （授業料ブロックのつぶし表現は「フォーカスの方が授業料が高く見える」ため不採用） */}
             <div class="tower ng">
               <div class="blk o1" style="background:#B7C1CE">模試代</div>
               <div class="blk o2" style="background:#A5AFBE">季節講習費</div>
               <div class="blk o3" style="background:#B7C1CE">教材費</div>
               <div class="blk o4" style="background:#A5AFBE">設備管理費</div>
               <div class="blk" style="background:#9AA5B5">入会金</div>
-              <div class="blk base crush" style="background:#8A96A8">授業料</div>
+              <div class="blk base press" style="background:#8A96A8">授業料</div>
             </div>
             <svg class="stk-ground sag" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
             <p class="stk-name">一般的な塾</p>
@@ -232,12 +233,12 @@ const feeRows = [
   .blk.o4 { transform: translateX(-4px) rotate(.8deg); }
   /* 重さの表現（✗側のみ） */
   .tower.ng { gap: 2px; }
-  .blk.crush { position: relative; width: 134px; height: 38px; }
-  .blk.crush::before, .blk.crush::after {
+  .blk.press { position: relative; }
+  .blk.press::before, .blk.press::after {
     content: ""; position: absolute; bottom: 5px; width: 13px; height: 2.5px; border-radius: 2px; background: #9AA5B5;
   }
-  .blk.crush::before { left: -18px; transform: rotate(34deg); box-shadow: 6px -9px 0 #B7C1CE; }
-  .blk.crush::after { right: -18px; transform: rotate(-34deg); box-shadow: -6px -9px 0 #B7C1CE; }
+  .blk.press::before { left: -18px; transform: rotate(34deg); box-shadow: 6px -9px 0 #B7C1CE; }
+  .blk.press::after { right: -18px; transform: rotate(-34deg); box-shadow: -6px -9px 0 #B7C1CE; }
   .stk-ground { width: 150px; height: 3px; border-radius: 2px; background: #B9C8DE; margin-top: 5px; }
   .stk-ground.sag { height: 10px; margin-top: 0; border-radius: 0; background: none; display: block; }
   .stk-name { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
