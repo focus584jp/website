@@ -34,7 +34,7 @@ const subjects = [
   }
   .sim-q { font-family: var(--font-round); font-size: 15px; font-weight: 800; color: var(--navy); margin: 0 0 14px; }
 
-  /* 本棚: 背表紙の丸み（左右の陰影）・上下の帯ライン・ロゴ風マーク・棚板で本らしさを出す */
+  /* 本棚: フラットな図案（ベタ塗り+帯ライン+ロゴ風マーク+棚板）で本を表す。立体表現は使わない */
   .shelf { display: flex; justify-content: center; align-items: flex-end; gap: 8px; }
   .book {
     position: relative; width: 49px; height: 92px; border: none; cursor: pointer; padding: 0;
@@ -45,21 +45,17 @@ const subjects = [
     display: flex; align-items: center; justify-content: center;
     transition: background .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;
   }
-  .book.on { background: var(--bc); color: #fff; transform: translateY(-9px); box-shadow: 0 10px 14px rgba(20, 42, 84, .28); }
-  .book::before {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
-    background: linear-gradient(90deg, rgba(0, 0, 0, .20), rgba(255, 255, 255, .28) 20%, rgba(255, 255, 255, 0) 46%, rgba(0, 0, 0, .14));
-  }
+  .book.on { background: var(--bc); color: #fff; transform: translateY(-9px); box-shadow: 0 4px 0 rgba(20, 42, 84, .16); }
   .book::after {
     content: ""; position: absolute; left: 7px; right: 7px; top: 9px; height: 2px; pointer-events: none;
-    background: rgba(255, 255, 255, .6); box-shadow: 0 4px 0 rgba(255, 255, 255, .6);
+    background: rgba(255, 255, 255, .65); box-shadow: 0 4px 0 rgba(255, 255, 255, .65);
   }
-  .book .bmark { position: absolute; left: 7px; right: 7px; bottom: 20px; height: 2px; pointer-events: none; background: rgba(255, 255, 255, .6); }
+  .book .bmark { position: absolute; left: 7px; right: 7px; bottom: 20px; height: 2px; pointer-events: none; background: rgba(255, 255, 255, .65); }
   .book .bmark::after {
     content: ""; position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%);
-    width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .75);
+    width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, .8);
   }
-  .board { height: 9px; margin: 0 22px; border-radius: 4px; background: linear-gradient(#C9D4E3, #AEBDD2); box-shadow: 0 3px 6px rgba(20, 42, 84, .14); }
+  .board { height: 8px; margin: 0 22px; border-radius: 4px; background: #B9C8DE; }
 
   .sim-result { margin-top: 14px; background: #fff; border-radius: 12px; padding: 12px 12px 14px; }
   .sim-formula { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; font-variant-numeric: tabular-nums; }
