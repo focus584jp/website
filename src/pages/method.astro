@@ -98,18 +98,18 @@ const pillars = [
   /* 全体像 */
   .overview { background: #fff; }
   .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); text-align: center; }
-  /* 問いかけの見出し: 保護者の疑問を代弁する吹き出し（以降の4ポイントが答える構造。
-     PageHeroの黄マーカーと被るためマーカーは使わない） */
+  /* 問いかけの見出し: 保護者の疑問を代弁する吹き出し（以降の4ポイントが答える構造）。
+     紺地白文字=ヒーローの専門タグと同じ言語。淡青だと白/薄青のセクション背景に埋もれるため */
   .q-title {
     display: inline-block; position: relative;
-    background: var(--blue-paler); border-radius: 14px; padding: 12px 26px;
+    background: var(--navy); border-radius: 14px; padding: 12px 26px;
     font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
-    color: var(--ink); margin: 0;
+    color: #fff; margin: 0;
   }
   .q-title::after {
     content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%);
     border-left: 9px solid transparent; border-right: 9px solid transparent;
-    border-top: 10px solid var(--blue-paler);
+    border-top: 10px solid var(--navy);
   }
   /* 各柱 */
   .pillar { background: #fff; }
