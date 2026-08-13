@@ -96,9 +96,9 @@ const options = [
           {options.map((o) => (
             <li class="opt-item">
               <button type="button" class="opt-head" aria-expanded="false" data-opt-toggle>
-                <span class="opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"></path></svg></span>
+                <span class="opt-add" aria-hidden="true">＋</span>
                 <span class="opt-name">{o.name}</span>
-                <span class="opt-plus" aria-hidden="true">＋</span>
+                <span class="opt-tag">任意</span>
               </button>
               <div class="opt-body"><div class="opt-clip"><p>{o.desc}</p></div></div>
             </li>
@@ -225,30 +225,35 @@ const options = [
   .wf-panel.ok .wf-cap { color: var(--navy); }
   .why-sum { font-family: var(--font-round); font-size: 15.5px; font-weight: 800; color: var(--ink); text-align: center; margin: 4px 0 0; }
 
-  /* その他オプション（タップで説明が開く。開閉機構はFaqListと同じ grid-template-rows 0fr→1fr） */
+  /* その他オプション（タップで説明が開く。開閉機構はFaqListと同じ grid-template-rows 0fr→1fr）
+     オプション感の演出: 点線枠=まだ足していない任意のもの（開くと実線紺枠）・＋丸バッジ=追加できるもの（開くと×に回転）・任意ピル */
   .opt-list { list-style: none; margin: 0 auto; padding: 0; max-width: 480px; display: flex; flex-direction: column; gap: 10px; }
   .opt-item {
-    background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card);
+    background: #fff; border: 1.5px dashed #A9BBD4; border-radius: 12px;
     overflow: hidden; transition: border-color .2s ease;
   }
-  .opt-item.open { border-color: var(--navy); }
+  .opt-item.open { border: 1.5px solid var(--navy); }
   .opt-head {
     display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 16px;
     background: none; border: none; text-align: left; cursor: pointer;
     font-family: var(--font-body); font-size: 15px; font-weight: 700; color: var(--ink);
   }
+  .opt-add {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: #E3ECFB; color: var(--navy); font: 900 15px var(--font-round);
+    display: grid; place-items: center; transition: transform .3s;
+  }
+  .opt-item.open .opt-add { transform: rotate(45deg); }
   .opt-name { flex: 1; }
-  .opt-plus { flex: none; color: var(--navy); font-weight: 900; font-size: 17px; transition: transform .3s; }
-  .opt-item.open .opt-plus { transform: rotate(45deg); }
+  .opt-tag {
+    flex: none; font: 800 11.5px var(--font-round); color: var(--muted);
+    border: 1.5px solid #C6D0DC; border-radius: 999px; padding: 3px 10px;
+  }
   .opt-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
   .opt-item.open .opt-body { grid-template-rows: 1fr; }
   .opt-clip { overflow: hidden; }
   .opt-body p { font-size: 14.5px; line-height: 1.95; color: var(--ink); margin: 0; padding: 0 16px 14px 52px; }
-  .opt-item.etc { background: none; border: none; box-shadow: none; color: var(--muted); font-size: 13.5px; padding: 0; text-align: center; }
-  .opt-check {
-    flex: none; width: 26px; height: 26px; border-radius: 50%;
-    background: #E3ECFB; display: grid; place-items: center;
-  }
+  .opt-item.etc { background: none; border: none; color: var(--muted); font-size: 13.5px; padding: 0; text-align: center; }
 </style>
 
 <script>
