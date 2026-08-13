@@ -99,10 +99,11 @@ const pillars = [
   .overview { background: #fff; }
   .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); text-align: center; }
   /* 問いかけの見出し: 保護者の疑問を代弁する吹き出し（以降の4ポイントが答える構造）。
-     白地+紺枠+紺文字（淡青だと白/薄青のセクション背景に埋もれるため）。しっぽは二重三角で枠線風に */
+     白地+紺枠+紺文字+淡青のずらし影（ヒーローの専門タグと同じオフセットシャドウ言語）。しっぽは二重三角で枠線風に */
   .q-title {
     display: inline-block; position: relative;
     background: #fff; border: 2px solid var(--navy); border-radius: 14px; padding: 12px 26px;
+    box-shadow: 5px 5px 0 var(--blue-pale);
     font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
     color: var(--navy); margin: 0;
   }
