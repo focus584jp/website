@@ -60,7 +60,7 @@ const pillars = [
   {/* ページの導入となる問い（目次リストは2026-08-13に削除: 流し見ペルソナには冗長で、直後に同じ見出しが並ぶため） */}
   <section class="overview">
     <div class="container">
-      <h2 class="q-title">どのように成績が上がるの？</h2>
+      <h2 class="q-title"><span class="slash">＼</span>どのように成績が上がるの？<span class="slash">／</span></h2>
     </div>
   </section>
 
@@ -98,15 +98,12 @@ const pillars = [
   /* 全体像 */
   .overview { background: #fff; }
   .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); }
+  /* 問いかけの見出し: PageHeroの黄マーカーと被らないよう、CtaBandと同じ＼ ／様式 */
   .q-title {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
     color: var(--ink); text-align: center; margin: 0;
   }
-  .q-title::after {
-    content: ""; display: block; width: 148px; height: 8px; margin: 4px auto 0;
-    background: linear-gradient(transparent 0, var(--marker) 0 88%, transparent 88%);
-    transform: skewX(-18deg);
-  }
+  .q-title .slash { color: var(--orange); margin: 0 .35em; font-weight: 900; }
   /* 各柱 */
   .pillar { background: #fff; }
   .pillar.alt { background: var(--alt-bg); }
