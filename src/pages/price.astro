@@ -54,12 +54,13 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
             <p class="stk-cap">授業料のほかにも<br />いろいろかかる</p>
             {/* 重さの表現: 詰まった段間隔・強めの傾き・圧のシワ線・たわむ地面
                 （授業料ブロックのつぶし表現は「フォーカスの方が授業料が高く見える」ため不採用） */}
-            {/* 季節講習費は載せない: フォーカスも季節講習が原則参加（別途講習費）のため対比が成り立たない。下の※注記で開示 */}
+            {/* ✗側は「他塾で毎月かかるのが一般的な費目」のみで構成（◯側の「毎月かかるのは」と対比を揃える）。
+                入会金・模試代（毎月でない）と季節講習費（フォーカスも原則参加）は載せない */}
             <div class="tower ng">
-              <div class="blk o1" style="background:#9AA8BB">模試代</div>
-              <div class="blk o2" style="background:#8E9DB1">教材費</div>
-              <div class="blk o3" style="background:#9AA8BB">設備管理費</div>
-              <div class="blk" style="background:#8493A8">入会金</div>
+              <div class="blk o1" style="background:#9AA8BB">システム管理費</div>
+              <div class="blk o2" style="background:#8E9DB1">冷暖房費</div>
+              <div class="blk o3" style="background:#9AA8BB">教材費</div>
+              <div class="blk" style="background:#8493A8">設備管理費</div>
               <div class="blk base press" style="background:#76859B">授業料</div>
             </div>
             <svg class="stk-ground" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
