@@ -5,7 +5,8 @@ import CtaBand from '../components/site/CtaBand.astro';
 import SectionHead from '../components/site/SectionHead.astro';
 import QuestionBalloon from '../components/site/QuestionBalloon.astro';
 
-// 3本柱構成（2026-08-13 再設計・現行サイト focus584.net/fee/ を参考）: 授業料 → 諸経費 → その他オプション
+// 4セクション構成（2026-08-13 再設計・現行サイト focus584.net/fee/ を参考）:
+// 授業料 → 諸経費（まずフォーカスの料金を完結に伝える）→ 他塾との比較 → その他オプション（すべて任意）
 // 教科数ごとの月額 = 1教科 6,578円（税込）の単純合算が実料金（2026-08-13 確定）
 const plans = [
   { subjects: '1教科', taxed: '6,578' },
@@ -21,6 +22,9 @@ const subjectChips = [
   { label: '理科', bg: '#1F6B3C' },
   { label: '社会', bg: '#6B4FA3' },
 ];
+
+// オプション（料金は掲載しない。すべて任意であることを本文で明記）
+const options = ['定期テスト対策', '過去問演習講座', '外部模試'];
 
 // 他塾比較（現行サイトで公開中の比較表と同データ。1教科あたり・税込）
 const compareRows = [
@@ -66,30 +70,6 @@ const compareRows = [
           ))}
         </tbody>
       </table>
-      <p class="table-note">他塾の2教科分の料金で、5教科全部通えます。</p>
-
-      <h3 class="sub-h">他塾と比べてください</h3>
-      <table class="cmp-table">
-        <thead>
-          <tr><th></th><th>個別指導<br />M塾</th><th class="focus-col">フォーカス</th><th>個別指導<br />E塾</th></tr>
-        </thead>
-        <tbody>
-          {compareRows.map((r) => (
-            <tr>
-              <td class="row-label">{r.label}</td>
-              <td>{r.m}</td>
-              <td class="focus-col">{r.strong ? <strong>{r.focus}</strong> : <span class="free">{r.focus}</span>}</td>
-              <td>{r.e}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p class="cmp-note">※表は1教科あたりの金額（税込）です（当社調べ）</p>
-
-      <div class="why">
-        <h3 class="sub-h">お手頃価格が実現できるワケ</h3>
-        <p class="why-p">一般的な個別指導塾は、正直、高いです。フォーカスは<span class="mk">勉強が苦手な中学生に絞る</span>ことでムダな費用を抑え、それでいて高い授業品質を保っています。安くて高品質だから、長く通い続けられます。</p>
-      </div>
     </div>
   </section>
 
@@ -110,11 +90,49 @@ const compareRows = [
     </div>
   </section>
 
-  {/* ===== その他オプション ===== */}
+  {/* ===== 他塾との比較（授業料・諸経費を伝えたうえで比較する） ===== */}
+  <section class="compare">
+    <div class="container">
+      <SectionHead eyebrow="COMPARISON" title="他塾との比較" />
+      <table class="cmp-table">
+        <thead>
+          <tr><th></th><th>個別指導<br />M塾</th><th class="focus-col">フォーカス</th><th>個別指導<br />E塾</th></tr>
+        </thead>
+        <tbody>
+          {compareRows.map((r) => (
+            <tr>
+              <td class="row-label">{r.label}</td>
+              <td>{r.m}</td>
+              <td class="focus-col">{r.strong ? <strong>{r.focus}</strong> : <span class="free">{r.focus}</span>}</td>
+              <td>{r.e}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="cmp-note">※表は1教科あたりの金額（税込）です（当社調べ）</p>
+      <p class="cmp-lead">他塾の2教科分の料金で、5教科全部通えます。</p>
+
+      <div class="why">
+        <h3 class="sub-h">お手頃価格が実現できるワケ</h3>
+        <p class="why-p">一般的な個別指導塾は、正直、高いです。フォーカスは<span class="mk">勉強が苦手な中学生に絞る</span>ことでムダな費用を抑え、それでいて高い授業品質を保っています。安くて高品質だから、長く通い続けられます。</p>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== その他オプション（すべて任意であることを必ず明記） ===== */}
   <section class="options">
     <div class="container">
       <SectionHead eyebrow="OPTIONS" title="その他オプション" />
-      <p class="opt-p">通常授業のほかに、模試やテスト対策などのオプションサービスがあります。<span class="mk">必要なサービスを、必要な分だけ</span>。選ぶ際のアドバイスはいたしますが、追加するかどうかは保護者さまご自身で都度お選びいただけます。</p>
+      <ul class="opt-list">
+        {options.map((o) => (
+          <li class="opt-item">
+            <span class="opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"></path></svg></span>
+            {o}
+          </li>
+        ))}
+        <li class="opt-item etc">など</li>
+      </ul>
+      <p class="opt-p"><span class="mk">オプションはすべて任意です。</span>選ぶ際のアドバイスはいたしますが、必要なサービスを必要な分だけ、保護者さまご自身で都度お選びいただけます。</p>
     </div>
   </section>
 
@@ -196,7 +214,22 @@ const compareRows = [
     .fee-card { flex: 1; flex-direction: column; gap: 8px; justify-content: center; }
   }
 
+  /* 他塾との比較 */
+  .compare { background: #fff; }
+  .cmp-lead { font-size: 15px; font-weight: 800; color: var(--ink); text-align: center; margin: 18px 0 0; }
+
   /* その他オプション */
-  .options { background: #fff; }
+  .options { background: var(--alt-bg); }
+  .opt-list { list-style: none; margin: 0 auto 20px; padding: 0; max-width: 480px; display: flex; flex-direction: column; gap: 10px; }
+  .opt-item {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border-radius: 12px; box-shadow: var(--shadow-card);
+    padding: 13px 16px; font-size: 15px; font-weight: 700; color: var(--ink);
+  }
+  .opt-item.etc { background: none; box-shadow: none; justify-content: center; color: var(--muted); font-size: 13.5px; padding: 0; }
+  .opt-check {
+    flex: none; width: 26px; height: 26px; border-radius: 50%;
+    background: #E3ECFB; display: grid; place-items: center;
+  }
   .opt-p { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0 auto; max-width: 640px; }
 </style>
