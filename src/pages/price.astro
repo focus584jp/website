@@ -6,19 +6,14 @@ import SectionHead from '../components/site/SectionHead.astro';
 import QuestionBalloon from '../components/site/QuestionBalloon.astro';
 import PriceSimulator from '../components/site/PriceSimulator.astro';
 
-// 5セクション構成（2026-08-13 再設計）: 授業料 → 諸経費 → 他塾との比較 → お手頃価格のワケ → その他オプション
+// 4セクション構成（2026-08-14 再々設計）: 授業料（こだわり先行）→ 諸経費 → その他オプション → お手頃価格のワケ
+// 前半=料金の全貌（必ずかかるもの→任意のもの）・後半=評価（なぜ安いか）の2部構成。
+// 他塾比較セクションは2026-08-14に削除（比較データの根拠管理が料金ページでは不要に）
 // レイアウトは /method と同型（吹き出し直後にセクション・交互背景・方眼ノートカードに本文＋図解）
-// 教科数ごとの月額 = 1教科 6,578円（税込）・月4回授業の単純合算が実料金。計算は PriceSimulator が担う
+// 教科数ごとの月額 = 1教科 6,578円（税込）・月4回授業の単純合算が実料金。同一教科の複数枠受講も可（枠数分の料金）。計算は PriceSimulator が担う
 
 // オプション（料金は掲載しない。すべて任意であることを本文で明記）
 const options = ['定期テスト対策', '過去問演習講座', '外部模試'];
-
-// 他塾比較（現行サイトで公開中の比較表と同データ。1教科あたり・税込）
-// 基本授業料は棒グラフで見せるため、表は諸経費まわりの2行のみ
-const feeRows = [
-  { label: '入会費', m: '20,000円', focus: '無料', e: '無料' },
-  { label: '設備管理費など', m: '3,200円', focus: '無料', e: '3,520円' },
-];
 ---
 <SiteLayout
   title="料金｜学習塾フォーカス"
@@ -34,7 +29,9 @@ const feeRows = [
     <div class="container">
       <SectionHead eyebrow="TUITION" title="授業料" />
       <div class="note-card">
-        <p class="body-p">フォーカスの授業料は、<span class="mk">1教科あたり月6,578円（税込）</span>です。授業は1教科につき月4回行います。複雑な料金プランはなく、選んだ教科数分の単純なかけ算だけの明朗会計です。</p>
+        {/* こだわり（Why）を先に語ってから金額へ。マーカーはカード内1箇所=こだわり文に（金額はシミュレータが大きく見せる） */}
+        <p class="body-p">個別指導は料金が高いから、受講は1〜2教科に絞るもの──フォーカスは、その「当たり前」をなくしたいと考えています。勉強が苦手な子ほど、複数の教科でつまずいているからです。<span class="mk">5教科すべての受講も、苦手教科を週2回にすることも、あきらめなくていい</span>料金にこだわりました。</p>
+        <p class="body-p">フォーカスの授業料は、1教科あたり月6,578円（税込）です。授業は1教科につき月4回行います。複雑な料金プランはなく、選んだ教科数分の単純なかけ算だけの明朗会計です。</p>
         <PriceSimulator />
       </div>
     </div>
@@ -79,52 +76,21 @@ const feeRows = [
     </div>
   </section>
 
-  {/* ===== 他塾との比較 ===== */}
+  {/* ===== その他オプション（すべて任意であることを必ず明記。諸経費の「必ずかかるのは」を受けて任意分を開示） ===== */}
   <section class="sec alt">
     <div class="container">
-      <SectionHead eyebrow="COMPARISON" title="他塾との比較" />
+      <SectionHead eyebrow="OPTIONS" title="その他オプション" />
       <div class="note-card">
-        <p class="body-p">同じ個別指導の塾と比べても、フォーカスの授業料はおよそ3分の1。<span class="mk">他塾の2教科分の料金で、5教科すべて</span>通えます。</p>
-
-        {/* 基本授業料の棒グラフ: フォーカスの安さを高低差で見せる（方眼地がグラフ用紙になる） */}
-        <div class="chart">
-          <svg viewBox="0 0 340 224" role="img" aria-label="基本授業料の比較。個別指導M塾20,400円、フォーカス6,578円、個別指導E塾27,500円">
-            <text x="170" y="16" text-anchor="middle" font-size="14" font-weight="800" fill="#333333">基本授業料（1教科・月額）</text>
-            <g>
-              <rect x="30" y="86" width="72" height="104" rx="6" fill="#C6D0DC"></rect>
-              <text x="66" y="78" text-anchor="middle" font-size="14" font-weight="800" fill="#5B6B85">20,400円</text>
-              <text x="66" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#5B6B85">個別指導M塾</text>
-            </g>
-            <g>
-              <rect x="134" y="156" width="72" height="34" rx="6" fill="#E67832"></rect>
-              <text x="170" y="146" text-anchor="middle" font-size="19" font-weight="900" fill="#E67832" class="f-num">6,578円</text>
-              <text x="170" y="212" text-anchor="middle" font-size="13.5" font-weight="900" fill="#143778">フォーカス</text>
-            </g>
-            <g>
-              <rect x="238" y="50" width="72" height="140" rx="6" fill="#C6D0DC"></rect>
-              <text x="274" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#5B6B85">27,500円</text>
-              <text x="274" y="212" text-anchor="middle" font-size="13" font-weight="700" fill="#5B6B85">個別指導E塾</text>
-            </g>
-            <line x1="20" y1="190" x2="320" y2="190" stroke="#C6D0DC" stroke-width="2"></line>
-          </svg>
-        </div>
-
-        <table class="cmp-table">
-          <thead>
-            <tr><th></th><th>個別指導<br />M塾</th><th class="focus-col">フォーカス</th><th>個別指導<br />E塾</th></tr>
-          </thead>
-          <tbody>
-            {feeRows.map((r) => (
-              <tr>
-                <td class="row-label">{r.label}</td>
-                <td>{r.m}</td>
-                <td class="focus-col"><span class="free">{r.focus}</span></td>
-                <td>{r.e}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p class="cmp-note">※いずれも1教科あたりの金額（税込）です（当社調べ）</p>
+        <p class="body-p">必ずかかる費用は、以上ですべてです。このほかに、ご希望に応じて選べるオプション講座があります。<span class="mk">オプションはすべて任意です。</span>選ぶ際のアドバイスはいたしますが、必要なサービスを必要な分だけ、保護者さまご自身で都度お選びいただけます。</p>
+        <ul class="opt-list">
+          {options.map((o) => (
+            <li class="opt-item">
+              <span class="opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"></path></svg></span>
+              {o}
+            </li>
+          ))}
+          <li class="opt-item etc">など</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -172,25 +138,6 @@ const feeRows = [
           </div>
           <p class="why-sum">絞っているから、<strong>安くて高品質</strong>。</p>
         </div>
-      </div>
-    </div>
-  </section>
-
-  {/* ===== その他オプション（すべて任意であることを必ず明記） ===== */}
-  <section class="sec alt">
-    <div class="container">
-      <SectionHead eyebrow="OPTIONS" title="その他オプション" />
-      <div class="note-card">
-        <p class="body-p">授業料と諸経費のほかに、ご希望に応じて選べるオプション講座があります。<span class="mk">オプションはすべて任意です。</span>選ぶ際のアドバイスはいたしますが、必要なサービスを必要な分だけ、保護者さまご自身で都度お選びいただけます。</p>
-        <ul class="opt-list">
-          {options.map((o) => (
-            <li class="opt-item">
-              <span class="opt-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"></path></svg></span>
-              {o}
-            </li>
-          ))}
-          <li class="opt-item etc">など</li>
-        </ul>
       </div>
     </div>
   </section>
@@ -243,24 +190,6 @@ const feeRows = [
   .stk-ground { width: 150px; height: 10px; display: block; }
   .stk-name { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
   .stk-name.ok { color: var(--navy); font-weight: 900; }
-
-  /* 他塾との比較 */
-  .chart { max-width: 420px; margin: 0 auto; }
-  .chart svg { width: 100%; height: auto; display: block; }
-  .chart .f-num { font-family: var(--font-round); }
-
-  .cmp-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
-  .cmp-table th, .cmp-table td {
-    border: 1px solid var(--line); padding: 12px 8px; font-size: 14px; color: var(--ink); text-align: center;
-    background: #fff;
-  }
-  .cmp-table thead th { background: var(--panel); font-weight: 700; line-height: 1.4; }
-  .cmp-table thead th.focus-col { background: var(--orange); color: #fff; font-family: var(--font-round); font-weight: 900; border: 2.5px solid var(--orange); border-bottom: none; }
-  .cmp-table td.focus-col { background: #FDEFE4; border-left: 2.5px solid var(--orange); border-right: 2.5px solid var(--orange); }
-  .cmp-table tbody tr:last-child td.focus-col { border-bottom: 2.5px solid var(--orange); }
-  .cmp-table td.focus-col .free { font: 900 15.5px var(--font-round); color: var(--ink); }
-  .cmp-table .row-label { background: var(--panel); font-weight: 700; font-size: 13.5px; }
-  .cmp-note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; line-height: 1.7; }
 
   /* お手頃価格のワケ */
   .why-fig { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
