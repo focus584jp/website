@@ -40,6 +40,7 @@ src/
                     ※RatioCycle=1対4の巡回アニメ図解（/method POINT03用。先生が4席を循環し「演習」⇄「解説」が切替）
                     ※TeacherFilter=講師選考のフィルター図解（/method POINT04用。応募10人→厳しい選考カード→採用3人+約30%）
                     ※QuestionBalloon=ページ導入の問いかけ吹き出し（/method・/priceで共用。text propで文言指定）
+                    ※PriceSimulator=料金シミュレータ（/price用。教科チップをタップすると教科数×6,578円を表示）
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/

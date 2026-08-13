@@ -1,0 +1,83 @@
+---
+// 料金シミュレータ（/price 授業料セクション用）。
+// 教科チップをタップすると、選んだ教科数 × 6,578円（税込）の月額をその場で表示する。
+// 「どの教科も同じ料金」「単純合算の明朗会計」を触って体験してもらう部品。
+const subjects = [
+  { label: '国語', color: '#B0413E' },
+  { label: '数学', color: '#2C55A0' },
+  { label: '英語', color: '#B95A1E' },
+  { label: '理科', color: '#1F6B3C' },
+  { label: '社会', color: '#6B4FA3' },
+];
+---
+<div class="sim" data-price-sim>
+  <p class="sim-q">受講したい教科をえらんでください</p>
+  <div class="sim-chips">
+    {subjects.map((s, i) => (
+      <button type="button" class:list={['sim-chip', { on: i === 1 }]} data-color={s.color}>{s.label}</button>
+    ))}
+  </div>
+  <div class="sim-result">
+    <p class="sim-count" data-count>1教科の場合</p>
+    <p class="sim-price" data-price></p>
+  </div>
+  <p class="sim-note">どの教科をえらんでも、1教科あたり月6,578円（税込）です</p>
+</div>
+
+<style>
+  .sim {
+    max-width: 480px; margin: 28px auto 0;
+    background: var(--blue-paler); border: 2.5px solid var(--navy); border-radius: 16px;
+    padding: clamp(18px, 3.5vw, 24px) 16px; text-align: center;
+  }
+  .sim-q { font-family: var(--font-round); font-size: 15.5px; font-weight: 800; color: var(--navy); margin: 0 0 12px; }
+  .sim-chips { display: flex; justify-content: center; gap: 7px; flex-wrap: wrap; }
+  .sim-chip {
+    font-family: var(--font-body); font-size: 13.5px; font-weight: 800; border-radius: 9px; padding: 7px 12px;
+    border: 2px solid #C6D0DC; background: #fff; color: var(--gray-1); cursor: pointer;
+    transition: background .15s ease, color .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  .sim-chip.on { color: #fff; border-color: transparent; transform: scale(1.05); }
+  .sim-result { margin-top: 16px; background: #fff; border-radius: 12px; padding: 13px 12px 15px; }
+  .sim-count { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 0; }
+  .sim-price { margin: 2px 0 0; line-height: 1.1; }
+  .sim-price :global(.yen-l) { font: 700 16px var(--font-round); color: var(--ink); margin-right: 3px; }
+  .sim-price :global(.n) { font: 900 clamp(36px, 8vw, 42px) var(--font-round); color: var(--orange); }
+  .sim-price :global(.yen) { font: 700 17px var(--font-round); color: var(--ink); margin-left: 2px; }
+  .sim-price :global(.tax) { font-size: 11.5px; color: var(--muted); margin-left: 3px; }
+  .sim-price :global(.sim-empty) { display: inline-block; font-size: 14px; font-weight: 700; color: var(--gray-1); margin: 10px 0; }
+  .sim-note { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-price-sim]').forEach((sim) => {
+    const chips = sim.querySelectorAll<HTMLButtonElement>('.sim-chip');
+    const count = sim.querySelector('[data-count]') as HTMLElement;
+    const price = sim.querySelector('[data-price]') as HTMLElement;
+    const UNIT = 6578;
+    const render = () => {
+      const n = sim.querySelectorAll('.sim-chip.on').length;
+      if (n === 0) {
+        count.textContent = '';
+        price.innerHTML = '<span class="sim-empty">教科をえらんでください</span>';
+        return;
+      }
+      count.textContent = `${n}教科の場合`;
+      const total = (UNIT * n).toLocaleString('ja-JP');
+      price.innerHTML = `<span class="yen-l">月</span><span class="n">${total}</span><span class="yen">円</span><span class="tax">（税込）</span>`;
+    };
+    chips.forEach((chip) => {
+      const color = chip.dataset.color!;
+      const paint = () => {
+        chip.style.background = chip.classList.contains('on') ? color : '#fff';
+      };
+      paint();
+      chip.addEventListener('click', () => {
+        chip.classList.toggle('on');
+        paint();
+        render();
+      });
+    });
+    render();
+  });
+</script>
