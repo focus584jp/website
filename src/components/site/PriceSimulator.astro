@@ -11,7 +11,7 @@ const subjects = [
 ];
 ---
 <div class="sim" data-price-sim>
-  <p class="sim-q">受講を検討している教科をえらんでください</p>
+  <p class="sim-q">受講を検討している教科を<br />選んでください</p>
   <div class="shelf">
     {subjects.map((s, i) => (
       <button type="button" class:list={['book', { on: i === 1 }]} style={`--bc: ${s.color}`} aria-pressed={i === 1 ? 'true' : 'false'}>
@@ -83,7 +83,7 @@ const subjects = [
       const n = sim.querySelectorAll('.book.on').length;
       if (n === 0) {
         formula.textContent = '';
-        price.innerHTML = '<span class="sim-empty">教科をえらんでください</span>';
+        price.innerHTML = '<span class="sim-empty">教科を選んでください</span>';
         return;
       }
       formula.textContent = `6,578円 × ${n}教科（月${LESSONS * n}回）`;
