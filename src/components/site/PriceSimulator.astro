@@ -27,11 +27,8 @@ const subjects = [
 </div>
 
 <style>
-  .sim {
-    max-width: 480px; margin: 8px auto 0;
-    background: var(--blue-paler); border: 2.5px solid var(--navy); border-radius: 16px;
-    padding: clamp(18px, 3.5vw, 24px) 16px; text-align: center;
-  }
+  /* 枠なし: 方眼ノートカードに直接置く（青枠+薄青地カードは2026-08-14に廃止） */
+  .sim { max-width: 480px; margin: 14px auto 0; text-align: center; }
   .sim-q { font-family: var(--font-round); font-size: 15px; font-weight: 800; color: var(--navy); margin: 0 0 14px; }
 
   /* 本棚: フラットな図案（ベタ塗り+帯ライン+ロゴ風マーク+棚板）で本を表す。立体表現は使わない */
@@ -57,7 +54,7 @@ const subjects = [
   }
   .board { height: 8px; margin: 0 22px; border-radius: 4px; background: #B9C8DE; }
 
-  .sim-result { margin-top: 14px; background: #fff; border-radius: 12px; padding: 12px 12px 14px; }
+  .sim-result { margin-top: 14px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 14px; }
   .sim-formula { font-size: 13px; font-weight: 700; color: var(--muted); margin: 0; font-variant-numeric: tabular-nums; }
   .sim-price { margin: 2px 0 0; line-height: 1.1; }
   .sim-price :global(.yen-l) { font: 700 15px var(--font-round); color: var(--ink); margin-right: 3px; }

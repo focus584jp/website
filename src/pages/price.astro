@@ -62,7 +62,7 @@ const feeRows = [
               <div class="blk" style="background:#9AA5B5">入会金</div>
               <div class="blk base press" style="background:#8A96A8">授業料</div>
             </div>
-            <svg class="stk-ground sag" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
+            <svg class="stk-ground" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
             <p class="stk-name">一般的な塾</p>
           </div>
           <div class="stk-col">
@@ -71,7 +71,7 @@ const feeRows = [
               <div class="blk" style="background:var(--navy-light)">教材費など <small>1,375円</small></div>
               <div class="blk base" style="background:var(--navy)">授業料</div>
             </div>
-            <div class="stk-ground"></div>
+            <svg class="stk-ground" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 L148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
             <p class="stk-name ok">フォーカス</p>
           </div>
         </div>
@@ -239,8 +239,8 @@ const feeRows = [
   }
   .blk.press::before { left: -18px; transform: rotate(34deg); box-shadow: 6px -9px 0 #B7C1CE; }
   .blk.press::after { right: -18px; transform: rotate(-34deg); box-shadow: -6px -9px 0 #B7C1CE; }
-  .stk-ground { width: 150px; height: 3px; border-radius: 2px; background: #B9C8DE; margin-top: 5px; }
-  .stk-ground.sag { height: 10px; margin-top: 0; border-radius: 0; background: none; display: block; }
+  /* 地面は両側ともSVG（同一ジオメトリ）: ✗側だけ地面レベルから下にたわむ */
+  .stk-ground { width: 150px; height: 10px; display: block; }
   .stk-name { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
   .stk-name.ok { color: var(--navy); font-weight: 900; }
 
