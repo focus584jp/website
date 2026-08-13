@@ -34,6 +34,8 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
         {/* 月4回の説明はシミュレータの式（6,578円×n教科（月4n回））が担うため本文からは省く */}
         <p class="body-p">フォーカスの授業料は、<span class="mk">1教科あたり月6,578円（税込）</span>です。複雑な料金プランはなく、選んだ教科数分の単純なかけ算だけの明朗会計です。</p>
         <PriceSimulator />
+        {/* 季節講習は指導に対する費用なので授業料セクションで開示（原則参加。注記で小さく書くと打ち消し表示的で嘘くさくなるため本文で堂々と） */}
+        <p class="body-p seasonal">また、春・夏・冬の年3回は、通常授業に加えて季節講習を実施しています。講習は原則ご参加いただいており、講習費は季節ごとに別途かかります。</p>
       </div>
     </div>
   </section>
@@ -43,7 +45,7 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
     <div class="container">
       <SectionHead eyebrow="FEES" title="諸経費" />
       <div class="note-card">
-        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、季節講習費…。フォーカスでは、授業料のほかに毎月、<span class="mk">教材費・システム利用料の1,375円（税込）のみ</span>いただいています。入会金・設備管理費は0円で、学年による授業料の値上げなども一切ありません。</p>
+        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、模試代…。フォーカスでは、授業料のほかに毎月、<span class="mk">教材費・システム利用料の1,375円（税込）のみ</span>いただいています。入会金・設備管理費は0円で、学年による授業料の値上げなども一切ありません。</p>
 
         {/* 積み上げくらべ: 授業料の上に諸経費が積み上がる一般的な塾 vs ほぼ授業料だけのフォーカス。
             ◯側は「必ずかかるのは」の言い回しで任意オプション（季節講習等）の存在と両立させる（詳細はその他オプションで） */}
@@ -65,7 +67,7 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
           </div>
           <div class="stk-div" aria-hidden="true"></div>
           <div class="stk-col">
-            <p class="stk-cap ok">必ずかかるものは<br />これだけ！</p>
+            <p class="stk-cap ok">毎月かかるのは<br />これだけ！</p>
             <div class="tower">
               <div class="blk" style="background:var(--navy-light)">教材費など <small>1,375円</small></div>
               <div class="blk base" style="background:var(--navy)">授業料</div>
@@ -74,7 +76,6 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
             <p class="stk-name ok">フォーカス</p>
           </div>
         </div>
-        <p class="stk-note">※季節講習（春・夏・冬）は原則ご参加いただいており、講習費が別途かかります。</p>
       </div>
     </div>
   </section>
@@ -164,6 +165,7 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
     box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
   }
   .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 16px; max-width: 640px; }
+  .body-p.seasonal { margin: 20px auto 0; }
 
   /* 諸経費: 積み上げくらべ（上=説明タイトル / 下=塾名） */
   .stk { display: flex; justify-content: center; align-items: flex-end; gap: clamp(16px, 3.5vw, 26px); }
@@ -195,7 +197,6 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
   .stk-ground { width: 150px; height: 10px; display: block; }
   .stk-name { font-size: 14px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
   .stk-name.ok { color: var(--navy); font-weight: 900; }
-  .stk-note { font-size: 12.5px; color: var(--muted); margin: 18px 0 0; text-align: left; line-height: 1.8; }
 
   /* お手頃価格のワケ */
   .why-fig { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
