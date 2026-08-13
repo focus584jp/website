@@ -60,7 +60,7 @@ const pillars = [
   {/* ページの導入となる問い（目次リストは2026-08-13に削除: 流し見ペルソナには冗長で、直後に同じ見出しが並ぶため） */}
   <section class="overview">
     <div class="container">
-      <h2 class="q-title"><span class="slash">＼</span>どのように成績が上がるの？<span class="slash">／</span></h2>
+      <h2 class="q-title">どのように成績が上がるの？</h2>
     </div>
   </section>
 
@@ -97,13 +97,20 @@ const pillars = [
 
   /* 全体像 */
   .overview { background: #fff; }
-  .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); }
-  /* 問いかけの見出し: PageHeroの黄マーカーと被らないよう、CtaBandと同じ＼ ／様式 */
+  .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); text-align: center; }
+  /* 問いかけの見出し: 保護者の疑問を代弁する吹き出し（以降の4ポイントが答える構造。
+     PageHeroの黄マーカーと被るためマーカーは使わない） */
   .q-title {
+    display: inline-block; position: relative;
+    background: var(--blue-paler); border-radius: 14px; padding: 12px 26px;
     font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
-    color: var(--ink); text-align: center; margin: 0;
+    color: var(--ink); margin: 0;
   }
-  .q-title .slash { color: var(--orange); margin: 0 .35em; font-weight: 900; }
+  .q-title::after {
+    content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%);
+    border-left: 9px solid transparent; border-right: 9px solid transparent;
+    border-top: 10px solid var(--blue-paler);
+  }
   /* 各柱 */
   .pillar { background: #fff; }
   .pillar.alt { background: var(--alt-bg); }
