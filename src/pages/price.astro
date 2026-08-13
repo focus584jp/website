@@ -52,15 +52,16 @@ const feeRows = [
         <div class="stk">
           <div class="stk-col">
             <p class="stk-cap">授業料のほかにも<br />いろいろかかる</p>
-            <div class="tower">
+            {/* 重さの表現: 詰まった段間隔・強めの傾き・押しつぶされた授業料（シワ線）・たわむ地面 */}
+            <div class="tower ng">
               <div class="blk o1" style="background:#B7C1CE">模試代</div>
               <div class="blk o2" style="background:#A5AFBE">季節講習費</div>
               <div class="blk o3" style="background:#B7C1CE">教材費</div>
               <div class="blk o4" style="background:#A5AFBE">設備管理費</div>
               <div class="blk" style="background:#9AA5B5">入会金</div>
-              <div class="blk base" style="background:#8A96A8">授業料</div>
+              <div class="blk base crush" style="background:#8A96A8">授業料</div>
             </div>
-            <div class="stk-ground"></div>
+            <svg class="stk-ground sag" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
             <p class="stk-name">一般的な塾</p>
           </div>
           <div class="stk-col">
@@ -225,11 +226,20 @@ const feeRows = [
   }
   .blk small { font-size: 10px; font-weight: 700; opacity: .95; }
   .blk.base { height: 46px; font-size: 13px; }
-  .blk.o1 { transform: translateX(5px) rotate(-1.2deg); }
-  .blk.o2 { transform: translateX(-5px) rotate(1deg); }
-  .blk.o3 { transform: translateX(3px) rotate(-.8deg); }
-  .blk.o4 { transform: translateX(-3px); }
+  .blk.o1 { transform: translateX(7px) rotate(-2.2deg); }
+  .blk.o2 { transform: translateX(-6px) rotate(1.6deg); }
+  .blk.o3 { transform: translateX(4px) rotate(-1.2deg); }
+  .blk.o4 { transform: translateX(-4px) rotate(.8deg); }
+  /* 重さの表現（✗側のみ） */
+  .tower.ng { gap: 2px; }
+  .blk.crush { position: relative; width: 134px; height: 38px; }
+  .blk.crush::before, .blk.crush::after {
+    content: ""; position: absolute; bottom: 5px; width: 13px; height: 2.5px; border-radius: 2px; background: #9AA5B5;
+  }
+  .blk.crush::before { left: -18px; transform: rotate(34deg); box-shadow: 6px -9px 0 #B7C1CE; }
+  .blk.crush::after { right: -18px; transform: rotate(-34deg); box-shadow: -6px -9px 0 #B7C1CE; }
   .stk-ground { width: 150px; height: 3px; border-radius: 2px; background: #B9C8DE; margin-top: 5px; }
+  .stk-ground.sag { height: 10px; margin-top: 0; border-radius: 0; background: none; display: block; }
   .stk-name { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
   .stk-name.ok { color: var(--navy); font-weight: 900; }
 
