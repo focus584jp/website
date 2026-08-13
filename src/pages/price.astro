@@ -45,11 +45,33 @@ const feeRows = [
     <div class="container">
       <SectionHead eyebrow="FEES" title="諸経費" />
       <div class="note-card">
-        <p class="body-p">授業料のほかに毎月かかるのは、<span class="mk">教材費・システム利用料の1,375円（税込）だけ</span>。入会金・設備管理費は0円で、授業料の値上げも中学3年間ありません。</p>
-        <div class="fee-cards">
-          <div class="fee-card"><p class="fee-name">入会金</p><p class="fee-value">0<span>円</span></p></div>
-          <div class="fee-card"><p class="fee-name">設備管理費</p><p class="fee-value">0<span>円</span></p></div>
-          <div class="fee-card"><p class="fee-name">授業料の値上げ</p><p class="fee-value">なし<span class="small">（中学3年間据え置き）</span></p></div>
+        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、季節講習費…。フォーカスで授業料のほかに毎月かかるのは、<span class="mk">教材費・システム利用料の1,375円（税込）だけ</span>。入会金・設備管理費は0円で、授業料の値上げも中学3年間ありません。</p>
+
+        {/* 積み上げくらべ: 授業料の上に諸経費が積み上がる一般的な塾 vs ほぼ授業料だけのフォーカス。
+            ◯側は「必ずかかるのは」の言い回しで任意オプション（季節講習等）の存在と両立させる（詳細はその他オプションで） */}
+        <div class="stk">
+          <div class="stk-col">
+            <p class="stk-cap">授業料のほかに<br />いろいろ乗ってくる</p>
+            <div class="tower">
+              <div class="blk o1" style="background:#B7C1CE">模試代</div>
+              <div class="blk o2" style="background:#A5AFBE">季節講習費</div>
+              <div class="blk o3" style="background:#B7C1CE">教材費</div>
+              <div class="blk o4" style="background:#A5AFBE">設備管理費</div>
+              <div class="blk" style="background:#9AA5B5">入会金</div>
+              <div class="blk base" style="background:#8A96A8">授業料</div>
+            </div>
+            <div class="stk-ground"></div>
+            <p class="stk-name">一般的な塾</p>
+          </div>
+          <div class="stk-col">
+            <p class="stk-cap ok">必ずかかるのは<br />これだけ</p>
+            <div class="tower">
+              <div class="blk" style="background:var(--navy-light)">教材費など <small>1,375円</small></div>
+              <div class="blk base" style="background:var(--navy)">授業料</div>
+            </div>
+            <div class="stk-ground"></div>
+            <p class="stk-name ok">フォーカス</p>
+          </div>
         </div>
       </div>
     </div>
@@ -191,20 +213,25 @@ const feeRows = [
   }
   .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 16px; max-width: 640px; }
 
-  /* 諸経費 */
-  .fee-cards { display: flex; flex-direction: column; gap: 12px; max-width: 480px; margin: 0 auto; }
-  .fee-card {
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-card);
-    padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+  /* 諸経費: 積み上げくらべ（上=説明タイトル / 下=塾名） */
+  .stk { display: flex; justify-content: center; align-items: flex-end; gap: clamp(30px, 6vw, 48px); }
+  .stk-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+  .stk-cap { font-family: var(--font-round); font-size: 13px; font-weight: 800; color: var(--muted); margin: 0 0 10px; line-height: 1.65; text-align: center; }
+  .stk-cap.ok { color: var(--navy); }
+  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+  .blk {
+    width: 124px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
+    font: 800 11.5px var(--font-round); height: 26px;
   }
-  .fee-name { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0; }
-  .fee-value { font: 900 26px var(--font-round); color: var(--navy); margin: 0; }
-  .fee-value span { font-size: 15px; }
-  .fee-value .small { font-size: 12px; font-weight: 700; color: var(--muted); margin-left: 4px; }
-  @media (min-width: 768px) {
-    .fee-cards { flex-direction: row; max-width: none; }
-    .fee-card { flex: 1; flex-direction: column; gap: 8px; justify-content: center; }
-  }
+  .blk small { font-size: 10px; font-weight: 700; opacity: .95; }
+  .blk.base { height: 46px; font-size: 13px; }
+  .blk.o1 { transform: translateX(5px) rotate(-1.2deg); }
+  .blk.o2 { transform: translateX(-5px) rotate(1deg); }
+  .blk.o3 { transform: translateX(3px) rotate(-.8deg); }
+  .blk.o4 { transform: translateX(-3px); }
+  .stk-ground { width: 150px; height: 3px; border-radius: 2px; background: #B9C8DE; margin-top: 5px; }
+  .stk-name { font-size: 13.5px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
+  .stk-name.ok { color: var(--navy); font-weight: 900; }
 
   /* 他塾との比較 */
   .chart { max-width: 420px; margin: 0 auto; }
