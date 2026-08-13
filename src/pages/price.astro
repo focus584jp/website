@@ -63,6 +63,7 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
             <svg class="stk-ground" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 Q75 10 148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
             <p class="stk-name">一般的な塾</p>
           </div>
+          <div class="stk-div" aria-hidden="true"></div>
           <div class="stk-col">
             <p class="stk-cap ok">必ずかかるものは<br />これだけ！</p>
             <div class="tower">
@@ -165,20 +166,16 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
   .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 16px; max-width: 640px; }
 
   /* 諸経費: 積み上げくらべ（上=説明タイトル / 下=塾名） */
-  .stk { display: flex; justify-content: center; align-items: flex-end; gap: clamp(30px, 6vw, 48px); }
+  .stk { display: flex; justify-content: center; align-items: flex-end; gap: clamp(16px, 3.5vw, 26px); }
+  /* 他塾とフォーカスを分ける縦の点線 */
+  .stk-div { align-self: stretch; width: 0; border-left: 2px dashed #C9D3E0; margin-top: 4px; }
   .stk-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
   .stk-cap { font-family: var(--font-round); font-size: 14px; font-weight: 800; color: var(--muted); margin: 0 0 10px; line-height: 1.65; text-align: center; }
   .stk-cap.ok { color: var(--navy); }
-  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 5px; }
+  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
   .blk {
-    position: relative;
     width: 130px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
     font: 800 12.5px var(--font-round); height: 28px;
-  }
-  /* 段の継ぎ目: 薄い点線（費目が1つずつ積み重なっている感じを出す） */
-  .blk:not(.base)::after {
-    content: ""; position: absolute; left: 10px; right: 10px; bottom: -3.5px;
-    border-top: 2px dashed #C9D3E0;
   }
   .blk small { font-size: 12px; font-weight: 800; opacity: 1; }
   .blk.base { height: 48px; font-size: 14px; }
@@ -187,8 +184,7 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
   .blk.o3 { transform: translateX(4px) rotate(-1.2deg); }
   .blk.o4 { transform: translateX(-4px) rotate(.8deg); }
   /* 重さの表現（✗側のみ） */
-  .tower.ng { gap: 4px; }
-  .tower.ng .blk:not(.base)::after { bottom: -3px; }
+  .tower.ng { gap: 2px; }
   .blk.press { position: relative; }
   .blk.press::before, .blk.press::after {
     content: ""; position: absolute; bottom: 5px; width: 13px; height: 2.5px; border-radius: 2px; background: #9AA5B5;
