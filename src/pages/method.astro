@@ -14,7 +14,6 @@ const pillars = [
   {
     num: '01',
     id: 'learn-from-basics',
-    navLabel: '基礎から学び直す',
     title: '基礎から学び直す',
     body: [
       '一般的な塾では、学校の授業に沿って指導が行われます。フォーカスでは学年にとらわれず、<span class="mk">つまずいたところまで戻って</span>学習し直します。苦手の原因から積み直すので、授業についていけないという心配はありません。',
@@ -24,7 +23,6 @@ const pillars = [
   {
     num: '02',
     id: 'dekita',
-    navLabel: '「できた！」が増える授業',
     title: '「できた！」が増える授業',
     body: [
       'フォーカスの授業は、答えをすぐに教えません。考え方を問いかけ、ヒントを出しながら、<span class="mk">自分の力で「できた！」にたどり着かせます</span>。この積み重ねが自信になり、勉強への姿勢が変わっていきます。',
@@ -35,7 +33,6 @@ const pillars = [
     num: '03',
     // 1対4は可能な限り伏せる方針（消しはしない）: 見出し・文頭から外し、本文末尾でさらっと触れるだけに
     id: 'practice-and-coaching',
-    navLabel: '「演習」と「解説」の行き来',
     title: '「演習」と「解説」を行き来する',
     body: [
       'フォーカスの授業は、先生と解く「解説」と、自分の力で解く「演習」を行き来しながら進みます。<span class="mk">演習と解説のバランス</span>がいいから、教わって終わりにならず、自分で学習する力が身につきます。講師1人につき生徒は最大4人、この距離感がバランスを支えています。',
@@ -45,7 +42,6 @@ const pillars = [
   {
     num: '04',
     id: 'teachers',
-    navLabel: '千葉大生の講師陣',
     title: '選び抜かれた千葉大生講師陣',
     body: [
       'フォーカスの講師は、全員が千葉大学の学生です。それでも、応募者を全員採用するわけではありません。<span class="mk">勉強が苦手な子に寄り添えるか</span>を重視して選考し、採用するのは約30%です。',
@@ -61,20 +57,10 @@ const pillars = [
   {/* リード文なし: 直下の「どのように成績が上がるの？」+4本柱概要が内容を視覚で伝えるため */}
   <PageHero eyebrow="METHOD" title="指導方針" />
 
-  {/* 4本柱の全体像（丸数字＋点線コネクタ。タップで各セクションへ） */}
+  {/* ページの導入となる問い（目次リストは2026-08-13に削除: 流し見ペルソナには冗長で、直後に同じ見出しが並ぶため） */}
   <section class="overview">
     <div class="container">
       <h2 class="q-title">どのように成績が上がるの？</h2>
-      <ol class="flow">
-        {pillars.map((p, i) => (
-          <li class="flow-item">
-            <a href={`#${p.id}`} class="flow-link">
-              <span class="flow-num">{i + 1}</span>
-              <span class="flow-t">{p.navLabel}</span>
-            </a>
-          </li>
-        ))}
-      </ol>
     </div>
   </section>
 
@@ -114,27 +100,13 @@ const pillars = [
   .overview .container { padding-top: clamp(32px, 5vw, 48px); padding-bottom: clamp(32px, 5vw, 48px); }
   .q-title {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(19px, 4.6vw, 24px);
-    color: var(--ink); text-align: center; margin: 0 0 clamp(20px, 3.5vw, 28px);
+    color: var(--ink); text-align: center; margin: 0;
   }
   .q-title::after {
     content: ""; display: block; width: 148px; height: 8px; margin: 4px auto 0;
     background: linear-gradient(transparent 0, var(--marker) 0 88%, transparent 88%);
     transform: skewX(-18deg);
   }
-  .flow { list-style: none; margin: 0 auto; padding: 0; max-width: 400px; }
-  .flow-item { position: relative; padding-bottom: 18px; }
-  .flow-item:last-child { padding-bottom: 0; }
-  .flow-item:not(:last-child)::before {
-    content: ""; position: absolute; left: 17px; top: 40px; bottom: 2px;
-    border-left: 2.5px dotted var(--navy-light);
-  }
-  .flow-link { display: flex; align-items: center; gap: 14px; text-decoration: none; }
-  .flow-num {
-    width: 35px; height: 35px; border-radius: 50%; background: var(--navy); color: #fff; flex: none;
-    display: grid; place-items: center; font-family: var(--font-round); font-size: 16px; font-weight: 900;
-  }
-  .flow-t { font-family: var(--font-round); font-size: clamp(16px, 4vw, 18px); font-weight: 900; color: var(--ink); }
-
   /* 各柱 */
   .pillar { background: #fff; }
   .pillar.alt { background: var(--alt-bg); }
