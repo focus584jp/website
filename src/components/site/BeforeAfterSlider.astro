@@ -243,22 +243,53 @@ const copy = {
     rng.addEventListener('input', () => setPos(rng.value));
     setPos(rng.value);
 
-    // ポインタ操作: カードのどこを触ってもその位置へジャンプし、そのままドラッグで追従
-    // （座標→%変換はバー位置と同じ fig 幅基準）
+    // ポインタ操作: タップでその位置へジャンプ、横ドラッグで追従。
+    // 縦スクロール目的のタッチでは動かさない（downでは判定だけ行い、横移動かタップ確定で初めて反映）。
+    // 座標→%変換はバー位置と同じ fig 幅基準
     const setFromX = (clientX: number) => {
       const r = fig.getBoundingClientRect();
       const p = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
       rng.value = String(p);
       setPos(p);
     };
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    let dragging = false;
     card.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
-      card.setPointerCapture(e.pointerId);
-      setFromX(e.clientX);
+      startX = e.clientX;
+      startY = e.clientY;
+      tracking = true;
+      dragging = false;
     });
     card.addEventListener('pointermove', (e) => {
-      if (!card.hasPointerCapture(e.pointerId)) return;
+      if (!tracking) return;
+      if (!dragging) {
+        const dx = Math.abs(e.clientX - startX);
+        const dy = Math.abs(e.clientY - startY);
+        if (dx > 6 && dx > dy) {
+          // 横方向の意図が確定してから追従開始
+          dragging = true;
+          card.setPointerCapture(e.pointerId);
+        } else if (dy > 10) {
+          // 縦スクロールの意図: このタッチでは動かさない
+          tracking = false;
+          return;
+        } else {
+          return;
+        }
+      }
       setFromX(e.clientX);
+    });
+    card.addEventListener('pointerup', (e) => {
+      if (tracking && !dragging) setFromX(e.clientX); // ほぼ動かず離した=タップ → その位置へジャンプ
+      tracking = false;
+      dragging = false;
+    });
+    card.addEventListener('pointercancel', () => {
+      tracking = false;
+      dragging = false;
     });
   });
 </script>
