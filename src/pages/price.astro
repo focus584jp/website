@@ -2,13 +2,16 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import CtaBand from '../components/site/CtaBand.astro';
+import SectionHead from '../components/site/SectionHead.astro';
+import QuestionBalloon from '../components/site/QuestionBalloon.astro';
 
-// 教科数ごとの月額目安 ※2教科以上の実料金は公開前に要確認（現在は単純合算の仮値）
+// 3本柱構成（2026-08-13 再設計・現行サイト focus584.net/fee/ を参考）: 授業料 → 諸経費 → その他オプション
+// 教科数ごとの月額 = 1教科 6,578円（税込）の単純合算が実料金（2026-08-13 確定）
 const plans = [
-  { subjects: '1教科', taxed: '6,578', draft: false },
-  { subjects: '2教科', taxed: '13,156', draft: true },
-  { subjects: '3教科', taxed: '19,734', draft: true },
-  { subjects: '5教科', taxed: '32,890', draft: true },
+  { subjects: '1教科', taxed: '6,578' },
+  { subjects: '2教科', taxed: '13,156' },
+  { subjects: '3教科', taxed: '19,734' },
+  { subjects: '5教科', taxed: '32,890' },
 ];
 
 const subjectChips = [
@@ -18,15 +21,28 @@ const subjectChips = [
   { label: '理科', bg: '#1F6B3C' },
   { label: '社会', bg: '#6B4FA3' },
 ];
+
+// 他塾比較（現行サイトで公開中の比較表と同データ。1教科あたり・税込）
+const compareRows = [
+  { label: '基本授業料', m: '20,400円', focus: '6,578円', e: '27,500円', strong: true },
+  { label: '入会費', m: '20,000円', focus: '無料', e: '無料', strong: false },
+  { label: '設備管理費など', m: '3,200円', focus: '無料', e: '3,520円', strong: false },
+];
 ---
 <SiteLayout
   title="料金｜学習塾フォーカス"
-  description="学習塾フォーカスの料金。1教科あたり月6,578円（税込）。入会金・設備管理費0円、授業料は中学3年間据え置きの明朗会計です。"
+  description="学習塾フォーカスの料金。1教科あたり月6,578円（税込）で5教科どれでも同じ料金。入会金・設備管理費0円、授業料は中学3年間据え置きの明朗会計です。"
 >
   <PageHero eyebrow="PRICE" title="料金" deco="price" />
 
+  {/* ページの導入となる問い（現行サイトの見出しを踏襲。以降の3セクションが答える構造） */}
+  <QuestionBalloon text="個別指導って、高いんじゃないの？" />
+
+  {/* ===== 授業料 ===== */}
   <section class="tuition">
     <div class="container">
+      <SectionHead eyebrow="TUITION" title="授業料" />
+
       <div class="hero-card">
         <p class="label">授業料（1教科あたり）</p>
         <p class="value"><span class="unit">月</span><span class="num">6,578</span><span class="unit">円</span><span class="tax">（税込）</span></p>
@@ -45,45 +61,60 @@ const subjectChips = [
           {plans.map((p) => (
             <tr>
               <td>{p.subjects}</td>
-              <td><strong>{p.taxed}円</strong>{p.draft && <span class="draft">※仮</span>}</td>
+              <td><strong>{p.taxed}円</strong></td>
             </tr>
           ))}
         </tbody>
       </table>
-      <p class="table-note">※2教科以上の料金は確認中の仮値です（1教科分の単純合算で表示しています）</p>
+      <p class="table-note">他塾の2教科分の料金で、5教科全部通えます。</p>
+
+      <h3 class="sub-h">他塾と比べてください</h3>
+      <table class="cmp-table">
+        <thead>
+          <tr><th></th><th>個別指導<br />M塾</th><th class="focus-col">フォーカス</th><th>個別指導<br />E塾</th></tr>
+        </thead>
+        <tbody>
+          {compareRows.map((r) => (
+            <tr>
+              <td class="row-label">{r.label}</td>
+              <td>{r.m}</td>
+              <td class="focus-col">{r.strong ? <strong>{r.focus}</strong> : <span class="free">{r.focus}</span>}</td>
+              <td>{r.e}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="cmp-note">※表は1教科あたりの金額（税込）です（当社調べ）</p>
+
+      <div class="why">
+        <h3 class="sub-h">お手頃価格が実現できるワケ</h3>
+        <p class="why-p">一般的な個別指導塾は、正直、高いです。フォーカスは<span class="mk">勉強が苦手な中学生に絞る</span>ことでムダな費用を抑え、それでいて高い授業品質を保っています。安くて高品質だから、長く通い続けられます。</p>
+      </div>
     </div>
   </section>
 
+  {/* ===== 諸経費 ===== */}
   <section class="fees">
     <div class="container">
-      <h2>入会金・設備管理費は、0円です</h2>
+      <SectionHead eyebrow="FEES" title="諸経費" />
+      <div class="monthly-fee">
+        <p class="mf-label">毎月かかる諸経費は</p>
+        <p class="mf-value"><span class="mf-name">教材費・システム利用料</span><span class="mf-num">1,375</span><span class="mf-unit">円</span><span class="mf-tax">（税込）</span></p>
+        <p class="mf-note">だけ。授業料のほかに毎月かかる費用は、これですべてです。</p>
+      </div>
       <div class="fee-cards">
         <div class="fee-card"><p class="fee-name">入会金</p><p class="fee-value">0<span>円</span></p></div>
         <div class="fee-card"><p class="fee-name">設備管理費</p><p class="fee-value">0<span>円</span></p></div>
         <div class="fee-card"><p class="fee-name">授業料の値上げ</p><p class="fee-value">なし<span class="small">（中学3年間据え置き）</span></p></div>
       </div>
-      <p class="fee-note">毎月かかるのは、授業料のほかは教材費・システム利用料の1,375円（税込）のみです。</p>
     </div>
   </section>
 
-  <section class="compare">
+  {/* ===== その他オプション ===== */}
+  <section class="options">
     <div class="container">
-      <h2>他塾と比べてください</h2>
-      <p class="compare-lead">1教科あたりの月額は、一般的な個別指導塾の半分以下。<br class="sp-br" />他塾の2教科分の料金で、5教科全部通えます。</p>
-      <table class="cmp-table">
-        <thead>
-          <tr><th></th><th class="focus-col">フォーカス</th><th>個別A社</th><th>個別B社</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1教科・月額</td>
-            <td class="focus-col"><strong>6,578円</strong></td>
-            <td>20,400円</td>
-            <td>16,500円</td>
-          </tr>
-        </tbody>
-      </table>
-      <p class="table-note">※他塾の金額は中学3年生・週1回コースの一般的な価格帯の例です。フォーカスは全学年同一料金です（当社調べ・仮値。公開前に根拠を確定）</p>
+      <SectionHead eyebrow="OPTIONS" title="その他オプション" />
+      <p class="opt-p">通常授業のほかに、模試やテスト対策などのオプションサービスがあります。<span class="mk">必要なサービスを、必要な分だけ</span>。選ぶ際のアドバイスはいたしますが、追加するかどうかは保護者さまご自身で都度お選びいただけます。</p>
     </div>
   </section>
 
@@ -92,8 +123,12 @@ const subjectChips = [
 
 <style>
   .container { max-width: 760px; margin: 0 auto; padding: clamp(44px, 6vw, 72px) 24px; }
-  h2 { font-family: var(--font-round); font-weight: 900; font-size: clamp(20px, 2.8vw, 25px); color: var(--ink); text-align: center; margin: 0 0 24px; }
+  .sub-h {
+    font-family: var(--font-round); font-weight: 900; font-size: clamp(17px, 2.4vw, 20px);
+    color: var(--ink); text-align: center; margin: clamp(36px, 5vw, 48px) 0 18px;
+  }
 
+  /* 授業料 */
   .tuition { background: #fff; }
   .hero-card {
     background: var(--blue-paler); border: 2.5px solid var(--navy); border-radius: 16px;
@@ -115,10 +150,38 @@ const subjectChips = [
   }
   .plan-table th { background: var(--navy); color: #fff; font-weight: 700; }
   .plan-table strong { font-family: var(--font-round); font-weight: 900; }
-  .draft { font-size: 11px; color: #C0392B; font-weight: 700; margin-left: 6px; }
-  .table-note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; line-height: 1.7; }
+  .table-note { font-size: 13.5px; font-weight: 700; color: var(--ink); text-align: center; margin: 12px 0 0; }
 
+  /* 他塾比較（現行サイトの比較表を踏襲: フォーカス列をオレンジ強調） */
+  .cmp-table { width: 100%; border-collapse: collapse; }
+  .cmp-table th, .cmp-table td {
+    border: 1px solid var(--line); padding: 12px 8px; font-size: 14px; color: var(--ink); text-align: center;
+  }
+  .cmp-table thead th { background: var(--panel); font-weight: 700; line-height: 1.4; }
+  .cmp-table thead th.focus-col { background: var(--orange); color: #fff; font-family: var(--font-round); font-weight: 900; }
+  .cmp-table td.focus-col { background: #FDEFE4; border-left: 2.5px solid var(--orange); border-right: 2.5px solid var(--orange); }
+  .cmp-table tbody tr:last-child td.focus-col { border-bottom: 2.5px solid var(--orange); }
+  .cmp-table thead th.focus-col { border: 2.5px solid var(--orange); border-bottom: none; }
+  .cmp-table td.focus-col strong { font: 900 clamp(18px, 3.4vw, 22px) var(--font-round); color: var(--orange); }
+  .cmp-table td.focus-col .free { font: 900 15.5px var(--font-round); color: var(--ink); }
+  .cmp-table .row-label { background: var(--panel); font-weight: 700; font-size: 13.5px; }
+  .cmp-note { font-size: 12px; color: var(--gray-1); margin: 10px 0 0; line-height: 1.7; }
+
+  .why-p { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0 auto; max-width: 640px; }
+
+  /* 諸経費 */
   .fees { background: var(--alt-bg); }
+  .monthly-fee {
+    background: #fff; border-radius: 14px; box-shadow: var(--shadow-card);
+    padding: clamp(20px, 3.5vw, 28px); text-align: center; margin-bottom: 14px;
+  }
+  .mf-label { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; }
+  .mf-value { margin: 8px 0 0; line-height: 1.3; }
+  .mf-name { display: block; font-size: 13.5px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+  .mf-num { font: 900 clamp(34px, 7vw, 42px) var(--font-round); color: var(--navy); }
+  .mf-unit { font: 700 16px var(--font-round); color: var(--ink); margin-left: 3px; }
+  .mf-tax { font-size: 12px; color: var(--muted); margin-left: 2px; }
+  .mf-note { font-size: 13.5px; font-weight: 700; color: var(--ink); margin: 10px 0 0; line-height: 1.9; }
   .fee-cards { display: flex; flex-direction: column; gap: 12px; }
   .fee-card {
     background: #fff; border-radius: 14px; box-shadow: var(--shadow-card);
@@ -128,22 +191,12 @@ const subjectChips = [
   .fee-value { font: 900 26px var(--font-round); color: var(--navy); margin: 0; }
   .fee-value span { font-size: 15px; }
   .fee-value .small { font-size: 12px; font-weight: 700; color: var(--muted); margin-left: 4px; }
-  .fee-note { font-size: 13.5px; line-height: 1.9; color: var(--ink); text-align: center; margin: 20px 0 0; }
   @media (min-width: 768px) {
     .fee-cards { flex-direction: row; }
     .fee-card { flex: 1; flex-direction: column; gap: 8px; justify-content: center; }
   }
 
-  .compare { background: #fff; }
-  .compare-lead { font-size: 15px; line-height: 2; color: var(--ink); text-align: center; margin: 0 0 22px; }
-  .sp-br { display: inline; }
-  @media (min-width: 768px) { .sp-br { display: none; } }
-  .cmp-table { width: 100%; border-collapse: collapse; }
-  .cmp-table th, .cmp-table td {
-    border: 1px solid var(--line); padding: 12px 10px; font-size: 14.5px; color: var(--ink); text-align: center;
-  }
-  .cmp-table thead th { background: var(--panel); font-weight: 700; }
-  .cmp-table thead th.focus-col { background: var(--navy); color: #fff; }
-  .cmp-table td.focus-col { background: var(--blue-paler); }
-  .cmp-table td.focus-col strong { font: 900 20px var(--font-round); color: var(--orange); }
+  /* その他オプション */
+  .options { background: #fff; }
+  .opt-p { font-size: 15px; line-height: 2.1; color: var(--ink); margin: 0 auto; max-width: 640px; }
 </style>
