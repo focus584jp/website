@@ -37,7 +37,7 @@ const copy = {
 
     <div class:list={['fig', variant]}>
       {variant === 'blocks' ? (
-        <svg viewBox="0 0 210 158" role="img" aria-label="学校の進度に合わせるだけだと基礎が抜けて崩れた積み木が、つまずいた場所から積み直すと完成していく比較図">
+        <svg viewBox="-16 -9 242 176" role="img" aria-label="学校の進度に合わせるだけだと基礎が抜けて崩れた積み木が、つまずいた場所から積み直すと完成していく比較図">
           <ellipse cx="105" cy="139" rx="92" ry="9" fill="#2B3242" opacity=".13"></ellipse>
           {/* 下段4（3番目は基礎の抜けで Before では存在しない） */}
           <rect class="blk row1" data-cx="45" x="28" y="104" width="34" height="34" rx="2"></rect>
@@ -113,8 +113,7 @@ const copy = {
 </div>
 
 <style>
-  /* 幅は③④の図解パネル(440)より狭い400。SVG要素が大きい積み木は440だと量感過多になるため */
-  .bas { --pos: 93%; width: 100%; max-width: 400px; margin: clamp(14px, 2vw, 20px) auto 0; }
+  .bas { --pos: 93%; width: 100%; max-width: 440px; margin: clamp(14px, 2vw, 20px) auto 0; }
 
   /* カード全体が優勢側に応じて変わる: ✗優勢=グレー地 ⇄ ◯優勢=淡青地+紺枠。
      カード全面がドラッグ面（pan-y で縦スクロールは通す） */
@@ -149,7 +148,7 @@ const copy = {
   .mark.mk-ok { background: #E3ECFB; }
 
   .fig { position: relative; }
-  .fig.blocks { aspect-ratio: 210 / 158; }
+  .fig.blocks { aspect-ratio: 242 / 176; }
   .fig.talk { aspect-ratio: 240 / 120; margin: 8px 0; }
   .fig > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
