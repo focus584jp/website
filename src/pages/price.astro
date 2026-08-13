@@ -169,10 +169,16 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
   .stk-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
   .stk-cap { font-family: var(--font-round); font-size: 14px; font-weight: 800; color: var(--muted); margin: 0 0 10px; line-height: 1.65; text-align: center; }
   .stk-cap.ok { color: var(--navy); }
-  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 5px; }
   .blk {
+    position: relative;
     width: 130px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
     font: 800 12.5px var(--font-round); height: 28px;
+  }
+  /* 段の継ぎ目: 薄い点線（費目が1つずつ積み重なっている感じを出す） */
+  .blk:not(.base)::after {
+    content: ""; position: absolute; left: 10px; right: 10px; bottom: -3.5px;
+    border-top: 2px dashed #C9D3E0;
   }
   .blk small { font-size: 12px; font-weight: 800; opacity: 1; }
   .blk.base { height: 48px; font-size: 14px; }
@@ -181,7 +187,8 @@ const options = ['定期テスト対策', '過去問演習講座', '外部模試
   .blk.o3 { transform: translateX(4px) rotate(-1.2deg); }
   .blk.o4 { transform: translateX(-4px) rotate(.8deg); }
   /* 重さの表現（✗側のみ） */
-  .tower.ng { gap: 2px; }
+  .tower.ng { gap: 4px; }
+  .tower.ng .blk:not(.base)::after { bottom: -3px; }
   .blk.press { position: relative; }
   .blk.press::before, .blk.press::after {
     content: ""; position: absolute; bottom: 5px; width: 13px; height: 2.5px; border-radius: 2px; background: #9AA5B5;
