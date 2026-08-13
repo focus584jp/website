@@ -49,9 +49,10 @@ import { u } from '../../lib/path';
     box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
   }
   .feature-head { display: flex; flex-direction: column; align-items: center; gap: 9px; }
+  /* CV色のオレンジと被らないよう紺（/methodのPOINTピルと同様） */
   .pill {
     font-family: var(--font-round); font-size: clamp(12px, 1.4vw, 13px); font-weight: 900;
-    color: #fff; background: var(--orange); border-radius: 999px; padding: 4px 16px;
+    color: #fff; background: var(--navy); border-radius: 999px; padding: 4px 16px;
   }
   h3 { font-family: var(--font-round); font-size: clamp(18px, 2.4vw, 23px); font-weight: 900; color: var(--ink); margin: 0; }
   .lead { font-size: clamp(15px, 1.6vw, 16px); line-height: 2; color: var(--ink); margin: clamp(14px, 2vw, 20px) auto 0; max-width: 640px; }
