@@ -5,6 +5,7 @@ import CtaBand from '../components/site/CtaBand.astro';
 import SectionHead from '../components/site/SectionHead.astro';
 import QuestionBalloon from '../components/site/QuestionBalloon.astro';
 import PriceSimulator from '../components/site/PriceSimulator.astro';
+import BeforeAfterSlider from '../components/site/BeforeAfterSlider.astro';
 
 // 4セクション構成（2026-08-14 再々設計）: 授業料（こだわり先行）→ 諸経費 → その他オプション → お手頃価格のワケ
 // 前半=料金の全貌（必ずかかるもの→任意のもの）・後半=評価（なぜ安いか）の2部構成。
@@ -113,44 +114,13 @@ const options = [
     <div class="container">
       <SectionHead eyebrow="WHY" title="お手頃価格が実現できるワケ" />
       <div class="note-card">
-        <p class="body-p">一般的な個別指導塾は、正直、高いです。フォーカスは<span class="mk">勉強が苦手な中学生に絞る</span>ことでムダな費用を抑え、それでいて高い授業品質を保っています。</p>
+        {/* Q→Aの流れ: なぜこの価格が実現できるのか？→ターゲットを絞っているから */}
+        <p class="body-p">なぜ、この価格が実現できるのか──答えは、対象を<span class="mk">勉強が苦手な中学生だけに絞っている</span>からです。全学年・全レベルに対応しようとすれば、設備も教材も人件費もふくらみます。フォーカスは絞ることでムダな費用をなくし、そのぶんを価格と授業の質に還元しています。</p>
 
-        {/* 対比図: あれもこれもの塾 vs 対象を絞るフォーカス */}
-        <div class="why-fig">
-          <div class="wf-panels">
-            <div class="wf-panel ng">
-              <p class="wf-head"><span class="m ng"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="3.2" stroke-linecap="round"><path d="M5 5l14 14"></path><path d="M19 5L5 19"></path></svg></span>一般的な塾</p>
-              <svg viewBox="0 0 170 110" role="img" aria-label="全学年・全レベルに対応する一般的な塾">
-                <g fill="#9AA5B5">
-                  <g transform="translate(30,30) scale(.6)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                  <g transform="translate(62,24) scale(.85)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                  <g transform="translate(102,28) scale(.72)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                  <g transform="translate(138,22) scale(.95)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                </g>
-                <text x="27" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#5B6B85">小学生</text>
-                <text x="63" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#5B6B85">中学生</text>
-                <text x="101" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#5B6B85">高校生</text>
-                <text x="141" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#5B6B85">受験生</text>
-                <text x="85" y="105" text-anchor="middle" font-size="12" font-weight="700" fill="#5B6B85">全学年・全レベルに対応</text>
-              </svg>
-              <p class="wf-cap">幅広く対応するため<br />設備・教材・人件費がかさむ</p>
-            </div>
-            <div class="wf-panel ok">
-              <p class="wf-head"><span class="m ok"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#143778" stroke-width="3"><circle cx="12" cy="12" r="8.5"></circle></svg></span>フォーカス</p>
-              <svg viewBox="0 0 170 110" role="img" aria-label="勉強が苦手な中学生だけに絞るフォーカス">
-                <circle cx="85" cy="46" r="36" fill="none" stroke="#E67832" stroke-width="2.5" stroke-dasharray="6 5"></circle>
-                <path d="M85 4 v12 M85 76 v12 M43 46 h12 M115 46 h12" stroke="#E67832" stroke-width="2.5" stroke-linecap="round"></path>
-                <g fill="#143778">
-                  <g transform="translate(70,26) scale(.78)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                  <g transform="translate(100,26) scale(.78)"><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
-                </g>
-                <text x="85" y="105" text-anchor="middle" font-size="12" font-weight="800" fill="#143778">勉強が苦手な中学生だけ</text>
-              </svg>
-              <p class="wf-cap">対象を絞るから<br />ムダな費用がかからない</p>
-            </div>
-          </div>
-          <p class="why-sum">絞っているから、<strong>安くて高品質</strong>。</p>
-        </div>
+        {/* 大勢の生徒→照準ロックの絞り込みをスライダーで体験（指導方針と同じ機構のtargetバリアント） */}
+        <BeforeAfterSlider variant="target" />
+
+        <p class="why-sum">絞っているから、<strong>安くて高品質</strong>。</p>
       </div>
     </div>
   </section>
@@ -208,21 +178,7 @@ const options = [
   .stk-name.ok { color: var(--navy); font-weight: 900; }
 
   /* お手頃価格のワケ */
-  .why-fig { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-  .wf-panels { display: flex; gap: 10px; }
-  .wf-panel { flex: 1; border-radius: 14px; padding: 14px 10px 16px; text-align: center; }
-  .wf-panel.ng { background: #EEF1F5; }
-  .wf-panel.ok { background: var(--blue-paler); border: 2px solid var(--navy); }
-  .wf-head { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 13px; font-weight: 800; margin: 0 0 4px; }
-  .wf-head .m { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
-  .wf-head .m.ng { background: #FBE0E0; }
-  .wf-head .m.ok { background: #E3ECFB; }
-  .wf-panel.ng .wf-head { color: var(--ink); }
-  .wf-panel.ok .wf-head { color: var(--navy); }
-  .wf-panel svg { width: 100%; max-width: 170px; height: auto; display: block; margin: 4px auto 0; }
-  .wf-cap { font-size: 12.5px; font-weight: 700; color: var(--muted); margin: 8px 0 0; line-height: 1.7; }
-  .wf-panel.ok .wf-cap { color: var(--navy); }
-  .why-sum { font-family: var(--font-round); font-size: 15.5px; font-weight: 800; color: var(--ink); text-align: center; margin: 4px 0 0; }
+  .why-sum { font-family: var(--font-round); font-size: 15.5px; font-weight: 800; color: var(--ink); text-align: center; margin: 18px 0 0; }
 
   /* その他オプション（タップで説明が開く。開閉機構はFaqListと同じ grid-template-rows 0fr→1fr）
      オプション感の演出: 点線枠=まだ足していない任意のもの（開くと実線紺枠）・＋丸バッジ=追加できるもの（開くと×に回転）・任意ピル */

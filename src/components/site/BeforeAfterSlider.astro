@@ -1,9 +1,10 @@
 ---
-// 指導方針のBefore/After比較スライダー。トップのMethodセクションと /method 詳細ページで共用。
+// Before/After比較スライダー。トップのMethodセクション・/method・/price（ワケ）で共用。
 // variant: 'blocks'=積み木の積み方比較（基礎から学び直す） / 'talk'=Teaching vs Coaching の対話図
+//          / 'target'=ターゲットの絞り込み（大勢→勉強が苦手な中学生だけに照準ロック。/price お手頃価格のワケ用）
 // 図は1組だけ持ち、境界（つまみ）を越えた要素（data-cx=viewBox x座標）が Before→After 状態へ遷移する。
 // 操作はカード全面の Pointer Events（タップ位置へジャンプ+ドラッグ追従）。range はキーボード・SR用。
-interface Props { variant: 'blocks' | 'talk' }
+interface Props { variant: 'blocks' | 'talk' | 'target' }
 const { variant } = Astro.props;
 
 // 見出し・注釈は旧MethodCompare（2カード比較）の文言を踏襲
@@ -20,7 +21,19 @@ const copy = {
     ngNote: '解き方を一方的に解説し、<br>生徒が受け身で聞くだけになる指導',
     okNote: '考え方を問いかけ、ヒントを与え、<br>「できた！」にたどり着かせる指導',
   },
+  target: {
+    ngHead: '一般的な塾は、あれもこれも',
+    okHead: 'フォーカスは、ここだけ',
+    ngNote: '全学年・全レベルに対応するため、<br>設備・教材・人件費がかさむ',
+    okNote: '勉強が苦手な中学生だけに絞るから、<br>ムダな費用がかからない',
+  },
 }[variant];
+
+// target用の群衆（x, y, scale, target?）。data-cx=x で境界越え判定
+const crowd: [number, number, number, boolean?][] = [
+  [24, 12, .55], [62, 8, .7], [100, 14, .6], [140, 9, .72], [178, 13, .6], [214, 10, .55],
+  [38, 60, .72], [76, 64, .62], [112, 58, .85, true], [148, 58, .85, true], [186, 62, .7], [220, 64, .58],
+];
 ---
 <div class="bas" data-ba-slider>
   <div class="card">
@@ -36,7 +49,28 @@ const copy = {
     </div>
 
     <div class:list={['fig', variant]}>
-      {variant === 'blocks' ? (
+      {variant === 'target' && (
+        <svg viewBox="0 0 240 134" role="img" aria-label="全学年・全レベルの大勢の生徒から、勉強が苦手な中学生だけに照準が絞られていく比較図">
+          {crowd.map(([x, y, s, tgt]) =>
+            tgt ? (
+              <g transform={`translate(${x},${y}) scale(${s})`}>
+                <g class="tp" data-cx={x}><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
+              </g>
+            ) : (
+              <g class="np" data-cx={x} transform={`translate(${x},${y}) scale(${s})`}><circle cx="0" cy="14" r="8"></circle><path d="M-14 40 a14 14 0 0 1 28 0 Z"></path></g>
+            )
+          )}
+          <g class="deco only-a" data-cx="105">
+            <circle cx="130" cy="78" r="36" fill="none" stroke="#E67832" stroke-width="2.5" stroke-dasharray="6 5"></circle>
+            <path d="M130 34 v12 M130 110 v12 M84 78 h12 M164 78 h12" stroke="#E67832" stroke-width="2.5" stroke-linecap="round"></path>
+          </g>
+          <g fill="#FFC94A">
+            <g transform="translate(86,36)"><path class="deco only-a" data-cx="100" d="M0 -7 Q1.3 -1.3 7 0 Q1.3 1.3 0 7 Q-1.3 1.3 -7 0 Q-1.3 -1.3 0 -7 Z"></path></g>
+            <g transform="translate(178,44)"><path class="deco only-a" data-cx="96" d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z"></path></g>
+          </g>
+        </svg>
+      )}
+      {variant === 'blocks' && (
         <svg viewBox="-16 -9 242 176" role="img" aria-label="学校の進度に合わせるだけだと基礎が抜けて崩れた積み木が、つまずいた場所から積み直すと完成していく比較図">
           <ellipse cx="105" cy="139" rx="92" ry="9" fill="#2B3242" opacity=".13"></ellipse>
           {/* 下段4（3番目は基礎の抜けで Before では存在しない） */}
@@ -67,7 +101,8 @@ const copy = {
             <g transform="translate(172,54)"><path class="deco only-a" data-cx="100" d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z"></path></g>
           </g>
         </svg>
-      ) : (
+      )}
+      {variant === 'talk' && (
         <svg viewBox="0 0 240 120" role="img" aria-label="一方的に教える従来の指導が、問いかけと回答をやり取りするフォーカスの指導に変わる比較図">
           {/* 先生・生徒は境界を越えるとグレー→紺 */}
           <g class="person" data-cx="45"><circle cx="45" cy="37" r="15"></circle><path d="M19 84 a26 26 0 0 1 52 0 Z"></path></g>
@@ -150,6 +185,7 @@ const copy = {
   .fig { position: relative; }
   .fig.blocks { aspect-ratio: 242 / 176; }
   .fig.talk { aspect-ratio: 240 / 120; margin: 8px 0; }
+  .fig.target { aspect-ratio: 240 / 134; margin: 6px 0; }
   .fig > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 
   /* --- 図は1組だけ。境界（--pos）を越えた要素に .is-after が付き、色・姿勢が遷移する --- */
@@ -180,6 +216,11 @@ const copy = {
   .person.is-after { fill: var(--navy); }
   .plabel { fill: #5B6B85; transition: fill .3s ease; }
   .plabel.is-after { fill: var(--navy); }
+  /* target: 対象外は薄く、ターゲットは紺+ややズームイン（位置決めのtranslateは親gに分離し、CSS transformの上書きを回避） */
+  .np { fill: #9FB3D1; transition: opacity .35s ease; }
+  .np.is-after { opacity: .16; }
+  .tp { fill: #9FB3D1; transition: fill .3s ease, transform .35s cubic-bezier(.34, 1.45, .64, 1); transform-box: fill-box; transform-origin: center; }
+  .tp.is-after { fill: var(--navy); transform: scale(1.1); }
   /* Before専用の飾り ⇄ After専用の飾り */
   .deco { transition: opacity .25s ease, transform .3s ease; }
   .only-b { opacity: 1; }
@@ -217,7 +258,7 @@ const copy = {
   .hint { font-size: 12px; font-weight: 700; color: var(--gray-1); text-align: center; margin: 8px 0 0; }
 
   @media (prefers-reduced-motion: reduce) {
-    .blk, .deco, .person, .plabel, .sw > *, .card { transition: none; }
+    .blk, .deco, .person, .plabel, .np, .tp, .sw > *, .card { transition: none; }
   }
 </style>
 
