@@ -253,7 +253,8 @@ const options = [
   .opt-item.open .opt-body { grid-template-rows: 1fr; }
   .opt-clip { overflow: hidden; }
   .opt-body p { font-size: 14.5px; line-height: 1.95; color: var(--ink); margin: 0; padding: 0 16px 14px 52px; }
-  .opt-item.etc { background: none; border: none; color: var(--muted); font-size: 13.5px; padding: 0; text-align: center; }
+  /* 「など」はオプション名の縦ラインに揃える（16px + バッジ26px + 間隔10px = 52px） */
+  .opt-item.etc { background: none; border: none; color: var(--muted); font-size: 13.5px; padding: 0 16px 0 52px; text-align: left; }
 </style>
 
 <script>
