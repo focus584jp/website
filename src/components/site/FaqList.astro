@@ -2,6 +2,7 @@
 // FAQアコーディオン（排他開閉・grid-template-rows 0fr→1fr）。トップと/faqで共用
 // flat: 白カードの器を外す（/faqで方眼ノートカードの中に入れる用。器は親が用意する）
 import type { Faq } from '../../data/faqs';
+import { u } from '../../lib/path';
 
 interface Props { faqs: Faq[]; flat?: boolean }
 const { faqs, flat = false } = Astro.props;
@@ -17,6 +18,7 @@ const { faqs, flat = false } = Astro.props;
       <div class="answer">
         <div class="answer-clip">
           <p>{f.a}{f.draft && <span class="draft">（※仮の回答です）</span>}</p>
+          {f.link && <a class="a-link" href={u(f.link.href)}>{f.link.label}<span class="ar" aria-hidden="true">→</span></a>}
         </div>
       </div>
     </div>
@@ -44,6 +46,14 @@ const { faqs, flat = false } = Astro.props;
   .item.open .answer { grid-template-rows: 1fr; }
   .answer-clip { overflow: hidden; }
   .answer p { font-size: 15px; line-height: 1.85; color: var(--ink); margin: 0; padding: 0 0 15px 34px; }
+  /* 回答下の内部リンク（回答本文と同じインデントに揃える） */
+  .a-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    margin: -4px 0 15px 34px;
+    font-size: 14.5px; font-weight: 700; color: var(--navy);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .a-link .ar { text-decoration: none; }
   .draft { font-size: 12px; font-weight: 700; color: #C0392B; }
 </style>
 
