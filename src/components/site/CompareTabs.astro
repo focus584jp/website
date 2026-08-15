@@ -32,17 +32,18 @@ const copy = {
 }[variant];
 
 // blocks: 積み木（x, y, 段, Before姿勢のtransform）。
-// Beforeは「基礎が固まっていない不安定な塔」: 崩れてはいないが、基礎が不揃いで全体が傾きグラグラしている
+// Beforeは「基礎が固まっていない不安定な塔」: 基礎が不揃いで、上の段ほど大きく落ち込み傾いている。
+// 切替時は全ブロックが一斉に正位置へ動く（時間差なし）＝落ちていた上段が持ち上がる動きが主役
 const blocks: [number, number, 1 | 2 | 3, string][] = [
   [28, 104, 1, 'translate(-9px, 2px) rotate(-6deg)'],
   [66, 104, 1, 'translate(-3px, 4px) rotate(3deg)'],
   [104, 104, 1, 'translate(3px, -3px) rotate(-8deg)'],
   [142, 104, 1, 'translate(10px, 2px) rotate(6deg)'],
-  [47, 66, 2, 'translate(-7px, 7px) rotate(-11deg)'],
-  [85, 66, 2, 'translate(1px, 11px) rotate(9deg)'],
-  [123, 66, 2, 'translate(7px, 5px) rotate(-13deg)'],
-  [66, 28, 3, 'translate(-8px, 12px) rotate(-17deg)'],
-  [104, 28, 3, 'translate(9px, 8px) rotate(15deg)'],
+  [47, 66, 2, 'translate(-9px, 20px) rotate(-14deg)'],
+  [85, 66, 2, 'translate(2px, 24px) rotate(11deg)'],
+  [123, 66, 2, 'translate(9px, 18px) rotate(-15deg)'],
+  [66, 28, 3, 'translate(-12px, 34px) rotate(-20deg)'],
+  [104, 28, 3, 'translate(12px, 30px) rotate(18deg)'],
 ];
 
 // target: 群衆の配置（x, y, scale, target?）
@@ -77,9 +78,9 @@ const crowd: [number, number, number, boolean?][] = [
             <path d="M168 28 l8 6 -4 9 8 6 -4 9"></path>
           </g>
           <g fill="#FFC94A">
-            <g transform="translate(48,34)"><path class="deco only-a" d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z"></path></g>
-            <g transform="translate(160,22)"><path class="deco only-a" d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z"></path></g>
-            <g transform="translate(172,54)"><path class="deco only-a" d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z"></path></g>
+            <g transform="translate(48,34)"><path class="deco only-a spark-b" d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z"></path></g>
+            <g transform="translate(160,22)"><path class="deco only-a spark-b" d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z"></path></g>
+            <g transform="translate(172,54)"><path class="deco only-a spark-b" d="M0 -5 Q1 -1 5 0 Q1 1 0 5 Q-1 1 -5 0 Q-1 -1 0 -5 Z"></path></g>
           </g>
         </svg>
       )}
@@ -185,7 +186,7 @@ const crowd: [number, number, number, boolean?][] = [
   .only-a { opacity: 0; transform: scale(.4); }
   .tw.st-ok .only-a { opacity: 1; transform: scale(1); }
 
-  /* --- blocks: バラバラ→下段から順に組み上がる振り付け --- */
+  /* --- blocks: 落ちていた上段ごと、全ブロックが一斉に正位置へ --- */
   .blk {
     transform-box: fill-box; transform-origin: center;
     transition: fill .3s ease, transform .45s cubic-bezier(.34, 1.45, .64, 1);
@@ -193,20 +194,18 @@ const crowd: [number, number, number, boolean?][] = [
   .r1 { fill: #7E8A9C; } .tw.st-ok .r1 { fill: var(--navy); }
   .r2 { fill: #96A1B1; } .tw.st-ok .r2 { fill: var(--navy-mid); }
   .r3 { fill: #ACB6C4; } .tw.st-ok .r3 { fill: var(--navy-light); }
-  .tw.st-ok .r2 { transition-delay: .18s; }
-  .tw.st-ok .r3 { transition-delay: .38s; }
   /* Before姿勢はinline style。◯で正位置へ（!importantでinlineを上書き） */
   .tw.st-ok .pose { transform: none !important; }
-  .tw.st-ok .fig .only-a { transition-delay: .62s; }
+  .tw.st-ok .spark-b { transition-delay: .3s; }
 
-  /* --- talk: 教える矢印→紺化→問いかけ→回答→ひらめき の時間差 --- */
+  /* --- talk: 教える消滅→紺化→問いかけ→回答→ひらめき（テンポ速め） --- */
   .person { fill: #8A96A8; transition: fill .3s ease; }
-  .tw.st-ok .person { fill: var(--navy); transition-delay: .1s; }
+  .tw.st-ok .person { fill: var(--navy); }
   .plabel { fill: #5B6B85; transition: fill .3s ease; }
-  .tw.st-ok .plabel { fill: var(--navy); transition-delay: .1s; }
-  .tw.st-ok .arr-q { transition-delay: .28s; }
-  .tw.st-ok .arr-a { transition-delay: .46s; }
-  .tw.st-ok .spark2 { transition-delay: .66s; }
+  .tw.st-ok .plabel { fill: var(--navy); }
+  .tw.st-ok .arr-q { transition-delay: .12s; }
+  .tw.st-ok .arr-a { transition-delay: .24s; }
+  .tw.st-ok .spark2 { transition-delay: .34s; }
 
   /* --- target: 対象外は薄く、ターゲットは紺+ズームイン、照準ポップ --- */
   .np { fill: #9FB3D1; transition: opacity .35s ease; }
@@ -215,7 +214,6 @@ const crowd: [number, number, number, boolean?][] = [
   .tw.st-ok .tp { fill: var(--navy); transform: scale(1.1); }
   .scope { opacity: 0; transform-box: fill-box; transform-origin: center; transform: scale(.55); transition: opacity .3s ease, transform .35s cubic-bezier(.34, 1.45, .64, 1); }
   .tw.st-ok .scope { opacity: 1; transform: scale(1); }
-  .tw.st-ok .spark-t1 { transition-delay: .12s; }
 
   @media (prefers-reduced-motion: reduce) {
     .tab, .card, .sw > *, .blk, .deco, .person, .plabel, .np, .tp, .scope { transition: none; }
