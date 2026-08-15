@@ -89,6 +89,8 @@ const crowd: [number, number, number, boolean?][] = [
   .nt { text-align: center; font-size: 14.5px; font-weight: 800; color: var(--ink); line-height: 1.8; }
   .nt.v-ok { color: var(--navy); }
 
+  /* 図の下端（照準の下の余白）に注釈を少し食い込ませ、図と注釈の間延びを防ぐ */
+  .fig { margin-bottom: -14px; }
   .fig svg { width: 100%; height: auto; display: block; }
   /* 対象外は薄く、ターゲットは紺+ややズームイン */
   .np { fill: #9FB3D1; transition: opacity .35s ease; }
