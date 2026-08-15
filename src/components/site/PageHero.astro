@@ -1,6 +1,8 @@
 ---
-// 下層ページの見出しバンド: 英字ラベル → h1（黄色蛍光ペンSVG）→ リード文（任意）
-// 「ノートの1ページ」モチーフ: 方眼地＋ページ内容にちなんだ線画アイコン2つ（左上・右下の定位置）
+// 下層ページの見出しバンド: 英字ラベル → h1 → リード文（任意）
+// ページ内容にちなんだ線画アイコン2つ（左上・右下の定位置）を淡青ベタ地に配置
+// ※方眼地とタイトルの蛍光ペンは2026-08-16に廃止（本文側のSectionHeadマーカー・方眼カードとデザインが被るため。
+//   蛍光ペン=セクション見出しと本文強調、方眼=コンテンツカードの言語、と役割を分離）
 // deco: study=鉛筆＋ノート（既定） / faq=？と！の吹き出し / price=¥コイン＋電卓 / company=ビル＋旗
 // リード文はページ次第（フォーム系=安心材料として載せる／内容が直下と重複するページ=省略）
 import flagLine from '../../assets/focus-flag-line.svg?raw'; // FOCUS旗ロゴの線画（design-system/assets/logo が正本）
@@ -72,14 +74,7 @@ const { eyebrow, title, lead, deco = 'study' } = Astro.props;
     </>
   )}
   <p class="eyebrow">{eyebrow}</p>
-  <h1>
-    <span class="title-wrap">
-      {title}
-      <svg viewBox="0 0 400 22" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M4 8 Q 120 2 396 6 L 392 16 Q 180 13 8 17 Z" fill="#FFD84D" opacity="0.9"></path>
-      </svg>
-    </span>
-  </h1>
+  <h1>{title}</h1>
   {lead && <p class="lead" set:html={lead} />}
 </div>
 
@@ -87,11 +82,6 @@ const { eyebrow, title, lead, deco = 'study' } = Astro.props;
   .page-hero {
     position: relative; overflow: hidden; text-align: center;
     background-color: var(--alt-bg);
-    /* 方眼ノート地（リング綴じは2026-07-10に検討の上で不採用） */
-    background-image:
-      linear-gradient(rgba(74, 122, 204, .08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
-    background-size: 22px 22px;
     padding: clamp(38px, 6vw, 58px) 24px clamp(36px, 5.5vw, 56px);
   }
 
@@ -111,10 +101,5 @@ const { eyebrow, title, lead, deco = 'study' } = Astro.props;
     color: var(--orange); letter-spacing: .32em; margin: 0 0 6px;
   }
   h1 { font-family: var(--font-round); font-weight: 900; font-size: clamp(25px, 4vw, 34px); margin: 0; color: var(--ink); }
-  .title-wrap { display: inline-block; position: relative; padding: 0 6px; z-index: 0; }
-  .title-wrap svg {
-    position: absolute; left: -8px; bottom: 0;
-    width: calc(100% + 16px); height: 19px; z-index: -1;
-  }
   .lead { font-size: 15px; line-height: 2; color: var(--ink); margin: 14px auto 0; max-width: 620px; }
 </style>

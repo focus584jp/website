@@ -20,7 +20,7 @@ const groups = [
   <PageHero eyebrow="FAQ" title="よくあるご質問" deco="faq" />
 
   {groups.map((g, i) => (
-    <section class:list={['sec', { alt: i % 2 === 0 }]}>
+    <section class:list={['sec', { alt: i % 2 === 1 }]}>
       <div class="container">
         <SectionHead eyebrow={g.eyebrow} title={g.title} />
         <div class="note-card">
