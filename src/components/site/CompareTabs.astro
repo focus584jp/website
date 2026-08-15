@@ -14,7 +14,7 @@ const copy = {
   blocks: {
     ngHead: '無理に学校の進度に合わせると…',
     okHead: 'フォーカスでの成績の上がり方',
-    ngNote: '知識がバラバラのまま積み上がらず、<br>成績が伸びなやむ',
+    ngNote: '基礎が固まらないまま積み上げるので、<br>土台が不安定で伸びなやむ',
     okNote: '基礎から順番に積み上げて …<br><span class="mk">苦手を克服！</span>',
   },
   talk: {
@@ -31,17 +31,18 @@ const copy = {
   },
 }[variant];
 
-// blocks: 積み木（x, y, 段, Before姿勢のtransform）。Beforeは「まだ積めていない」散らばり
+// blocks: 積み木（x, y, 段, Before姿勢のtransform）。
+// Beforeは「基礎が固まっていない不安定な塔」: 崩れてはいないが、基礎が不揃いで全体が傾きグラグラしている
 const blocks: [number, number, 1 | 2 | 3, string][] = [
-  [28, 104, 1, 'translate(-12px, 0) rotate(-7deg)'],
-  [66, 104, 1, 'translate(-6px, 0) rotate(4deg)'],
-  [104, 104, 1, 'translate(6px, 0) rotate(-4deg)'],
-  [142, 104, 1, 'translate(14px, 0) rotate(8deg)'],
-  [47, 66, 2, 'translate(-2px, 30px) rotate(-16deg)'],
-  [85, 66, 2, 'translate(4px, 32px) rotate(20deg)'],
-  [123, 66, 2, 'translate(-4px, 28px) rotate(-24deg)'],
-  [66, 28, 3, 'translate(-52px, 70px) rotate(45deg)'],
-  [104, 28, 3, 'translate(64px, 72px) rotate(45deg)'],
+  [28, 104, 1, 'translate(-9px, 2px) rotate(-6deg)'],
+  [66, 104, 1, 'translate(-3px, 4px) rotate(3deg)'],
+  [104, 104, 1, 'translate(3px, -3px) rotate(-8deg)'],
+  [142, 104, 1, 'translate(10px, 2px) rotate(6deg)'],
+  [47, 66, 2, 'translate(-7px, 7px) rotate(-11deg)'],
+  [85, 66, 2, 'translate(1px, 11px) rotate(9deg)'],
+  [123, 66, 2, 'translate(7px, 5px) rotate(-13deg)'],
+  [66, 28, 3, 'translate(-8px, 12px) rotate(-17deg)'],
+  [104, 28, 3, 'translate(9px, 8px) rotate(15deg)'],
 ];
 
 // target: 群衆の配置（x, y, scale, target?）
@@ -67,6 +68,14 @@ const crowd: [number, number, number, boolean?][] = [
           {blocks.map(([x, y, row, pose]) => (
             <rect class={`blk r${row} pose`} style={`transform: ${pose}`} x={x} y={y} width="34" height="34" rx="2"></rect>
           ))}
+          <g class="deco only-b" stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+            <path d="M52 32 l-8 6 4 9 -8 6 4 9"></path>
+            <path d="M40 28 l-8 6 4 9 -8 6 4 9"></path>
+          </g>
+          <g class="deco only-b" stroke="#4A4F58" stroke-width="2.6" fill="none" stroke-linejoin="miter" stroke-linecap="butt">
+            <path d="M156 34 l8 6 -4 9 8 6 -4 9"></path>
+            <path d="M168 28 l8 6 -4 9 8 6 -4 9"></path>
+          </g>
           <g fill="#FFC94A">
             <g transform="translate(48,34)"><path class="deco only-a" d="M0 -9 Q1.6 -1.6 9 0 Q1.6 1.6 0 9 Q-1.6 1.6 -9 0 Q-1.6 -1.6 0 -9 Z"></path></g>
             <g transform="translate(160,22)"><path class="deco only-a" d="M0 -6 Q1.2 -1.2 6 0 Q1.2 1.2 0 6 Q-1.2 1.2 -6 0 Q-1.2 -1.2 0 -6 Z"></path></g>
