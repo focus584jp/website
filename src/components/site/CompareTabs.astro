@@ -43,7 +43,8 @@ const blocks: [number, number, 1 | 2 | 3, string][] = [
   [85, 66, 2, 'translate(2px, 24px) rotate(11deg)'],
   [123, 66, 2, 'translate(9px, 18px) rotate(-15deg)'],
   [66, 28, 3, 'translate(-12px, 34px) rotate(-20deg)'],
-  [104, 28, 3, 'translate(12px, 30px) rotate(18deg)'],
+  // 一番上の右ブロックは地面まで落ちてひし形に挟まっている（旧スライダーで好評だった表現。切替時に最も大きく持ち上がる主役）
+  [104, 28, 3, 'translate(14px, 66px) rotate(45deg)'],
 ];
 
 // target: 群衆の配置（x, y, scale, target?）
