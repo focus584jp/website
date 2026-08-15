@@ -1,78 +1,62 @@
 ---
 // 下層ページの見出しバンド: 英字ラベル → h1 → リード文（任意）
-// ページ内容にちなんだ線画アイコン2つ（左上・右下の定位置）を淡青ベタ地に配置
-// ※方眼地とタイトルの蛍光ペンは2026-08-16に廃止（本文側のSectionHeadマーカー・方眼カードとデザインが被るため。
-//   蛍光ペン=セクション見出しと本文強調、方眼=コンテンツカードの言語、と役割を分離）
-// deco: study=鉛筆＋ノート（既定） / faq=？と！の吹き出し / price=¥コイン＋電卓 / company=ビル＋旗
-// リード文はページ次第（フォーム系=安心材料として載せる／内容が直下と重複するページ=省略）
+// 装飾（2026-08-16確定）: 横罫線ノート地 + テーマアイコンの散らし（大2・小2） + 色アクセント4つ
+// - 罫線は全て同じ太さ（ヘッダー罫なし）。本文の方眼カードとは罫線の種類（横罫 vs 方眼）で区別
+// - 色アクセントは上部（オレンジの英字ラベル付近）は寒色のみ、暖色（黄・橙）は下部に限定
+// - 蛍光ペンとタイトル装飾は使わない（蛍光ペン=セクション見出し・本文強調の専用言語）
 import flagLine from '../../assets/focus-flag-line.svg?raw'; // FOCUS旗ロゴの線画（design-system/assets/logo が正本）
 
 interface Props { eyebrow: string; title: string; lead?: string; deco?: 'study' | 'faq' | 'price' | 'company' | 'classroom' | 'request' | 'consult' }
 const { eyebrow, title, lead, deco = 'study' } = Astro.props;
+
+// テーマアイコン（左上・右下の2種。小サイズの散らしにも同じ絵柄を使う）
+const svgAttrs = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"';
+const icons: Record<string, [string, string]> = {
+  study: [
+    // 見開きのノート（ページの膨らみ・罫線。左3本/右2本で書きかけの表情）
+    `<svg viewBox="0 0 28 26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 20.8 C11 18.6 7.5 18 3.5 19 V4.6 C7.5 3.6 11 4.2 14 6.2 Z"></path><path d="M14 20.8 C17 18.6 20.5 18 24.5 19 V4.6 C20.5 3.6 17 4.2 14 6.2 Z"></path><path d="M3.2 20.6 C8 19.6 11.5 20.2 14 22.3 C16.5 20.2 20 19.6 24.8 20.6"></path><path d="M6.2 9 C8.2 8.4 10 8.3 11.6 8.7 M6.2 12 C8.2 11.4 10 11.3 11.6 11.7 M6.2 15 C8.2 14.4 10 14.3 11.6 14.7"></path><path d="M16.4 8.7 C18 8.3 19.8 8.4 21.8 9 M16.4 11.7 C18 11.3 19.8 11.4 21.8 12"></path></svg>`,
+    // 鉛筆（ボディの一本線＋塗りの芯。軸45度）
+    `<svg ${svgAttrs}><path d="M5.66 14.66 L14.66 5.66 L18.34 9.34 L9.34 18.34 Z"></path><path d="M8.4 15.6 L15.6 8.4"></path><path d="M5.66 14.66 L4 20 L9.34 18.34"></path><path d="M4 20 L4.7 17.75 L6.25 19.3 Z" fill="currentColor" stroke="none"></path></svg>`,
+  ],
+  faq: [
+    `<svg ${svgAttrs}><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"></path><path d="M9.6 9.2 a2.5 2.5 0 0 1 4.86.83 c0 1.67-2.5 2.5-2.5 2.5"></path><path d="M12 15.6h.01"></path></svg>`,
+    `<svg ${svgAttrs}><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M12 6.6v4.6"></path><path d="M12 14.4h.01"></path></svg>`,
+  ],
+  price: [
+    `<svg ${svgAttrs}><circle cx="12" cy="12" r="9"></circle><path d="M8.8 7.5 12 11.7 15.2 7.5"></path><path d="M12 11.7 V17"></path><path d="M9.2 13h5.6"></path><path d="M9.2 15.4h5.6"></path></svg>`,
+    `<svg ${svgAttrs}><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>`,
+  ],
+  classroom: [
+    `<svg ${svgAttrs}><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>`,
+    `<svg ${svgAttrs}><rect width="16" height="16" x="4" y="3" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m18 22-2-3"></path><path d="M8 15h.01"></path><path d="M16 15h.01"></path></svg>`,
+  ],
+  request: [
+    `<svg ${svgAttrs}><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>`,
+    `<svg ${svgAttrs}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg>`,
+  ],
+  consult: [
+    `<svg ${svgAttrs}><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>`,
+    `<svg ${svgAttrs}><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>`,
+  ],
+  company: [
+    `<svg ${svgAttrs}><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>`,
+    flagLine, // FOCUS旗ロゴの線画（実ロゴ。currentColorで着色）
+  ],
+};
+const [tlIcon, brIcon] = icons[deco];
 ---
 <div class="page-hero">
-  {deco === 'study' && (
-    <>
-      {/* 見開きのノート（ページの膨らみ・罫線。左3本/右2本で書きかけの表情） */}
-      <svg class="deco deco-tl deco-note" viewBox="0 0 28 26" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M14 20.8 C11 18.6 7.5 18 3.5 19 V4.6 C7.5 3.6 11 4.2 14 6.2 Z"></path>
-        <path d="M14 20.8 C17 18.6 20.5 18 24.5 19 V4.6 C20.5 3.6 17 4.2 14 6.2 Z"></path>
-        <path d="M3.2 20.6 C8 19.6 11.5 20.2 14 22.3 C16.5 20.2 20 19.6 24.8 20.6"></path>
-        <path d="M6.2 9 C8.2 8.4 10 8.3 11.6 8.7 M6.2 12 C8.2 11.4 10 11.3 11.6 11.7 M6.2 15 C8.2 14.4 10 14.3 11.6 14.7"></path>
-        <path d="M16.4 8.7 C18 8.3 19.8 8.4 21.8 9 M16.4 11.7 C18 11.3 19.8 11.4 21.8 12"></path>
-      </svg>
-      {/* 鉛筆（ボディの一本線＋塗りの芯。軸45度） */}
-      <svg class="deco deco-br deco-pencil" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.66 14.66 L14.66 5.66 L18.34 9.34 L9.34 18.34 Z"></path><path d="M8.4 15.6 L15.6 8.4"></path><path d="M5.66 14.66 L4 20 L9.34 18.34"></path><path d="M4 20 L4.7 17.75 L6.25 19.3 Z" fill="#4A7ACC" stroke="none"></path></svg>
-    </>
-  )}
-  {deco === 'faq' && (
-    <>
-      {/* 「？」の丸吹き出し */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z"></path><path d="M9.6 9.2 a2.5 2.5 0 0 1 4.86.83 c0 1.67-2.5 2.5-2.5 2.5"></path><path d="M12 15.6h.01"></path></svg>
-      {/* 「！」の角吹き出し */}
-      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M12 6.6v4.6"></path><path d="M12 14.4h.01"></path></svg>
-    </>
-  )}
-  {deco === 'price' && (
-    <>
-      {/* ¥コイン */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.8 7.5 12 11.7 15.2 7.5"></path><path d="M12 11.7 V17"></path><path d="M9.2 13h5.6"></path><path d="M9.2 15.4h5.6"></path></svg>
-      {/* 電卓 */}
-      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2"></rect><line x1="8" x2="16" y1="6" y2="6"></line><line x1="16" x2="16" y1="14" y2="18"></line><path d="M16 10h.01"></path><path d="M12 10h.01"></path><path d="M8 10h.01"></path><path d="M12 14h.01"></path><path d="M8 14h.01"></path><path d="M12 18h.01"></path><path d="M8 18h.01"></path></svg>
-    </>
-  )}
-  {deco === 'classroom' && (
-    <>
-      {/* 地図ピン */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
-      {/* 電車 */}
-      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="16" x="4" y="3" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path><path d="m8 19-2 3"></path><path d="m18 22-2-3"></path><path d="M8 15h.01"></path><path d="M16 15h.01"></path></svg>
-    </>
-  )}
-  {deco === 'request' && (
-    <>
-      {/* 資料（書類） */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
-      {/* ダウンロード */}
-      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path><path d="M12 15V3"></path></svg>
-    </>
-  )}
-  {deco === 'consult' && (
-    <>
-      {/* 対話の吹き出し2つ */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
-      {/* カレンダー（日時の確定） */}
-      <svg class="deco deco-br" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>
-    </>
-  )}
-  {deco === 'company' && (
-    <>
-      {/* ビル */}
-      <svg class="deco deco-tl" viewBox="0 0 24 24" fill="none" stroke="#4A7ACC" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"></path><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"></path><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
-      {/* FOCUS旗ロゴの線画（実ロゴ。色はCSSのcurrentColorで統一） */}
-      <span class="deco deco-br deco-flag" aria-hidden="true" set:html={flagLine} />
-    </>
-  )}
+  {/* テーマアイコン: 大（左上・右下）+ 小（右上・左下に反対側の絵柄を薄く） */}
+  <span class:list={['deco', 'deco-tl', { 'deco-note': deco === 'study', 'deco-flag-none': false }]} set:html={tlIcon} />
+  <span class:list={['deco', 'deco-br', { 'deco-pencil': deco === 'study', 'deco-flag': deco === 'company' }]} set:html={brIcon} />
+  <span class="deco deco-tr-s" set:html={tlIcon} />
+  <span class="deco deco-bl-s" set:html={brIcon} />
+  {/* 色アクセント: 上部=寒色（紺系）のみ / 暖色（黄・橙）は下部に限定 */}
+  <svg class="acc acc-plus" viewBox="0 0 14 14" stroke="#4A7ACC" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 2v10M2 7h10" fill="none"></path></svg>
+  <svg class="acc acc-ring" viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="3.2" fill="none" stroke="#4A7ACC" stroke-width="2"></circle></svg>
+  <svg class="acc acc-dot" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.2" fill="#FFD84D"></circle></svg>
+  <svg class="acc acc-tri" viewBox="0 0 14 12" aria-hidden="true"><path d="M7 1.5 L12.5 10.5 H1.5 Z" fill="none" stroke="#E67832" stroke-width="2"></path></svg>
+
   <p class="eyebrow">{eyebrow}</p>
   <h1>{title}</h1>
   {lead && <p class="lead" set:html={lead} />}
@@ -82,24 +66,36 @@ const { eyebrow, title, lead, deco = 'study' } = Astro.props;
   .page-hero {
     position: relative; overflow: hidden; text-align: center;
     background-color: var(--alt-bg);
+    /* 横罫線ノート地（全て同じ太さ） */
+    background-image: repeating-linear-gradient(to bottom, transparent 0 27px, rgba(74, 122, 204, .15) 27px 28px);
+    background-position: 0 10px;
     padding: clamp(38px, 6vw, 58px) 24px clamp(36px, 5.5vw, 56px);
   }
 
-  /* テーマアイコンの線画（うっすら。左上・右下の定位置） */
-  .deco { position: absolute; opacity: .32; width: 54px; height: 54px; }
-  /* 位置は中央からの距離で決める（PCでもタイトルとの間隔がスマホと同じに保たれる） */
+  /* テーマアイコン（うっすら。位置は中央からの距離で決め、PCでもタイトルとの間隔を保つ） */
+  .deco { position: absolute; color: #4A7ACC; opacity: .32; width: 54px; height: 54px; }
+  .deco :global(svg) { width: 100%; height: 100%; display: block; }
   .deco-tl { left: calc(50% - min(43vw, 218px)); top: 14px; transform: rotate(-8deg); }
   .deco-br { right: calc(50% - min(44vw, 228px)); bottom: 10px; transform: rotate(8deg); }
   .deco-note { width: 58px; height: 54px; }
-  .deco-flag { color: #4A7ACC; width: 52px; height: 64px; }
-  .deco-flag :global(svg) { width: 100%; height: 100%; display: block; }
+  .deco-flag { width: 52px; height: 64px; }
   .deco-flag :global(path) { stroke-width: 2.4; } /* non-scaling-strokeなので実px指定 */
   .deco-pencil { width: 68px; height: 68px; bottom: 8px; transform: rotate(0deg); } /* 軸45度 */
+  /* 小サイズの散らし（反対側の対角に薄く） */
+  .deco-tr-s { width: 26px; height: 26px; right: calc(50% - min(31vw, 160px)); top: 18px; opacity: .17; transform: rotate(-12deg); }
+  .deco-bl-s { width: 24px; height: 24px; left: calc(50% - min(31vw, 156px)); bottom: 16px; opacity: .17; transform: rotate(12deg); }
+
+  /* 色アクセント */
+  .acc { position: absolute; }
+  .acc-plus { width: 13px; height: 13px; right: calc(50% - min(36vw, 178px)); top: 44px; }
+  .acc-ring { width: 10px; height: 10px; left: calc(50% - min(21vw, 104px)); top: 26px; }
+  .acc-dot { width: 11px; height: 11px; left: calc(50% - min(34vw, 168px)); bottom: 22px; }
+  .acc-tri { width: 12px; height: 11px; right: calc(50% - min(21vw, 102px)); bottom: 18px; }
 
   .eyebrow {
     font: 800 clamp(11px, 1.3vw, 13px) var(--font-round);
-    color: var(--orange); letter-spacing: .32em; margin: 0 0 6px;
+    color: var(--orange); letter-spacing: .32em; margin: 0 0 6px; position: relative;
   }
-  h1 { font-family: var(--font-round); font-weight: 900; font-size: clamp(25px, 4vw, 34px); margin: 0; color: var(--ink); }
-  .lead { font-size: 15px; line-height: 2; color: var(--ink); margin: 14px auto 0; max-width: 620px; }
+  h1 { font-family: var(--font-round); font-weight: 900; font-size: clamp(25px, 4vw, 34px); margin: 0; color: var(--ink); position: relative; }
+  .lead { font-size: 15px; line-height: 2; color: var(--ink); margin: 14px auto 0; max-width: 620px; position: relative; }
 </style>
