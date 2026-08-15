@@ -119,18 +119,21 @@ const crowd: [number, number, number, boolean?][] = [
         t.setAttribute('aria-selected', String(active));
       });
     };
+    // 自動再生のタイマー: 手動タップで必ずキャンセル（発火待ちの1.2秒間にタップされた選択を上書きしない）
+    let autoTimer = 0;
     tabs.forEach((t) =>
       t.addEventListener('click', () => {
+        clearTimeout(autoTimer);
         box.dataset.played = '1';
         set(t.classList.contains('ok'));
       }),
     );
-    // 画面に入ったら1回だけ ✗→◯ を自動再生（以降は手動）
+    // 画面に6割入ったら1回だけ ✗→◯ を自動再生（以降は手動）
     new IntersectionObserver((entries, ob) => {
       entries.forEach((e) => {
         if (e.isIntersecting && !box.dataset.played) {
           box.dataset.played = '1';
-          setTimeout(() => set(true), 1200);
+          autoTimer = window.setTimeout(() => set(true), 1200);
           ob.disconnect();
         }
       });
