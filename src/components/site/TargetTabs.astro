@@ -128,12 +128,12 @@ const crowd: [number, number, number, boolean?][] = [
         set(t.classList.contains('ok'));
       }),
     );
-    // 画面に6割入ったら1回だけ ✗→◯ を自動再生（以降は手動）
+    // 画面に6割入ったら1回だけ ✗→◯ を自動再生（以降は手動）。✗を1.8秒見せてから切り替える
     new IntersectionObserver((entries, ob) => {
       entries.forEach((e) => {
         if (e.isIntersecting && !box.dataset.played) {
           box.dataset.played = '1';
-          autoTimer = window.setTimeout(() => set(true), 1200);
+          autoTimer = window.setTimeout(() => set(true), 1800);
           ob.disconnect();
         }
       });
