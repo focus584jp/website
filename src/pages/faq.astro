@@ -1,26 +1,57 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
+import SectionHead from '../components/site/SectionHead.astro';
 import FaqList from '../components/site/FaqList.astro';
 import CtaBand from '../components/site/CtaBand.astro';
 import { faqs } from '../data/faqs';
+
+// 3カテゴリのグループ表示（2026-08-15 再設計）。器は/method・/priceと同じ方眼ノートカード+交互背景
+const groups = [
+  { eyebrow: 'LESSON', title: '授業・指導について', cat: 'lesson' },
+  { eyebrow: 'PRICE', title: '料金について', cat: 'price' },
+  { eyebrow: 'ADMISSION', title: '入塾・通塾について', cat: 'admission' },
+] as const;
 ---
 <SiteLayout
   title="よくあるご質問｜学習塾フォーカス"
-  description="学習塾フォーカスによく寄せられるご質問と回答。料金・諸経費・講師・1対4の指導スタイル・部活との両立などにお答えします。"
+  description="学習塾フォーカスによく寄せられるご質問と回答。授業・指導、料金・季節講習、対象学年・振替・体験授業など、入塾前の疑問にお答えします。"
 >
   <PageHero eyebrow="FAQ" title="よくあるご質問" deco="faq" />
-  <section class="body">
-    <div class="container">
-      <FaqList faqs={faqs} />
+
+  {groups.map((g, i) => (
+    <section class:list={['sec', { alt: i % 2 === 0 }]}>
+      <div class="container">
+        <SectionHead eyebrow={g.eyebrow} title={g.title} />
+        <div class="note-card">
+          <FaqList faqs={faqs.filter((f) => f.cat === g.cat)} flat />
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="sec">
+    <div class="container note-c">
       <p class="note">ここにないご質問は、お電話または無料相談でお気軽にお尋ねください。</p>
     </div>
   </section>
+
   <CtaBand />
 </SiteLayout>
 
 <style>
-  .body { background: #fff; }
-  .container { max-width: 680px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
-  .note { font-size: 14px; color: var(--muted); text-align: center; margin: 22px 0 0; }
+  .sec { background: #fff; }
+  .sec.alt { background: var(--alt-bg); }
+  .container { max-width: 760px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
+  .note-card {
+    background-color: #fff;
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+    background-size: 24px 24px;
+    border: 1px solid var(--line); border-radius: 16px; padding: clamp(8px, 1.5vw, 14px) clamp(16px, 3vw, 28px);
+    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
+  }
+  .note-c { padding-top: 0; padding-bottom: clamp(28px, 4vw, 44px); }
+  .note { font-size: 14px; color: var(--muted); text-align: center; margin: 0; }
 </style>

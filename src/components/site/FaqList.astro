@@ -1,11 +1,12 @@
 ---
 // FAQアコーディオン（排他開閉・grid-template-rows 0fr→1fr）。トップと/faqで共用
+// flat: 白カードの器を外す（/faqで方眼ノートカードの中に入れる用。器は親が用意する）
 import type { Faq } from '../../data/faqs';
 
-interface Props { faqs: Faq[] }
-const { faqs } = Astro.props;
+interface Props { faqs: Faq[]; flat?: boolean }
+const { faqs, flat = false } = Astro.props;
 ---
-<div class="card" data-faq>
+<div class:list={['card', { flat }]} data-faq>
   {faqs.map((f, i) => (
     <div class:list={['item', { last: i === faqs.length - 1 }]}>
       <button aria-expanded="false" data-faq-toggle>
@@ -24,6 +25,7 @@ const { faqs } = Astro.props;
 
 <style>
   .card { background: #fff; border-radius: 14px; padding: 4px 18px; box-shadow: 0 6px 16px rgba(20, 55, 120, .09); }
+  .card.flat { background: none; border-radius: 0; padding: 0; box-shadow: none; }
   .item { border-bottom: 2px dashed #DFE9F1; }
   .item.last { border-bottom: none; }
   .item button {
