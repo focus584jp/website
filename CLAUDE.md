@@ -34,11 +34,10 @@ src/
   components/
     site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/DiagnosisApp/
                     SectionHead/FaqList/LeadForm/CorporateForm/BeforeAfterSlider/RatioCycle/Icon/ArrowCircle）
-                    ※BeforeAfterSlider=指導方針のBefore/Afterスライダー（旧MethodCompareの2カード比較を置き換え。
-                    　variant: 'blocks'=積み木／'talk'=Teaching vs Coaching。ドラッグで境界を越えた要素が
-                    　✗状態→◯状態に遷移する。トップMethodと/methodで共用）
-                    ※TargetTabs=ターゲット絞り込みのインデックスタブ図解（/priceワケ用。✗全学年対応⇄◯苦手な中学生専門を
-                    　紺塗りつぶしタブで切替。画面に入ると✗→◯を1回自動再生・照準ロック+キラキラ）
+                    ※CompareTabs=✗⇄◯比較のインデックスタブ図解（サイト共通の比較UI。旧BeforeAfterSlider・旧TargetTabsを
+                    　2026-08-15に統合）。variant: 'blocks'=積み木バラバラ→組み上がる（トップMethod・/method）／
+                    　'talk'=対話図（同）／'target'=絞り込み照準（/priceワケ）。画面に入ると✗→◯を1回自動再生（1.8秒）、
+                    　以降タブ切替。切替時は要素が時間差で遷移する振り付き
                     ※RatioCycle=1対4の巡回アニメ図解（/method POINT03用。先生が4席を循環し「演習」⇄「解説」が切替）
                     ※TeacherFilter=講師選考のフィルター図解（/method POINT04用。応募10人→厳しい選考カード→採用3人+約30%）
                     ※QuestionBalloon=ページ導入の問いかけ吹き出し（/method・/priceで共用。text propで文言指定）

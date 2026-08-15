@@ -5,7 +5,7 @@ import CtaBand from '../components/site/CtaBand.astro';
 import SectionHead from '../components/site/SectionHead.astro';
 import QuestionBalloon from '../components/site/QuestionBalloon.astro';
 import PriceSimulator from '../components/site/PriceSimulator.astro';
-import TargetTabs from '../components/site/TargetTabs.astro';
+import CompareTabs from '../components/site/CompareTabs.astro';
 
 // 4セクション構成（2026-08-14 再々設計）: 授業料（こだわり先行）→ 諸経費 → その他オプション → お手頃価格のワケ
 // 前半=料金の全貌（必ずかかるもの→任意のもの）・後半=評価（なぜ安いか）の2部構成。
@@ -118,7 +118,7 @@ const options = [
         <p class="body-p">なぜ、この価格が実現できるのか──答えは、対象を<span class="mk">勉強が苦手な中学生だけに絞っている</span>からです。全学年・全レベルに対応しようとすれば、設備も教材も、人件費も研修コストもふくらみます。フォーカスは対象を絞ることでムダな費用をなくし、そのぶんを価格と授業の質に還元しています。</p>
 
         {/* 大勢の生徒→照準ロックの絞り込みをインデックスタブで切替（画面に入ると✗→◯を1回自動再生） */}
-        <TargetTabs />
+        <CompareTabs variant="target" />
       </div>
     </div>
   </section>

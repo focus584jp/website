@@ -2,7 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import CtaBand from '../components/site/CtaBand.astro';
-import BeforeAfterSlider from '../components/site/BeforeAfterSlider.astro';
+import CompareTabs from '../components/site/CompareTabs.astro';
 import RatioCycle from '../components/site/RatioCycle.astro';
 import TeacherFilter from '../components/site/TeacherFilter.astro';
 import QuestionBalloon from '../components/site/QuestionBalloon.astro';
@@ -70,8 +70,8 @@ const pillars = [
         </div>
         <div class="note-card">
           {p.body.map((t) => <p class="body-p" set:html={t} />)}
-          {p.fig === 'blocks' && <BeforeAfterSlider variant="blocks" />}
-          {p.fig === 'talk' && <BeforeAfterSlider variant="talk" />}
+          {p.fig === 'blocks' && <CompareTabs variant="blocks" />}
+          {p.fig === 'talk' && <CompareTabs variant="talk" />}
           {p.fig === 'ratio' && <RatioCycle />}
           {p.fig === 'teachers' && <TeacherFilter />}
         </div>
