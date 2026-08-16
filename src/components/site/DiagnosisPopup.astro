@@ -62,8 +62,9 @@ import DiagnosisApp from './DiagnosisApp.astro';
   .text { display: flex; flex-direction: column; gap: 6px; min-width: 0; align-items: flex-start; }
   .vs-row { display: flex; align-items: center; gap: 6px; }
   .chip { font-family: var(--font-round); font-size: 12px; font-weight: 900; border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
-  .chip.group { color: var(--navy); background: var(--blue-pale); }
-  .chip.solo { color: var(--orange-shadow); background: #FBDECB; }
+  /* 集団=暖色 / 個別=紺（フォーカス=個別指導をブランド色に。2026-08-16入れ替え） */
+  .chip.group { color: var(--orange-shadow); background: #FBDECB; }
+  .chip.solo { color: var(--navy); background: var(--blue-pale); }
   .vs { font: 900 12px var(--font-round); color: var(--gray-1); }
   .text p { font-family: var(--font-round); font-size: 14px; font-weight: 900; color: var(--ink); margin: 0; line-height: 1.6; }
   .text .mk { white-space: nowrap; } /* 「どのタイプ？」の途中で折り返さない */
