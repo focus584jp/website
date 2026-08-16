@@ -89,7 +89,8 @@ const [tlIcon, brIcon] = icons[deco];
   .acc { position: absolute; }
   .acc-plus { width: 13px; height: 13px; right: calc(50% - min(36vw, 178px)); top: 44px; }
   .acc-ring { width: 10px; height: 10px; left: calc(50% - min(21vw, 104px)); top: 26px; }
-  .acc-dot { width: 11px; height: 11px; left: calc(50% - min(34vw, 168px)); bottom: 22px; }
+  /* 黄丸は左下の小アイコン（deco-bl-s）と接しないよう、アイコンの外側へ離して配置 */
+  .acc-dot { width: 11px; height: 11px; left: calc(50% - min(42vw, 205px)); bottom: 26px; }
   .acc-tri { width: 12px; height: 11px; right: calc(50% - min(21vw, 102px)); bottom: 18px; }
 
   .eyebrow {
