@@ -241,12 +241,13 @@ const crowd: [number, number, number, boolean?][] = [
         set(t.classList.contains('ok'));
       }),
     );
-    // 画面に6割入ったら1回だけ ✗→◯ を自動再生（✗を1.8秒見せてから切替）
+    // 画面に6割入ったら1回だけ ✗→◯ を自動再生。
+    // ✗側の見出し+注釈（40〜50字）を読み終えられるよう4秒見せてから切り替える（1.8秒では早すぎた）
     new IntersectionObserver((entries, ob) => {
       entries.forEach((e) => {
         if (e.isIntersecting && !box.dataset.played) {
           box.dataset.played = '1';
-          autoTimer = window.setTimeout(() => set(true), 1800);
+          autoTimer = window.setTimeout(() => set(true), 4000);
           ob.disconnect();
         }
       });
