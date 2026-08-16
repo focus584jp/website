@@ -22,7 +22,16 @@ import { flowSteps } from '../../data/home';
 <style>
   .flow { background: var(--alt-bg); }
   .container { max-width: 520px; margin: 0 auto; padding: clamp(48px, 7vw, 88px) 24px; }
-  .card { background: #fff; border-radius: 14px; padding: 24px 26px; box-shadow: 0 6px 16px rgba(20, 55, 120, .09); }
+  /* 方眼ノートカード（サイト共通の器言語に統一。2026-08-16） */
+  .card {
+    background-color: #fff;
+    background-image:
+      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+    background-size: 24px 24px;
+    border: 1px solid var(--line); border-radius: 16px; padding: 24px 26px;
+    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
+  }
   .step { position: relative; padding: 2px 0 26px 44px; }
   .step.last { padding-bottom: 2px; }
   .circle {
