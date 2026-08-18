@@ -33,7 +33,7 @@ src/
     SiteLayout.astro  共通レイアウト（フォント読込・ヘッダー/フッター・OGP。props: popup / fixedCta で診断ポップアップと固定CTAをページ単位で無効化できる）
   components/
     site/           全ページ共通（SiteHeader/SiteFooter/PageHero/CtaBand/FixedCta/DiagnosisPopup/DiagnosisApp/
-                    SectionHead/FaqList/LeadForm/CorporateForm/BeforeAfterSlider/RatioCycle/Icon/ArrowCircle）
+                    SectionHead/FaqList/LeadForm/CorporateForm/RatioCycle/TeacherFilter/Icon/ArrowCircle）
                     ※CompareTabs=✗⇄◯比較のインデックスタブ図解（サイト共通の比較UI。旧BeforeAfterSlider・旧TargetTabsを
                     　2026-08-15に統合）。variant: 'blocks'=積み木バラバラ→組み上がる（トップMethod・/method）／
                     　'talk'=対話図（同）／'target'=絞り込み照準（/priceワケ）。画面に入ると✗→◯を1回自動再生（4秒）、

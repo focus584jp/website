@@ -2,8 +2,9 @@
 // hifi化したページ用のレイアウト（ワイヤー用 WireframeLayout とは別系統）
 // フォントは自己ホスト（fontsource）: レンダリングブロック回避のためGoogle Fonts外部CSSは使わない
 import '@fontsource-variable/noto-sans-jp';
-import '@fontsource/zen-maru-gothic/japanese-700.css';
-import '@fontsource/zen-maru-gothic/japanese-900.css';
+// japanese-*.css（単一1.4MB）ではなく標準css（unicode-range分割）を使う: 使う文字の分だけダウンロードされる
+import '@fontsource/zen-maru-gothic/700.css';
+import '@fontsource/zen-maru-gothic/900.css';
 import '../styles/site.css';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';

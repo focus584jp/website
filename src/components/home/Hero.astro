@@ -1,6 +1,6 @@
 ---
 // ヒーロー: 実写写真＋白グラデ、ラベル、手書きキャッチ画像、料金カード、CTA（PCのみ。SP/タブレットは下部固定CTAが担う）
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import heroWide from '../../assets/home/hero-photo-crop2.jpg';
 import heroNarrow from '../../assets/home/hero-photo-sp.jpg';
 import heroCatch from '../../assets/home/hero-catch-small.png';
@@ -8,11 +8,22 @@ import { u } from '../../lib/path';
 import { ctaLabels } from '../../data/home';
 import Icon from '../site/Icon.astro';
 import ArrowCircle from '../site/ArrowCircle.astro';
+
+// SP用とPC用を<picture>のメディア分岐で出し分け、表示中の1枚だけダウンロードさせる
+// （CSSのdisplay切替だとeagerな2枚を両方取得してしまう）
+const wideImg = await getImage({ src: heroWide, widths: [768, 1100, 1500, 2200, 2880], format: 'webp' });
+const narrowImg = await getImage({ src: heroNarrow, widths: [580, 890, 1600, 1812], format: 'webp' });
 ---
 <section class="hero" id="top">
   <div class="wrap">
-    <Image src={heroNarrow} alt="階段をのぼる生徒と先生" widths={[580, 890, 1600, 1812]} sizes="104vw" class="photo-narrow" loading="eager" />
-    <Image src={heroWide} alt="階段をのぼる生徒と先生" widths={[768, 1100, 1500, 2200, 2880]} sizes="100vw" class="photo-wide" loading="eager" />
+    <picture>
+      <source media="(min-width: 768px)" srcset={wideImg.srcSet.attribute} sizes="100vw" width={wideImg.attributes.width} height={wideImg.attributes.height} />
+      <img
+        src={narrowImg.src} srcset={narrowImg.srcSet.attribute} sizes="104vw"
+        width={narrowImg.attributes.width} height={narrowImg.attributes.height}
+        alt="階段をのぼる生徒と先生" class="photo" loading="eager" fetchpriority="high" decoding="async"
+      />
+    </picture>
     <div class="fade" aria-hidden="true"></div>
 
     <div class="text">
@@ -49,11 +60,8 @@ import ArrowCircle from '../site/ArrowCircle.astro';
     display: flex; align-items: stretch; min-height: auto;
   }
   /* クロップ左端〜右端がCSS 104%に対応（右-3%はみ出しで左端は画面0%）。人物の位置は幅86%時代と同一 */
-  .photo-narrow { position: absolute; top: 0; right: -3%; width: 104%; height: auto; display: block; }
-  .photo-wide {
-    display: none; position: absolute; inset: 0; width: 100%; height: 100%;
-    object-fit: cover; object-position: right top; transform-origin: right top; transform: translateX(9%);
-  }
+  /* <picture>で1枚のimgにSP/PC画像が切り替わるため、スタイルも同じ.photoを768pxで切り替える */
+  .photo { position: absolute; top: 0; right: -3%; width: 104%; height: auto; display: block; }
   .fade {
     position: absolute; inset: 0;
     background:
@@ -109,8 +117,10 @@ import ArrowCircle from '../site/ArrowCircle.astro';
   /* タブレット 768–1024px */
   @media (min-width: 768px) {
     .wrap { align-items: center; min-height: 520px; }
-    .photo-narrow { display: none; }
-    .photo-wide { display: block; }
+    .photo {
+      inset: 0; right: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: right top; transform-origin: right top; transform: translateX(9%);
+    }
     .fade {
       background:
         linear-gradient(to right, rgba(255,255,255,1) 4%, rgba(255,255,255,.88) 24%, rgba(255,255,255,0) 52%),
@@ -129,7 +139,7 @@ import ArrowCircle from '../site/ArrowCircle.astro';
   /* PC >1024px */
   @media (min-width: 1025px) {
     .wrap { min-height: min(76vh, 700px); }
-    .photo-wide { transform: translateX(11%); }
+    .photo { transform: translateX(11%); }
     .text { width: min(700px, 50%); max-width: 700px; }
     .tag { font-size: clamp(17px, 1.85vw, 36px); }
     .catch { max-width: 700px; }
