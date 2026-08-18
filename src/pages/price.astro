@@ -28,7 +28,8 @@ const options = [
   <PageHero eyebrow="PRICE" title="料金" deco="price" />
 
   {/* ページの導入となる問い（現行サイトの見出しを踏襲。以降のセクションが答える構造） */}
-  <QuestionBalloon text="個別指導って、高いんじゃないの？" />
+  {/* 狭い幅で「の？」だけが2行目に落ちないよう、後半をひとかたまりで折り返す */}
+  <QuestionBalloon text={'個別指導って、<span style="white-space:nowrap">高いんじゃないの？</span>'} />
 
   {/* ===== 授業料 ===== */}
   <section class="sec alt">

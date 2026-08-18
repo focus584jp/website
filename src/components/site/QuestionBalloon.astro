@@ -6,7 +6,7 @@ const { text } = Astro.props;
 ---
 <section class="qb">
   <div class="container">
-    <h2 class="q-title">{text}</h2>
+    <h2 class="q-title" set:html={text} />
   </div>
 </section>
 
