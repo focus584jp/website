@@ -58,7 +58,8 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
 
     <div class="summary">
       <p class="tsumari">フォーカスなら<span class="dash">──</span></p>
-      <p class="headline">他塾の2教科分の料金で、<span class="em"><span class="five">5</span>教科全部<svg viewBox="0 0 120 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5.5 Q 9 1.5 17 5 T 32 5 T 47 5 T 62 5 T 77 5 T 92 5 T 107 5 T 118 5" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>通える！</p>
+      {/* 収まる幅では1行、収まらない幅では「料金で、」の後だけで折り返す（seg単位のnowrap） */}
+      <p class="headline"><span class="seg">他塾の2教科分の料金で、</span><span class="seg"><span class="em"><span class="five">5</span>教科全部<svg viewBox="0 0 120 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5.5 Q 9 1.5 17 5 T 32 5 T 47 5 T 62 5 T 77 5 T 92 5 T 107 5 T 118 5" fill="none" stroke="#E67832" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>通える！</span></p>
 
       <div class="band">
         <div class="band-other">
@@ -128,8 +129,9 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
   .dash { margin-left: .4em; }
   .headline {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(18.5px, 2.8vw, 36px);
-    color: var(--ink); margin: 10px 0 0; line-height: 1.6; white-space: nowrap;
+    color: var(--ink); margin: 10px 0 0; line-height: 1.6;
   }
+  .headline .seg { white-space: nowrap; display: inline-block; }
   .em { color: var(--orange); display: inline-block; position: relative; margin-right: .35em; }
   .five { font-size: 1.15em; }
   .em svg { position: absolute; left: 1%; bottom: -8px; width: 98%; height: 11px; }
