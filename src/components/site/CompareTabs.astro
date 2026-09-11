@@ -6,7 +6,7 @@
 // 挙動: 自動再生はしない（2026-09-11廃止）。初期状態は✗側で止まり、ユーザーがタブをタップして初めて◯側へ切り替わる。
 // タップ誘導（2026-09-11確定・案A2）: 「フォーカス」タブの右上に赤ペン文字「ここをタップ！」が現れ、その真下から短い矢印が
 // 赤ペン（#C0392B=サイトの注記赤）でスッと描かれてタブを指す（先端はタブに少し食い込む。文字には被らない）。
-// 現れる→矢印が描かれる→約2秒キープ→消える→描き直しの4秒周期。最初のタップで両方消える（.tapped）。
+// 現れる→矢印が描かれる→約1.6秒キープ→消える→描き直しの3秒周期。あわせてタブ自体から紺の波紋が広がり続ける。最初のタップで全部消える（.tapped）。
 // 経緯: 波紋+バッジ（揺れ）→赤ペン丸（文字と被る）を経て、文字+矢印に落ち着いた。
 // タブは選択で寸法を変えず色だけ遷移（シームレス）。フォーカス側は常に大きめのインデックス。
 // 切替時は要素が時間差で遷移する振り付け（積み木は下段→中段→上段→キラキラの順に組み上がる）。
@@ -61,7 +61,7 @@ const crowd: [number, number, number, boolean?][] = [
 <div class="tw" data-cmp-tabs>
   <div class="tabs" role="tablist" aria-label="一般的な塾とフォーカスの比較切替">
     <button type="button" class="tab ng on" role="tab" aria-selected="true">一般的な塾</button>
-    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス<span class="tap-lbl" aria-hidden="true">ここをタップ！</span><svg class="tap-arr" viewBox="0 0 18 18" aria-hidden="true"><path class="stem" d="M11 1 C 10 6, 9 10, 8 15"></path><path class="head" d="M2 10 L8 16 L14 10"></path></svg></button>
+    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス<span class="tap-lbl" aria-hidden="true">ここをタップ！</span><svg class="tap-arr" viewBox="0 0 18 28" aria-hidden="true"><path class="stem" d="M12 1 C 11 8, 9.5 15, 8 25"></path><path class="head" d="M2 19 L8 26 L14 19"></path></svg></button>
   </div>
   <div class="card">
     <div class="sw">
@@ -165,20 +165,27 @@ const crowd: [number, number, number, boolean?][] = [
   .tw.st-ok .tab:not(.on) { border-bottom-color: var(--navy); }
 
   /* タップ誘導（最初のタップまで）: 赤ペン文字が右上に現れ、その真下から短い矢印が描かれてタブを指す */
-  .tw { padding-top: 26px; } /* 文字ぶんの余白（誘導が消えても高さが変わらないよう常時確保） */
+  .tw { padding-top: 28px; } /* 文字ぶんの余白（誘導が消えても高さが変わらないよう常時確保） */
   .tap-lbl {
-    position: absolute; right: 4px; top: -36px;
+    position: absolute; right: 4px; top: -38px;
     color: #C0392B; font: 900 13.5px var(--font-round); white-space: nowrap; transform: rotate(-3deg);
-    animation: cmp-lbl 4s ease-in-out infinite;
+    animation: cmp-lbl 3s ease-in-out infinite;
   }
-  .tap-arr { position: absolute; right: 44px; top: -15px; width: 18px; height: 18px; overflow: visible; pointer-events: none; }
+  .tap-arr { position: absolute; right: 44px; top: -19px; width: 18px; height: 28px; overflow: visible; pointer-events: none; }
   .tap-arr path { fill: none; stroke: #C0392B; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-  .tap-arr .stem { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-stem 4s ease-in-out infinite; }
-  .tap-arr .head { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-head 4s ease-in-out infinite; }
+  .tap-arr .stem { stroke-dasharray: 30; stroke-dashoffset: 30; animation: cmp-stem 3s ease-in-out infinite; }
+  .tap-arr .head { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-head 3s ease-in-out infinite; }
   .tw.tapped .tap-lbl, .tw.tapped .tap-arr { display: none; }
-  @keyframes cmp-lbl { 0% { opacity: 0; } 8% { opacity: 1; } 82% { opacity: 1; } 92%, 100% { opacity: 0; } }
-  @keyframes cmp-stem { 0%, 14% { stroke-dashoffset: 20; opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 82% { stroke-dashoffset: 0; opacity: 1; } 92%, 100% { opacity: 0; } }
-  @keyframes cmp-head { 0%, 30% { stroke-dashoffset: 20; opacity: 1; } 40% { stroke-dashoffset: 0; opacity: 1; } 82% { stroke-dashoffset: 0; opacity: 1; } 92%, 100% { opacity: 0; } }
+  /* タブ自体からも紺の波紋（押せるボタン感） */
+  .tw:not(.tapped) .tab.ok { animation: cmp-pulse 1.5s ease-out infinite; }
+  @keyframes cmp-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(20, 55, 120, .45); }
+    70% { box-shadow: 0 0 0 9px rgba(20, 55, 120, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(20, 55, 120, 0); }
+  }
+  @keyframes cmp-lbl { 0% { opacity: 0; } 6% { opacity: 1; } 84% { opacity: 1; } 93%, 100% { opacity: 0; } }
+  @keyframes cmp-stem { 0%, 8% { stroke-dashoffset: 30; opacity: 1; } 24% { stroke-dashoffset: 0; opacity: 1; } 84% { stroke-dashoffset: 0; opacity: 1; } 93%, 100% { opacity: 0; } }
+  @keyframes cmp-head { 0%, 22% { stroke-dashoffset: 20; opacity: 1; } 32% { stroke-dashoffset: 0; opacity: 1; } 84% { stroke-dashoffset: 0; opacity: 1; } 93%, 100% { opacity: 0; } }
 
   /* カード: ✗=グレー地 ⇄ ◯=淡青地+紺枠 */
   .card {
@@ -242,6 +249,7 @@ const crowd: [number, number, number, boolean?][] = [
     .tab, .card, .sw > *, .blk, .deco, .person, .plabel, .np, .tp, .scope { transition: none; }
     /* 誘導は静止表示（文字+矢印を描いた状態）。.stem/.head の指定に負けないようクラスで上書き */
     .tap-lbl, .tap-arr .stem, .tap-arr .head { animation: none; opacity: 1; stroke-dashoffset: 0; }
+    .tab.ok { animation: none; }
   }
 </style>
 
