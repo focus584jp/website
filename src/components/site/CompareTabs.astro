@@ -176,8 +176,9 @@ const crowd: [number, number, number, boolean?][] = [
   .tap-arr .stem { stroke-dasharray: 30; stroke-dashoffset: 30; animation: cmp-stem 3s ease-in-out infinite; }
   .tap-arr .head { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-head 3s ease-in-out infinite; }
   .tw.tapped .tap-lbl, .tw.tapped .tap-arr { display: none; }
-  /* タブ自体からも紺の波紋（押せるボタン感） */
-  .tw:not(.tapped) .tab.ok { animation: cmp-pulse 1.5s ease-out infinite; }
+  /* タブ自体からも紺の波紋（押せるボタン感）。タブはカードと一体なので、波紋は上と左右だけに出す
+     （下に広がるとカードの上に乗ってタブからずれて見える）。clip-pathの上は文字ぶん大きく空ける */
+  .tw:not(.tapped) .tab.ok { animation: cmp-pulse 1.5s ease-out infinite; clip-path: inset(-48px -20px 0 -20px); }
   @keyframes cmp-pulse {
     0% { box-shadow: 0 0 0 0 rgba(20, 55, 120, .45); }
     70% { box-shadow: 0 0 0 9px rgba(20, 55, 120, 0); }
