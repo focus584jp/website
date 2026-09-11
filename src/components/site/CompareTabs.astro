@@ -4,10 +4,10 @@
 //          'talk'=Teaching vs Coaching の対話図（トップMethod・/method POINT02）
 //          'target'=ターゲットの絞り込み（大勢→照準ロック。/price お手頃価格のワケ）
 // 挙動: 自動再生はしない（2026-09-11廃止）。初期状態は✗側で止まり、ユーザーがタブをタップして初めて◯側へ切り替わる。
-// タップ誘導（案B「赤ペン先生の丸」2026-09-11確定）: 先生が答案に丸をつけるように、赤ペン（#C0392B=サイトの注記赤）の手描き丸が
-// 「フォーカス」タブをぐるっと囲み、数秒キープして消え、また描き直す。上に赤ペン文字「ここをタップ！」。最初のタップで両方消える（.tapped）。
-// 描き順は日本の丸つけ: 下の中央から書き始め→左→上→右と時計回りに一周し、最後に書き始めを少し越えて止める（pathの並び順がそのまま描画順）。
-// 丸全体を-2°（わずかに右上がり）に傾けて、ペンを走らせた勢いを出す（傾き・書き始め位置は試作Artifactで比較の上ユーザー確定 2026-09-11）
+// タップ誘導（2026-09-11確定・案A2）: 「フォーカス」タブの右上に赤ペン文字「ここをタップ！」が現れ、その真下から短い矢印が
+// 赤ペン（#C0392B=サイトの注記赤）でスッと描かれてタブを指す（先端はタブに少し食い込む。文字には被らない）。
+// 現れる→矢印が描かれる→約2秒キープ→消える→描き直しの4秒周期。最初のタップで両方消える（.tapped）。
+// 経緯: 波紋+バッジ（揺れ）→赤ペン丸（文字と被る）を経て、文字+矢印に落ち着いた。
 // タブは選択で寸法を変えず色だけ遷移（シームレス）。フォーカス側は常に大きめのインデックス。
 // 切替時は要素が時間差で遷移する振り付け（積み木は下段→中段→上段→キラキラの順に組み上がる）。
 // CSS transform(scale)がSVGのtranslate属性を上書きする問題は、位置決めを親gに分離するか inline style + !important で回避
@@ -61,7 +61,7 @@ const crowd: [number, number, number, boolean?][] = [
 <div class="tw" data-cmp-tabs>
   <div class="tabs" role="tablist" aria-label="一般的な塾とフォーカスの比較切替">
     <button type="button" class="tab ng on" role="tab" aria-selected="true">一般的な塾</button>
-    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス<svg class="pen-ring" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true"><g transform="rotate(-2 100 22)"><path d="M104 42 C 50 44, 6 36, 12 20 C 18 4, 80 1, 120 4 C 160 7, 192 14, 188 26 C 184 38, 140 44, 96 42 C 90 41.5, 84 40.5, 78 39"></path></g></svg><span class="pen-lbl" aria-hidden="true">ここをタップ！</span></button>
+    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス<span class="tap-lbl" aria-hidden="true">ここをタップ！</span><svg class="tap-arr" viewBox="0 0 18 18" aria-hidden="true"><path class="stem" d="M11 1 C 10 6, 9 10, 8 15"></path><path class="head" d="M2 10 L8 16 L14 10"></path></svg></button>
   </div>
   <div class="card">
     <div class="sw">
@@ -164,27 +164,21 @@ const crowd: [number, number, number, boolean?][] = [
   .tw:not(.st-ok) .tab:not(.on) { border-bottom-color: #DFE5EC; }
   .tw.st-ok .tab:not(.on) { border-bottom-color: var(--navy); }
 
-  /* タップ誘導（最初のタップまで）: 赤ペンの手描き丸が◯タブを囲む（描く→キープ→消える→描き直し）＋上に赤ペン文字 */
-  .tw { padding-top: 12px; } /* ペン文字ぶんの余白（誘導が消えても高さが変わらないよう常時確保） */
-  /* SVGは置換要素なのでinsetだけでは伸びない→幅高さを明示 */
-  .pen-ring { position: absolute; left: -12px; top: -9px; width: calc(100% + 24px); height: calc(100% + 17px); pointer-events: none; overflow: visible; }
-  .pen-ring path {
-    fill: none; stroke: #C0392B; stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke;
-    stroke-dasharray: 1000; stroke-dashoffset: 1000;
-    animation: cmp-pen-draw 4s ease-in-out infinite;
+  /* タップ誘導（最初のタップまで）: 赤ペン文字が右上に現れ、その真下から短い矢印が描かれてタブを指す */
+  .tw { padding-top: 26px; } /* 文字ぶんの余白（誘導が消えても高さが変わらないよう常時確保） */
+  .tap-lbl {
+    position: absolute; right: 4px; top: -36px;
+    color: #C0392B; font: 900 13.5px var(--font-round); white-space: nowrap; transform: rotate(-3deg);
+    animation: cmp-lbl 4s ease-in-out infinite;
   }
-  .pen-lbl {
-    position: absolute; right: -2px; top: -25px;
-    color: #C0392B; font: 900 13px var(--font-round); white-space: nowrap; transform: rotate(-5deg);
-  }
-  .tw.tapped .pen-ring, .tw.tapped .pen-lbl { display: none; }
-  @keyframes cmp-pen-draw {
-    0% { stroke-dashoffset: 1000; opacity: 1; }
-    28% { stroke-dashoffset: 0; opacity: 1; }
-    78% { stroke-dashoffset: 0; opacity: 1; }
-    92% { opacity: 0; }
-    100% { stroke-dashoffset: 1000; opacity: 0; }
-  }
+  .tap-arr { position: absolute; right: 44px; top: -15px; width: 18px; height: 18px; overflow: visible; pointer-events: none; }
+  .tap-arr path { fill: none; stroke: #C0392B; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .tap-arr .stem { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-stem 4s ease-in-out infinite; }
+  .tap-arr .head { stroke-dasharray: 20; stroke-dashoffset: 20; animation: cmp-head 4s ease-in-out infinite; }
+  .tw.tapped .tap-lbl, .tw.tapped .tap-arr { display: none; }
+  @keyframes cmp-lbl { 0% { opacity: 0; } 8% { opacity: 1; } 82% { opacity: 1; } 92%, 100% { opacity: 0; } }
+  @keyframes cmp-stem { 0%, 14% { stroke-dashoffset: 20; opacity: 1; } 30% { stroke-dashoffset: 0; opacity: 1; } 82% { stroke-dashoffset: 0; opacity: 1; } 92%, 100% { opacity: 0; } }
+  @keyframes cmp-head { 0%, 30% { stroke-dashoffset: 20; opacity: 1; } 40% { stroke-dashoffset: 0; opacity: 1; } 82% { stroke-dashoffset: 0; opacity: 1; } 92%, 100% { opacity: 0; } }
 
   /* カード: ✗=グレー地 ⇄ ◯=淡青地+紺枠 */
   .card {
@@ -246,7 +240,8 @@ const crowd: [number, number, number, boolean?][] = [
 
   @media (prefers-reduced-motion: reduce) {
     .tab, .card, .sw > *, .blk, .deco, .person, .plabel, .np, .tp, .scope { transition: none; }
-    .pen-ring path { animation: none; stroke-dashoffset: 0; }
+    /* 誘導は静止表示（文字+矢印を描いた状態）。.stem/.head の指定に負けないようクラスで上書き */
+    .tap-lbl, .tap-arr .stem, .tap-arr .head { animation: none; opacity: 1; stroke-dashoffset: 0; }
   }
 </style>
 
