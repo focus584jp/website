@@ -75,3 +75,4 @@ src/
   2. 変更後に再ビルド→ `bash scripts/screenshot-pages.sh <after>` → `python3 scripts/compare-shots.py <before> <after>`
   3. 教室ページのGoogleマップ・フォント微差は撮影ノイズ。疑わしければ同じビルドを2回撮って切り分ける
 - devサーバーは編集を重ねるとscoped CSSがHMRで古くなることがある→表示が怪しいときは再起動、最終確認はビルド出力で
+- **描かれる系のCSSアニメ（stroke-dashoffset等）をヘッドレスChromeで確認するとき**: `--virtual-time-budget` は開始直後の位相で止まりがちで「点しか描かれていない」ように見える。distを複製してCSS末尾に `animation-delay:-1.5s !important` を足し、位相を固定してから撮る（base対応のため `srv/website -> dist` のシンボリックリンクで配信）
