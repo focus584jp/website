@@ -3,7 +3,11 @@
 // variant: 'blocks'=積み木（バラバラ→基礎から組み上がる。トップMethod・/method POINT01）
 //          'talk'=Teaching vs Coaching の対話図（トップMethod・/method POINT02）
 //          'target'=ターゲットの絞り込み（大勢→照準ロック。/price お手頃価格のワケ）
-// 挙動: 画面に6割入ると✗→◯を1回だけ自動再生（4秒後）。以降はタブで切替（タップで自動再生はキャンセル）。
+// 挙動: 自動再生はしない（2026-09-11廃止）。初期状態は✗側で止まり、ユーザーがタブをタップして初めて◯側へ切り替わる。
+// タップ誘導（案B「赤ペン先生の丸」2026-09-11確定）: 先生が答案に丸をつけるように、赤ペン（#C0392B=サイトの注記赤）の手描き丸が
+// 「フォーカス」タブをぐるっと囲み、数秒キープして消え、また描き直す。上に赤ペン文字「ここをタップ！」。最初のタップで両方消える（.tapped）。
+// 描き順は日本の丸つけ: 下の中央から書き始め→左→上→右と時計回りに一周し、最後に書き始めを少し越えて止める（pathの並び順がそのまま描画順）。
+// 丸全体を-2°（わずかに右上がり）に傾けて、ペンを走らせた勢いを出す（傾き・書き始め位置は試作Artifactで比較の上ユーザー確定 2026-09-11）
 // タブは選択で寸法を変えず色だけ遷移（シームレス）。フォーカス側は常に大きめのインデックス。
 // 切替時は要素が時間差で遷移する振り付け（積み木は下段→中段→上段→キラキラの順に組み上がる）。
 // CSS transform(scale)がSVGのtranslate属性を上書きする問題は、位置決めを親gに分離するか inline style + !important で回避
@@ -57,7 +61,7 @@ const crowd: [number, number, number, boolean?][] = [
 <div class="tw" data-cmp-tabs>
   <div class="tabs" role="tablist" aria-label="一般的な塾とフォーカスの比較切替">
     <button type="button" class="tab ng on" role="tab" aria-selected="true">一般的な塾</button>
-    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス</button>
+    <button type="button" class="tab ok" role="tab" aria-selected="false">フォーカス<svg class="pen-ring" viewBox="0 0 200 44" preserveAspectRatio="none" aria-hidden="true"><g transform="rotate(-2 100 22)"><path d="M104 42 C 50 44, 6 36, 12 20 C 18 4, 80 1, 120 4 C 160 7, 192 14, 188 26 C 184 38, 140 44, 96 42 C 90 41.5, 84 40.5, 78 39"></path></g></svg><span class="pen-lbl" aria-hidden="true">ここをタップ！</span></button>
   </div>
   <div class="card">
     <div class="sw">
@@ -149,7 +153,7 @@ const crowd: [number, number, number, boolean?][] = [
   .tabs { display: flex; gap: 8px; padding: 0 10px; position: relative; z-index: 1; margin-bottom: -2px; align-items: flex-end; }
   .tab {
     flex: 1; border: none; border-bottom: 2px solid transparent; border-radius: 12px 12px 0 0;
-    background: #AEBDD2; color: #fff; cursor: pointer;
+    background: #AEBDD2; color: #fff; cursor: pointer; position: relative;
     padding: 9px 6px 10px;
     font: 800 13.5px var(--font-round);
     transition: background .25s ease, border-bottom-color .25s ease;
@@ -159,6 +163,28 @@ const crowd: [number, number, number, boolean?][] = [
   .tab.ok.on { background: var(--navy); }
   .tw:not(.st-ok) .tab:not(.on) { border-bottom-color: #DFE5EC; }
   .tw.st-ok .tab:not(.on) { border-bottom-color: var(--navy); }
+
+  /* タップ誘導（最初のタップまで）: 赤ペンの手描き丸が◯タブを囲む（描く→キープ→消える→描き直し）＋上に赤ペン文字 */
+  .tw { padding-top: 12px; } /* ペン文字ぶんの余白（誘導が消えても高さが変わらないよう常時確保） */
+  /* SVGは置換要素なのでinsetだけでは伸びない→幅高さを明示 */
+  .pen-ring { position: absolute; left: -12px; top: -9px; width: calc(100% + 24px); height: calc(100% + 17px); pointer-events: none; overflow: visible; }
+  .pen-ring path {
+    fill: none; stroke: #C0392B; stroke-width: 2.4; stroke-linecap: round; vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1000; stroke-dashoffset: 1000;
+    animation: cmp-pen-draw 4s ease-in-out infinite;
+  }
+  .pen-lbl {
+    position: absolute; right: -2px; top: -25px;
+    color: #C0392B; font: 900 13px var(--font-round); white-space: nowrap; transform: rotate(-5deg);
+  }
+  .tw.tapped .pen-ring, .tw.tapped .pen-lbl { display: none; }
+  @keyframes cmp-pen-draw {
+    0% { stroke-dashoffset: 1000; opacity: 1; }
+    28% { stroke-dashoffset: 0; opacity: 1; }
+    78% { stroke-dashoffset: 0; opacity: 1; }
+    92% { opacity: 0; }
+    100% { stroke-dashoffset: 1000; opacity: 0; }
+  }
 
   /* カード: ✗=グレー地 ⇄ ◯=淡青地+紺枠 */
   .card {
@@ -220,6 +246,7 @@ const crowd: [number, number, number, boolean?][] = [
 
   @media (prefers-reduced-motion: reduce) {
     .tab, .card, .sw > *, .blk, .deco, .person, .plabel, .np, .tp, .scope { transition: none; }
+    .pen-ring path { animation: none; stroke-dashoffset: 0; }
   }
 </style>
 
@@ -234,25 +261,12 @@ const crowd: [number, number, number, boolean?][] = [
         t.setAttribute('aria-selected', String(active));
       });
     };
-    // 自動再生のタイマー: 手動タップで必ずキャンセル
-    let autoTimer = 0;
+    // 最初のタップで誘導（波紋・バッジ）を消す。自動再生はしない
     tabs.forEach((t) =>
       t.addEventListener('click', () => {
-        clearTimeout(autoTimer);
-        box.dataset.played = '1';
+        box.classList.add('tapped');
         set(t.classList.contains('ok'));
       }),
     );
-    // 画面に6割入ったら1回だけ ✗→◯ を自動再生。
-    // ✗側の見出し+注釈（40〜50字）を読み終えられるよう4秒見せてから切り替える（1.8秒では早すぎた）
-    new IntersectionObserver((entries, ob) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting && !box.dataset.played) {
-          box.dataset.played = '1';
-          autoTimer = window.setTimeout(() => set(true), 4000);
-          ob.disconnect();
-        }
-      });
-    }, { threshold: 0.6 }).observe(box);
   });
 </script>
