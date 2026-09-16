@@ -22,6 +22,9 @@ const photos = Object.entries(photoModules)
   .sort((a, b) => a[0].localeCompare(b[0]))
   .map(([, mod]) => mod.default);
 const photosPlaceholder = photos.length === 0;
+// 写真の説明: 同じフォルダの captions.json（ファイル名順に対応する配列）。無ければ「様子N」で表示
+const captionModules = import.meta.glob<string[]>('/src/assets/classrooms/**/captions.json', { eager: true, import: 'default' });
+const photoCaptions = captionModules[`/src/assets/classrooms/${classroom.slug}/captions.json`] ?? [];
 
 // 対応中学校: データが入れば表示、無ければダミーのチップを表示する。
 const DUMMY_SCHOOLS = ['◯◯中学校', '△△中学校', '□□中学校'];
@@ -87,7 +90,7 @@ const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカ
   <section class="photos">
     <div class="container">
       <h2>教室の様子</h2>
-      <PhotoGallery photos={photos} roomName={classroom.name} />
+      <PhotoGallery photos={photos} captions={photoCaptions} roomName={classroom.name} />
       {photosPlaceholder && <p class="ph-note">※教室写真は準備中です（後日、実際の写真に差し替え）</p>}
     </div>
   </section>

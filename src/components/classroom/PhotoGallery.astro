@@ -6,8 +6,10 @@
 import type { ImageMetadata } from 'astro';
 import { Image, getImage } from 'astro:assets';
 
-interface Props { photos: ImageMetadata[]; roomName: string }
-const { photos, roomName } = Astro.props;
+interface Props { photos: ImageMetadata[]; captions?: string[]; roomName: string }
+const { photos, captions = [], roomName } = Astro.props;
+// 写真ごとの説明（captions.json）。足りない分は「様子N」で埋める
+const cap = (i: number) => captions[i] ?? `様子${i + 1}`;
 
 // 拡大表示用の大きめ最適化画像（サムネとは別に幅1200で生成）
 const fullImages = await Promise.all(photos.map((p) => getImage({ src: p, width: 1200 })));
@@ -36,16 +38,16 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
           </button>
         ))
       : photos.map((p, i) => (
-          <button type="button" class="th" data-full={fullImages[i].src} data-w={fullImages[i].attributes.width} data-h={fullImages[i].attributes.height} aria-label={`${roomName}の様子${i + 1}を拡大表示`}>
-            <Image src={p} alt={`${roomName}の様子${i + 1}`} widths={[400, 800]} sizes="(min-width: 768px) 25vw, 50vw" class="photo" />
+          <button type="button" class="th" data-full={fullImages[i].src} data-w={fullImages[i].attributes.width} data-h={fullImages[i].attributes.height} data-desc={cap(i)} aria-label={`${roomName} ${cap(i)}を拡大表示`}>
+            <Image src={p} alt={`${roomName} ${cap(i)}`} widths={[400, 800]} sizes="(min-width: 768px) 25vw, 50vw" class="photo" />
             <span class="zoom" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
             </span>
           </button>
         ))}
     {!isPlaceholder && (
       <p class="hint">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
         写真をタップすると拡大できます
       </p>
     )}
@@ -57,8 +59,8 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
         <button type="button" class="ctl x" data-close aria-label="閉じる">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
         </button>
+        <figcaption class="cp"><span class="num" data-num></span><span data-cap></span></figcaption>
       </figure>
-      <p class="cp" data-cap></p>
       {count > 1 && (
         <>
           <button type="button" class="ctl lnav prev" data-prev aria-label="前の写真へ">
@@ -119,12 +121,12 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
     cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none;
   }
-  /* 枚数表示: 画像の下ではなく画面上端に固定（画像の高さに左右されず写真と重ならない。下端は固定CTAと重なるので不可） */
+  /* 説明文: 画像の直下。画像には width/height を渡してあるので読み込み前から位置が確定し、写真と重ならない */
   .cp {
-    position: absolute; left: 0; right: 0; top: 0; z-index: 1; margin: 0;
-    padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px; text-align: center;
-    color: #fff; font-size: 14px; font-weight: 700; letter-spacing: .04em; pointer-events: none;
+    display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;
+    padding: 0 8px; color: #fff; font-size: 13.5px; font-weight: 700; letter-spacing: .03em; text-align: center;
   }
+  .num { font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: rgba(255, 255, 255, .18); }
 
   .ctl {
     position: absolute; z-index: 1; width: 40px; height: 40px; padding: 0;
@@ -147,10 +149,12 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     const box = root.querySelector<HTMLElement>('[data-lbx]');
     const big = root.querySelector<HTMLImageElement>('[data-big]');
     const cap = root.querySelector<HTMLElement>('[data-cap]');
-    if (!box || !big || !cap || thumbs.length === 0) return;
+    const num = root.querySelector<HTMLElement>('[data-num]');
+    if (!box || !big || !cap || !num || thumbs.length === 0) return;
 
     const fulls = thumbs.map((t) => t.dataset.full ?? '');
     const dims = thumbs.map((t) => [Number(t.dataset.w) || 0, Number(t.dataset.h) || 0] as const);
+    const caps = thumbs.map((t) => t.dataset.desc ?? '');
     const name = root.dataset.name ?? '';
     const isPh = root.dataset.ph === '1'; // ダミー（サンプル画像）モード
     const n = fulls.length;
@@ -161,7 +165,8 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
       const [w, h] = dims[idx];
       if (w && h) { big!.width = w; big!.height = h; } // 読み込み前に比率を確定（レイアウトのガタつき防止）
       big!.src = fulls[idx];
-      cap!.textContent = isPh ? `写真準備中（サンプル ${idx + 1} / ${n}）` : `${name}の様子 ${idx + 1} / ${n}`;
+      num!.textContent = `${idx + 1} / ${n}`;
+      cap!.textContent = isPh ? '写真準備中（サンプル）' : caps[idx];
       if (n > 1) new Image().src = fulls[(idx + 1) % n]; // 次の1枚を先読み
     }
     const next = () => { idx = (idx + 1) % n; render(); };
