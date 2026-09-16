@@ -6,7 +6,7 @@
 - 対応形式: jpg / jpeg / png / webp
 - ファイル名の昇順で並びます（例: 01.jpg, 02.jpg …）
 - astro:assets で自動的に最適化されます
-- 同じフォルダに `captions.json`（ファイル名順に対応する説明文の配列）を置くと、alt と拡大時の説明に使われる。無い分は「様子N」
+- 写真の説明文（alt・拡大時）は全教室共通で `src/pages/classrooms/[slug].astro` の photoCaptions（01=入口（外観）/02=教室全体/03=個別指導の座席/04=自習ブース）。この順で並べること
 
 slug 一覧: inage / nishi-chiba / tsuga / shin-kemigawa / inage-kaigan / soga / kamatori / myoden / goi / yotsukaido
 - 置く前に長辺2000px程度・JPEG品質85にリサイズする（元のカメラJPEG 4608px/2〜3MBのままだとgitが重い。生成側は最大1200pxしか使わない）
