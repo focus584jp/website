@@ -9,6 +9,6 @@
 
 slug 一覧: inage / nishi-chiba / tsuga / shin-kemigawa / inage-kaigan / soga / kamatori / myoden / goi / yotsukaido
 - 置く前に長辺2000px程度・JPEG品質85にリサイズする（元のカメラJPEG 4608px/2〜3MBのままだとgitが重い。生成側は最大1200pxしか使わない）
-- 並び順はユーザーが書き出し時に付けた番号（myoden_pic1〜4 等）に従う（妙典は 01=外観）
+- 並び順はユーザーが書き出し時に付けた番号（myoden_pic1〜4 等）に従う（4教室とも 01=外観）
 
-投入済み（2026-09-16）: myoden（Lightroom現像済みの正式版） / shin-kemigawa / inage-kaigan / inage（後3つはカメラJPEGの仮投入。現像済み版が来たら差し替え）
+投入済み（2026-09-16・いずれもLightroom現像済みの正式版）: myoden / shin-kemigawa / inage-kaigan / inage
