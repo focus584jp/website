@@ -36,10 +36,19 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
           </button>
         ))
       : photos.map((p, i) => (
-          <button type="button" class="th" data-full={fullImages[i].src} aria-label={`${roomName}の様子${i + 1}を拡大表示`}>
+          <button type="button" class="th" data-full={fullImages[i].src} data-w={fullImages[i].attributes.width} data-h={fullImages[i].attributes.height} aria-label={`${roomName}の様子${i + 1}を拡大表示`}>
             <Image src={p} alt={`${roomName}の様子${i + 1}`} widths={[400, 800]} sizes="(min-width: 768px) 25vw, 50vw" class="photo" />
+            <span class="zoom" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+            </span>
           </button>
         ))}
+    {!isPlaceholder && (
+      <p class="hint">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="m21 3-7 7"/><path d="m3 21 7-7"/></svg>
+        写真をタップすると拡大できます
+      </p>
+    )}
 
     <div class="lbx" role="dialog" aria-modal="true" aria-label={`${roomName}の写真の拡大表示`} data-lbx>
       <div class="ov" data-close></div>
@@ -48,8 +57,8 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
         <button type="button" class="ctl x" data-close aria-label="閉じる">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
         </button>
-        <figcaption class="cp" data-cap></figcaption>
       </figure>
+      <p class="cp" data-cap></p>
       {count > 1 && (
         <>
           <button type="button" class="ctl lnav prev" data-prev aria-label="前の写真へ">
@@ -67,7 +76,19 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
   .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   @media (min-width: 768px) { .gallery { grid-template-columns: repeat(4, 1fr); } }
 
-  .th { padding: 0; border: 0; background: none; display: block; border-radius: 14px; cursor: zoom-in; }
+  .th { position: relative; padding: 0; border: 0; background: none; display: block; border-radius: 14px; cursor: zoom-in; }
+  .th:active .photo { transform: scale(.97); }
+  .photo { transition: transform .12s ease; }
+  /* 「拡大できる」合図: 右下の白丸バッジ（スマホはhoverが無いので常時表示） */
+  .zoom {
+    position: absolute; right: 8px; bottom: 8px; width: 28px; height: 28px;
+    border-radius: 50%; background: rgba(255, 255, 255, .94); color: var(--navy);
+    display: grid; place-items: center; box-shadow: 0 1px 6px rgba(0, 0, 0, .3); pointer-events: none;
+  }
+  .hint {
+    grid-column: 1 / -1; margin: 2px 0 0; display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--gray-1);
+  }
   .th:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
   /* height:auto は必須: astro:assets の <Image> が height 属性を出すため、無いと aspect-ratio が無視されて縦長に崩れる */
   .photo { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; }
@@ -93,11 +114,16 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     animation: lbx-zoom .28s ease;
   }
   .big {
-    max-width: 100%; max-height: 76vh; max-height: 76dvh; border-radius: 14px;
+    max-width: 100%; height: auto; max-height: 70vh; max-height: 70dvh; border-radius: 14px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
     cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none;
   }
-  .cp { color: #fff; font-size: 12.5px; font-weight: 700; letter-spacing: .04em; }
+  /* 枚数表示: 画像の下ではなく画面上端に固定（画像の高さに左右されず写真と重ならない。下端は固定CTAと重なるので不可） */
+  .cp {
+    position: absolute; left: 0; right: 0; top: 0; z-index: 1; margin: 0;
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px; text-align: center;
+    color: #fff; font-size: 14px; font-weight: 700; letter-spacing: .04em; pointer-events: none;
+  }
 
   .ctl {
     position: absolute; z-index: 1; width: 40px; height: 40px; padding: 0;
@@ -123,6 +149,7 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     if (!box || !big || !cap || thumbs.length === 0) return;
 
     const fulls = thumbs.map((t) => t.dataset.full ?? '');
+    const dims = thumbs.map((t) => [Number(t.dataset.w) || 0, Number(t.dataset.h) || 0] as const);
     const name = root.dataset.name ?? '';
     const isPh = root.dataset.ph === '1'; // ダミー（サンプル画像）モード
     const n = fulls.length;
@@ -130,6 +157,8 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     let opener: HTMLElement | null = null;
 
     function render() {
+      const [w, h] = dims[idx];
+      if (w && h) { big!.width = w; big!.height = h; } // 読み込み前に比率を確定（レイアウトのガタつき防止）
       big!.src = fulls[idx];
       cap!.textContent = isPh ? `写真準備中（サンプル ${idx + 1} / ${n}）` : `${name}の様子 ${idx + 1} / ${n}`;
       if (n > 1) new Image().src = fulls[(idx + 1) % n]; // 次の1枚を先読み
