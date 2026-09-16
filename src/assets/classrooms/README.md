@@ -12,4 +12,4 @@ slug 一覧: inage / nishi-chiba / tsuga / shin-kemigawa / inage-kaigan / soga /
 - 置く前に長辺2000px程度・JPEG品質85にリサイズする（元のカメラJPEG 4608px/2〜3MBのままだとgitが重い。生成側は最大1200pxしか使わない）
 - 並び順はユーザーが書き出し時に付けた番号（myoden_pic1〜4 等）に従う（4教室とも 01=外観）
 
-投入済み（2026-09-16・いずれもLightroom現像済みの正式版）: myoden / shin-kemigawa / inage-kaigan / inage
+投入済み（2026-09-16・いずれもLightroom現像済みの正式版）: myoden / shin-kemigawa / inage-kaigan / inage / goi / kamatori / nishi-chiba / soga / yotsukaido（残り tsuga）
