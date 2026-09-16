@@ -81,12 +81,13 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
   .photo { transition: transform .12s ease; }
   /* 「拡大できる」合図: 右下の白丸バッジ（スマホはhoverが無いので常時表示） */
   .zoom {
-    position: absolute; right: 8px; bottom: 8px; width: 28px; height: 28px;
-    border-radius: 50%; background: rgba(255, 255, 255, .94); color: var(--navy);
-    display: grid; place-items: center; box-shadow: 0 1px 6px rgba(0, 0, 0, .3); pointer-events: none;
+    position: absolute; right: 8px; bottom: 8px; width: 24px; height: 24px;
+    border-radius: 50%; background: rgba(20, 30, 50, .45); color: #fff;
+    display: grid; place-items: center; pointer-events: none;
   }
+  .zoom svg { width: 13px; height: 13px; }
   .hint {
-    grid-column: 1 / -1; margin: 2px 0 0; display: flex; align-items: center; gap: 6px;
+    grid-column: 1 / -1; margin: 2px 0 0; display: flex; align-items: center; justify-content: center; gap: 6px;
     font-size: 12px; font-weight: 600; color: var(--gray-1);
   }
   .th:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
