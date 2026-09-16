@@ -69,7 +69,8 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
 
   .th { padding: 0; border: 0; background: none; display: block; border-radius: 14px; cursor: zoom-in; }
   .th:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
-  .photo { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; }
+  /* height:auto は必須: astro:assets の <Image> が height 属性を出すため、無いと aspect-ratio が無視されて縦長に崩れる */
+  .photo { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; display: block; }
 
   /* ダミータイル（タップでサンプル画像のライトボックスが開く） */
   .th-ph {
