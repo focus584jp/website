@@ -38,7 +38,13 @@
 
 ## 3. 機能
 
-- [ ] **SMS資料送付の有効化** — ①楽天CPaaSトライアル申込（ユーザー作業・約1週間）→ ②APIドキュメントで lead-api の `buildSmsRequest_()` を確定 → ③プロパティ設定＋`testSms_()`で3キャリア実機確認 → ④clasp push＋デプロイ更新 → ⑤フォーム完了文言・確認画面の注意書きを「資料のURL」表現へ更新（コードは実装済み・悪用ガード込み。比較選定: `focus/lead-api/docs/2026-07-12-sms-provider-selection.md`）
+- [ ] **SMS資料送付の有効化** — 楽天CPaaS契約済み（2026-09-21）。比較選定: `focus/lead-api/docs/2026-07-12-sms-provider-selection.md`
+  - [x] 2026-09-21 lead-api の `Sms.gs` を楽天CPaaSの実仕様で確定（lead-api 4e5038d・未push）。Basic認証→JWT（10分キャッシュ）→Bearer送信・`result_code`判定。`.claspignore` に Sms.gs が無くGASに上がらない不具合も修正。単体テスト `node test/sms.test.js`
+  - [x] 2026-09-21 HP文言（確認画面の注意書き・完了文言）を**ブランチ `sms-wording`** に用意（mainには未マージ＝SMS有効化前に公開されないように）
+  - [ ] ユーザー作業: lead-api の Script Properties に `SMS_API_KEY` / `SMS_API_SECRET` / `SMS_FROM`（楽天に登録した送信元）/ `SMS_TEST_PHONE` を設定
+  - [ ] clasp push → GASエディタで `testSms` 実行 → 3キャリア実機受信と、ログの parts=1（1通課金）を確認。トライアル契約の場合は送信先の事前登録が要る可能性（エラー111）
+  - [ ] Web Appの**デプロイ更新** → stagingではSMSは飛ばない（本番のみ）ので、本番フォームから自分の番号で通し確認
+  - [ ] `sms-wording` を main にマージして push
 - [ ] **GA4導入** — 測定ID受領後。CVイベント設計とセット（CV到達点=フォーム完了画面）
 - [ ] **フォーム2種の総点検** — 資料請求/無料相談を実機で通しチェック（入力→確認→送信→中央管理表の記録→Slack通知→SMS）。企業問い合わせ（/contact）も
 - [ ] **見込み顧客管理への中継有効化** — 教室マスタ「CRMシートID」の記入（現在は全教室「記録のみ」運用）
