@@ -56,6 +56,7 @@
   - [ ] lead-api を clasp push＋デプロイ更新（clasp再ログインで中断）→ `testSms` で parts を確認（2なら本文短縮を検討）
   - [ ] Script Property `SMS_PAMPHLET_URL` を `https://focus584jp.github.io/website/p/focus-pamphlet-2609` に変更（**website公開後に**。先に変えると旧URLしか無い状態でSMSが飛ぶ）
   - [ ] `sms-hardening-ux` を main にマージ→push→公開確認→旧 /pamphlet が404になることを確認
+  - [ ] **bot対策の追加（2026-09-22検討・未着手・要判断）**: 現状はSMS費用の上限（1日30通=264円）はあるが、受付自体に上限が無く、番号ローテートのbotでシート行とSlack通知が大量に増えるのは防げない。提案: ①Cloudflare Turnstile（無料。ユーザーがCloudflareアカウント作成→サイトキー発行。フォームのトークンをGASで検証。半日）②受付全体の時間あたり上限＋超過時はSlackに「大量申込を検知」を1回だけ（1時間）。公開前に両方入れる価値あり
 - [ ] **GA4導入** — 測定ID受領後。CVイベント設計とセット（CV到達点=フォーム完了画面）
 - [ ] **フォーム2種の総点検** — 資料請求/無料相談を実機で通しチェック（入力→確認→送信→中央管理表の記録→Slack通知→SMS）。企業問い合わせ（/contact）も
 - [ ] **見込み顧客管理への中継有効化** — 教室マスタ「CRMシートID」の記入（現在は全教室「記録のみ」運用）
