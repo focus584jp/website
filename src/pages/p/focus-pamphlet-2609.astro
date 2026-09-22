@@ -1,24 +1,27 @@
 ---
-// デジタルパンフレットの公開ページ。資料請求のSMSで送るURLの着地先。
-// PDF本体は public/pamphlet.pdf（現在は仮。正式版ができたら同名で差し替えればURLは不変）
-import SiteLayout from '../layouts/SiteLayout.astro';
-import PageHero from '../components/site/PageHero.astro';
-import Icon from '../components/site/Icon.astro';
-import ArrowCircle from '../components/site/ArrowCircle.astro';
-import { u } from '../lib/path';
-import { ctaLabels } from '../data/home';
+// デジタルパンフレットのページ。資料請求のSMSで送るURLの着地先（HP内からはリンクしない・検索除外）。
+// URLの決め方: /p/focus-pamphlet-<発行年月YYMM>（推測しにくいが規則はある形。2026-09-22決定）。
+// 改訂で差し替えるときは同名で上書きすればURLは不変。URLを変えるときは lead-api の Script Property SMS_PAMPHLET_URL も更新する。
+// PDF本体は public/p/focus-pamphlet-2609.pdf（現在は仮。正式版ができたら同名で差し替え）
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageHero from '../../components/site/PageHero.astro';
+import Icon from '../../components/site/Icon.astro';
+import ArrowCircle from '../../components/site/ArrowCircle.astro';
+import { u } from '../../lib/path';
+import { ctaLabels } from '../../data/home';
 ---
 <SiteLayout
   title="デジタルパンフレット｜学習塾フォーカス"
   description="学習塾フォーカスのデジタルパンフレット。指導方針・料金・教室の様子をまとめた紹介資料をご覧いただけます。"
   fixedCta={false}
+  noindex
 >
   <PageHero eyebrow="PAMPHLET" title="デジタルパンフレット" deco="request" />
 
   <section class="body">
     <div class="container">
       <p class="lead">フォーカスの指導方針・料金・教室の様子をまとめた紹介資料です。<br class="pc-br" />下のボタンからご覧ください。</p>
-      <a href={u('/pamphlet.pdf')} target="_blank" rel="noopener" class="btn-shine btn3d btn3d-o open-btn"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />パンフレットを見る（PDF）</a>
+      <a href={u('/p/focus-pamphlet-2609.pdf')} target="_blank" rel="noopener" class="btn-shine btn3d btn3d-o open-btn"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />パンフレットを見る（PDF）</a>
       <p class="temp-note">※現在は仮の資料を表示しています（正式版に差し替え予定）</p>
     </div>
   </section>

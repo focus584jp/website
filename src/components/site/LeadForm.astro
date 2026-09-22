@@ -1,7 +1,8 @@
 ---
 // フォーム2種共通の3ステップフォーム（入力→確認→完了。ページ内切替）。
 // 文言・バリアント定義は src/data/forms.ts。ベースの見た目は site.css の .form-card / .f-field / .f-submit。
-// 送信バックエンド（GAS）は未接続: 本番は送信ボタンdisabled＋「準備中」表記、DEVのみ完了画面まで進める。
+// 送信先は lead-api（GAS Web App。src/data/forms.ts の LEAD_API_URL。2026-07-10から本番稼働）。未設定時のみ送信ボタンdisabled。
+// 教室ページからの遷移は ?c=<slug> で教室を選択済みにする（CtaBand の classroomSlug）。
 // 設計: docs/superpowers/specs/2026-07-10-form-confirm-step-design.md
 import { classrooms } from '../../data/classrooms';
 import { grades, leadForms, LEAD_API_URL, type LeadFormVariant } from '../../data/forms';
@@ -55,7 +56,7 @@ const STEPS = ['入力', '確認', '完了'];
       <select name="classroom" required>
         <option value="">選択してください</option>
         {/* 表示・送信値とも「西千葉」形式（末尾の「教室」なし。API側は教室マスタ照合時に有無を吸収） */}
-        {classrooms.map((c) => <option value={c.name.replace(/教室$/, '')}>{c.name.replace(/教室$/, '')}</option>)}
+        {classrooms.map((c) => <option value={c.name.replace(/教室$/, '')} data-slug={c.slug}>{c.name.replace(/教室$/, '')}</option>)}
       </select>
       <p class="f-err" hidden>教室を選択してください</p>
     </label>
@@ -172,7 +173,7 @@ const STEPS = ['入力', '確認', '完了'];
     animation: lf-spin .7s linear infinite;
   }
   @keyframes lf-spin { to { transform: rotate(360deg); } }
-  .send-fly svg { animation: lf-fly .7s ease-in forwards; }
+  .send-fly svg { animation: lf-fly .4s ease-in forwards; }
   @keyframes lf-fly {
     0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
     15% { transform: translate(-6px, 3px) rotate(8deg); opacity: 1; } /* ひと呼吸ためてから飛ぶ */
@@ -225,6 +226,13 @@ const STEPS = ['入力', '確認', '完了'];
         phoneInput.dispatchEvent(new Event('input')); // 再整形
       }
     });
+
+    // 教室ページのCTAから来た場合（?c=<slug>）は、その教室を選択済みにして入力を1つ減らす
+    const preSlug = new URLSearchParams(location.search).get('c');
+    if (preSlug) {
+      const opt = form.querySelector<HTMLOptionElement>(`select[name="classroom"] option[data-slug="${CSS.escape(preSlug)}"]`);
+      if (opt) opt.selected = true;
+    }
 
     function setError(name: string, on: boolean) {
       const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
@@ -338,10 +346,10 @@ const STEPS = ['入力', '確認', '完了'];
         return;
       }
 
-      // 送信完了 → 紙飛行機が飛んで完了画面へ
+      // 送信完了 → 紙飛行機が飛んで完了画面へ（待ちは見せるための最小限。通信の待ちが先にあるので長くしない）
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
         sendState('fly');
-        await wait(700);
+        await wait(400);
       }
       show('done');
       sendState('idle'); // 「修正する」で戻って再送信するケースに備えて復帰

@@ -14,7 +14,8 @@ import { u } from '../lib/path';
 
 // popup: 相性診断ポップアップ（トップページのみ出す。デフォルトは非表示）
 // fixedCta: SP下部固定バー＋PC右端縦書きCTA（診断ページでは結果カードのCTAと重複するため出さない）
-const { title, description = '', popup = false, fixedCta = true } = Astro.props;
+// noindex: ページ単位の検索除外（SMSで配るパンフレットページなど、URLを知っている人だけに見せるページ）。サイト全体の公開前除外とは独立
+const { title, description = '', popup = false, fixedCta = true, noindex = false } = Astro.props;
 // OGP用の絶対URL（LINE・SNS共有時に必須）
 const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
@@ -25,7 +26,8 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />{/* 数字の自動電話リンク化を無効（明示的な tel: リンクは有効のまま） */}
-    <meta name="robots" content="noindex, nofollow" />{/* 公開前：検索インデックス除外。ローンチ時に外す */}
+    <meta name="robots" content="noindex, nofollow" />{/* 公開前：検索インデックス除外。ローンチ時に外す（下の noindex ページ単位の除外は残す） */}
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="icon" type="image/svg+xml" href={u('/favicon.svg')} />
