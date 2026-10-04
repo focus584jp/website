@@ -13,9 +13,8 @@ GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp
 
 ## 正本ドキュメント（docs/design/）
 
-Claude Designプロジェクト「フォーカス公式サイト リニューアル」からのハンドオフ一式。**デザイン判断はまずここを読む。**
+Claude Designプロジェクト「フォーカス公式サイト リニューアル」からのハンドオフ一式（hifiの元データ）。**デザインの判断（色・型・部品）は `~/claude/design-system/brand-guide.md` と `src/styles/site.css` が正本**（旧ハンドオフ仕様の README.md と社内用 /styleguide は古くなったため2026-10-04に削除。git履歴に残っている）。
 
-- `README.md` — ハンドオフ全仕様（画面仕様・トークン・インタラクション・公開前TODO）
 - `トップページ.dc.html` — トップのhifi（実装済み）
 - `相性診断.dc.html` — 診断ページのhifi＋配点ロジック（未実装）
 - `ワイヤーフレーム.dc.html` — 下層ページの構造ガイド
@@ -47,7 +46,7 @@ src/
     home/           トップ専用セクション（Hero/Reasons/Method/Price/Voices/Rooms/Flow/Faq）
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/
-    site.css        デザイントークン＋共有ボタン＋フォーム（正。docs/design/README.mdのトークンと同期）
+    site.css        デザイントークン＋共有ボタン＋フォーム（正。~/claude/design-system/tokens.css と値を同期）
   data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts / forms.ts）。文言・数値・配点はここに集約
   assets/home/      画像（astro:assetsで最適化される）
 ```
@@ -64,7 +63,7 @@ src/
 - **読ませる本文は15px標準（clamp下限も14px以上）・色は var(--ink) #333333**。ターゲット（40代保護者・スマホ）の可読性基準。#8A96A8（gray-1）は装飾的な補足のみ（駅・徒歩など実用情報にはmuted以上を使う）
 - **最低フォントサイズ 12px**（clampの下限も12px以上）。例外は「高密度な比較カード内の補足（税込等）」「装飾英字ラベル」「アイコン補助ラベル（ハンバーガーのメニュー等）」のみ最低10px
 - **図解の器のルール（2026-08-15統一）**: 状態を切り替える図解（Before/Afterスライダー・タブ切替）だけが枠付きカード（✗=グレー地⇄◯=淡青地+紺枠）。それ以外の図解（静的図・自動アニメ・タップ小物）は方眼ノートカードに直置きし、パネルで囲まない
-- **仮データの扱い**: 徒歩分数・教室座標・他塾比較金額・FAQ一部は仮。差し替えまで「※仮」表記を消さない（一覧は docs/design/README.md 末尾の公開前TODO）。保護者の声は2026-08-12に掲載確定済み（アンケート整合確認済み）
+- **仮データの扱い**: 徒歩分数・教室座標・他塾比較金額・FAQ一部は仮。差し替えまで「※仮」表記を消さない（残りは docs/TODO.md）。保護者の声は2026-08-12に掲載確定済み（アンケート整合確認済み）
 
 ## 運用
 

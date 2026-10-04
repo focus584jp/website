@@ -22,7 +22,7 @@
 
 デザインシステム（~/claude/design-system）をHPの現行に合わせて更新した際の突き合わせで検出。**HPのデザインが正**なので見た目は変えず、実装の整理だけ行う。
 
-- [ ] **教科色の直書きが3ファイルに重複** — `src/components/home/Price.astro:10-14`・`site/PriceSimulator.astro:6-10`・`pages/styleguide.astro:9-13`。site.css に `--subject-*` 変数を追加して参照に置き換える（design-system/tokens.css と同値）
+- [ ] **教科色の直書きが3ファイルに重複** — `src/components/home/Price.astro:10-14`・`site/PriceSimulator.astro:6-10`（styleguide.astro は削除済み）。site.css に `--subject-*` 変数を追加して参照に置き換える（design-system/tokens.css と同値）
 - [ ] **site.css に無いトークンの直書き** — `--orange-pale` #FBDECB（Timetable.astro / DiagnosisPopup.astro）、`--warning-bg/--warning-text`（Timetable.astro）、`--sparkle-yellow` #FFC94A（CompareTabs.astro）。site.css に変数を足して参照に
 - [ ] **罫線・面の近似色が約15値** — #E8EDF4（SiteHeader下線）、#DDE3EA（ナビ区切り）、#D8DFE8（SPメニュー）、#E3E8EF（FixedCta上線）、#DFE9F1（FAQ点線）、#E3E9F0（LeadForm未来ステップ）、#E4E9F0（Timetable講習行）、#DCE4EE/#8FA9D0/#A9B7CC（DiagnosisApp）、#C6D4DF（Voicesドット）、#F8FAFD（Roomsホバー）、#EEF1F6/#C9D2DE（PhotoGalleryプレースホルダ）。`--line`（#DBE3EE）/`--panel`/`--alt-bg`/`--blue-pale` に寄せる
 - [ ] **廃止済みの旧グレー #2B3242** が `CompareTabs.astro:74`（地面の影）に残っている
@@ -31,8 +31,8 @@
 - [ ] **12px未満の文字（例外外）** — 必須バッジ 11px（`site.css:92`）、会社概要のflag 11px（`company.astro:94`）、「任意」タグ 11.5px（`price.astro:201`）、時間割 11px/11.5px（`Timetable.astro:116,162,164`）。12pxに上げるか、例外として design-system/brand-guide.md に追記済みのバッジ扱いにする
 - [ ] **Zen Maru 800 の指定**（読み込みは700/900のみで、実際は900表示）— `CompareTabs.astro:156,206`、`PriceSimulator.astro:32`、`price.astro:153,158,201`、`method.astro:101`、`SectionHead.astro`/`PageHero.astro` の英字ラベル。900に書き換えて実態と揃える
 - [ ] **細かい不統一** — 診断ポップアップのボタン下影が3px（他は5px、`DiagnosisPopup.astro:74`）／SP固定CTAの紺ボタンだけテキスト「→」（他は ArrowCircle、`FixedCta.astro:9`）／診断画面だけマーカーのグラデが62/94%・余白4px（共通は60/95%・2px、`DiagnosisApp.astro:81`）／方眼カードのCSSが5ファイルにコピー（Method・Flow・pages/method・price・faq。共通クラスにまとめる）
-- [ ] **`pages/styleguide.astro` が実装とずれている** — 教科チップが丸ピル（実装は角丸6px）、details版FAQ（廃止済み）、教室カードの左線5px（実装は4px）、「POINT」文字入りの丸バッジ（実装に無い）、方眼14px。公開時にビルド除外する方針なので、直すか消すか
-- [ ] **`docs/design/README.md` が古い** — マーカー #FFE869、グレー #A9B2BE/#7A8598、紺フッター・紺バンド、黒系の影、淡色チップ。design-system/CLAUDE.md からは「旧仕様・参照しない」に変更済み。冒頭に「2026-07以前の旧仕様」と注記するか、site.css と CLAUDE.md を正本にして削除する。`CLAUDE.md:50` の「READMEのトークンと同期」の記述も直す
+- [x] **`pages/styleguide.astro` が実装とずれている** — 2026-10-04 削除して解消（部品の見本は design-system 側に一本化）。旧記述: — 教科チップが丸ピル（実装は角丸6px）、details版FAQ（廃止済み）、教室カードの左線5px（実装は4px）、「POINT」文字入りの丸バッジ（実装に無い）、方眼14px。公開時にビルド除外する方針なので、直すか消すか
+- [x] **`docs/design/README.md` が古い** — 2026-10-04 削除、CLAUDE.md の参照も修正済み。旧記述: — マーカー #FFE869、グレー #A9B2BE/#7A8598、紺フッター・紺バンド、黒系の影、淡色チップ。design-system/CLAUDE.md からは「旧仕様・参照しない」に変更済み。冒頭に「2026-07以前の旧仕様」と注記するか、site.css と CLAUDE.md を正本にして削除する。`CLAUDE.md:50` の「READMEのトークンと同期」の記述も直す
 
 ## 1. ページの作り込み（下層デザイン展開の続き）
 
@@ -80,7 +80,7 @@
 ## 4. 公開前の仕上げ
 
 - [ ] noindex解除（SiteLayout）＋SEO一式（OGP・sitemapの最終確認）
-- [ ] **`/styleguide` をビルドから除外**（社内用部品カタログ。公開サイトには残さない＝2026-09-11決定。ページを削除するか、`src/pages/styleguide.astro` を `_styleguide.astro` 等にしてルーティングから外す。sitemapにも出ないことを確認）
+- [x] **`/styleguide` をビルドから除外** — 2026-10-04 ページごと削除。旧記述:（社内用部品カタログ。公開サイトには残さない＝2026-09-11決定。ページを削除するか、`src/pages/styleguide.astro` を `_styleguide.astro` 等にしてルーティングから外す。sitemapにも出ないことを確認）
 - [x] 他塾比較の金額根拠・「当社調べ」表記の確定 — 2026-08-15 完了（社内で裏どり済みとユーザー確認。記録の置き場は `docs/当社調べ根拠.md`）
 - [x] 教室座標のジオコーディング — 2026-08-15 完了。国土地理院APIで10教室の住所を番地レベルでジオコーディング（classrooms.ts）。駅からの直線距離が公表の徒歩分数と整合することも確認済み（旧仮値の駅座標が誤っていただけ）
 - [ ] 全ページ最終チェック（実機スマホ/PC・リンク・誤字・「※仮」表記の残りゼロ確認）
