@@ -1,103 +1,57 @@
 ---
-// 指導方針③「講師1人に、生徒は最大4人」の巡回アニメ図解（/method 専用）。
-// 講師が4席を順に回り（1→2→3→4→1…と循環）、いる席だけ「解説」（オレンジ机・紺生徒）、
-// 他の席は「演習」に戻る。画面内にあるときだけ動く。prefers-reduced-motion では静止（2席目で解説中）。
-// 4席は viewBox 内で左右対称（左右16ずつ）。「講師」ラベルは頭の右横（x67・右端の席でも viewBox 内に収まる）。
+// 指導方針③「講師1人に、生徒は最大4人」の図（/method 専用）。デジタルパンフレットの fig_ratio と同じ形・同じ動き（2026-10-08 ユーザー指示で差し替え）。
+// 講師（青）が4席を順に回り、回ってきた席は「解説」（青の枠・机の線が淡い青）、ほかの席は「演習」（机の橙の点線が動く＝自分で解いている）。
+// 動きはCSSだけ（8秒で1周）。画面に入っているときだけ動く。prefers-reduced-motion では止めて、1席目が解説中の状態にする。
+// 人のしるしは頭の半径5・肩の半径9・首のすき間1.5（パンフレットの person() と同じ比率）
+const person = (x: number, y: number, s: number) =>
+  `<circle cx="${x}" cy="${y}" r="${(5 * s).toFixed(1)}"/><path d="M${(x - 9 * s).toFixed(1)} ${(y + 15.5 * s).toFixed(1)}a${(9 * s).toFixed(1)} ${(9 * s).toFixed(1)} 0 0 1 ${(18 * s).toFixed(1)} 0z"/>`;
+const seats = [0, 1, 2, 3].map((i) => ({ i, x: 16 + i * 82, delay: `${2 * i - 8}s` }));
 ---
 <div class="rc" data-ratio-cycle>
-  <svg viewBox="0 0 320 184" role="img" aria-label="講師1人が4人の生徒の席を順に回り、演習と解説を繰り返す授業の図">
-    {/* 4席（机+生徒）。data-seat の順に講師が巡回する */}
-    <g class="seat" data-seat="0">
-      <rect class="desk" x="16" y="96" width="66" height="12" rx="3"></rect>
-      <circle class="stu" cx="49" cy="124" r="10"></circle>
-      <path class="stu" d="M32 156 a17 17 0 0 1 34 0 Z"></path>
-      <text class="slabel" x="49" y="177" text-anchor="middle" font-size="15.5">演習</text>
-    </g>
-    <g class="seat" data-seat="1">
-      <rect class="desk" x="90" y="96" width="66" height="12" rx="3"></rect>
-      <circle class="stu" cx="123" cy="124" r="10"></circle>
-      <path class="stu" d="M106 156 a17 17 0 0 1 34 0 Z"></path>
-      <text class="slabel" x="123" y="177" text-anchor="middle" font-size="15.5">演習</text>
-    </g>
-    <g class="seat" data-seat="2">
-      <rect class="desk" x="164" y="96" width="66" height="12" rx="3"></rect>
-      <circle class="stu" cx="197" cy="124" r="10"></circle>
-      <path class="stu" d="M180 156 a17 17 0 0 1 34 0 Z"></path>
-      <text class="slabel" x="197" y="177" text-anchor="middle" font-size="15.5">演習</text>
-    </g>
-    <g class="seat" data-seat="3">
-      <rect class="desk" x="238" y="96" width="66" height="12" rx="3"></rect>
-      <circle class="stu" cx="271" cy="124" r="10"></circle>
-      <path class="stu" d="M254 156 a17 17 0 0 1 34 0 Z"></path>
-      <text class="slabel" x="271" y="177" text-anchor="middle" font-size="15.5">演習</text>
-    </g>
-    {/* 講師（seat 0 の位置が基準。JSが translateX で巡回させる） */}
-    <g class="teacher" data-teacher>
-      <text x="67" y="38" font-size="14" font-weight="700" fill="#143778">講師</text>
-      <circle cx="49" cy="34" r="13" fill="#143778"></circle>
-      <path d="M27 74 a22 22 0 0 1 44 0 Z" fill="#143778"></path>
-      <path d="M49 80 v13" stroke="#E67832" stroke-width="3" stroke-linecap="round"></path>
-    </g>
+  <svg viewBox="0 -8 342 140" role="img" aria-label="講師が4人の生徒を順に回り、解説と演習をくり返す図">
+    {seats.map((s) => (
+      <g class:list={['seat', `d${s.i}`]}>
+        <rect class="glow" x={s.x - 6} y="36" width="76" height="76" rx="12" style={`animation-delay:${s.delay}`} />
+        <g class="kid" set:html={person(s.x + 32, 56, 1.5)} />
+        <rect class="desk" x={s.x} y="78" width="64" height="28" rx="6" />
+        <path class="pen" d={`M${s.x + 16} 92h32`} style={`animation-delay:0s,${s.delay}`} />
+        <path class="pen-s" d={`M${s.x + 16} 92h32`} style={`animation-delay:${s.delay}`} />
+        <text class="t-ex" x={s.x + 32} y="126" style={`animation-delay:${s.delay}`}>解説</text>
+        <text class="t-pr" x={s.x + 32} y="126" style={`animation-delay:${s.delay}`}>演習</text>
+      </g>
+    ))}
+    <g class="teacher" set:html={person(48, 5, 1.6)} />
   </svg>
 </div>
 
 <style>
   /* 方眼ノートに直置き（サイト共通ルール: 状態切替UI以外の図解はパネルで囲まない。2026-08-15統一） */
-  .rc {
-    width: 100%; max-width: 440px; margin: clamp(18px, 2.5vw, 24px) auto 0;
-    box-sizing: border-box;
-  }
-  .rc svg { width: 100%; height: auto; display: block; }
-  .teacher { transition: transform .6s cubic-bezier(.45, 0, .25, 1); }
-  .desk { transition: fill .45s ease; fill: #C6D0DC; }
-  .stu { transition: fill .45s ease; fill: var(--gray-1); }
-  .slabel { transition: fill .45s ease; fill: var(--muted); font-weight: 700; }
-  .seat.active .desk { fill: #F6C9A8; }
-  .seat.active .stu { fill: var(--navy); }
-  .seat.active .slabel { fill: var(--orange); font-weight: 800; }
+  .rc { width: 100%; max-width: 440px; margin: clamp(18px, 2.5vw, 24px) auto 0; box-sizing: border-box; }
+  .rc svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .desk { fill: #fff; stroke: var(--navy-soft); stroke-width: 1.5; }
+  .kid { fill: var(--navy); }
+  .teacher { fill: var(--navy-light); animation: rc-walk 8s cubic-bezier(.22, .68, .18, 1) infinite; }
+  .glow { fill: none; stroke: var(--navy-light); stroke-width: 2.5; opacity: 0; animation: rc-lit 8s linear infinite; }
+  .t-ex { font-size: 13.5px; font-weight: 800; text-anchor: middle; fill: var(--navy-mid); opacity: 0; animation: rc-lit 8s linear infinite; }
+  .t-pr { font-size: 13.5px; font-weight: 800; text-anchor: middle; fill: var(--orange-shadow); animation: rc-unlit 8s linear infinite; }
+  .pen, .pen-s { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 3 3; }
+  .pen { stroke: var(--orange); animation: rc-dash .9s linear infinite, rc-unlit 8s linear infinite; }
+  .pen-s { stroke: var(--navy-soft); opacity: 0; animation: rc-lit 8s linear infinite; }
+  @keyframes rc-walk { 0%, 20% { transform: translateX(0); } 25%, 45% { transform: translateX(82px); } 50%, 70% { transform: translateX(164px); } 75%, 95% { transform: translateX(246px); } 100% { transform: translateX(0); } }
+  @keyframes rc-lit { 0%, 22% { opacity: 1; } 25%, 97% { opacity: 0; } 100% { opacity: 1; } }
+  @keyframes rc-unlit { 0%, 22% { opacity: 0; } 25%, 97% { opacity: 1; } 100% { opacity: 0; } }
+  @keyframes rc-dash { to { stroke-dashoffset: -12; } }
+  /* 画面の外では止めておく */
+  .rc:not(.run) * { animation-play-state: paused; }
   @media (prefers-reduced-motion: reduce) {
-    .teacher, .desk, .stu, .slabel { transition: none; }
+    .rc * { animation: none !important; }
+    .d0 .glow, .d0 .t-ex, .d0 .pen-s { opacity: 1; }
+    .d0 .t-pr, .d0 .pen { opacity: 0; }
   }
 </style>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-ratio-cycle]').forEach((fig) => {
-    const teacher = fig.querySelector('[data-teacher]') as SVGGElement;
-    const seats = fig.querySelectorAll<SVGGElement>('.seat');
-    const SEAT_STEP = 74; // 席の間隔（viewBox座標）
-    let idx = 1;
-    const setActive = (i: number) => {
-      seats.forEach((s, j) => {
-        const active = j === i;
-        s.classList.toggle('active', active);
-        s.querySelector('.slabel')!.textContent = active ? '解説' : '演習';
-      });
-    };
-    teacher.style.transform = `translateX(${idx * SEAT_STEP}px)`;
-    setActive(idx);
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    // 画面内にあるときだけ巡回（移動0.6s→到着した席だけ解説、1→2→3→4→1…と循環）
-    let timer: ReturnType<typeof setInterval> | null = null;
-    let arrive: ReturnType<typeof setTimeout> | null = null;
-    const tick = () => {
-      idx = (idx + 1) % seats.length;
-      setActive(-1);
-      teacher.style.transform = `translateX(${idx * SEAT_STEP}px)`;
-      arrive = setTimeout(() => setActive(idx), 600);
-    };
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting && !timer) {
-          timer = setInterval(tick, 1700);
-        } else if (!e.isIntersecting && timer) {
-          clearInterval(timer);
-          if (arrive) clearTimeout(arrive);
-          timer = null;
-          setActive(idx);
-        }
-      });
-    }, { threshold: 0.3 });
-    io.observe(fig);
+    new IntersectionObserver((es) => es.forEach((e) => fig.classList.toggle('run', e.isIntersecting)), { threshold: 0.3 }).observe(fig);
   });
 </script>
