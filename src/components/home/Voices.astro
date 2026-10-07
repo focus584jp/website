@@ -36,6 +36,7 @@ const avatars = [v1, v2, v4, v3, v5]; // 3件目がお父さまのため男性�
         <button aria-label={`${i + 1}件目を表示`} data-voice-dot data-index={i}></button>
       ))}
     </div>
+    <p class="src-note">※ 保護者さまアンケートの回答をもとに掲載しています。</p>   {/* ステマ規制への対応（デジタルパンフレットと同じ注記。2026-10-08） */}
   </div>
 </section>
 
@@ -78,6 +79,7 @@ const avatars = [v1, v2, v4, v3, v5]; // 3件目がお父さまのため男性�
   .next { right: 8px; }
   /* 見た目は9pxドットのまま、タップ領域を24pxに確保 */
   .dots { display: flex; justify-content: center; margin-top: 8px; }
+  .src-note { margin: 10px 0 0; padding: 0 24px; text-align: center; font-size: 13px; color: var(--muted); line-height: 1.6; }
   .dots button {
     width: 24px; height: 24px; border: none; padding: 0; cursor: pointer;
     background: none; display: grid; place-items: center;
