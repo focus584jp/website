@@ -13,13 +13,13 @@ import CompareTabs from '../components/site/CompareTabs.astro';
 // レイアウトは /method と同型（吹き出し直後にセクション・交互背景・方眼ノートカードに本文＋図解）
 // 教科数ごとの月額 = 1教科 6,578円（税込）・月4回授業の単純合算が実料金。同一教科の複数枠受講も可（枠数分の料金）。計算は PriceSimulator が担う
 
-// オプション（料金は掲載しない。すべて任意であることを本文で明記）。名前タップで説明が開く（FAQと同じ排他アコーディオン）
-// 説明文は2026-08-14にユーザー確認済み（外部模試=Sもぎ）
-const options = [
-  { name: '定期テスト対策', desc: '学校の定期テストの前に、テスト範囲に合わせた対策授業を追加できる講座です。' },
-  { name: '過去問演習講座', desc: '高校入試の過去問を実戦形式で解き、時間配分と得点力を鍛える講座です。' },
-  { name: '外部模試', desc: '偏差値や志望校の合格判定を確認できる、外部の模擬試験（Sもぎ）です。' },
-];
+import { options } from '../data/options';
+// オプションの絵（デジタルパンフレットと同じ線画。紺の線＋橙のアクセント）
+const optIcon = {
+  test: '<path class="ln" d="M10 4h18l8 8v28H10z"/><path class="ln" d="M28 4v8h8"/><path class="ln o" d="M16 28l4 4 8-9"/><path class="ln s" d="M16 18h10"/>',
+  paper: '<rect class="ln" x="8" y="6" width="28" height="34" rx="4"/><path class="ln s" d="M15 16h14M15 23h14M15 30h8"/><path class="ln o" d="M30 33l3 3 6-7"/>',
+  chart: '<path class="ln" d="M6 38h32M10 34V22M19 34V14M28 34V18M37 34V10" style="stroke-width:3"/><path class="ln o" d="M8 18l11-8 9 4 9-8"/>',
+};
 ---
 <SiteLayout
   title="料金｜学習塾フォーカス"
@@ -94,18 +94,15 @@ const options = [
       <SectionHead eyebrow="OPTIONS" title="その他オプション" />
       <div class="note-card">
         <p class="body-p">上記のほかに、オプション講座もご用意していますが、<span class="mk">受講はすべて任意です。</span>必要なものを必要な分だけ、保護者さまご自身で都度お選びいただけます。</p>
-        <ul class="opt-list" data-opt-acc>
+        {/* オプションはデジタルパンフレットと同じカード（絵＋講座名＋ひとこと）を縦に並べる（2026-10-08 ユーザー指示） */}
+        <div class="opt-cards">
           {options.map((o) => (
-            <li class="opt-item">
-              <button type="button" class="opt-head" aria-expanded="false" data-opt-toggle>
-                <span class="opt-add" aria-hidden="true">＋</span>
-                <span class="opt-name">{o.name}</span>
-                <span class="opt-tag">任意</span>
-              </button>
-              <div class="opt-body"><div class="opt-clip"><p>{o.desc}</p></div></div>
-            </li>
+            <div class="opt-card">
+              <svg viewBox="0 0 44 44" aria-hidden="true" set:html={optIcon[o.icon]} />
+              <div><b>{o.name}</b><span>{o.desc}</span></div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -179,47 +176,13 @@ const options = [
 
   /* その他オプション（タップで説明が開く。開閉機構はFaqListと同じ grid-template-rows 0fr→1fr）
      オプション感の演出: 点線枠=まだ足していない任意のもの（開くと実線紺枠）・＋丸バッジ=追加できるもの（開くと×に回転）・任意ピル */
-  .opt-list { list-style: none; margin: 0 auto; padding: 0; max-width: 480px; display: flex; flex-direction: column; gap: 10px; }
-  .opt-item {
-    background: #fff; border: 1.5px dashed #A9BBD4; border-radius: 12px;
-    overflow: hidden; transition: border-color .2s ease;
-  }
-  .opt-item.open { border: 1.5px solid var(--navy); }
-  .opt-head {
-    display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 16px;
-    background: none; border: none; text-align: left; cursor: pointer;
-    font-family: var(--font-body); font-size: 15px; font-weight: 700; color: var(--ink);
-  }
-  .opt-add {
-    flex: none; width: 26px; height: 26px; border-radius: 50%;
-    background: #E3ECFB; color: var(--navy); font: 900 15px var(--font-round);
-    display: grid; place-items: center; transition: transform .3s;
-  }
-  .opt-item.open .opt-add { transform: rotate(45deg); }
-  .opt-name { flex: 1; }
-  .opt-tag {
-    flex: none; font: 800 11.5px var(--font-round); color: var(--muted);
-    border: 1.5px solid #C6D0DC; border-radius: 999px; padding: 3px 10px;
-  }
-  .opt-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .3s ease; }
-  .opt-item.open .opt-body { grid-template-rows: 1fr; }
-  .opt-clip { overflow: hidden; }
-  .opt-body p { font-size: 14.5px; line-height: 1.95; color: var(--ink); margin: 0; padding: 0 16px 14px 52px; }
+  .opt-cards { margin: 0 auto; max-width: 480px; display: grid; gap: 10px; }
+  .opt-card { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px; box-shadow: var(--shadow-card); padding: 12px 14px; }
+  .opt-card svg { flex: none; width: 36px; height: 36px; }
+  .opt-card :global(.ln) { fill: none; stroke: var(--navy); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .opt-card :global(.ln.o) { stroke: var(--orange); } .opt-card :global(.ln.s) { stroke: var(--navy-soft); }
+  .opt-card > div { min-width: 0; }
+  .opt-card b { display: block; font-family: var(--font-round); font-weight: 900; font-size: 16px; color: var(--navy); line-height: 1.4; }
+  .opt-card span { display: block; font-size: 13.5px; color: var(--muted); line-height: 1.5; margin-top: 2px; text-wrap: balance; } /* 1文字だけの行を作らない */
 </style>
 
-<script>
-  // オプションの説明を開閉（FAQと同じ排他式: 1つ開くと他は閉じる）
-  const items = [...document.querySelectorAll<HTMLElement>('[data-opt-acc] .opt-item')].filter(
-    (it) => it.querySelector('[data-opt-toggle]'),
-  );
-  items.forEach((item) => {
-    item.querySelector('[data-opt-toggle]')?.addEventListener('click', () => {
-      const willOpen = !item.classList.contains('open');
-      items.forEach((it) => {
-        const open = it === item && willOpen;
-        it.classList.toggle('open', open);
-        it.querySelector('[data-opt-toggle]')?.setAttribute('aria-expanded', String(open));
-      });
-    });
-  });
-</script>

@@ -1,12 +1,12 @@
 ---
 // 指導方針③「講師1人に、生徒は最大4人」の巡回アニメ図解（/method 専用）。
-// 先生が4席を順に回り（1→2→3→4→1…と循環）、いる席だけ「解説」（オレンジ机・紺生徒）、
+// 講師が4席を順に回り（1→2→3→4→1…と循環）、いる席だけ「解説」（オレンジ机・紺生徒）、
 // 他の席は「演習」に戻る。画面内にあるときだけ動く。prefers-reduced-motion では静止（2席目で解説中）。
-// 4席は viewBox 内で左右対称（左右16ずつ）。「先生」ラベルは頭の右横（x67・右端の席でも viewBox 内に収まる）。
+// 4席は viewBox 内で左右対称（左右16ずつ）。「講師」ラベルは頭の右横（x67・右端の席でも viewBox 内に収まる）。
 ---
 <div class="rc" data-ratio-cycle>
   <svg viewBox="0 0 320 184" role="img" aria-label="講師1人が4人の生徒の席を順に回り、演習と解説を繰り返す授業の図">
-    {/* 4席（机+生徒）。data-seat の順に先生が巡回する */}
+    {/* 4席（机+生徒）。data-seat の順に講師が巡回する */}
     <g class="seat" data-seat="0">
       <rect class="desk" x="16" y="96" width="66" height="12" rx="3"></rect>
       <circle class="stu" cx="49" cy="124" r="10"></circle>
@@ -31,9 +31,9 @@
       <path class="stu" d="M254 156 a17 17 0 0 1 34 0 Z"></path>
       <text class="slabel" x="271" y="177" text-anchor="middle" font-size="15.5">演習</text>
     </g>
-    {/* 先生（seat 0 の位置が基準。JSが translateX で巡回させる） */}
+    {/* 講師（seat 0 の位置が基準。JSが translateX で巡回させる） */}
     <g class="teacher" data-teacher>
-      <text x="67" y="38" font-size="14" font-weight="700" fill="#143778">先生</text>
+      <text x="67" y="38" font-size="14" font-weight="700" fill="#143778">講師</text>
       <circle cx="49" cy="34" r="13" fill="#143778"></circle>
       <path d="M27 74 a22 22 0 0 1 44 0 Z" fill="#143778"></path>
       <path d="M49 80 v13" stroke="#E67832" stroke-width="3" stroke-linecap="round"></path>

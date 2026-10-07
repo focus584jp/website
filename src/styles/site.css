@@ -19,6 +19,8 @@
   --panel: #F2F4F7;
   --blue-pale: #DDE7F7;
   --blue-paler: #EFF5FD;
+  --navy-soft: #9DBCEA; /* 紺の淡段（design-system/tokens.css と同期。路線図の線） */
+  --orange-pale: #FBDECB; /* 淡橙の面（design-system/tokens.css と同期。バッジ） */
   --line: #DBE3EE;
   --font-body: 'Noto Sans JP Variable', 'Noto Sans JP', sans-serif;
   --font-round: 'Zen Maru Gothic', sans-serif;

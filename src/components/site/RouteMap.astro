@@ -1,0 +1,46 @@
+---
+// 教室のある駅の路線図（模式図）。駅の丸か駅名をタップすると、その教室のページへ。
+// 形と駅の位置は data/routeMap.ts（デジタルパンフレットと共用）。教室名は data/classrooms.ts から
+import { classrooms } from '../../data/classrooms';
+import { routeMapViewBox, routeMapRails, routeMapLineNames, routeMapHubs, routeMapStations, routeMapLabel } from '../../data/routeMap';
+import { u } from '../../lib/path';
+
+const nameOf = (slug: string) => classrooms.find((c) => c.slug === slug)?.name.replace(/教室$/, '') ?? slug;
+---
+<svg class="route-map" viewBox={routeMapViewBox} role="img" aria-label="教室のある駅の路線図。駅名をタップすると教室のページが開きます">
+  {routeMapRails.map((r) => <path class:list={['rail', ...r.kind.split(' ')]} d={r.d} />)}
+  {routeMapLineNames.map((l) => <text class="ln-name" x={l.x} y={l.y} text-anchor={l.anchor}>{l.name}</text>)}
+  {routeMapHubs.map((h) => (
+    <>
+      <circle class="hub" cx={h.x} cy={h.y} r={h.r} />
+      <text class="hubt" x={h.x} y={h.y - 11}>{h.name}</text>
+    </>
+  ))}
+  {routeMapStations.map((s, i) => {
+    const t = routeMapLabel(s.x, s.y, s.label);
+    return (
+      <a href={u(`/classrooms/${s.slug}`)}>
+        <rect x={s.x - 22} y={s.y - 22} width="44" height="44" fill="transparent" />
+        <circle class="ring" cx={s.x} cy={s.y} r="7" style={`--i:${i}`} />
+        <circle class="dot" cx={s.x} cy={s.y} r="6.5" />
+        <text class="nm" x={t.x} y={t.y} text-anchor={t.anchor}>{nameOf(s.slug)}</text>
+      </a>
+    );
+  })}
+</svg>
+
+<style>
+  .route-map { display: block; width: 100%; height: auto; overflow: visible; }
+  .rail { fill: none; stroke: var(--navy-soft); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+  .rail.sub { stroke: var(--line); }
+  .rail.thin { stroke-width: 2.5; }
+  .ln-name { font-size: 11px; fill: var(--gray-1); font-weight: 700; }
+  .hub { fill: #fff; stroke: var(--gray-1); stroke-width: 2; }
+  .hubt { font-size: 11px; fill: var(--gray-1); font-weight: 700; text-anchor: middle; }
+  .dot { fill: var(--navy); stroke: #fff; stroke-width: 2; }
+  .ring { fill: none; stroke: var(--orange); stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: rm-ring 2.4s ease-out infinite; animation-delay: calc(var(--i) * .24s); }
+  @keyframes rm-ring { 0% { transform: scale(.6); opacity: .9; } 70%, 100% { transform: scale(2.1); opacity: 0; } }
+  .nm { font-family: var(--font-round); font-size: 13px; font-weight: 900; fill: var(--navy); paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+  a:hover .dot, a:focus-visible .dot { fill: var(--orange); }
+  @media (prefers-reduced-motion: reduce) { .ring { animation: none; opacity: 0; } }
+</style>
