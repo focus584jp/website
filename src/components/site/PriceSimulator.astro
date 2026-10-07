@@ -76,16 +76,35 @@ const subjects = [
     const price = sim.querySelector('[data-price]') as HTMLElement;
     const UNIT = 6578;
     const LESSONS = 4; // 1教科あたり月4回
+    // 合計の数字は、前の金額から新しい金額まで0.45秒で数え上げる（デジタルパンフレットと同じ動き。2026-10-08）
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let shown = 0;
+    const count = (el: HTMLElement, to: number) => {
+      const from = shown; shown = to;
+      if (still) { el.textContent = to.toLocaleString('ja-JP'); return; }
+      const t0 = performance.now();
+      const step = (now: number) => {
+        const k = Math.min(1, (now - t0) / 450);
+        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))).toLocaleString('ja-JP');
+        if (k < 1 && shown === to) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
     const render = () => {
       const n = sim.querySelectorAll('.book.on').length;
       if (n === 0) {
         formula.textContent = '';
         price.innerHTML = '<span class="sim-empty">教科を選んでください</span>';
+        shown = 0;
         return;
       }
       formula.textContent = `6,578円 × ${n}教科（月${LESSONS * n}回）`;
-      const total = (UNIT * n).toLocaleString('ja-JP');
-      price.innerHTML = `<span class="yen-l">月</span><span class="n">${total}</span><span class="yen">円</span><span class="tax">（税込）</span>`;
+      let num = price.querySelector<HTMLElement>('.n');
+      if (!num) {
+        price.innerHTML = `<span class="yen-l">月</span><span class="n">${shown.toLocaleString('ja-JP')}</span><span class="yen">円</span><span class="tax">（税込）</span>`;
+        num = price.querySelector<HTMLElement>('.n')!;
+      }
+      count(num, UNIT * n);
     };
     books.forEach((book) => {
       book.addEventListener('click', () => {
