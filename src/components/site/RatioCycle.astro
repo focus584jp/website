@@ -8,7 +8,7 @@ const person = (x: number, y: number, s: number) =>
 const seats = [0, 1, 2, 3].map((i) => ({ i, x: 16 + i * 82, delay: `${2 * i - 8}s` }));
 ---
 <div class="rc" data-ratio-cycle>
-  <svg viewBox="0 -8 342 140" role="img" aria-label="講師が4人の生徒を順に回り、解説と演習をくり返す図">
+  <svg viewBox="0 -8 342 144" role="img" aria-label="講師が4人の生徒を順に回り、解説と演習をくり返す図">
     {seats.map((s) => (
       <g class:list={['seat', `d${s.i}`]}>
         <rect class="glow" x={s.x - 6} y="36" width="76" height="76" rx="12" style={`animation-delay:${s.delay}`} />
@@ -16,8 +16,8 @@ const seats = [0, 1, 2, 3].map((i) => ({ i, x: 16 + i * 82, delay: `${2 * i - 8}
         <rect class="desk" x={s.x} y="78" width="64" height="28" rx="6" />
         <path class="pen" d={`M${s.x + 16} 92h32`} style={`animation-delay:0s,${s.delay}`} />
         <path class="pen-s" d={`M${s.x + 16} 92h32`} style={`animation-delay:${s.delay}`} />
-        <text class="t-ex" x={s.x + 32} y="126" style={`animation-delay:${s.delay}`}>解説</text>
-        <text class="t-pr" x={s.x + 32} y="126" style={`animation-delay:${s.delay}`}>演習</text>
+        <text class="t-ex" x={s.x + 32} y="131" style={`animation-delay:${s.delay}`}>解説</text>
+        <text class="t-pr" x={s.x + 32} y="131" style={`animation-delay:${s.delay}`}>演習</text>
       </g>
     ))}
     <g class="teacher" set:html={person(48, 5, 1.6)} />
@@ -33,7 +33,7 @@ const seats = [0, 1, 2, 3].map((i) => ({ i, x: 16 + i * 82, delay: `${2 * i - 8}
   .teacher { fill: var(--navy-light); animation: rc-walk 8s cubic-bezier(.22, .68, .18, 1) infinite; }
   .glow { fill: none; stroke: var(--navy-light); stroke-width: 2.5; opacity: 0; animation: rc-lit 8s linear infinite; }
   .t-ex { font-size: 13.5px; font-weight: 800; text-anchor: middle; fill: var(--navy-mid); opacity: 0; animation: rc-lit 8s linear infinite; }
-  .t-pr { font-size: 13.5px; font-weight: 800; text-anchor: middle; fill: var(--orange-shadow); animation: rc-unlit 8s linear infinite; }
+  .t-pr { font-size: 13.5px; font-weight: 800; text-anchor: middle; fill: var(--orange); animation: rc-unlit 8s linear infinite; }
   .pen, .pen-s { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-dasharray: 3 3; }
   .pen { stroke: var(--orange); animation: rc-dash .9s linear infinite, rc-unlit 8s linear infinite; }
   .pen-s { stroke: var(--navy-soft); opacity: 0; animation: rc-lit 8s linear infinite; }
