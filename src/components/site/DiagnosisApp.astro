@@ -5,6 +5,11 @@ import { u } from '../../lib/path';
 import { ctaLabels } from '../../data/home';
 import Icon from './Icon.astro';
 import ArrowCircle from './ArrowCircle.astro';
+
+// 導入の見出しレベル。/diagnosis ページ単体では h1、モーダル（DiagnosisPopup）の中ではページの h1 と重ならないよう h2
+interface Props { heading?: 'h1' | 'h2' }
+const { heading = 'h1' } = Astro.props;
+const Title = heading;
 ---
   <div class="stage" data-diag-app>
     <div class="inner">
@@ -13,7 +18,7 @@ import ArrowCircle from './ArrowCircle.astro';
       <div class="screen" data-screen="intro">
         <div class="card intro-card">
           <span class="badge">30秒・全5問</span>
-          <h1>うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></h1>
+          <Title class="title">うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></Title>
           <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの塾のタイプがその場で分かります。</p>
           <button class="start btn3d btn3d-n" data-start>診断をはじめる<ArrowCircle /></button>
         </div>
@@ -89,7 +94,7 @@ import ArrowCircle from './ArrowCircle.astro';
       linear-gradient(90deg, rgba(74, 122, 204, .08) 1px, transparent 1px);
     background-size: 22px 22px;
   }
-  .intro-card h1 {
+  .intro-card .title {
     font-family: var(--font-round); font-weight: 900; font-size: clamp(24px, 5.5vw, 30px);
     line-height: 1.6; margin: 16px 0 0; color: var(--ink);
   }
@@ -207,6 +212,9 @@ import ArrowCircle from './ArrowCircle.astro';
   type Step = 'intro' | number | 'result';
   let step: Step = 'intro';
   let answers: number[] = [];
+  // 次の設問に切り替わった直後は選択肢を押せなくする（連打で次の問いまで答えてしまうのを防ぐ）
+  const LOCK_MS = 300;
+  let lockedUntil = 0;
 
   const screens = {
     intro: root.querySelector<HTMLElement>('[data-screen="intro"]')!,
@@ -239,10 +247,11 @@ import ArrowCircle from './ArrowCircle.astro';
       label.textContent = c.label;
       b.append(badge, label);
       b.addEventListener('click', () => {
+        if (performance.now() < lockedUntil) return;
         answers[i] = ci;
         const next = i + 1;
         if (next >= questions.length) { renderResult(); step = 'result'; show('result'); }
-        else { step = next; renderQuiz(next); }
+        else { step = next; renderQuiz(next); lockedUntil = performance.now() + LOCK_MS; }
       });
       return b;
     }));

@@ -48,7 +48,8 @@ src/
     classroom/      教室詳細用（PhotoGallery=タップ拡大ライトボックス）
   styles/
     site.css        デザイントークン＋共有ボタン＋フォーム（正。docs/design/README.mdのトークンと同期）
-  data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts / forms.ts）。文言・数値・配点はここに集約
+  data/             コンテンツデータ（classrooms.ts / home.ts / faqs.ts / diagnosis.ts / forms.ts / price.ts=料金の数字と yen() / subjects.ts=教科名→色トークン）。文言・数値・配点はここに集約
+  lib/              path.ts（u()）/ leadApi.ts（フォーム2種の送信・電話番号整形などの共通処理）
   assets/home/      画像（astro:assetsで最適化される）
 ```
 

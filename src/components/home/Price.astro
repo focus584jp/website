@@ -4,19 +4,12 @@
 import SectionHead from '../site/SectionHead.astro';
 import Icon from '../site/Icon.astro';
 import { u } from '../../lib/path';
+import { price, yen } from '../../data/price';
+import { subjectColor, type Subject } from '../../data/subjects';
 
-// 教科チップは濃色ベタ＋白文字（淡青カードの上でも沈まないように）
-const subjectChip = {
-  国語: { bg: '#B0413E', color: '#fff' },
-  数学: { bg: '#2C55A0', color: '#fff' },
-  英語: { bg: '#B95A1E', color: '#fff' },
-  理科: { bg: '#1F6B3C', color: '#fff' },
-  社会: { bg: '#6B4FA3', color: '#fff' },
-} as const;
-type Subject = keyof typeof subjectChip;
-
+// 教科チップは濃色ベタ＋白文字（淡青カードの上でも沈まないように。色は data/subjects.ts）
 const chip = (s: Subject, size: 'sm' | 'lg') =>
-  `background:${subjectChip[s].bg};color:${subjectChip[s].color};` +
+  `background:${subjectColor[s].bg};color:${subjectColor[s].text};` +
   (size === 'sm' ? 'font-size:clamp(12px,1.4vw,14px);padding:3px 10px' : 'font-size:clamp(12px,1.6vw,15px);padding:4px 12px');
 ---
 <section id="price" class="price">
@@ -28,13 +21,13 @@ const chip = (s: Subject, size: 'sm' | 'lg') =>
         <div class="card-head">フォーカス</div>
         <div class="card-body">
           <div class="per">1教科・月額</div>
-          <div class="amount"><span class="num">6,578</span><span class="yen">円</span></div>
+          <div class="amount"><span class="num">{yen(price.tuition)}</span><span class="yen">円</span></div>
           <div class="tax">（税込）</div>
         </div>
       </div>
       {[
-        { name: '個別指導M塾', price: '20,400' },
-        { name: '個別指導E塾', price: '27,500' },
+        { name: '個別指導M塾', price: yen(price.otherM) },
+        { name: '個別指導E塾', price: yen(price.otherE) },
       ].map((c) => (
         <div class="card other-card">
           <div class="card-head other">{c.name}</div>

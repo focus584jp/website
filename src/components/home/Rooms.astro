@@ -1,5 +1,6 @@
 ---
-// 05 教室一覧 — 千葉市/千葉市以外タブ（スワイプ切替対応）＋現在地から最寄り検索（路線図は2026-10-08に載せたが蛇足のため外した）
+// 05 教室一覧 — 千葉市/千葉市以外タブ（上部タブのタップで切替。スワイプ切替は廃止）＋現在地から最寄り検索（路線図は2026-10-08に載せたが蛇足のため外した）
+// タブは2択の切替ボタン（aria-pressed）。見えていない側のパネルは inert（フォーカス・読み上げの対象外）
 import SectionHead from '../site/SectionHead.astro';
 import Icon from '../site/Icon.astro';
 import { classrooms, stationLabel } from '../../data/classrooms';
@@ -22,13 +23,13 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
     </div>
 
     <div class="tabs-card">
-      <div role="tablist" aria-label="教室のエリア" class="tablist">
-        <button role="tab" aria-selected="true" class="tab active" data-room-tab="chiba">千葉市</button>
-        <button role="tab" aria-selected="false" class="tab" data-room-tab="other">千葉市以外</button>
+      <div role="group" aria-label="教室のエリア" class="tablist">
+        <button type="button" aria-pressed="true" class="tab active" data-room-tab="chiba">千葉市</button>
+        <button type="button" aria-pressed="false" class="tab" data-room-tab="other">千葉市以外</button>
       </div>
       <div class="panels" data-room-panels>
         <div class="track" data-room-track>
-          <div role="tabpanel" class="panel">
+          <div class="panel" data-room-panel="chiba">
             <div class="grid">
               {chibaRooms.map((r) => (
                 <a href={u(`/classrooms/${r.slug}`)} class="room btn-out">
@@ -41,7 +42,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
               ))}
             </div>
           </div>
-          <div role="tabpanel" class="panel">
+          <div class="panel" data-room-panel="other" inert>
             <div class="grid">
               {otherRooms.map((r) => (
                 <a href={u(`/classrooms/${r.slug}`)} class="room btn-out">
@@ -125,19 +126,21 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
   // --- タブ切替（上部タブのみ。スワイプ切替は縦スクロールと誤反応するため廃止） ---
   const tabs = [...document.querySelectorAll<HTMLElement>('[data-room-tab]')];
   const track = document.querySelector<HTMLElement>('[data-room-track]');
+  const panels = [...document.querySelectorAll<HTMLElement>('[data-room-panel]')];
 
   function setTab(tab: 'chiba' | 'other') {
     if (track) track.style.transform = `translateX(${tab === 'chiba' ? 0 : -100}%)`;
     tabs.forEach((t) => {
       const active = t.dataset.roomTab === tab;
       t.classList.toggle('active', active);
-      t.setAttribute('aria-selected', String(active));
+      t.setAttribute('aria-pressed', String(active));
     });
+    panels.forEach((p) => { p.inert = p.dataset.roomPanel !== tab; });
   }
 
   tabs.forEach((t) => t.addEventListener('click', () => setTab(t.dataset.roomTab as 'chiba' | 'other')));
 
-  // --- 現在地から最寄りの教室（座標は仮値。公開前に教室所在地へ差し替え） ---
+  // --- 現在地から最寄りの教室（座標は data/classrooms.ts。2026-08-15に住所からジオコーディング済み） ---
   const nearBtn = document.querySelector<HTMLElement>('[data-nearest]');
   nearBtn?.addEventListener('click', () => {
     const rooms: { slug: string; lat: number; lng: number }[] = JSON.parse(nearBtn.dataset.rooms ?? '[]');

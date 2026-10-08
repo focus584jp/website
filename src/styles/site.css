@@ -21,6 +21,16 @@
   --blue-paler: #EFF5FD;
   --navy-soft: #9DBCEA; /* 紺の淡段（design-system/tokens.css と同期。路線図の線） */
   --orange-pale: #FBDECB; /* 淡橙の面（design-system/tokens.css と同期。バッジ） */
+  --sparkle-yellow: #FFC94A; /* キラキラ・ひらめき線（design-system/tokens.css と同期） */
+  --warning-text: #9A6A12; /* 注意（design-system/tokens.css と同期。時間割の例Cの色にも使用） */
+  --warning-bg: #FCF3D7;
+  --note-red: #C0392B; /* 注記「※仮」・入力エラー文字・赤ペンのタップ誘導（design-system/tokens.css と同期） */
+  /* 教科の色（濃色ベタ＋白文字。design-system/tokens.css の --subject-* と同期。対応表は src/data/subjects.ts） */
+  --subject-ja-bg: #B0413E; --subject-ja-text: #FFFFFF; /* 国語 */
+  --subject-math-bg: #2C55A0; --subject-math-text: #FFFFFF; /* 数学 */
+  --subject-en-bg: #B95A1E; --subject-en-text: #FFFFFF; /* 英語 */
+  --subject-sci-bg: #1F6B3C; --subject-sci-text: #FFFFFF; /* 理科 */
+  --subject-soc-bg: #6B4FA3; --subject-soc-text: #FFFFFF; /* 社会 */
   --line: #DBE3EE;
   --font-body: 'Noto Sans JP Variable', 'Noto Sans JP', sans-serif;
   --font-round: 'Zen Maru Gothic', sans-serif;
@@ -70,6 +80,12 @@ a, button, [role="button"], select { touch-action: manipulation; }
 }
 @keyframes btnShineV { 0% { top: -120%; left: -150%; } 30% { top: 150%; left: 60%; } 100% { top: 150%; left: 60%; } }
 
+/* 動きを減らす設定: 常時シャインとスムーズスクロールを止める */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn-shine::after, .btn-shine-v::after { animation: none; }
+}
+
 /* --- 沈み込みボタン（下影が0になり translateY） --- */
 .btn3d { transition: transform .1s, box-shadow .1s !important; }
 .btn3d-o:hover, .btn3d-o:active, .btn3d-o.pressed { transform: translateY(5px) !important; box-shadow: 0 0 0 var(--orange-shadow) !important; }
@@ -81,6 +97,17 @@ a, button, [role="button"], select { touch-action: manipulation; }
 
 /* --- 黄マーカー（インライン強調） --- */
 .mk { background: linear-gradient(transparent 60%, var(--marker) 60% 95%, transparent 95%); padding: 0 2px; }
+
+/* --- 方眼ノートカード（トップMethod・/method・/price・/faq 共通。余白が違うページは各ページで上書き） --- */
+.note-card {
+  background-color: #fff;
+  background-image:
+    linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3.5vw, 32px);
+  box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
+}
 
 /* --- フォーム（/request・/consult 共通） --- */
 .form-card {

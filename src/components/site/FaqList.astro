@@ -13,9 +13,10 @@ const { faqs, flat = false } = Astro.props;
       <button aria-expanded="false" data-faq-toggle>
         <span class="q-badge">Q</span>
         <span class="q-text">{f.q}</span>
-        <span class="plus">＋</span>
+        <span class="plus" aria-hidden="true">＋</span>
       </button>
-      <div class="answer">
+      {/* 閉じている回答は inert（中のリンクにフォーカスが入らない・読み上げない）。開閉はスクリプトが切り替える */}
+      <div class="answer" inert>
         <div class="answer-clip">
           <p>{f.a}{f.draft && <span class="draft">（※仮の回答です）</span>}</p>
           {f.link && <a class="a-link" href={u(f.link.href)}>{f.link.label}<span class="ar" aria-hidden="true">→</span></a>}
@@ -54,7 +55,7 @@ const { faqs, flat = false } = Astro.props;
     text-decoration: underline; text-underline-offset: 3px;
   }
   .a-link .ar { text-decoration: none; }
-  .draft { font-size: 12px; font-weight: 700; color: #C0392B; }
+  .draft { font-size: 12px; font-weight: 700; color: var(--note-red); }
 </style>
 
 <script>
@@ -67,6 +68,8 @@ const { faqs, flat = false } = Astro.props;
         const open = it === item && willOpen;
         it.classList.toggle('open', open);
         it.querySelector('[data-faq-toggle]')?.setAttribute('aria-expanded', String(open));
+        const answer = it.querySelector<HTMLElement>('.answer');
+        if (answer) answer.inert = !open;
       });
     });
   });

@@ -15,10 +15,11 @@ import { faqPageNode } from '../lib/structuredData';
 
 // 構造化データ FAQPage: トップのFAQ（home/Faq.astro）に出している3問と同じもの
 const topFaqs = faqs.filter((f) => f.top);
+import { price, yen } from '../data/price';
 ---
 <SiteLayout
   title="【公式】学習塾フォーカス｜勉強が苦手な中学生専門の個別指導塾"
-  description="勉強が苦手な中学生専門の個別指導塾フォーカス。1教科あたり月6,578円（税込）、入会金0円。講師は全員千葉大生。千葉市を中心に10教室。"
+  description={`勉強が苦手な中学生専門の個別指導塾フォーカス。1教科あたり月${yen(price.tuition)}円（税込）、入会金0円。講師は全員千葉大生。千葉市を中心に10教室。`}
   popup={true}
   schema={[faqPageNode(topFaqs, '/')]}
 >

@@ -1,24 +1,22 @@
 ---
 // フォーム2種共通の3ステップフォーム（入力→確認→完了。ページ内切替）。
 // 文言・バリアント定義は src/data/forms.ts。ベースの見た目は site.css の .form-card / .f-field / .f-submit。
-// 送信バックエンド（GAS）は未接続: 本番は送信ボタンdisabled＋「準備中」表記、DEVのみ完了画面まで進める。
+// 送信先は lead-api（GAS Web App。2026-07-10〜本番稼働中）。送信・電話番号の整形などの共通処理は src/lib/leadApi.ts。
+// 本番ホスト（data/forms.ts の PRODUCTION_HOSTS）以外からの送信は env: 'staging' になり、lead-api 側でテスト扱いになる。
 // 設計: docs/superpowers/specs/2026-07-10-form-confirm-step-design.md
 import { classrooms } from '../../data/classrooms';
-import { grades, leadForms, LEAD_API_URL, type LeadFormVariant } from '../../data/forms';
+import { grades, leadForms, type LeadFormVariant } from '../../data/forms';
 
 interface Props { variant: LeadFormVariant }
 const { variant } = Astro.props;
 const cfg = leadForms[variant];
-const isDev = import.meta.env.DEV;
-// APIが未設定の間は本番の送信ボタンをdisabled＋「準備中」表記のまま公開できる
-const formEnabled = isDev || LEAD_API_URL !== '';
 
 // 「次へ進む」はアウトライン（白地＋紺枠）で統一し、塗り＋立体3D（request=橙/consult=紺）は確認画面の最終送信ボタンだけに使う
 const nextClass = ['f-submit', 'flat'];
 const sendClass = cfg.theme === 'navy' ? ['f-submit', 'btn3d', 'btn3d-n', 'navy'] : ['f-submit', 'btn3d', 'btn3d-o', 'btn-shine'];
 const STEPS = ['入力', '確認', '完了'];
 ---
-<div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern} data-variant={variant} data-api={LEAD_API_URL}>
+<div class="lead-form" data-lead-form data-phone-pattern={cfg.phonePattern} data-variant={variant}>
   <ol class="steps" aria-label="お申し込みの手順">
     {STEPS.map((label, i) => (
       <li class:list={['step', { 'is-current': i === 0 }]} data-step>
@@ -68,7 +66,6 @@ const STEPS = ['入力', '確認', '完了'];
       <span class="ar-c" aria-hidden="true"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"></path><path d="m13 6 6 6-6 6"></path></svg></span>
     </button>
     {cfg.note && <p class="f-note" set:html={cfg.note} />}
-    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
   </form>
 
   {/* --- 2. 確認 --- */}
@@ -80,7 +77,7 @@ const STEPS = ['入力', '確認', '完了'];
       <div class="row"><dt>{cfg.phoneLabel}</dt><dd data-out="phone"></dd>{cfg.phoneConfirmNote && <p class="phone-note">{cfg.phoneConfirmNote}</p>}</div>
       <div class="row"><dt>{cfg.classroomLabel}</dt><dd data-out="classroom"></dd></div>
     </dl>
-    <button type="button" class:list={sendClass} data-send disabled={!formEnabled}>
+    <button type="button" class:list={sendClass} data-send>
       <span class="send-layer send-idle">
         {variant === 'request' && <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"></path><path d="m7 10 5 5 5-5"></path><path d="M4 21h16"></path></svg>}
         {cfg.submitLabel}
@@ -92,8 +89,7 @@ const STEPS = ['入力', '確認', '完了'];
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
       </span>
     </button>
-    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です（フォームはまだ動作しません）</p>}
-    <p class="f-note send-error" data-send-error hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
+    <p class="f-note send-error" data-send-error role="alert" hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
     <button type="button" class="back-btn" data-back>← 入力画面に戻って修正する</button>
   </div>
 
@@ -138,11 +134,10 @@ const STEPS = ['入力', '確認', '完了'];
   .flat:active { transform: translateY(1px); }
 
   /* バリデーションエラー */
-  .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
-  .f-field.is-error :is(input, select) { border-color: #C0392B; }
+  .f-err { font-size: 12.5px; font-weight: 700; color: var(--note-red); margin: 0; }
+  .f-field.is-error :is(input, select) { border-color: var(--note-red); }
 
-  .note-draft { color: #C0392B; font-weight: 700; }
-  .send-error { color: #C0392B; font-weight: 700; }
+  .send-error { color: var(--note-red); font-weight: 700; }
 
   /* honeypot: 視覚・タブ順から隠す（display:noneだとbotが埋めないことがあるため画面外へ） */
   form[data-view='input'] { position: relative; }
@@ -187,6 +182,8 @@ const STEPS = ['入力', '確認', '完了'];
 </style>
 
 <script>
+  import { digitsOf, isMobile, hyphenateMobile, attachPhoneFormat, setFieldError, leadEnv, postLead, wait, reducedMotion } from '../../lib/leadApi';
+
   document.querySelectorAll<HTMLElement>('[data-lead-form]').forEach((root) => {
     const form = root.querySelector<HTMLFormElement>('form[data-view="input"]');
     const confirmView = root.querySelector<HTMLElement>('[data-view="confirm"]');
@@ -198,8 +195,7 @@ const STEPS = ['入力', '確認', '完了'];
 
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
     // 全角数字→半角に直してから数字だけ取り出す（判定・表示は正規化後の値で行う）
-    const toHalf = (s: string) => s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
-    const phoneDigits = () => toHalf(field('phone').value).replace(/\D/g, '');
+    const phoneDigits = () => digitsOf(field('phone').value);
     const fmtPhone = (d: string) =>
       d.length === 11 ? `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
       : d.length === 10 ? `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6)}`
@@ -207,31 +203,8 @@ const STEPS = ['入力', '確認', '完了'];
 
     // 携帯番号（070/080/090）は入力中に自動でハイフンを挿入する。
     // 固定電話（consultのみ許容）は市外局番で桁割りが異なり誤整形になるため数字のまま。
-    const phoneInput = field('phone') as HTMLInputElement;
-    phoneInput.addEventListener('input', () => {
-      const d = toHalf(phoneInput.value).replace(/\D/g, '').slice(0, 11);
-      phoneInput.value = /^0[789]0/.test(d)
-        ? d.length <= 3 ? d
-        : d.length <= 7 ? `${d.slice(0, 3)}-${d.slice(3)}`
-        : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`
-        : d;
-    });
-    // ハイフン直後でバックスペースしたときは、手前の数字ごと消す（ハイフンが再挿入されて消せなくなるのを防ぐ）
-    phoneInput.addEventListener('keydown', (e) => {
-      const p = phoneInput.selectionStart ?? 0;
-      if (e.key === 'Backspace' && p > 1 && phoneInput.selectionEnd === p && phoneInput.value[p - 1] === '-') {
-        e.preventDefault();
-        phoneInput.value = phoneInput.value.slice(0, p - 2) + phoneInput.value.slice(p);
-        phoneInput.dispatchEvent(new Event('input')); // 再整形
-      }
-    });
-
-    function setError(name: string, on: boolean) {
-      const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
-      wrap?.classList.toggle('is-error', on);
-      const err = wrap?.querySelector<HTMLElement>('.f-err');
-      if (err) err.hidden = !on;
-    }
+    attachPhoneFormat(field('phone') as HTMLInputElement, (d) => (isMobile(d) ? hyphenateMobile(d) : d));
+    const setError = (name: string, on: boolean) => setFieldError(form, name, on);
 
     function validate(): boolean {
       const checks: Array<[string, boolean]> = [
@@ -270,7 +243,7 @@ const STEPS = ['入力', '確認', '完了'];
         steps[i]?.classList.toggle('is-current', i === cur);
         steps[i]?.classList.toggle('is-done', i < cur);
       });
-      root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      root.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'start' });
       views[name].focus({ preventScroll: true });
     }
 
@@ -288,11 +261,8 @@ const STEPS = ['入力', '確認', '完了'];
       });
       sendBtn?.classList.toggle('is-sending', state !== 'idle'); // 送信中〜紙飛行機の間はグレー
     };
-    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
     backBtn?.addEventListener('click', () => show('input'));
 
-    const api = root.dataset.api ?? '';
     const variant = root.dataset.variant ?? '';
     const errEl = confirmView.querySelector<HTMLElement>('[data-send-error]');
 
@@ -303,31 +273,16 @@ const STEPS = ['入力', '確認', '完了'];
       if (errEl) errEl.hidden = true;
       sendState('busy');
 
-      let ok = true;
-      if (api) {
-        // lead-api（GAS Web App）へ送信。text/plain は CORS プリフライト回避の定石
-        try {
-          const payload = {
-            form: variant,
-            name: field('name').value.trim(),
-            grade: field('grade').value,
-            phone: phoneDigits(),
-            classroom: field('classroom').value,
-            env: location.hostname === 'focus584jp.github.io' ? 'production' : 'staging',
-            hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
-          };
-          const res = await fetch(api, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload),
-          });
-          ok = res.ok && (await res.json()).ok === true;
-        } catch {
-          ok = false;
-        }
-      } else {
-        await wait(900); // API未設定（DEVデモ）: 成功の体で完了画面まで確認できる
-      }
+      // lead-api（GAS Web App）へ送信（失敗・15秒のタイムアウトは false）
+      const ok = await postLead({
+        form: variant,
+        name: field('name').value.trim(),
+        grade: field('grade').value,
+        phone: phoneDigits(),
+        classroom: field('classroom').value,
+        env: leadEnv(),
+        hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
+      });
 
       if (!ok) {
         // 失敗: ボタンを戻してエラー表示（そのまま再試行できる）
@@ -339,7 +294,7 @@ const STEPS = ['入力', '確認', '完了'];
       }
 
       // 送信完了 → 紙飛行機が飛んで完了画面へ
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!reducedMotion()) {
         sendState('fly');
         await wait(700);
       }

@@ -1,6 +1,7 @@
 // 教室ページの時間割（全教室共通）。例の生徒A〜Dをタップで切り替え、その生徒の受講例（科目つき）を表示する。
 // 同じコマに複数の生徒が重なってよい（1対4の個別指導なので現実もそう。表示は選択中の生徒のみ）。
-// 見た目は components/classroom/Timetable.astro。
+// 見た目は components/classroom/Timetable.astro。教科の色は data/subjects.ts。
+// ※ デジタルパンフレット（focus/pamphlet/build.py）が slots の行を正規表現で読むので、1コマ1行の書き方を崩さないこと。
 
 export const timetableDays = ['月', '火', '水', '木', '金'];
 
@@ -16,7 +17,9 @@ export const timetableTimes: { time: string; seasonal?: boolean }[] = [
   { time: '21:00〜' },
 ];
 
-export interface PersonaSlot { day: string; time: string; subject: string }
+import type { Subject } from './subjects';
+
+export interface PersonaSlot { day: string; time: string; subject: Subject }
 export interface TimetablePersona { key: string; label: string; slots: PersonaSlot[] }
 
 /** 例の生徒（色は Timetable.astro の .p-a〜.p-d と対応） */

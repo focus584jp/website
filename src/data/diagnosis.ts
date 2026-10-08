@@ -6,6 +6,7 @@
 //   → 「費用よりも手厚さ」=D、「無理なく続けられる費用」=E
 // ・優等生系の回答（C）はEにほぼ加点しない（A/B/Cタイプへ流す）
 // ・全243通りの分布: A 6% / B 2% / C 7% / D 19% / E 66%（E優勢は集客導線として意図的）
+import { price, yen } from './price';
 
 export interface Choice { label: string; s: [number, number, number, number, number] }
 export interface Question { q: string; choices: Choice[] }
@@ -95,7 +96,7 @@ export const types: Record<string, DiagnosisType> = {
       '分からない部分をその場ですぐに質問し、解決できる',
       '講師がすぐ隣にいるため、きめ細やかな手厚い指導が受けられる',
     ],
-    note: '質問がすぐできる環境は安心ですよね。ただ、「授業料が高くなりがち」という一面も。フォーカスの個別指導なら、質問しやすさはそのままに1教科 月6,578円（税込）〜。費用を抑えて複数教科をしっかり対策できます。',
+    note: `質問がすぐできる環境は安心ですよね。ただ、「授業料が高くなりがち」という一面も。フォーカスの個別指導なら、質問しやすさはそのままに1教科 月${yen(price.tuition)}円（税込）〜。費用を抑えて複数教科をしっかり対策できます。`,
   },
   E: {
     name: '1対多数の個別指導塾', level: 3, fit: true,

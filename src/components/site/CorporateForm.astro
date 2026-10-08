@@ -2,12 +2,9 @@
 // 企業・お取引向けの問い合わせフォーム（会社概要ページ内）。
 // 送信先は lead-api（form: 'corporate'）→ 中央管理表「企業問い合わせ」シート＋Slack通知。
 // 保護者向けのLeadFormと違い確認ステップなしの1段構成（送信中スピナー→紙飛行機→完了表示は共通の作法）。
-import { LEAD_API_URL } from '../../data/forms';
-
-const isDev = import.meta.env.DEV;
-const formEnabled = isDev || LEAD_API_URL !== '';
+// 送信・電話番号の整形などの共通処理は src/lib/leadApi.ts（LeadFormと共用）。
 ---
-<div class="corp-form" data-corp-form data-api={LEAD_API_URL}>
+<div class="corp-form" data-corp-form>
   <form class="form-card" data-view="input" novalidate>
     <label class="f-field" data-field="company">
       <span>会社名<em>必須</em></span>
@@ -37,15 +34,14 @@ const formEnabled = isDev || LEAD_API_URL !== '';
     <div class="hp-wrap" aria-hidden="true">
       <input type="text" name="hp" tabindex="-1" autocomplete="off" />
     </div>
-    <button type="submit" class="f-submit navy" data-send disabled={!formEnabled}>
+    <button type="submit" class="f-submit navy" data-send>
       <span class="send-layer send-idle">送信する</span>
       <span class="send-layer send-busy" hidden><span class="spinner" aria-hidden="true"></span>送信しています…</span>
       <span class="send-layer send-fly" hidden aria-hidden="true">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
       </span>
     </button>
-    {!formEnabled && <p class="f-note note-draft">※送信機能は準備中です</p>}
-    <p class="f-note send-error" data-send-error hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
+    <p class="f-note send-error" data-send-error role="alert" hidden>送信できませんでした。お手数ですが、時間をおいてもう一度お試しください。</p>
   </form>
 
   <div class="form-card done-view" data-view="done" hidden tabindex="-1">
@@ -58,9 +54,9 @@ const formEnabled = isDev || LEAD_API_URL !== '';
 <style>
   [data-view][hidden] { display: none; }
   .opt { background: var(--navy); } /* 任意バッジは必須（橙）と同形・ネイビー */
-  .f-err { font-size: 12.5px; font-weight: 700; color: #C0392B; margin: 0; }
-  .f-field.is-error :is(input, textarea) { border-color: #C0392B; }
-  .note-draft, .send-error { color: #C0392B; font-weight: 700; }
+  .f-err { font-size: 12.5px; font-weight: 700; color: var(--note-red); margin: 0; }
+  .f-field.is-error :is(input, textarea) { border-color: var(--note-red); }
+  .send-error { color: var(--note-red); font-weight: 700; }
 
   .navy { background: var(--navy); box-shadow: 0 5px 0 var(--navy-shadow); }
   .is-sending { background: var(--gray-1); box-shadow: 0 5px 0 #6E7A8C; cursor: default; }
@@ -89,6 +85,8 @@ const formEnabled = isDev || LEAD_API_URL !== '';
 </style>
 
 <script>
+  import { digitsOf, isMobile, hyphenateMobile, attachPhoneFormat, setFieldError, leadEnv, postLead, wait, reducedMotion } from '../../lib/leadApi';
+
   document.querySelectorAll<HTMLElement>('[data-corp-form]').forEach((root) => {
     const form = root.querySelector<HTMLFormElement>('form[data-view="input"]');
     const doneView = root.querySelector<HTMLElement>('[data-view="done"]');
@@ -96,34 +94,17 @@ const formEnabled = isDev || LEAD_API_URL !== '';
     const sendBtn = root.querySelector<HTMLButtonElement>('[data-send]');
     if (!form || !doneView || !sendBtn) return;
 
-    const api = root.dataset.api ?? '';
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLTextAreaElement;
-    const toHalf = (s: string) => s.replace(/[０-９]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xfee0));
-    const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
     // 電話番号の自動ハイフン（携帯=3-4-4 / 03・06=2-4-4 / 他の固定10桁=3-3-4の近似）
-    const phoneInput = field('phone') as HTMLInputElement;
     const fmtPhone = (d: string) => {
-      if (/^0[789]0/.test(d)) {
-        return d.length <= 3 ? d : d.length <= 7 ? `${d.slice(0, 3)}-${d.slice(3)}` : `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7, 11)}`;
-      }
+      if (isMobile(d)) return hyphenateMobile(d);
       if (/^0[36]/.test(d) && d.length >= 2) {
         return d.length <= 2 ? d : d.length <= 6 ? `${d.slice(0, 2)}-${d.slice(2)}` : `${d.slice(0, 2)}-${d.slice(2, 6)}-${d.slice(6, 10)}`;
       }
       return d.length <= 3 ? d : d.length <= 6 ? `${d.slice(0, 3)}-${d.slice(3)}` : `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6, 10)}`;
     };
-    phoneInput.addEventListener('input', () => {
-      const d = toHalf(phoneInput.value).replace(/\D/g, '').slice(0, 11);
-      phoneInput.value = fmtPhone(d);
-    });
-    phoneInput.addEventListener('keydown', (e) => {
-      const p = phoneInput.selectionStart ?? 0;
-      if (e.key === 'Backspace' && p > 1 && phoneInput.selectionEnd === p && phoneInput.value[p - 1] === '-') {
-        e.preventDefault();
-        phoneInput.value = phoneInput.value.slice(0, p - 2) + phoneInput.value.slice(p);
-        phoneInput.dispatchEvent(new Event('input'));
-      }
-    });
+    attachPhoneFormat(field('phone') as HTMLInputElement, fmtPhone);
 
     const sendState = (state: 'idle' | 'busy' | 'fly') => {
       sendBtn.querySelectorAll<HTMLElement>('.send-layer').forEach((el) => {
@@ -132,15 +113,10 @@ const formEnabled = isDev || LEAD_API_URL !== '';
       sendBtn.classList.toggle('is-sending', state !== 'idle');
     };
 
-    function setError(name: string, on: boolean) {
-      const wrap = form!.querySelector<HTMLElement>(`[data-field="${name}"]`);
-      wrap?.classList.toggle('is-error', on);
-      const err = wrap?.querySelector<HTMLElement>('.f-err');
-      if (err) err.hidden = !on;
-    }
+    const setError = (name: string, on: boolean) => setFieldError(form, name, on);
 
     function validate(): boolean {
-      const phoneDigits = toHalf(field('phone').value).replace(/\D/g, '');
+      const phoneDigits = digitsOf(field('phone').value);
       const checks: Array<[string, boolean]> = [
         ['company', field('company').value.trim().length > 0],
         ['person', field('person').value.trim().length > 0],
@@ -164,31 +140,17 @@ const formEnabled = isDev || LEAD_API_URL !== '';
       if (errEl) errEl.hidden = true;
       sendState('busy');
 
-      let ok = true;
-      if (api) {
-        try {
-          const payload = {
-            form: 'corporate',
-            company: field('company').value.trim(),
-            person: field('person').value.trim(),
-            email: field('email').value.trim(),
-            phone: toHalf(field('phone').value).replace(/\D/g, ''),
-            message: field('message').value.trim(),
-            env: location.hostname === 'focus584jp.github.io' ? 'production' : 'staging',
-            hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
-          };
-          const res = await fetch(api, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload),
-          });
-          ok = res.ok && (await res.json()).ok === true;
-        } catch {
-          ok = false;
-        }
-      } else {
-        await wait(900); // API未設定（DEVデモ）
-      }
+      // lead-api へ送信（失敗・15秒のタイムアウトは false）
+      const ok = await postLead({
+        form: 'corporate',
+        company: field('company').value.trim(),
+        person: field('person').value.trim(),
+        email: field('email').value.trim(),
+        phone: digitsOf(field('phone').value),
+        message: field('message').value.trim(),
+        env: leadEnv(),
+        hp: (form.elements.namedItem('hp') as HTMLInputElement | null)?.value ?? '',
+      });
 
       if (!ok) {
         sendState('idle');
@@ -196,7 +158,7 @@ const formEnabled = isDev || LEAD_API_URL !== '';
         if (errEl) errEl.hidden = false;
         return;
       }
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (!reducedMotion()) {
         sendState('fly');
         await wait(700);
       }
