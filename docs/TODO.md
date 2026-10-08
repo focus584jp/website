@@ -56,7 +56,8 @@
 
 ## 4. 公開前の仕上げ
 
-- [ ] noindex解除（SiteLayout）＋SEO一式（OGP・sitemapの最終確認）
+- [x] SEOの土台 — 2026-10-08 ブランチ `seo-foundations`（未マージ）。JSON-LD（団体・サイト・教室・FAQPage・パンくず。`src/lib/structuredData.ts`）・canonical・`@astrojs/sitemap`（/styleguide・/p/ 除外）・robots.txt（`src/pages/robots.txt.ts`）・末尾スラッシュ統一（`trailingSlash: 'always'`＋`u()`）・教室ページの題名と紹介文・トップの h1・404・FAQ 2問追加
+- [ ] **noindex解除** — 本番ドメインで公開するときに `src/layouts/SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` の1行を消すだけ（robots.txt は最初から全許可。ページ単位の noindex を持つページがあればそちらは残す）。解除後に Search Console へ `https://focus584.net/sitemap-index.xml` を登録
 - [ ] **`/styleguide` をビルドから除外**（社内用部品カタログ。公開サイトには残さない＝2026-09-11決定。ページを削除するか、`src/pages/styleguide.astro` を `_styleguide.astro` 等にしてルーティングから外す。sitemapにも出ないことを確認）
 - [x] 他塾比較の金額根拠・「当社調べ」表記の確定 — 2026-08-15 完了（社内で裏どり済みとユーザー確認。記録の置き場は `docs/当社調べ根拠.md`）
 - [x] 教室座標のジオコーディング — 2026-08-15 完了。国土地理院APIで10教室の住所を番地レベルでジオコーディング（classrooms.ts）。駅からの直線距離が公表の徒歩分数と整合することも確認済み（旧仮値の駅座標が誤っていただけ）
@@ -65,10 +66,11 @@
 ## 5. 本番ドメイン移行 — **https://focus584.net の現行サイトを置き換える形で公開**（2026-07-14決定）
 
 - [ ] GitHub Pages にカスタムドメイン focus584.net を設定（リポジトリ Settings > Pages。DNS: apexのAレコード4本を GitHub Pages のIPへ、www は CNAME。HTTPSはLet's Encryptが自動発行）
-- [ ] **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
+- [ ] **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計（canonical・og:url・JSON-LD の @id・sitemap・robots.txt の Sitemap 行も site と base から作っている）。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
 - [ ] **LeadForm/CorporateForm の本番判定を更新** — 現在 `location.hostname === 'focus584jp.github.io'` で production 判定。focus584.net を本番に切り替え（**忘れるとフォームが全部staging扱いになる**）
 - [ ] lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/pamphlet へ変更（Script Property・デプロイ不要）
 - [ ] 旧サイトのURL構造の扱いを決める（/school 等の旧URLは新サイトに存在しない。GitHub Pagesはサーバーリダイレクト不可のため、被リンクの多い旧URLがあればmetaリフレッシュのページを用意 or 404カスタムで誘導）
+  - 2026-10-08 旧サイト全21ページの対応表を作成: `docs/旧サイトURL対応表.md`（`/about/`・`/2026sum-campaign/` の行き先は要確認）。ロリポップ（Apache）なら `.htaccess` の Redirect 301 で転送し、`ErrorDocument 404 /404.html` も書く
 - [ ] 旧Pages URL（focus584jp.github.io/website）はカスタムドメイン設定後、自動で focus584.net へリダイレクトされることを確認（SMS等で配布済みURLの継続性）
 - [ ] 現行サイトのホスティング解約・DNS切替のタイミング調整（TTL短縮→切替→数日並走を推奨）
 

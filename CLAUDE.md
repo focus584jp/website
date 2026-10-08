@@ -69,7 +69,9 @@ src/
 ## 運用
 
 - 基本ローカル確認（`npm run dev`）。**pushはユーザーの指示があったときのみ**（push→GitHub Actionsで自動デプロイ）
-- 公開ローンチ時: noindex解除（SiteLayout）・仮データ差し替え・法務表記（当社調べ等）を確認
+- 公開ローンチ時: noindex解除（`SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` の1行を消す）・仮データ差し替え・法務表記（当社調べ等）を確認
+- **本番ドメインへの切り替えは astro.config の `site` と `base` だけ**（URL・canonical・og:url・JSON-LD の @id・sitemap・robots.txt はすべてここから作る。URLは末尾スラッシュ付きに統一＝`trailingSlash: 'always'`）
+- SEO: 構造化データは `src/lib/structuredData.ts`（値は src/data から。部品に直書きしない）。サイト名・フッターの一文・パンくずのページ名は `src/data/site.ts`。新しいページを足したら `pageNames` に名前を足す
 - **視覚回帰チェック（scripts/）**: リファクタなど「見た目を変えない」変更の検証に使う
   1. 変更前に `npm run build && bash scripts/screenshot-pages.sh <before>` でベースライン撮影（全ページ×SP500px/PC1280px）
   2. 変更後に再ビルド→ `bash scripts/screenshot-pages.sh <after>` → `python3 scripts/compare-shots.py <before> <after>`
