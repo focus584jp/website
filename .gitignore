@@ -5,3 +5,6 @@ dist/
 
 # セッション作業ファイル
 .superpowers/
+
+# エージェントの作業コピー
+.claude/worktrees/
