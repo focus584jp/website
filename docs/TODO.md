@@ -13,7 +13,7 @@
 
 - [x] **比較図の誘導は図ごとに独立** — 2026-09-11 ユーザー確定: 図ごと独立・毎回表示のままでよい
 - [x] **トップの料金セクションに他塾比較（M塾/E塾）が残っている** — 2026-09-11 ユーザー確定: 現状維持・金額も問題なし
-- [ ] **LeadForm.astro / CorporateForm.astro 冒頭コメントが古い** — 「GAS未接続・送信ボタンdisabled」と書かれているが、実際は2026-07-10から本番稼働中（`forms.ts` の `LEAD_API_URL` 設定済み）。コメントを現状に合わせて整理する（動作には影響なし）
+- [x] **LeadForm.astro / CorporateForm.astro 冒頭コメントが古い** — 2026-10-08 整理済み（「準備中」分岐ごと削除。共通処理は src/lib/leadApi.ts）。旧メモ: 「GAS未接続・送信ボタンdisabled」と書かれているが、実際は2026-07-10から本番稼働中（`forms.ts` の `LEAD_API_URL` 設定済み）。コメントを現状に合わせて整理する（動作には影響なし）
 - [ ] **依存の更新** — Astro 5.18.2 → 7.x が出ている（メジャー2つ）。公開前の大型更新はリスクがあるので**公開後に別途**。fontsource 2種のマイナー更新（5.2→5.3）は安全だが、フォントのunicode-range分割に影響しないか確認してから
 - [ ] 教室詳細の「対応中学校は準備中」分岐は全教室投入済みのため発火しない（残しても害なし。写真投入時に一緒に整理してもよい）
 - [x] `/styleguide`（社内用の部品カタログ・未リンク）を公開時にどうするか — 2026-09-11 ユーザー確定: **残さない**（公開前仕上げに「ビルドから除外」を追加）
@@ -66,7 +66,7 @@
 
 - [ ] GitHub Pages にカスタムドメイン focus584.net を設定（リポジトリ Settings > Pages。DNS: apexのAレコード4本を GitHub Pages のIPへ、www は CNAME。HTTPSはLet's Encryptが自動発行）
 - [ ] **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
-- [ ] **LeadForm/CorporateForm の本番判定を更新** — 現在 `location.hostname === 'focus584jp.github.io'` で production 判定。focus584.net を本番に切り替え（**忘れるとフォームが全部staging扱いになる**）
+- [ ] **フォームの本番判定を更新** — `src/data/forms.ts` の `PRODUCTION_HOSTS`（現在 `['focus584jp.github.io']`）に focus584.net を追加（**忘れるとフォームが全部staging扱いになる**）
 - [ ] lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/pamphlet へ変更（Script Property・デプロイ不要）
 - [ ] 旧サイトのURL構造の扱いを決める（/school 等の旧URLは新サイトに存在しない。GitHub Pagesはサーバーリダイレクト不可のため、被リンクの多い旧URLがあればmetaリフレッシュのページを用意 or 404カスタムで誘導）
 - [ ] 旧Pages URL（focus584jp.github.io/website）はカスタムドメイン設定後、自動で focus584.net へリダイレクトされることを確認（SMS等で配布済みURLの継続性）
