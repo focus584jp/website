@@ -1,0 +1,48 @@
+---
+// 404（ページが見つからない）。GitHub Pages は dist/404.html を自動で使う。
+// 本番（ロリポップ・Apache）へ移すときは .htaccess に `ErrorDocument 404 /404.html` が要る（docs/TODO.md 5.）
+// 旧サイト（WordPress）のURLから来た人もここに着くので、トップ・教室一覧・資料請求・電話へつなぐ
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import CtaBand from '../components/site/CtaBand.astro';
+import { u } from '../lib/path';
+import { siteName } from '../data/site';
+---
+<SiteLayout
+  title={`ページが見つかりません｜${siteName}`}
+  description="お探しのページは見つかりませんでした。"
+  notFound
+>
+  <PageHero
+    eyebrow="404 NOT FOUND"
+    title="ページが見つかりません"
+    lead={['お探しのページは、', '移動または削除された', '可能性があります。', 'お手数ですが、', '下のリンクからお進みください。'].map((s) => `<span style="display:inline-block">${s}</span>`).join('')}
+  />
+
+  <section class="links">
+    <div class="container">
+      <a href={u('/')} class="btn-out">トップページへ<span class="ar">→</span></a>
+      <a href={u('/classrooms')} class="btn-out">教室一覧を見る<span class="ar">→</span></a>
+    </div>
+  </section>
+
+  <CtaBand />
+</SiteLayout>
+
+<style>
+  .links { background: #fff; }
+  .container {
+    max-width: 680px; margin: 0 auto; padding: clamp(36px, 5vw, 56px) 24px;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  /* トップのFAQ「すべての質問を見る」と同じ白地＋紺枠のボタン */
+  .container a {
+    display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 320px;
+    border: 2px solid var(--navy); color: var(--navy); background: #fff; box-sizing: border-box;
+    font-size: 15px; font-weight: 700; padding: 13px 28px; border-radius: 999px; text-decoration: none;
+  }
+  @media (min-width: 768px) {
+    .container { flex-direction: row; justify-content: center; }
+    .container a { width: auto; min-width: 240px; }
+  }
+</style>

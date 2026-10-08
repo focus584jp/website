@@ -27,9 +27,10 @@ const narrowImg = await getImage({ src: heroNarrow, widths: [580, 890, 1600, 181
     <div class="fade" aria-hidden="true"></div>
 
     <div class="text">
-      <div><span class="tag">勉強が苦手な中学生専門！</span></div>
-      <h1 aria-label="「できた！」が増えると、勉強は変わる。">
-        <Image src={heroCatch} alt="「できた！」が増えると、勉強は変わる。" widths={[560, 700, 1120, 1400]} sizes="(max-width: 767px) 72vw, 700px" class="catch" loading="eager" />
+      {/* h1 = ラベル「勉強が苦手な中学生専門！」＋キャッチ画像（alt）。検索語を見出しに含めるため、既存のラベルごと h1 にした（見た目は以前と同じ） */}
+      <h1 class="hero-h1">
+        <span class="tag-row"><span class="tag">勉強が苦手な中学生専門！</span></span>
+        <span class="catch-row"><Image src={heroCatch} alt="「できた！」が増えると、勉強は変わる。" widths={[560, 700, 1120, 1400]} sizes="(max-width: 767px) 72vw, 700px" class="catch" loading="eager" /></span>
       </h1>
       <p class="sub"><span>一人ひとりの「わからない」に寄り添い、</span><br /><span>小さな成功体験を積み重ねます。</span></p>
 
@@ -79,7 +80,11 @@ const narrowImg = await getImage({ src: heroNarrow, widths: [580, 890, 1600, 181
     padding: .6em 1.1em; border-radius: 0; box-shadow: 4px 4px 0 rgba(20, 55, 120, .22);
     transform: rotate(-2.5deg); margin-top: 0;
   }
-  h1 { margin: 40px 0 0; }
+  /* h1 はラベル行とキャッチ行を包むだけ（文字の大きさ・太さは持たない）。
+     以前はラベルの div と h1 が .text の flex 子で、間隔 = gap 20px + h1 の margin-top 40px だった → catch-row の margin で再現 */
+  .hero-h1 { margin: 0; font: inherit; display: flex; flex-direction: column; }
+  .tag-row { display: block; }
+  .catch-row { display: block; margin-top: 60px; }
   .catch { width: 72%; max-width: 560px; height: auto; display: block; margin-left: -8px; }
   .sub {
     font-family: var(--font-round); font-weight: 700; font-size: clamp(14px, 3.7vw, 16px);
@@ -128,7 +133,7 @@ const narrowImg = await getImage({ src: heroNarrow, widths: [580, 890, 1600, 181
     }
     .text { width: min(500px, 46%); max-width: 540px; margin-left: clamp(24px, 4.5vw, 80px); padding: 32px 0 40px; gap: 30px; }
     .tag { font-size: clamp(14px, 1.9vw, 22px); margin-top: 32px; }
-    h1 { margin-top: 14px; }
+    .catch-row { margin-top: 44px; } /* 以前の gap 30px + h1 の margin-top 14px */
     .catch { width: 110%; max-width: 560px; margin-left: 0; }
     .sub { font-size: clamp(15px, 1.8vw, 18px); color: var(--muted); margin-top: 16px; }
     .price-card { padding: 16px 8px; max-width: 480px; align-self: auto; margin: 0 auto; }
