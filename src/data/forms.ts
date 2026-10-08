@@ -1,13 +1,19 @@
 // フォーム2種（資料請求 /request・無料相談 /consult）の文言・バリデーション定義。
-// 表示・判定は components/site/LeadForm.astro が行う。
+// 表示・判定は components/site/LeadForm.astro が行う（企業問い合わせは CorporateForm.astro）。
 
 export const grades = ['小6', '中1', '中2', '中3', 'その他'];
 
 /**
- * リード受付API（focus/lead-api の GAS Web App /exec URL）。
- * 空文字の間は送信ボタンが disabled＋「※準備中」表記になる（デプロイ後にURLを設定して有効化）。
+ * リード受付API（focus/lead-api の GAS Web App /exec URL。2026-07-10〜本番稼働中）。
+ * 送信処理は src/lib/leadApi.ts（LeadForm・CorporateForm 共通）。
  */
 export const LEAD_API_URL = 'https://script.google.com/macros/s/AKfycbxRYOlfsfb0Aj12rzJj8TpjkrDryPN347mHV4vIYyuNMYJRlpGWD6-87699KluKaYDb/exec';
+
+/**
+ * 本番として送信するホスト名（ここ以外＝ローカル・プレビューは env: 'staging' で送り、lead-api 側でテスト扱いになる）。
+ * 本番ドメイン移行（focus584.net）のときはここに追加する。忘れるとフォームが全部 staging 扱いになる。
+ */
+export const PRODUCTION_HOSTS = ['focus584jp.github.io'];
 
 export type LeadFormVariant = 'request' | 'consult';
 
