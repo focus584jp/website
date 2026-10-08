@@ -57,7 +57,7 @@ const legal = [
   .legal a:hover { color: var(--navy); }
 
   @media (min-width: 768px) {
-    .links { grid-template-columns: repeat(4, auto); max-width: none; justify-content: start; gap: 14px 36px; }
+    .links { display: flex; flex-wrap: wrap; max-width: none; gap: 14px 36px; } /* PCは1列に並べる（2026-10-08 ユーザー指示） */
   }
 
   .copyright { background: var(--navy); }
