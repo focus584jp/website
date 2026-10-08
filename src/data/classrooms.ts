@@ -83,3 +83,10 @@ export const classrooms: Classroom[] = [
 export function stationLabel(c: Classroom): string {
   return c.nearestStation.replace(/^(JR|東京メトロ|京成|小湊鉄道)\s*/, '');
 }
+
+/** 教室ページ冒頭の紹介文（データだけから作る。例:「JR稲毛駅から徒歩3分、千葉市稲毛区にある、勉強が苦手な中学生専門の個別指導塾です。」） */
+export function classroomIntro(c: Classroom): string {
+  const first = `${c.nearestStation}から徒歩${c.walkMinutes}分、${c.area}にある、勉強が苦手な中学生専門の個別指導塾です。`;
+  if (c.schools.length === 0) return first;
+  return `${first}${c.schools.slice(0, 2).join('・')}などの生徒が通っています。`;
+}

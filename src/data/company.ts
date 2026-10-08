@@ -18,7 +18,7 @@ export interface CompanyRow {
 
 export const companyInfo: CompanyRow[] = [
   { label: '会社名', value: '株式会社フォーカス' },
-  { label: '所在地', value: '〒263-0022 千葉県千葉市稲毛区弥生町2-21 ポップスクエア西千葉ビル301号' },
+  { label: '所在地', value: '〒263-0022 千葉県千葉市稲毛区弥生町2-21 ポップスクエア西千葉ビル3階' },
   { label: '代表者', value: '代表取締役　鈴木祐河' },
   { label: '創業', value: '2017年6月' },
   { label: '設立', value: '2020年1月（2024年10月 株式会社へ組織変更）' },

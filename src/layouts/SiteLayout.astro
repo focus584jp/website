@@ -1,23 +1,62 @@
 ---
 // hifi化したページ用のレイアウト（ワイヤー用 WireframeLayout とは別系統）
 // フォントは自己ホスト（fontsource）: レンダリングブロック回避のためGoogle Fonts外部CSSは使わない
-import '@fontsource-variable/noto-sans-jp';
+// パッケージ名だけの import は型が付かない（astro check が警告する）ので index.css を直接読む（中身は同じ）
+import '@fontsource-variable/noto-sans-jp/index.css';
 // japanese-*.css（単一1.4MB）ではなく標準css（unicode-range分割）を使う: 使う文字の分だけダウンロードされる
 import '@fontsource/zen-maru-gothic/700.css';
 import '@fontsource/zen-maru-gothic/900.css';
 import '../styles/site.css';
+import { getImage } from 'astro:assets';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import FixedCta from '../components/site/FixedCta.astro';
 import DiagnosisPopup from '../components/site/DiagnosisPopup.astro';
-import { u } from '../lib/path';
+import logo from '../assets/home/logo.png';
+import { u, absUrl } from '../lib/path';
+import { siteNodes, breadcrumbNode, toJsonLd } from '../lib/structuredData';
+import { siteName, pageNames } from '../data/site';
+import { classrooms } from '../data/classrooms';
 
-// popup: 相性診断ポップアップ（トップページのみ出す。デフォルトは非表示）
-// fixedCta: SP下部固定バー＋PC右端縦書きCTA（診断ページでは結果カードのCTAと重複するため出さない）
-const { title, description = '', popup = false, fixedCta = true } = Astro.props;
-// OGP用の絶対URL（LINE・SNS共有時に必須）
-const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
+interface Props {
+  title: string;
+  description?: string;
+  /** 相性診断ポップアップ（トップページのみ出す。デフォルトは非表示） */
+  popup?: boolean;
+  /** SP下部固定バー＋PC右端縦書きCTA（診断ページでは結果カードのCTAと重複するため出さない） */
+  fixedCta?: boolean;
+  /** ページ固有の構造化データ（教室・FAQPage など）。全ページ共通の団体・サイト・パンくずはここで足す */
+  schema?: Record<string, unknown>[];
+  /** 404ページ: canonical・og:url・パンくずを出さない */
+  notFound?: boolean;
+}
+const { title, description = '', popup = false, fixedCta = true, schema = [], notFound = false } = Astro.props;
+
+// base（/website）を除いたサイト内パス（例: '/classrooms/inage/'）。canonical・パンくずの元
+const baseNoSlash = import.meta.env.BASE_URL.replace(/\/$/, '');
+const rawPath = Astro.url.pathname.startsWith(baseNoSlash) ? Astro.url.pathname.slice(baseNoSlash.length) : Astro.url.pathname;
+const sitePath = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+// canonical / og:url（絶対URL・末尾スラッシュ付き。site と base は astro.config から）
+const canonical = absUrl(sitePath);
+const ogImage = absUrl('/ogp.jpg');
+
+// パンくず（下層ページのみ）: URLの段ごとに pageNames（data/site.ts）か教室名で名前を付ける
+const segs = sitePath.split('/').filter(Boolean);
+const crumbs = segs.map((seg, i) => {
+  const room = segs[0] === 'classrooms' && i === 1 ? classrooms.find((c) => c.slug === seg) : undefined;
+  return {
+    name: room?.name ?? pageNames[seg] ?? title.split('｜')[0],
+    path: `/${segs.slice(0, i + 1).join('/')}/`,
+  };
+});
+
+// 構造化データ（JSON-LD）: 全ページに団体＋サイト、下層にパンくず、ページ固有のもの
+const logoImg = await getImage({ src: logo, width: 600, format: 'png' });
+const jsonLd = toJsonLd([
+  ...siteNodes(new URL(logoImg.src, Astro.site).href),
+  ...(!notFound && crumbs.length > 0 ? [breadcrumbNode(crumbs)] : []),
+  ...schema,
+]);
 ---
 <!doctype html>
 <html lang="ja">
@@ -25,18 +64,22 @@ const ogImage = new URL(u('/ogp.jpg'), Astro.site).href;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />{/* 数字の自動電話リンク化を無効（明示的な tel: リンクは有効のまま） */}
-    <meta name="robots" content="noindex, nofollow" />{/* 公開前：検索インデックス除外。ローンチ時に外す */}
+    {/* 公開前：サイト全体を検索インデックス除外。本番ドメインで公開するときはこの1行を消す（docs/TODO.md「4. 公開前の仕上げ」） */}
+    <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {!notFound && <link rel="canonical" href={canonical} />}
     <link rel="icon" type="image/svg+xml" href={u('/favicon.svg')} />
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
-    <meta property="og:url" content={pageUrl} />
+    {!notFound && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
-    <meta property="og:site_name" content="学習塾フォーカス" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
+    <script type="application/ld+json" set:html={jsonLd} />
   </head>
   <body class:list={{ 'no-fixed-cta': !fixedCta }}>
     <SiteHeader />

@@ -5,6 +5,7 @@ import SectionHead from '../components/site/SectionHead.astro';
 import FaqList from '../components/site/FaqList.astro';
 import CtaBand from '../components/site/CtaBand.astro';
 import { faqs } from '../data/faqs';
+import { faqPageNode } from '../lib/structuredData';
 
 // 3カテゴリのグループ表示（2026-08-15 再設計）。器は/method・/priceと同じ方眼ノートカード+交互背景
 const groups = [
@@ -16,6 +17,7 @@ const groups = [
 <SiteLayout
   title="よくあるご質問｜学習塾フォーカス"
   description="学習塾フォーカスによく寄せられるご質問と回答。授業・指導、料金・季節講習、対象学年・振替・体験授業など、入塾前の疑問にお答えします。"
+  schema={[faqPageNode(faqs, '/faq/')]}
 >
   <PageHero eyebrow="FAQ" title="よくあるご質問" deco="faq" />
 

@@ -1,11 +1,14 @@
 ---
 import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import PageHero from '../../components/site/PageHero.astro';
 import CtaBand from '../../components/site/CtaBand.astro';
 import PhotoGallery from '../../components/classroom/PhotoGallery.astro';
 import Timetable from '../../components/classroom/Timetable.astro';
-import { classrooms } from '../../data/classrooms';
+import { classrooms, stationLabel, classroomIntro } from '../../data/classrooms';
+import { siteName } from '../../data/site';
+import { classroomNode } from '../../lib/structuredData';
 
 export function getStaticPaths() {
   return classrooms.map((c) => ({ params: { slug: c.slug }, props: { classroom: c } }));
@@ -35,12 +38,22 @@ const displayAddress = classroom.address.replace(/^〒\d{3}-\d{4}\s*/, '').repla
 
 // Googleマップ: 「フォーカス〇〇教室」で検索して登録地点を中央に表示（APIキー不要）
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカス${classroom.name}`)}&z=17&hl=ja&output=embed`;
+
+// 題名・紹介文・構造化データ（すべて classrooms.ts のデータから作る）
+const pageTitle = `${classroom.name}（${stationLabel(classroom)} 徒歩${classroom.walkMinutes}分）｜${classroom.area}の中学生向け個別指導塾 ${siteName}`;
+const intro = classroomIntro(classroom);
+// 見出し下のリード（PageHero の lead＝他ページの導入文と同じ見た目）。「、」「。」ごとの文節を inline-block にして、
+// 語の途中（「勉/強」「轟町/中」）で改行されないようにする（1文節が1行より長い狭い画面では文節の中で折り返す）
+const introLead = intro.split(/(?<=[、。])/).map((s) => `<span style="display:inline-block">${s}</span>`).join('');
+// 構造化データの image: 教室写真の1枚目（01=外観）。写真が無い教室は入れない
+const schemaImage = photos[0] ? new URL((await getImage({ src: photos[0], width: 1200, format: 'jpg' })).src, Astro.site).href : undefined;
 ---
 <SiteLayout
-  title={`${classroom.name}｜学習塾フォーカス`}
-  description={`学習塾フォーカス${classroom.name}のご案内。${classroom.nearestStation}から徒歩${classroom.walkMinutes}分。無料相談・体験授業を受け付けています。`}
+  title={pageTitle}
+  description={`${siteName}${classroom.name}のご案内。${intro}無料相談・体験授業を受け付けています。`}
+  schema={[classroomNode(classroom, schemaImage)]}
 >
-  <PageHero eyebrow="CLASSROOM" title={classroom.name} deco="classroom" />
+  <PageHero eyebrow="CLASSROOM" title={classroom.name} deco="classroom" lead={introLead} />
 
   <section class="info">
     <div class="container">

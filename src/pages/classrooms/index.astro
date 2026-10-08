@@ -10,7 +10,7 @@ import { u } from '../../lib/path';
 const regions = [...new Set(classrooms.map((c) => c.region))];
 ---
 <SiteLayout
-  title="教室一覧｜学習塾フォーカス"
+  title={`${regions.join('・')}の教室一覧｜学習塾フォーカス`}
   description="学習塾フォーカスの教室一覧。千葉市（稲毛・西千葉・都賀・新検見川・稲毛海岸・蘇我・鎌取）を中心に、市川・市原・四街道の全10教室。"
 >
   <PageHero eyebrow="CLASSROOMS" title="教室一覧" deco="classroom" />
