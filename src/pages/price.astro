@@ -11,9 +11,10 @@ import CompareTabs from '../components/site/CompareTabs.astro';
 // 前半=料金の全貌（必ずかかるもの→任意のもの）・後半=評価（なぜ安いか）の2部構成。
 // 他塾比較セクションは2026-08-14に削除（比較データの根拠管理が料金ページでは不要に）
 // レイアウトは /method と同型（吹き出し直後にセクション・交互背景・方眼ノートカードに本文＋図解）
-// 教科数ごとの月額 = 1教科 6,578円（税込）・月4回授業の単純合算が実料金。同一教科の複数枠受講も可（枠数分の料金）。計算は PriceSimulator が担う
+// 教科数ごとの月額 = 1教科の月額（税込・月4回。数字は data/price.ts）の単純合算が実料金。同一教科の複数枠受講も可（枠数分の料金）。計算は PriceSimulator が担う
 
 import { options } from '../data/options';
+import { price, yen } from '../data/price';
 // オプションの絵（デジタルパンフレットと同じ線画。紺の線＋橙のアクセント）
 const optIcon = {
   test: '<path class="ln" d="M10 4h18l8 8v28H10z"/><path class="ln" d="M28 4v8h8"/><path class="ln o" d="M16 28l4 4 8-9"/><path class="ln s" d="M16 18h10"/>',
@@ -23,7 +24,7 @@ const optIcon = {
 ---
 <SiteLayout
   title="料金｜学習塾フォーカス"
-  description="学習塾フォーカスの料金。1教科あたり月6,578円（税込）で5教科どれでも同じ料金。入会金・設備管理費0円、授業料は中学3年間据え置きの明朗会計です。"
+  description={`学習塾フォーカスの料金。1教科あたり月${yen(price.tuition)}円（税込）で5教科どれでも同じ料金。入会金・設備管理費0円、授業料は中学3年間据え置きの明朗会計です。`}
 >
   <PageHero eyebrow="PRICE" title="料金" deco="price" />
 
@@ -38,8 +39,8 @@ const optIcon = {
       <div class="note-card">
         {/* こだわり（Why）を先に語ってから金額へ。マーカーはカード内1箇所=金額に */}
         <p class="body-p">個別指導は料金が高く、受講は1〜2教科に絞るもの──フォーカスは、その「当たり前」をなくしたいと考えています。5教科すべての受講も、苦手科目を週2回受講することもあきらめなくていい料金にこだわりました。</p>
-        {/* 月4回の説明はシミュレータの式（6,578円×n教科（月4n回））が担うため本文からは省く */}
-        <p class="body-p">フォーカスの授業料は、<span class="mk">1教科あたり月6,578円（税込）</span>です。複雑な料金プランはなく、選んだ教科数分の単純なかけ算だけの明朗会計です。</p>
+        {/* 月4回の説明はシミュレータの式（◯円×n教科（月4n回））が担うため本文からは省く */}
+        <p class="body-p">フォーカスの授業料は、<span class="mk">1教科あたり月{yen(price.tuition)}円（税込）</span>です。複雑な料金プランはなく、選んだ教科数分の単純なかけ算だけの明朗会計です。</p>
         <PriceSimulator />
         {/* 季節講習は存在の告知のみ（費用・原則参加の記載はユーザー判断で載せない） */}
         <p class="body-p seasonal">また、春・夏・冬の年3回は、通常授業に加えて季節講習を実施しています。</p>
@@ -52,7 +53,7 @@ const optIcon = {
     <div class="container">
       <SectionHead eyebrow="FEES" title="諸経費" />
       <div class="note-card">
-        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、模試代…。フォーカスでは、授業料のほかに毎月、<span class="mk">教材費・システム利用料の1,375円（税込）のみ</span>いただいています。入会金・設備管理費は0円で、学年による授業料の値上げなども一切ありません。</p>
+        <p class="body-p">塾には、授業料のほかにも何かとお金がかかるものです。入会金、設備管理費、教材費、模試代…。フォーカスでは、授業料のほかに毎月、<span class="mk">教材費・システム利用料の{yen(price.fee)}円（税込）のみ</span>いただいています。入会金・設備管理費は0円で、学年による授業料の値上げなども一切ありません。</p>
 
         {/* 積み上げくらべ: 授業料の上に諸経費が積み上がる一般的な塾 vs ほぼ授業料だけのフォーカス。
             ◯側は「必ずかかるのは」の言い回しで任意オプション（季節講習等）の存在と両立させる（詳細はその他オプションで） */}
@@ -77,7 +78,7 @@ const optIcon = {
           <div class="stk-col">
             <p class="stk-cap ok">毎月かかるのは<br />これだけ！</p>
             <div class="tower">
-              <div class="blk" style="background:var(--navy-light)">教材費など <small>1,375円</small></div>
+              <div class="blk" style="background:var(--navy-light)">教材費など <small>{yen(price.fee)}円</small></div>
               <div class="blk base" style="background:var(--navy)">授業料</div>
             </div>
             <svg class="stk-ground" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 3 L148 3" fill="none" stroke="#B9C8DE" stroke-width="3" stroke-linecap="round"></path></svg>
@@ -115,7 +116,7 @@ const optIcon = {
         {/* Q→Aの流れ: なぜこの価格が実現できるのか？→ターゲットを絞っているから */}
         <p class="body-p">なぜ、この価格が実現できるのか──答えは、対象を<span class="mk">勉強が苦手な中学生だけに絞っている</span>からです。全学年・全レベルに対応しようとすれば、設備も教材も、人件費も研修コストもふくらみます。フォーカスは対象を絞ることでムダな費用をなくし、そのぶんを価格と授業の質に還元しています。</p>
 
-        {/* 大勢の生徒→照準ロックの絞り込みをインデックスタブで切替（画面に入ると✗→◯を1回自動再生） */}
+        {/* 大勢の生徒→照準ロックの絞り込みをインデックスタブで切替（自動再生なし。タブのタップで✗→◯） */}
         <CompareTabs variant="target" />
       </div>
     </div>
@@ -130,15 +131,7 @@ const optIcon = {
   /* /method と同型: 交互背景 + 方眼ノートカード（本文 + 図解） */
   .sec { background: #fff; }
   .sec.alt { background: var(--alt-bg); }
-  .note-card {
-    background-color: #fff;
-    background-image:
-      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
-    background-size: 24px 24px;
-    border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 3.5vw, 32px);
-    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
-  }
+  /* .note-card（方眼ノートカード）は site.css の共通定義 */
   .body-p { font-size: 15px; line-height: 2.15; color: var(--ink); margin: 0 auto 16px; max-width: 640px; }
   .body-p.seasonal { margin: 20px auto 0; }
 
@@ -146,12 +139,13 @@ const optIcon = {
   .stk { display: flex; justify-content: center; align-items: flex-end; gap: clamp(16px, 3.5vw, 26px); }
   /* 他塾とフォーカスを分ける縦の点線 */
   .stk-div { align-self: stretch; width: 0; border-left: 2px dashed #C9D3E0; margin-top: 4px; }
-  .stk-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+  /* 列は等幅で縮む（360〜375pxでもカードからはみ出さない）。PCでは地面の幅150pxが上限 */
+  .stk-col { flex: 1 1 0; min-width: 0; max-width: 150px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
   .stk-cap { font-family: var(--font-round); font-size: 14px; font-weight: 800; color: var(--muted); margin: 0 0 10px; line-height: 1.65; text-align: center; }
   .stk-cap.ok { color: var(--navy); }
-  .tower { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
+  .tower { width: 100%; max-width: 130px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 3px; }
   .blk {
-    width: 130px; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
+    width: 100%; border-radius: 6px; color: #fff; display: flex; align-items: center; justify-content: center; gap: 4px;
     font: 800 12.5px var(--font-round); height: 28px;
   }
   .blk small { font-size: 12px; font-weight: 800; opacity: 1; }
@@ -159,7 +153,6 @@ const optIcon = {
   .blk.o1 { transform: translateX(7px) rotate(-2.2deg); }
   .blk.o2 { transform: translateX(-6px) rotate(1.6deg); }
   .blk.o3 { transform: translateX(4px) rotate(-1.2deg); }
-  .blk.o4 { transform: translateX(-4px) rotate(.8deg); }
   /* 重さの表現（✗側のみ） */
   .tower.ng { gap: 2px; }
   .blk.press { position: relative; }
@@ -169,13 +162,11 @@ const optIcon = {
   .blk.press::before { left: -18px; transform: rotate(34deg); box-shadow: 6px -9px 0 #B7C1CE; }
   .blk.press::after { right: -18px; transform: rotate(-34deg); box-shadow: -6px -9px 0 #B7C1CE; }
   /* 地面は両側ともSVG（同一ジオメトリ）: ✗側だけ地面レベルから下にたわむ */
-  .stk-ground { width: 150px; height: 10px; display: block; }
+  .stk-ground { width: 100%; max-width: 150px; height: 10px; display: block; }
   .stk-name { font-size: 14px; font-weight: 800; color: var(--muted); margin: 9px 0 0; text-align: center; }
   .stk-name.ok { color: var(--navy); font-weight: 900; }
 
-
-  /* その他オプション（タップで説明が開く。開閉機構はFaqListと同じ grid-template-rows 0fr→1fr）
-     オプション感の演出: 点線枠=まだ足していない任意のもの（開くと実線紺枠）・＋丸バッジ=追加できるもの（開くと×に回転）・任意ピル */
+  /* その他オプション: デジタルパンフレットと同じカード（線画＋講座名＋ひとこと）を縦に並べる。開閉はしない */
   .opt-cards { margin: 0 auto; max-width: 480px; display: grid; gap: 10px; }
   .opt-card { display: flex; align-items: center; gap: 12px; background: #fff; border-radius: 14px; box-shadow: var(--shadow-card); padding: 12px 14px; }
   .opt-card svg { flex: none; width: 36px; height: 36px; }

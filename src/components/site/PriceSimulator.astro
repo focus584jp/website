@@ -1,28 +1,23 @@
 ---
 // 料金シミュレータ（/price 授業料セクション用）。
-// 本棚の教科書をタップすると選択がトグルし、「6,578円 × n教科（月4n回）」の式と月額合計を表示する。
+// 本棚の教科書をタップすると選択がトグルし、「6,578円 × n教科（月4n回）」の式と月額合計を表示する（数字は data/price.ts）。
 // 「どの教科も同じ料金」「単純合算の明朗会計」を触って体験してもらう部品。
-const subjects = [
-  { label: '国語', color: '#B0413E' },
-  { label: '数学', color: '#2C55A0' },
-  { label: '英語', color: '#B95A1E' },
-  { label: '理科', color: '#1F6B3C' },
-  { label: '社会', color: '#6B4FA3' },
-];
+// 読み上げは金額の1か所だけ（aria-live）。数え上げの途中の数字は読ませず、最終の金額だけを隠しテキストで伝える
+import { subjectNames, subjectColor } from '../../data/subjects';
 ---
 <div class="sim" data-price-sim>
   <p class="sim-q">受講を検討している教科を<br />選んでください</p>
   <div class="shelf">
-    {subjects.map((s, i) => (
-      <button type="button" class:list={['book', { on: i === 1 }]} style={`--bc: ${s.color}`} aria-pressed={i === 1 ? 'true' : 'false'}>
-        {s.label}<span class="bmark" aria-hidden="true"></span>
+    {subjectNames.map((s, i) => (
+      <button type="button" class:list={['book', { on: i === 1 }]} style={`--bc: ${subjectColor[s].bg}`} aria-pressed={i === 1 ? 'true' : 'false'}>
+        {s}<span class="bmark" aria-hidden="true"></span>
       </button>
     ))}
   </div>
   <div class="board" aria-hidden="true"></div>
   <div class="sim-result">
     <p class="sim-formula" data-formula></p>
-    <p class="sim-price" data-price></p>
+    <p class="sim-price" data-price aria-live="polite"></p>
   </div>
 </div>
 
@@ -61,6 +56,7 @@ const subjects = [
   .sim-price :global(.n) { font: 900 clamp(40px, 9.5vw, 48px) var(--font-round); color: var(--orange); font-variant-numeric: tabular-nums; }
   .sim-price :global(.yen) { font: 700 18px var(--font-round); color: var(--ink); margin-left: 2px; }
   .sim-price :global(.tax) { font-size: 12px; color: var(--muted); margin-left: 3px; }
+  .sim-price :global(.sr) { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .sim-price :global(.sim-empty) { display: inline-block; font-size: 14px; font-weight: 700; color: var(--gray-1); margin: 10px 0; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -70,41 +66,49 @@ const subjects = [
 </style>
 
 <script>
+  import { price, yen } from '../../data/price';
+
   document.querySelectorAll<HTMLElement>('[data-price-sim]').forEach((sim) => {
     const books = sim.querySelectorAll<HTMLButtonElement>('.book');
     const formula = sim.querySelector('[data-formula]') as HTMLElement;
-    const price = sim.querySelector('[data-price]') as HTMLElement;
-    const UNIT = 6578;
-    const LESSONS = 4; // 1教科あたり月4回
-    // 合計の数字は、前の金額から新しい金額まで0.45秒で数え上げる（デジタルパンフレットと同じ動き。2026-10-08）
+    const priceEl = sim.querySelector('[data-price]') as HTMLElement;
+    // 合計の数字は、いま表示中の金額から新しい金額まで0.45秒で数え上げる（デジタルパンフレットと同じ動き。2026-10-08）。
+    // 連打しても数え上げは常に1本だけ（前の分は cancelAnimationFrame で止める）
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let shown = 0;
+    let shown = 0; // いま表示している数字
+    let raf = 0;
     const count = (el: HTMLElement, to: number) => {
-      const from = shown; shown = to;
-      if (still) { el.textContent = to.toLocaleString('ja-JP'); return; }
+      cancelAnimationFrame(raf);
+      if (still) { shown = to; el.textContent = yen(to); return; }
+      const from = shown;
       const t0 = performance.now();
       const step = (now: number) => {
         const k = Math.min(1, (now - t0) / 450);
-        el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))).toLocaleString('ja-JP');
-        if (k < 1 && shown === to) requestAnimationFrame(step);
+        shown = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3)));
+        el.textContent = yen(shown);
+        if (k < 1) raf = requestAnimationFrame(step);
       };
-      requestAnimationFrame(step);
+      raf = requestAnimationFrame(step);
     };
     const render = () => {
       const n = sim.querySelectorAll('.book.on').length;
       if (n === 0) {
+        cancelAnimationFrame(raf);
         formula.textContent = '';
-        price.innerHTML = '<span class="sim-empty">教科を選んでください</span>';
+        priceEl.innerHTML = '<span class="sim-empty">教科を選んでください</span>';
         shown = 0;
         return;
       }
-      formula.textContent = `6,578円 × ${n}教科（月${LESSONS * n}回）`;
-      let num = price.querySelector<HTMLElement>('.n');
+      const total = price.tuition * n;
+      formula.textContent = `${yen(price.tuition)}円 × ${n}教科（月${price.lessons * n}回）`;
+      let num = priceEl.querySelector<HTMLElement>('.n');
       if (!num) {
-        price.innerHTML = `<span class="yen-l">月</span><span class="n">${shown.toLocaleString('ja-JP')}</span><span class="yen">円</span><span class="tax">（税込）</span>`;
-        num = price.querySelector<HTMLElement>('.n')!;
+        // 見える数字（数え上げ）は読み上げから外し、最終の金額を隠しテキスト（.sr）で読ませる
+        priceEl.innerHTML = `<span aria-hidden="true"><span class="yen-l">月</span><span class="n">${yen(shown)}</span><span class="yen">円</span><span class="tax">（税込）</span></span><span class="sr" data-sr></span>`;
+        num = priceEl.querySelector<HTMLElement>('.n')!;
       }
-      count(num, UNIT * n);
+      priceEl.querySelector<HTMLElement>('[data-sr]')!.textContent = `月${yen(total)}円（税込）`;
+      count(num, total);
     };
     books.forEach((book) => {
       book.addEventListener('click', () => {

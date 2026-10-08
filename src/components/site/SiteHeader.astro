@@ -34,11 +34,11 @@ import Icon from './Icon.astro';
   </div>
 </header>
 
-{/* SPメニュー（上からスライドダウン） */}
-<div class="sp-menu" data-menu style="visibility:hidden">
+{/* SPメニュー（上からスライドダウン）。閉じている間は inert（キーボードのフォーカスが見えないリンクに入らない） */}
+<div class="sp-menu" data-menu style="visibility:hidden" inert>
   <div class="panel">
     <div class="items">
-      {nav.map((n, i) => (
+      {nav.map((n) => (
         <a href={u(`/#${n.id}`)} class="item" data-menu-close>
           {n.label}
           <svg width="8" height="13" viewBox="0 0 8 13" fill="none" stroke="#143778" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m1.5 1.5 5 5-5 5"></path></svg>
@@ -139,14 +139,23 @@ import Icon from './Icon.astro';
 </style>
 
 <script>
-  const toggle = document.querySelector('[data-menu-toggle]');
+  const toggle = document.querySelector<HTMLElement>('[data-menu-toggle]');
   const label = document.querySelector('[data-menu-label]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
 
   function setMenu(open: boolean) {
     document.body.classList.toggle('menu-open', open);
     toggle?.setAttribute('aria-expanded', String(open));
     if (label) label.textContent = open ? 'とじる' : 'メニュー';
+    if (menu) menu.inert = !open;
   }
+  // Escで閉じて、フォーカスをハンバーガーに戻す
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains('menu-open')) {
+      setMenu(false);
+      toggle?.focus();
+    }
+  });
 
   toggle?.addEventListener('click', () => setMenu(!document.body.classList.contains('menu-open')));
   document.querySelectorAll('[data-menu-close]').forEach((el) => {

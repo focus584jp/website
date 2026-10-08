@@ -43,15 +43,8 @@ const groups = [
   .sec { background: #fff; }
   .sec.alt { background: var(--alt-bg); }
   .container { max-width: 760px; margin: 0 auto; padding: clamp(40px, 6vw, 64px) 24px; }
-  .note-card {
-    background-color: #fff;
-    background-image:
-      linear-gradient(rgba(74, 122, 204, .10) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(74, 122, 204, .10) 1px, transparent 1px);
-    background-size: 24px 24px;
-    border: 1px solid var(--line); border-radius: 16px; padding: clamp(8px, 1.5vw, 14px) clamp(16px, 3vw, 28px);
-    box-shadow: 0 1px 2px rgba(20, 42, 84, .06), 0 12px 24px rgba(20, 42, 84, .06);
-  }
+  /* .note-card（方眼ノートカード）は site.css の共通定義。FAQ一覧は上下を詰める */
+  .note-card { padding: clamp(8px, 1.5vw, 14px) clamp(16px, 3vw, 28px); }
   .note-c { padding-top: 0; padding-bottom: clamp(28px, 4vw, 44px); }
   .note { font-size: 14px; color: var(--muted); text-align: center; margin: 0; }
 </style>

@@ -6,6 +6,7 @@ import heroNarrow from '../../assets/home/hero-photo-sp.jpg';
 import heroCatch from '../../assets/home/hero-catch-small.png';
 import { u } from '../../lib/path';
 import { ctaLabels } from '../../data/home';
+import { price, yen } from '../../data/price';
 import Icon from '../site/Icon.astro';
 import ArrowCircle from '../site/ArrowCircle.astro';
 
@@ -36,7 +37,7 @@ const narrowImg = await getImage({ src: heroNarrow, widths: [580, 890, 1600, 181
       <div class="price-card">
         <div class="cell">
           <div class="label">1教科あたり</div>
-          <div class="value"><span class="unit unit-l">月</span><span class="num">6,578</span><span class="unit">円</span><span class="tax">（税込）</span></div>
+          <div class="value"><span class="unit unit-l">月</span><span class="num">{yen(price.tuition)}</span><span class="unit">円</span><span class="tax">（税込）</span></div>
         </div>
         <div class="v-line"></div>
         <div class="cell">

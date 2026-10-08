@@ -29,7 +29,7 @@ const phFull = (i: number) =>
   );
 const count = isPlaceholder ? PH_COUNT : photos.length;
 ---
-  <div class="gallery" data-lbx-root data-name={roomName} data-ph={isPlaceholder ? '1' : null}>
+  <div class="gallery" data-lbx-root data-ph={isPlaceholder ? '1' : null}>
     {isPlaceholder
       ? [...Array(PH_COUNT).keys()].map((i) => (
           <button type="button" class="th th-ph" data-full={phFull(i)} aria-label={`写真準備中のサンプル${i + 1}を拡大表示`}>
@@ -132,6 +132,7 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     display: grid; place-items: center;
   }
   .ctl:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .ctl::before { content: ""; position: absolute; inset: -4px; } /* 当たり判定だけ44pxに（見た目の丸は36pxのまま） */
   .x { top: 8px; right: 8px; } /* 画像の右上角の内側に収める */
   .lnav { top: 50%; transform: translateY(-50%); }
   .prev { left: 10px; }
@@ -152,7 +153,6 @@ const count = isPlaceholder ? PH_COUNT : photos.length;
     const fulls = thumbs.map((t) => t.dataset.full ?? '');
     const dims = thumbs.map((t) => [Number(t.dataset.w) || 0, Number(t.dataset.h) || 0] as const);
     const caps = thumbs.map((t) => t.dataset.desc ?? '');
-    const name = root.dataset.name ?? '';
     const isPh = root.dataset.ph === '1'; // ダミー（サンプル画像）モード
     const n = fulls.length;
     let idx = 0;

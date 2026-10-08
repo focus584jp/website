@@ -2,14 +2,14 @@
 // 時間割（教室詳細ページ）。例の生徒A〜Dをタップで切り替え、選んだ生徒の受講例（科目つき）だけを表示する。
 // データは src/data/timetable.ts（全教室共通）。同じコマに複数の生徒が重なってよい（表示は選択中の生徒のみ）。
 import { timetableDays, timetableTimes, timetablePersonas, timetableNotes } from '../../data/timetable';
+import { subjectColor } from '../../data/subjects';
 
 // (時間帯×曜日) → その枠に入っている生徒たち（キーと科目）
 const cellEntries = (time: string, day: string) =>
   timetablePersonas.flatMap((p) =>
     p.slots.filter((s) => s.time === time && s.day === day).map((s) => ({ key: p.key, subject: s.subject })),
   );
-// 科目のピルは教科の色（料金シミュレーション・デジタルパンフレットと同じ。design-system の subject-*）
-const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0', 英語: '#B95A1E', 理科: '#1F6B3C', 社会: '#6B4FA3' };
+// 科目のピルは教科の色（料金シミュレーション・デジタルパンフレットと同じ。design-system の subject-*。対応表は data/subjects.ts）
 ---
 <div class="tt" data-tt>
   <p class="tt-lead">部活や習い事のスケジュールを確認したうえで、無理なく通える曜日・時間帯を一緒に決めていきます。</p>
@@ -39,7 +39,7 @@ const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0'
             <th class="time">{r.time}</th>
             {timetableDays.map((d) => (
               <td>
-                {cellEntries(r.time, d).map((e) => <span class="pk" data-p={e.key} style={`background:${subjectBg[e.subject] ?? 'var(--navy)'}`}>{e.subject}</span>)}
+                {cellEntries(r.time, d).map((e) => <span class="pk" data-p={e.key} style={`background:${subjectColor[e.subject].bg}`}>{e.subject}</span>)}
               </td>
             ))}
           </tr>
@@ -107,7 +107,7 @@ const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0'
     font-family: var(--font-tel); padding: 0 4px; border-radius: 7px; white-space: nowrap;
   }
   .tbl td {
-    background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px;
+    background: var(--alt-bg); border-radius: 7px; text-align: center; height: 38px; padding: 0;
     transition: background .2s;
   }
   /* 講習期間のみの行は低くして全体の縦を圧縮 */
@@ -116,39 +116,36 @@ const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0'
 
   /* セル内の科目（選択中の生徒のものだけ .on で表示。JSが切り替える） */
   /* 科目は教科の色で塗ったピルをコマいっぱいに出す（デジタルパンフレットと同じ。2026-10-08 ユーザー指示） */
-  .tbl td { padding: 0; }
   .pk { display: none; height: 100%; border-radius: 7px; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
   .pk.on { display: grid; place-items: center; animation: tt-pop .45s cubic-bezier(.34, 1.5, .64, 1) both; }
   @keyframes tt-pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { .pk.on { animation: none; } }
 
-  /* 例の生徒の色（A〜Dの切替ボタン・説明・凡例のバッジ。面=デザイントークンの淡色4種、文字=対応する濃色） */
+  /* 例の生徒の色（A〜Dの切替ボタン・説明・凡例のバッジ。面=デザイントークンの淡色4種、文字=対応する濃色）。
+     --p-bg / --p-fg を生徒ごとに決め、各部品はこの2つだけを参照する */
+  .p-a { --p-bg: var(--orange-pale); --p-fg: var(--orange-shadow); }
+  .p-b { --p-bg: var(--blue-pale); --p-fg: var(--navy); }
+  .p-c { --p-bg: var(--warning-bg); --p-fg: var(--warning-text); }
+  .p-d { --p-bg: var(--success-bg); --p-fg: var(--success-text); }
 
   /* 切替チップ（時間割の上。1画面内で切替→時間割の変化が見える） */
   .sw-cap { font-size: 12.5px; font-weight: 700; color: var(--muted); text-align: center; margin: 0 0 8px; }
   .sw { display: flex; justify-content: center; gap: 12px; margin: 0 0 10px; }
   .sw-btn {
-    width: 42px; height: 42px; border-radius: 50%; border: none; padding: 0;
+    width: 44px; height: 44px; border-radius: 50%; border: none; padding: 0; /* タップ領域44px */
+    background: var(--p-bg); color: var(--p-fg);
     font-family: var(--font-round); font-size: 16.5px; font-weight: 900;
     cursor: pointer; opacity: .42; transition: opacity .2s, transform .2s, box-shadow .2s;
   }
   .sw-btn.is-active { opacity: 1; transform: scale(1.12); box-shadow: 0 3px 10px rgba(20, 42, 84, .25); }
-  .sw-btn.p-a { background: #FBDECB; color: var(--orange-shadow); }
-  .sw-btn.p-b { background: var(--blue-pale); color: var(--navy); }
-  .sw-btn.p-c { background: #FCF3D7; color: #9A6A12; }
-  .sw-btn.p-d { background: var(--success-bg); color: var(--success-text); }
 
   /* 選択中の生徒の説明（1行。JSが .on を付け外し） */
   .sw-desc {
     display: none; text-align: center; border-radius: 10px; padding: 8px 12px; margin: 0 0 14px;
-    font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.6;
+    font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.6; background: var(--p-bg);
   }
   .sw-desc.on { display: block; }
-  .sw-desc b { font-family: var(--font-round); font-weight: 900; margin-right: 8px; }
-  .sw-desc.p-a { background: #FBDECB; } .sw-desc.p-a b { color: var(--orange-shadow); }
-  .sw-desc.p-b { background: var(--blue-pale); } .sw-desc.p-b b { color: var(--navy); }
-  .sw-desc.p-c { background: #FCF3D7; } .sw-desc.p-c b { color: #9A6A12; }
-  .sw-desc.p-d { background: var(--success-bg); } .sw-desc.p-d b { color: var(--success-text); }
+  .sw-desc b { font-family: var(--font-round); font-weight: 900; margin-right: 8px; color: var(--p-fg); }
 
   .notes { margin: 18px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
   .notes li { font-size: 12.5px; color: var(--muted); line-height: 1.8; padding-left: 1.4em; text-indent: -1.4em; }
@@ -180,16 +177,10 @@ const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0'
     width: 25px; height: 25px; border-radius: 50%;
     display: grid; place-items: center; flex: none;
     font-family: var(--font-round); font-size: 13px; font-weight: 900;
+    background: var(--p-bg); color: var(--p-fg);
     transition: background .2s;
   }
-  .lg-item.p-a .lg-key { background: #FBDECB; color: var(--orange-shadow); }
-  .lg-item.p-b .lg-key { background: var(--blue-pale); color: var(--navy); }
-  .lg-item.p-c .lg-key { background: #FCF3D7; color: #9A6A12; }
-  .lg-item.p-d .lg-key { background: var(--success-bg); color: var(--success-text); }
-  .lg-item.is-active.p-a { background: #FBDECB; }
-  .lg-item.is-active.p-b { background: var(--blue-pale); }
-  .lg-item.is-active.p-c { background: #FCF3D7; }
-  .lg-item.is-active.p-d { background: var(--success-bg); }
+  .lg-item.is-active { background: var(--p-bg); }
   .lg-item.is-active .lg-key { background: rgba(255, 255, 255, .88); }
 
   /* PC: 左に時間割・右に切替カードの2カラム。時間列も広めに */
