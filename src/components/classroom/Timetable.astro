@@ -8,6 +8,8 @@ const cellEntries = (time: string, day: string) =>
   timetablePersonas.flatMap((p) =>
     p.slots.filter((s) => s.time === time && s.day === day).map((s) => ({ key: p.key, subject: s.subject })),
   );
+// 科目のピルは教科の色（料金シミュレーション・デジタルパンフレットと同じ。design-system の subject-*）
+const subjectBg: Record<string, string> = { 国語: '#B0413E', 数学: '#2C55A0', 英語: '#B95A1E', 理科: '#1F6B3C', 社会: '#6B4FA3' };
 ---
 <div class="tt" data-tt>
   <p class="tt-lead">部活や習い事のスケジュールを確認したうえで、無理なく通える曜日・時間帯を一緒に決めていきます。</p>
@@ -37,7 +39,7 @@ const cellEntries = (time: string, day: string) =>
             <th class="time">{r.time}</th>
             {timetableDays.map((d) => (
               <td>
-                {cellEntries(r.time, d).map((e) => <span class="pk" data-p={e.key}>{e.subject}</span>)}
+                {cellEntries(r.time, d).map((e) => <span class="pk" data-p={e.key} style={`background:${subjectBg[e.subject] ?? 'var(--navy)'}`}>{e.subject}</span>)}
               </td>
             ))}
           </tr>
@@ -68,7 +70,6 @@ const cellEntries = (time: string, day: string) =>
     const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-persona]')];
     const descs = [...root.querySelectorAll<HTMLElement>('[data-desc]')];
     const cells = [...root.querySelectorAll<HTMLTableCellElement>('tbody td')];
-    const PCLASSES = ['p-a', 'p-b', 'p-c', 'p-d'];
     function select(key: string) {
       btns.forEach((b) => {
         const on = b.dataset.persona === key;
@@ -79,8 +80,6 @@ const cellEntries = (time: string, day: string) =>
       cells.forEach((td) => {
         const span = td.querySelector<HTMLElement>(`[data-p="${key}"]`);
         td.querySelectorAll<HTMLElement>('.pk').forEach((s) => s.classList.toggle('on', s === span));
-        PCLASSES.forEach((c) => td.classList.remove(c));
-        if (span) td.classList.add(`p-${key.toLowerCase()}`);
       });
     }
     btns.forEach((b) => b.addEventListener('click', () => select(b.dataset.persona ?? '')));
@@ -116,14 +115,14 @@ const cellEntries = (time: string, day: string) =>
   .tbl tr.seasonal .time { color: var(--gray-1); font-size: 11px; }
 
   /* セル内の科目（選択中の生徒のものだけ .on で表示。JSが切り替える） */
-  .pk { display: none; font-family: var(--font-round); font-size: 13px; font-weight: 900; letter-spacing: .04em; }
-  .pk.on { display: inline; }
+  /* 科目は教科の色で塗ったピルをコマいっぱいに出す（デジタルパンフレットと同じ。2026-10-08 ユーザー指示） */
+  .tbl td { padding: 0; }
+  .pk { display: none; height: 100%; border-radius: 7px; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+  .pk.on { display: grid; place-items: center; animation: tt-pop .45s cubic-bezier(.34, 1.5, .64, 1) both; }
+  @keyframes tt-pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .pk.on { animation: none; } }
 
-  /* 例の生徒の色（面=デザイントークンの淡色4種、文字=対応する濃色。凡例のバッジも同色） */
-  .tbl td.p-a { background: #FBDECB; color: var(--orange-shadow); } /* 淡橙 */
-  .tbl td.p-b { background: var(--blue-pale); color: var(--navy); } /* 淡青 */
-  .tbl td.p-c { background: #FCF3D7; color: #9A6A12; } /* 淡黄（文字=warning-text） */
-  .tbl td.p-d { background: var(--success-bg); color: var(--success-text); } /* 淡緑 */
+  /* 例の生徒の色（A〜Dの切替ボタン・説明・凡例のバッジ。面=デザイントークンの淡色4種、文字=対応する濃色） */
 
   /* 切替チップ（時間割の上。1画面内で切替→時間割の変化が見える） */
   .sw-cap { font-size: 12.5px; font-weight: 700; color: var(--muted); text-align: center; margin: 0 0 8px; }
