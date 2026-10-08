@@ -155,7 +155,7 @@ const geoData = classrooms.map((c) => ({ slug: c.slug, lat: c.lat, lng: c.lng })
           const d = (r: typeof a) => (r.lat - latitude) ** 2 + ((r.lng - longitude) * kx) ** 2;
           return d(b) < d(a) ? b : a;
         });
-        location.href = base + nearest.slug;
+        location.href = `${base}${nearest.slug}/`; // 末尾スラッシュ付き（301を避ける）
       },
       () => alert('現在地を取得できませんでした。位置情報の利用を許可してください。'),
     );
