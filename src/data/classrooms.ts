@@ -18,7 +18,7 @@ const HOURS = '16:00〜22:00（日曜定休）';
 // 並び順（2026-07-09）: 千葉市は西千葉を中心に近い順、千葉市以外は 四街道→五井→妙典
 export const classrooms: Classroom[] = [
   {
-    slug: 'nishi-chiba', name: '西千葉教室', region: '千葉市', area: '千葉市稲毛区',
+    slug: 'nishichiba', name: '西千葉教室', region: '千葉市', area: '千葉市稲毛区',
     nearestStation: 'JR西千葉駅', walkMinutes: 1, lat: 35.62320, lng: 140.10344,
     address: '〒263-0022 千葉県千葉市稲毛区弥生町2-21　ポップスクエア西千葉ビル3階',
     tel: '050-5358-4457', schools: ['轟町中', '緑町中', '都賀中', '新宿中', '千葉大学教育学部附属中'], hours: HOURS,
@@ -30,13 +30,13 @@ export const classrooms: Classroom[] = [
     tel: '050-5370-0360', schools: ['稲毛中', '小中台中', '緑が丘中', '朝日ヶ丘中', '千草台中', '草野中', '千葉大学教育学部附属中'], hours: HOURS,
   },
   {
-    slug: 'shin-kemigawa', name: '新検見川教室', region: '千葉市', area: '千葉市花見川区',
+    slug: 'shinkemigawa', name: '新検見川教室', region: '千葉市', area: '千葉市花見川区',
     nearestStation: 'JR新検見川駅', walkMinutes: 1, lat: 35.65107, lng: 140.07298,
     address: '〒262-0022 千葉県千葉市花見川区南花園2-2-24　篠田ビル2階',
     tel: '050-5526-1648', schools: ['花園中', '幕張中', '朝日ヶ丘中', '真砂中'], hours: HOURS,
   },
   {
-    slug: 'inage-kaigan', name: '稲毛海岸教室', region: '千葉市', area: '千葉市美浜区',
+    slug: 'inagekaigan', name: '稲毛海岸教室', region: '千葉市', area: '千葉市美浜区',
     nearestStation: 'JR稲毛海岸駅', walkMinutes: 2, lat: 35.62831, lng: 140.07434,
     address: '〒261-0004 千葉県千葉市美浜区高洲3-14-4　第二水野谷ビル2階',
     tel: '050-5526-9164', schools: ['高洲中', '磯辺中', '高浜中', '稲浜中', '幸町第一中', '真砂中'], hours: HOURS,

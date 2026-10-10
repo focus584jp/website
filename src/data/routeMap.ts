@@ -21,12 +21,12 @@ export const routeMapHubs = [
 ];
 export const routeMapStations = [
   { slug: 'myoden', x: 35, y: 89, label: 'b' },
-  { slug: 'shin-kemigawa', x: 128, y: 64, label: 't' },
+  { slug: 'shinkemigawa', x: 128, y: 64, label: 't' },
   { slug: 'inage', x: 176, y: 64, label: 'b' },
-  { slug: 'nishi-chiba', x: 224, y: 64, label: 't' },
+  { slug: 'nishichiba', x: 224, y: 64, label: 't' },
   { slug: 'tsuga', x: 296, y: 40, label: 'r' },
   { slug: 'yotsukaido', x: 320, y: 18, label: 't' },
-  { slug: 'inage-kaigan', x: 176, y: 118, label: 'b' },
+  { slug: 'inagekaigan', x: 176, y: 118, label: 'b' },
   { slug: 'soga', x: 268, y: 132, label: 'sl' },
   { slug: 'kamatori', x: 316, y: 158, label: 'b' },
   { slug: 'goi', x: 268, y: 184, label: 'l' },

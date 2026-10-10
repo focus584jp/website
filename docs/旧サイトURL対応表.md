@@ -12,10 +12,10 @@
 | `/teaching/` | 指導方針 | `/method/` | |
 | `/fee/` | 授業料 | `/price/` | |
 | `/school/` | 教室を探す | `/classrooms/` | |
-| `/school/nishichiba/` | 西千葉教室 | `/classrooms/nishi-chiba/` | スラッグが変わる（ハイフンあり） |
+| `/school/nishichiba/` | 西千葉教室 | `/classrooms/nishichiba/` | 旧サイトと同じ名前（2026-10-10 にハイフンなしへ変更） |
 | `/school/inage/` | 稲毛教室 | `/classrooms/inage/` | |
-| `/school/shinkemigawa/` | 新検見川教室 | `/classrooms/shin-kemigawa/` | スラッグが変わる |
-| `/school/inagekaigan/` | 稲毛海岸教室 | `/classrooms/inage-kaigan/` | スラッグが変わる |
+| `/school/shinkemigawa/` | 新検見川教室 | `/classrooms/shinkemigawa/` | 旧サイトと同じ名前（2026-10-10 にハイフンなしへ変更） |
+| `/school/inagekaigan/` | 稲毛海岸教室 | `/classrooms/inagekaigan/` | 旧サイトと同じ名前（2026-10-10 にハイフンなしへ変更） |
 | `/school/tsuga/` | 都賀教室 | `/classrooms/tsuga/` | |
 | `/school/soga/` | 蘇我教室 | `/classrooms/soga/` | |
 | `/school/kamatori/` | 鎌取教室 | `/classrooms/kamatori/` | |
