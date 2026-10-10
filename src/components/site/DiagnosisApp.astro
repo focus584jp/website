@@ -19,7 +19,7 @@ const Title = heading;
         <div class="card intro-card">
           <span class="badge">30秒・全5問</span>
           <Title class="title">うちの子に合う塾は、<br /><span class="mk">どのタイプ？</span></Title>
-          <p class="lead">お子さまのことを5問だけ教えてください。<br />ぴったりの塾のタイプがその場で分かります。</p>
+          <p class="lead">5つの質問に答えるだけで、<br /><span class="ph">お子さまにぴったりの</span><span class="ph">塾タイプがすぐに分かります。</span></p>
           <button class="start btn3d btn3d-n" data-start>診断をはじめる<ArrowCircle /></button>
         </div>
       </div>
@@ -99,6 +99,7 @@ const Title = heading;
     line-height: 1.6; margin: 16px 0 0; color: var(--ink);
   }
   .intro-card .lead { font-size: 14px; line-height: 2; color: var(--muted); margin: 16px 0 0; }
+  .intro-card .lead .ph { display: inline-block; } /* 狭い画面では言葉の切れ目（「ぴったりの」の後）でだけ折り返す */
   .start {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%; max-width: 320px; margin: 24px auto 0;
