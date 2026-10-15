@@ -1,8 +1,37 @@
-# 公開までのTODO（2026-07-14整理・2026-09-11更新）
+# HPのTODO（2026-07-14整理・2026-10-16 公開後の残りに更新）
 
 再開時はここから。完了したらチェックを付けて日付を書く。
 
-## 現在地（2026-09-11）
+## 公開後の残り（2026-10-16）— 再開時はここから
+
+2026-10-16 未明に focus584.net を新 HP に切り替え（GitHub Pages）。http では新 HP が出ている。本番フォーム 2 種は同日に実ブラウザで通し確認（都賀・資料請求＋無料相談、SMS・パンフ・Slack はユーザーが実機で確認）。
+
+### 今すぐ（https 待ち）
+- [ ] **https の証明書が配られるのを待つ** — GitHub 上は「発行済み」だが、サーバーはまだ `*.github.io` の証明書を返す（再デプロイ・ドメイン付け直しは実施済み）。配られたら「Enforce HTTPS」をオン（見張りが自動でオンにする）。**12時ごろまで直らなければ Cloudflare Pages へ移す**（ネームサーバーを Cloudflare へ。ドメイン契約はムームーのまま。homework・online・recruit の A 157.7.107.30 と google-site-verification の TXT を移し替える）
+- [ ] https が使えたら: lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（今は github.io の URL → 転送で届いている）
+- [ ] https が使えたら: 冬期チラシの QR（`docs/qr/2026win/`）を配る
+- [ ] 中央管理表「見込み顧客」と「見込み顧客管理_都賀」のテスト行（2026-10-16 07:21・07:22「テスト 動作確認」）と、「見込み顧客（テスト）」タブのテスト行を削除（ユーザー）
+
+### 公開後にやること（HP の外。手順は docs/公開とSEOの手順.md「外」）
+- [ ] Google ビジネスプロフィール 10 教室を整える（HP の URL を教室ページに）
+- [ ] Google Search Console（ドメインプロパティ・サイトマップ `https://focus584.net/sitemap-index.xml`）
+- [ ] Bing Webmaster Tools・Bing Places
+- [ ] 外部の塾ポータルの掲載情報をそろえる
+- [ ] GA4（測定 ID を受け取ってから。CV＝フォーム完了画面、チラシの `from=` もここで数える）
+- [ ] 任意: GitHub 組織のドメイン確認（TXT `_github-pages-challenge-focus584jp`。乗っ取り防止）
+
+### 検討事項（ユーザー判断待ち）
+- [ ] **1 画面目に「学習塾フォーカス」の文字を入れるか**（2026-10-16 ユーザー提起「スクロールしないとロゴの英字 FOCUS しか情報がない」）。案A（推奨）: ヘッダーのロゴの右に小さく「学習塾フォーカス」＝全ページで効く。案B: トップ冒頭のラベルに塾名を入れる
+- [ ] ロボット判定（Cloudflare Turnstile）と受付全体の時間あたり上限（下の「bot対策の追加」）。Cloudflare に移すなら一緒に
+- [ ] Cloudflare への移行（DNS・本物の 301 転送・アクセス解析・Turnstile）。ムームーの更新前に検討
+- [ ] パンフレットの保存用 PDF（配る予定があれば。focus/pamphlet/docs/production-notes.md）
+
+### 時間があるとき
+- [ ] 全ページ最終チェック（実機スマホ/PC・リンク・誤字）
+- [ ] 下の「デザインシステム監査で見つかったHP側の逸脱」（見た目の細部の統一）
+- [ ] 依存の更新（Astro 5 → 7）
+
+## 以前の現在地（2026-09-11）
 
 **外見（デザイン・文言）はほぼ完了。** 全ページhifi・下層の作り込み・保護者の声・Flow文言・FAQ・ジオコーディング・「当社調べ」根拠まで済み。
 2026-09-11の細部修正: 比較図（CompareTabs）の自動切替を廃止し、赤ペン文字「ここをタップ！」＋描かれる矢印＋タブの紺波紋で誘導する形に確定（5d212e6・本番反映済み）。
@@ -67,23 +96,23 @@
   - [x] 2026-09-21 ユーザー確認済み: 残りキャリアの実機確認
   - [ ] 中央管理表「見込み顧客（テスト）」のテスト行（デプロイ動作確認・応答時間計測の計5件）は削除してよい
   - [ ] 任意: `SMS_API_SECRET` はチャット履歴に残ったため、落ち着いたら楽天管理画面でクレデンシャルを作り直して差し替え（デプロイ不要）
-- [ ] **SMSイタズラ対策＋フォーム使い勝手（2026-09-22着手・ブランチ `sms-hardening-ux`）** — 決定: URLは推測しにくい規則形＋noindex／SMS本文に「心当たりがない場合は破棄」／Slack警戒フラグは**見送り**（通知文言は後日別途見直し）／CAPTCHAは bot 由来が増えてから
+- [x] **SMSイタズラ対策＋フォーム使い勝手（2026-09-22着手・ブランチ `sms-hardening-ux`）** — 決定: URLは推測しにくい規則形＋noindex／SMS本文に「心当たりがない場合は破棄」／Slack警戒フラグは**見送り**（通知文言は後日別途見直し）／CAPTCHAは bot 由来が増えてから
   - [x] website: パンフURL移動・noindex・教室ページからの教室自動選択（?c=slug）・紙飛行機待ち短縮（5d0c078）
   - [x] lead-api: 本文3行化・「送信済み（N通分）」記録・スプレッドシートを1回だけ開く高速化（ローカルコミット済み）
-  - [ ] lead-api を clasp push＋デプロイ更新（clasp再ログインで中断）→ `testSms` で parts を確認（2なら本文短縮を検討）
-  - [ ] Script Property `SMS_PAMPHLET_URL` を `https://focus584jp.github.io/website/p/focus-pamphlet-2609` に変更（**website公開後に**。先に変えると旧URLしか無い状態でSMSが飛ぶ）
-  - [ ] `sms-hardening-ux` を main にマージ→push→公開確認→旧 /pamphlet が404になることを確認
+  - [x] 2026-10-16 済み（版 4〜6） lead-api を clasp push＋デプロイ更新（clasp再ログインで中断）→ `testSms` で parts を確認（2なら本文短縮を検討）
+  - [x] Script Property `SMS_PAMPHLET_URL` を `https://focus584jp.github.io/website/p/focus-pamphlet-2609` に変更（**website公開後に**。先に変えると旧URLしか無い状態でSMSが飛ぶ）
+  - [x] 2026-10-16 済み `sms-hardening-ux` を main にマージ→push→公開確認→旧 /pamphlet が404になることを確認
   - [ ] **bot対策の追加（2026-09-22検討・未着手・要判断）**: 現状はSMS費用の上限（1日30通=264円）はあるが、受付自体に上限が無く、番号ローテートのbotでシート行とSlack通知が大量に増えるのは防げない。提案: ①Cloudflare Turnstile（無料。ユーザーがCloudflareアカウント作成→サイトキー発行。フォームのトークンをGASで検証。半日）②受付全体の時間あたり上限＋超過時はSlackに「大量申込を検知」を1回だけ（1時間）。公開前に両方入れる価値あり
 - [ ] **GA4導入** — 測定ID受領後。CVイベント設計とセット（CV到達点=フォーム完了画面）
-- [ ] **フォーム2種の総点検** — 資料請求/無料相談を実機で通しチェック（入力→確認→送信→中央管理表の記録→Slack通知→SMS）。企業問い合わせ（/contact）も
-- [ ] **見込み顧客管理への中継有効化** — 教室マスタ「CRMシートID」の記入（現在は全教室「記録のみ」運用）
+- [x] **フォーム2種の総点検**（2026-10-16 本番ドメインで資料請求・無料相談を通し確認。企業問い合わせは未） — 資料請求/無料相談を実機で通しチェック（入力→確認→送信→中央管理表の記録→Slack通知→SMS）。企業問い合わせ（/contact）も
+- [x] **見込み顧客管理への中継有効化** — 2026-10-16 ユーザーが教室マスタ「CRMシートID」に全教室を記入。通知は各シート B5 の Webhook（見込み顧客チャンネル）
 
 ## 4. 公開前の仕上げ
 
 **公開日の手順と、SEO・AI 検索のために HP の外でやること（Google ビジネスプロフィール・Search Console・Bing）は `docs/公開とSEOの手順.md` にまとめた（2026-10-16）。** あわせて `/llms.txt`（AI 向けの要約）と教室の構造化データの料金の目安を足した。
 
 - [x] SEOの土台 — 2026-10-08 ブランチ `seo-foundations`（未マージ）。JSON-LD（団体・サイト・教室・FAQPage・パンくず。`src/lib/structuredData.ts`）・canonical・`@astrojs/sitemap`（/styleguide・/p/ 除外）・robots.txt（`src/pages/robots.txt.ts`）・末尾スラッシュ統一（`trailingSlash: 'always'`＋`u()`）・教室ページの題名と紹介文・トップの h1・404・FAQ 2問追加
-- [ ] **noindex解除** — 本番ドメインで公開するときに `src/layouts/SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` の1行を消すだけ（robots.txt は最初から全許可。ページ単位の noindex を持つページがあればそちらは残す）。解除後に Search Console へ `https://focus584.net/sitemap-index.xml` を登録
+- [x] **noindex解除**（2026-10-16 済み） — 本番ドメインで公開するときに `src/layouts/SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` の1行を消すだけ（robots.txt は最初から全許可。ページ単位の noindex を持つページがあればそちらは残す）。解除後に Search Console へ `https://focus584.net/sitemap-index.xml` を登録
 - [x] **`/styleguide` をビルドから除外** — 2026-10-16 ページごと削除。旧メモ:（社内用部品カタログ。公開サイトには残さない＝2026-09-11決定。ページを削除するか、`src/pages/styleguide.astro` を `_styleguide.astro` 等にしてルーティングから外す。sitemapにも出ないことを確認）
 - [x] 他塾比較の金額根拠・「当社調べ」表記の確定 — 2026-08-15 完了（社内で裏どり済みとユーザー確認。記録の置き場は `docs/当社調べ根拠.md`）
 - [x] 教室座標のジオコーディング — 2026-08-15 完了。国土地理院APIで10教室の住所を番地レベルでジオコーディング（classrooms.ts）。駅からの直線距離が公表の徒歩分数と整合することも確認済み（旧仮値の駅座標が誤っていただけ）
@@ -92,13 +121,13 @@
 ## 5. 本番ドメイン移行 — **https://focus584.net の現行サイトを置き換える形で公開**（2026-07-14決定）
 
 - [x] 2026-10-16 GitHub Pages にカスタムドメイン focus584.net を設定・DNS 切り替え済み（手順と記録は docs/公開とSEOの手順.md）。旧メモ: GitHub Pages にカスタムドメイン focus584.net を設定（リポジトリ Settings > Pages。DNS: apexのAレコード4本を GitHub Pages のIPへ、www は CNAME。HTTPSはLet's Encryptが自動発行）
-- [ ] **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計（canonical・og:url・JSON-LD の @id・sitemap・robots.txt の Sitemap 行も site と base から作っている）。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
-- [ ] **フォームの本番判定を更新** — `src/data/forms.ts` の `PRODUCTION_HOSTS`（現在 `['focus584jp.github.io']`）に focus584.net を追加（**忘れるとフォームが全部staging扱いになる**）
-- [ ] lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/p/focus-pamphlet-2609/ へ変更（Script Property・デプロイ不要）
+- [x] 2026-10-16 済み **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計（canonical・og:url・JSON-LD の @id・sitemap・robots.txt の Sitemap 行も site と base から作っている）。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
+- [x] 2026-10-16 済み **フォームの本番判定を更新** — `src/data/forms.ts` の `PRODUCTION_HOSTS`（現在 `['focus584jp.github.io']`）に focus584.net を追加（**忘れるとフォームが全部staging扱いになる**）
+- [ ] lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/p/focus-pamphlet-2609/ へ変更（Script Property・デプロイ不要）— **https が使えてから**（上の「公開後の残り」）
 - [x] 旧サイトのURL構造の扱いを決める — 2026-10-16 旧 URL 19 本に転送ページを置いた（`src/data/legacyUrls.ts`・`src/pages/[...legacy].astro`。meta refresh＋canonical、`?`・`#` を引き継ぐ。`/about/`・`/2026sum-campaign/` はトップへ）。旧メモ:（/school 等の旧URLは新サイトに存在しない。GitHub Pagesはサーバーリダイレクト不可のため、被リンクの多い旧URLがあればmetaリフレッシュのページを用意 or 404カスタムで誘導）
   - 2026-10-08 旧サイト全21ページの対応表を作成: `docs/旧サイトURL対応表.md`（`/about/`・`/2026sum-campaign/` の行き先は要確認）。ロリポップ（Apache）なら `.htaccess` の Redirect 301 で転送し、`ErrorDocument 404 /404.html` も書く
-- [ ] 旧Pages URL（focus584jp.github.io/website）はカスタムドメイン設定後、自動で focus584.net へリダイレクトされることを確認（SMS等で配布済みURLの継続性）
-- [x] 現行サイトのホスティング: **ロリポップは解約しない**（homework.focus584.net・online.focus584.net が載っている。2026-10-16 判明）
+- [x] 2026-10-16 確認済み（301 で http://focus584.net/… へ） 旧Pages URL（focus584jp.github.io/website）はカスタムドメイン設定後、自動で focus584.net へリダイレクトされることを確認（SMS等で配布済みURLの継続性）
+- [x] 現行サイトのホスティング: **ロリポップは解約しない**（homework・online・recruit.focus584.net が載っている。2026-10-16 判明）
 
 ## アイデア（保留）
 
