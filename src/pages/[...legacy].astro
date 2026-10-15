@@ -1,0 +1,33 @@
+---
+// 旧サイトの URL に置く転送用のページ（src/data/legacyUrls.ts）。検索エンジンには新しい URL を正とする（canonical）。
+// URL の ?・# は新しいページに引き継ぐ（チラシの QR などの目印を落とさない）
+import { legacyUrls } from '../data/legacyUrls';
+import { absUrl, u } from '../lib/path';
+import { siteName } from '../data/site';
+
+export function getStaticPaths() {
+  return Object.keys(legacyUrls).map((legacy) => ({ params: { legacy } }));
+}
+const { legacy } = Astro.params;
+const to = legacyUrls[legacy as string];
+const href = u(to);
+const canonical = absUrl(to.replace(/#.*$/, ''));
+---
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ページを移動しました｜{siteName}</title>
+    <link rel="canonical" href={canonical} />
+    <script is:inline define:vars={{ href }}>
+      // ? と # を付けたまま移る（meta refresh より先に走る）
+      const [path, frag] = href.split('#');
+      location.replace(path + location.search + (location.hash || (frag ? '#' + frag : '')));
+    </script>
+    <meta http-equiv="refresh" content={`0; url=${href}`} />
+  </head>
+  <body>
+    <p>このページは移動しました。<a href={href}>新しいページへ</a></p>
+  </body>
+</html>

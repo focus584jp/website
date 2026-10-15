@@ -14,10 +14,10 @@ export default defineConfig({
   prefetch: { prefetchAll: true, defaultStrategy: 'viewport' },
   integrations: [
     sitemap({
-      // 社内用の部品カタログ（/styleguide）と、検索に出さない配布用ページ（/p/ 以下）は載せない
+      // 社内用の部品カタログ（/styleguide）、検索に出さない配布用ページ（/p/ 以下）、旧サイトの URL の転送ページ（src/data/legacyUrls.ts）は載せない
       filter: (page) => {
         const path = new URL(page).pathname;
-        return !/\/(styleguide|p)\//.test(path);
+        return !/\/(styleguide|p|school|about|teaching|fee|privacy-policy|soudan|seikyu|sitemap|2026sum-campaign)\//.test(path);
       },
     }),
   ],

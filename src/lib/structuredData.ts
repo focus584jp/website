@@ -5,6 +5,7 @@ import type { Classroom } from '../data/classrooms';
 import type { Faq } from '../data/faqs';
 import { organization, siteName, siteTagline } from '../data/site';
 import { phone } from '../data/home';
+import { price, yen } from '../data/price';
 import { absUrl } from './path';
 
 type Node = Record<string, unknown>;
@@ -64,6 +65,8 @@ export function classroomNode(c: Classroom, imageUrl?: string): Node {
     telephone: c.tel,
     address: postalAddress(c.address),
     geo: { '@type': 'GeoCoordinates', latitude: c.lat, longitude: c.lng },
+    // 料金の目安（検索・AI の回答で「いくら？」に答えられるように。表示は料金ページと同じ数字）
+    priceRange: `1教科 月${yen(price.tuition)}円（税込）・入会金0円`,
     ...(imageUrl ? { image: imageUrl } : {}),
     parentOrganization: { '@id': orgId() },
   };
