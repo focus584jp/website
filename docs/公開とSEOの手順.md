@@ -32,7 +32,9 @@ DNS は**ムームードメイン**（登録はお名前.com、ネームサー�
 5. lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（GAS のプロジェクトの設定。デプロイ不要）
 6. 確かめる: トップ・教室ページ・旧 URL（`/school/tsuga/`・`/seikyu/`）・`focus584jp.github.io/website/` からの転送・本番フォーム（資料請求・無料相談）で中央管理表に「本番」で記録されること
 
-**数日後**: 旧サイトのサーバー（ロリポップ）を解約。DNS の TTL を 3600 に戻す。
+**実施記録（2026-10-16 深夜）**: ムームーDNS の設定1 で `focus584.net` と `www` のホームページを「利用しない」に、設定2 に A 4 本と `www` の CNAME を追加（TXT はそのまま）。GitHub Pages の Custom domain を `focus584.net` に設定。TTL は下げずに実施（旧サイトと新サイトが並んで見えるだけで、表示は壊れない）。
+
+**ロリポップは解約しない**: `homework.focus584.net` と `online.focus584.net` のサイトがロリポップに載っている（ムームーDNS の設定1 で「ロリポップ！」のまま）。旧 HP のファイルだけ消すのはよいが、契約は残す。
 
 ## 外（ユーザー。効く順）
 
