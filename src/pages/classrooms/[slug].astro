@@ -125,7 +125,7 @@ const schemaImage = photos[0] ? new URL((await getImage({ src: photos[0], width:
     </div>
   </section>
 
-  <CtaBand />
+  <CtaBand classroomSlug={classroom.slug} />
 </SiteLayout>
 
 <style>

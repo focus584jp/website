@@ -15,4 +15,6 @@ export const legacyUrls: Record<string, string> = {
   'seikyu': '/request',
   'sitemap': '/',
   '2026sum-campaign': '/', // 期間限定ページ
+  // 2026-09-21〜の SMS で送ったパンフレットの URL（旧 /pamphlet/。github.io の URL は切り替え後に focus584.net の同じパスへ転送される）
+  'pamphlet': '/p/focus-pamphlet-2609',
 };

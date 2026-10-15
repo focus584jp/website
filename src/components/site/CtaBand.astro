@@ -4,13 +4,18 @@ import { phone, ctaLabels } from '../../data/home';
 import { u } from '../../lib/path';
 import Icon from './Icon.astro';
 import ArrowCircle from './ArrowCircle.astro';
+
+// classroomSlug: 教室ページから渡すと、フォームでその教室が選択済みになる（?c=<slug>。LeadForm 側で解決）
+interface Props { classroomSlug?: string }
+const { classroomSlug } = Astro.props;
+const q = classroomSlug ? `?c=${classroomSlug}` : '';
 ---
 <section class="cta-band">
   <div class="container">
     <h2 class="lead-in"><span class="slash">＼</span>お気軽にお問い合わせください<span class="slash">／</span></h2>
     <div class="buttons">
-      <a href={u('/request')} class="btn-shine btn3d btn3d-o doc"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />{ctaLabels.doc}</a>
-      <a href={u('/consult')} class="btn3d btn3d-n consult">{ctaLabels.consult}<ArrowCircle /></a>
+      <a href={u('/request') + q} class="btn-shine btn3d btn3d-o doc"><Icon name="download" size={16} stroke="#fff" strokeWidth={2.6} />{ctaLabels.doc}</a>
+      <a href={u('/consult') + q} class="btn3d btn3d-n consult">{ctaLabels.consult}<ArrowCircle /></a>
     </div>
     <div class="tel-block">
       <p class="tel-label">お電話でのお問い合わせはこちら</p>

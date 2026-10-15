@@ -17,7 +17,7 @@ export default defineConfig({
       // 社内用の部品カタログ（/styleguide）、検索に出さない配布用ページ（/p/ 以下）、旧サイトの URL の転送ページ（src/data/legacyUrls.ts）は載せない
       filter: (page) => {
         const path = new URL(page).pathname;
-        return !/\/(styleguide|p|school|about|teaching|fee|privacy-policy|soudan|seikyu|sitemap|2026sum-campaign)\//.test(path);
+        return !/\/(styleguide|p|school|about|teaching|fee|privacy-policy|soudan|seikyu|sitemap|2026sum-campaign|pamphlet)\//.test(path);
       },
     }),
   ],

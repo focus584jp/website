@@ -3,6 +3,7 @@
 // 文言・バリアント定義は src/data/forms.ts。ベースの見た目は site.css の .form-card / .f-field / .f-submit。
 // 送信先は lead-api（GAS Web App。2026-07-10〜本番稼働中）。送信・電話番号の整形などの共通処理は src/lib/leadApi.ts。
 // 本番ホスト（data/forms.ts の PRODUCTION_HOSTS）以外からの送信は env: 'staging' になり、lead-api 側でテスト扱いになる。
+// 教室を選んだ状態で開く: ?classroom=<slug か教室名>（チラシの QR）／ ?c=<slug>（教室ページの CTA。CtaBand の classroomSlug）。
 // 設計: docs/superpowers/specs/2026-07-10-form-confirm-step-design.md
 import { classrooms } from '../../data/classrooms';
 import { grades, leadForms, type LeadFormVariant } from '../../data/forms';
@@ -167,7 +168,7 @@ const STEPS = ['入力', '確認', '完了'];
     animation: lf-spin .7s linear infinite;
   }
   @keyframes lf-spin { to { transform: rotate(360deg); } }
-  .send-fly svg { animation: lf-fly .7s ease-in forwards; }
+  .send-fly svg { animation: lf-fly .4s ease-in forwards; }
   @keyframes lf-fly {
     0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
     15% { transform: translate(-6px, 3px) rotate(8deg); opacity: 1; } /* ひと呼吸ためてから飛ぶ */
@@ -196,7 +197,8 @@ const STEPS = ['入力', '確認', '完了'];
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
     // チラシの QR など、URL の ?classroom= で教室を選んだ状態にする（slug「tsuga」でも名前「都賀」「都賀教室」でも可）
     {
-      const want = (new URLSearchParams(location.search).get('classroom') ?? '').trim().replace(/教室$/, '');
+      const params = new URLSearchParams(location.search);
+      const want = (params.get('classroom') ?? params.get('c') ?? '').trim().replace(/教室$/, '');
       const sel = field('classroom') as HTMLSelectElement;
       if (want && sel) {
         const hit = Array.from(sel.options).find((o) => o.value === want || o.dataset.slug === want.toLowerCase());
@@ -302,10 +304,10 @@ const STEPS = ['入力', '確認', '完了'];
         return;
       }
 
-      // 送信完了 → 紙飛行機が飛んで完了画面へ
+      // 送信完了 → 紙飛行機が飛んで完了画面へ（待ちは見せるための最小限。通信の待ちが先にあるので長くしない）
       if (!reducedMotion()) {
         sendState('fly');
-        await wait(700);
+        await wait(400);
       }
       show('done');
       sendState('idle'); // 「修正する」で戻って再送信するケースに備えて復帰
