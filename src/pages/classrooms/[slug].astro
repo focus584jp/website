@@ -39,12 +39,9 @@ const displayAddress = classroom.address.replace(/^〒\d{3}-\d{4}\s*/, '').repla
 // Googleマップ: 「フォーカス〇〇教室」で検索して登録地点を中央に表示（APIキー不要）
 const mapSrc = `https://www.google.com/maps?q=${encodeURIComponent(`フォーカス${classroom.name}`)}&z=17&hl=ja&output=embed`;
 
-// 題名・紹介文・構造化データ（すべて classrooms.ts のデータから作る）
+// 題名・紹介文・構造化データ（すべて classrooms.ts のデータから作る）。紹介文は検索結果用の description だけに使い、画面の見出しの下には出さない（2026-10-16 ユーザー指示）
 const pageTitle = `${classroom.name}（${stationLabel(classroom)} 徒歩${classroom.walkMinutes}分）｜${classroom.area}の中学生向け個別指導塾 ${siteName}`;
 const intro = classroomIntro(classroom);
-// 見出し下のリード（PageHero の lead＝他ページの導入文と同じ見た目）。「、」「。」ごとの文節を inline-block にして、
-// 語の途中（「勉/強」「轟町/中」）で改行されないようにする（1文節が1行より長い狭い画面では文節の中で折り返す）
-const introLead = intro.split(/(?<=[、。])/).map((s) => `<span style="display:inline-block">${s}</span>`).join('');
 // 構造化データの image: 教室写真の1枚目（01=外観）。写真が無い教室は入れない
 const schemaImage = photos[0] ? new URL((await getImage({ src: photos[0], width: 1200, format: 'jpg' })).src, Astro.site).href : undefined;
 ---
@@ -53,7 +50,7 @@ const schemaImage = photos[0] ? new URL((await getImage({ src: photos[0], width:
   description={`${siteName}${classroom.name}のご案内。${intro}無料相談・体験授業を受け付けています。`}
   schema={[classroomNode(classroom, schemaImage)]}
 >
-  <PageHero eyebrow="CLASSROOM" title={classroom.name} deco="classroom" lead={introLead} />
+  <PageHero eyebrow="CLASSROOM" title={classroom.name} deco="classroom" />
 
   <section class="info">
     <div class="container">
