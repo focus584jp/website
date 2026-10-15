@@ -12,14 +12,27 @@
 - 旧サイトの URL（`/school/tsuga/`・`/seikyu/` など 19 本）から新しいページへの転送ページ。`?`・`#` も引き継ぐ（チラシの QR の目印を落とさない）。対応は `src/data/legacyUrls.ts`
 - 社内用の部品カタログ（/styleguide）はビルドから外した（`src/pages/_styleguide.astro`）
 
-## 公開日（コード。この順で）
+## 切り替えの手順（2026-10-16 用意。コードはブランチ `domain-switch` に入れてある）
 
-1. `astro.config.mjs` を `site: 'https://focus584.net'`・`base: '/'` に
-2. `src/data/forms.ts` の `PRODUCTION_HOSTS` に `focus584.net` を足す（忘れるとフォームが staging 扱いになる）
-3. `src/layouts/SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` を消す
-4. ビルドして全ページを目で確認 → push
-5. GitHub の Settings > Pages でカスタムドメイン `focus584.net` を設定し、DNS を GitHub Pages に向ける（TTL を先に短くしておく）
-6. lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/pamphlet/` に
+ブランチ `domain-switch` = 本番ドメインの設定（`site: https://focus584.net`・`base: /`）、フォームの本番判定（`PRODUCTION_HOSTS`）、サイト全体の検索除外を外す、パンフレットの URL を `/p/focus-pamphlet-2609/` に（旧 `/pamphlet/` は転送）。
+
+DNS は**ムームードメイン**（登録はお名前.com、ネームサーバーが muumuu-domain）。今の A レコードは旧サイト `157.7.107.30`、TTL 3600 秒。メール（MX）は無いので、DNS を変えてもメールには影響しない。Search Console の確認用 TXT（`google-site-verification=…`）は**消さずに残す**。
+
+**前日まで**
+1. ムームードメインで `focus584.net` と `www` の TTL を 300 秒に下げる（切り替え後の反映が 5 分で済む）
+2. GitHub のドメイン確認: GitHub の組織 focus584jp の Settings > Pages > Verified domains で `focus584.net` を追加し、表示された TXT レコード（`_github-pages-challenge-focus584jp`）をムームードメインに足して確認する（他人に乗っ取られないため）
+
+**当日（この順。30 分ほど）**
+1. `domain-switch` を main にマージして push（この間 `focus584jp.github.io/website/` は数分くずれる）
+2. GitHub の Settings > Pages で Custom domain に `focus584.net` を入れて保存（`gh api -X PUT repos/focus584jp/website/pages -f cname=focus584.net` でも可）
+3. ムームードメインで DNS を書き換える
+   - `focus584.net` の A レコードを 4 本に: `185.199.108.153` / `185.199.109.153` / `185.199.110.153` / `185.199.111.153`（旧 `157.7.107.30` は消す）
+   - `www` は CNAME で `focus584jp.github.io`
+4. 5〜30 分後、Settings > Pages で証明書ができたら「Enforce HTTPS」をオンにする
+5. lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（GAS のプロジェクトの設定。デプロイ不要）
+6. 確かめる: トップ・教室ページ・旧 URL（`/school/tsuga/`・`/seikyu/`）・`focus584jp.github.io/website/` からの転送・本番フォーム（資料請求・無料相談）で中央管理表に「本番」で記録されること
+
+**数日後**: 旧サイトのサーバー（ロリポップ）を解約。DNS の TTL を 3600 に戻す。
 
 ## 外（ユーザー。効く順）
 

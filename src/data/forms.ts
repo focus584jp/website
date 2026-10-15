@@ -11,9 +11,9 @@ export const LEAD_API_URL = 'https://script.google.com/macros/s/AKfycbxRYOlfsfb0
 
 /**
  * 本番として送信するホスト名（ここ以外＝ローカル・プレビューは env: 'staging' で送り、lead-api 側でテスト扱いになる）。
- * 本番ドメイン移行（focus584.net）のときはここに追加する。忘れるとフォームが全部 staging 扱いになる。
+ * 2026-10 に focus584.net へ移行（旧 focus584jp.github.io は GitHub が focus584.net へ転送するので外した）。
  */
-export const PRODUCTION_HOSTS = ['focus584jp.github.io'];
+export const PRODUCTION_HOSTS = ['focus584.net', 'www.focus584.net'];
 
 export type LeadFormVariant = 'request' | 'consult';
 

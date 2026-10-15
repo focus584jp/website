@@ -66,8 +66,6 @@ const jsonLd = toJsonLd([
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="format-detection" content="telephone=no" />{/* 数字の自動電話リンク化を無効（明示的な tel: リンクは有効のまま） */}
-    {/* 公開前：サイト全体を検索インデックス除外。本番ドメインで公開するときはこの1行を消す（docs/TODO.md「4. 公開前の仕上げ」） */}
-    <meta name="robots" content="noindex, nofollow" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}{/* ページ単位の除外（公開後も残す） */}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
