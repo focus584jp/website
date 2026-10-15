@@ -25,7 +25,7 @@
 | `/company/` | 会社情報 | `/company/` | 同じ |
 | `/privacy-policy/` | プライバシーポリシー | `/company/#privacy` | 転送先に `#` は付けられるが、サーバーによっては付かない。付かなくても `/company/` で可 |
 | `/soudan/` | 無料相談 | `/consult/` | |
-| `/seikyu/` | 資料請求 | `/request/` | |
+| `/seikyu/` | 資料請求 | `/request/` | **2026 冬期チラシの QR がこの URL に `?classroom=…&from=…` を付けて向いている（docs/qr/2026win）。転送は引数（クエリ）を引き継ぐこと** |
 | `/sitemap/` | サイトマップ | `/` | 新HPにHTMLのサイトマップはない（XMLは `/sitemap-index.xml`） |
 | `/2026sum-campaign/` | 夏期体験キャンペーン | `/` | **要確認**: 期間限定ページ。転送せず404（新HPの404ページから案内）でもよい |
 
