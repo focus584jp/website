@@ -7,6 +7,8 @@ export const siteName = '学習塾フォーカス';
 
 /** 検索・AIに引用されやすい一文（フッター・構造化データの description で共用） */
 export const siteTagline = `千葉市を中心に${classrooms.length}教室。勉強が苦手な中学生専門の個別指導塾です。`;
+// フッターのロゴの下の一文（2026-10-16 ユーザー指示でこの文言だけに。siteTagline は構造化データと llms.txt 用に残す）
+export const footerTagline = '勉強が苦手な中学生専門の個別指導塾です。';
 
 const companyValue = (label: string) => companyInfo.find((r) => r.label === label)?.value ?? '';
 
