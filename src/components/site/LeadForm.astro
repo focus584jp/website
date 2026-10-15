@@ -53,7 +53,7 @@ const STEPS = ['入力', '確認', '完了'];
       <select name="classroom" required>
         <option value="">選択してください</option>
         {/* 表示・送信値とも「西千葉」形式（末尾の「教室」なし。API側は教室マスタ照合時に有無を吸収） */}
-        {classrooms.map((c) => <option value={c.name.replace(/教室$/, '')}>{c.name.replace(/教室$/, '')}</option>)}
+        {classrooms.map((c) => <option value={c.name.replace(/教室$/, '')} data-slug={c.slug}>{c.name.replace(/教室$/, '')}</option>)}
       </select>
       <p class="f-err" hidden>教室を選択してください</p>
     </label>
@@ -194,6 +194,15 @@ const STEPS = ['入力', '確認', '完了'];
     const phonePattern = new RegExp(root.dataset.phonePattern ?? '');
 
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement | HTMLSelectElement;
+    // チラシの QR など、URL の ?classroom= で教室を選んだ状態にする（slug「tsuga」でも名前「都賀」「都賀教室」でも可）
+    {
+      const want = (new URLSearchParams(location.search).get('classroom') ?? '').trim().replace(/教室$/, '');
+      const sel = field('classroom') as HTMLSelectElement;
+      if (want && sel) {
+        const hit = Array.from(sel.options).find((o) => o.value === want || o.dataset.slug === want.toLowerCase());
+        if (hit) sel.value = hit.value;
+      }
+    }
     // 全角数字→半角に直してから数字だけ取り出す（判定・表示は正規化後の値で行う）
     const phoneDigits = () => digitsOf(field('phone').value);
     const fmtPhone = (d: string) =>
