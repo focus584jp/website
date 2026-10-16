@@ -47,5 +47,5 @@ jobs:
         run: |
           lftp -c "set ftp:ssl-force true; set ftp:ssl-protect-data true; set net:max-retries 3; \
             open -u \"$FTP_USER\",\"$FTP_PASSWORD\" \"$FTP_HOST\"; \
-            pwd; cls -1; mkdir -p -f $REMOTE_DIR; \
+            cls -1; cls -1 $REMOTE_DIR || mkdir -p $REMOTE_DIR; \
             mirror -R --delete --parallel=4 --verbose=1 dist/ $REMOTE_DIR"
