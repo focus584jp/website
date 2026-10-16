@@ -44,7 +44,8 @@ export const leadForms: Record<LeadFormVariant, LeadFormCopy> = {
     phonePattern: '^0[789]0\\d{8}$', // SMS送付先のため携帯のみ（070/080/090の11桁）
     phoneError: '090などで始まる携帯電話番号（11桁）を入力してください',
     // 誤番号だと第三者にSMSが届くため強めに確認を促す
-    phoneConfirmNote: '※この番号宛てに資料のURLをSMSでお送りします。お間違いがないかご確認ください',
+    // \n で改行、| は狭い画面で折り返してよい切れ目（語の途中で折り返さないように）
+    phoneConfirmNote: '※この番号宛てに|デジタルパンフレットの|URLをお送りします。\nお間違いがないか|ご確認ください。',
     submitLabel: '資料を受け取る',
     doneTitle: '送信しました',
     // lead-api が資料請求の直後にパンフレットURLをSMS自動送付する（楽天CPaaS）。届かない場合の案内も添える
