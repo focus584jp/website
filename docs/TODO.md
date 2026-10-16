@@ -7,9 +7,9 @@
 2026-10-16 未明に focus584.net を新 HP に切り替え（GitHub Pages）。http では新 HP が出ている。本番フォーム 2 種は同日に実ブラウザで通し確認（都賀・資料請求＋無料相談、SMS・パンフ・Slack はユーザーが実機で確認）。
 
 ### 今すぐ（https 待ち）
-- [ ] **https の証明書が配られるのを待つ** — GitHub 上は「発行済み」だが、サーバーはまだ `*.github.io` の証明書を返す（再デプロイ・ドメイン付け直しは実施済み）。配られたら「Enforce HTTPS」をオン（見張りが自動でオンにする）。**12時ごろまで直らなければ Cloudflare Pages へ移す**（ネームサーバーを Cloudflare へ。ドメイン契約はムームーのまま。homework・online・recruit の A 157.7.107.30 と google-site-verification の TXT を移し替える）
-- [ ] https が使えたら: lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（今は github.io の URL → 転送で届いている）
-- [ ] https が使えたら: 冬期チラシの QR（`docs/qr/2026win/`）を配る
+- [x] **https** — 2026-10-16 GitHub Pages の証明書が 9 時間たっても配られず（GitHub のヘルスチェックでも設定は正常・https だけ peer_failed_verification）、**配信をロリポップに切り替えた**: `.github/workflows/deploy-lolipop.yml` が push のたびに dist/ を FTPS でロリポップの `focus584-hp/` へ送る（Secrets `LOLIPOP_FTP_*`）。独自ドメイン設定で focus584.net の公開フォルダを `focus584-hp` に（旧 WordPress は `focus584.net/` フォルダに残っている＝戻すときは公開フォルダを戻すだけ）。ムームーDNS は設定1 を「ロリポップ！」に戻し、設定2 の A・CNAME を削除（12:20 ごろ）。証明書はロリポップの無料 SSL（www・homework・online・recruit 込み）。GitHub Pages はカスタムドメイン focus584.net のまま残し、旧 github.io の URL からの転送に使う
+- [ ] lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（今は github.io の URL → 転送で届いている）
+- [ ] 冬期チラシの QR（`docs/qr/2026win/`）を配る
 - [ ] 中央管理表「見込み顧客」と「見込み顧客管理_都賀」のテスト行（2026-10-16 07:21・07:22「テスト 動作確認」）と、「見込み顧客（テスト）」タブのテスト行を削除（ユーザー）
 
 ### 公開後にやること（HP の外。手順は docs/公開とSEOの手順.md「外」）
@@ -23,7 +23,7 @@
 ### 検討事項（ユーザー判断待ち）
 - [ ] **1 画面目に「学習塾フォーカス」の文字を入れるか**（2026-10-16 ユーザー提起「スクロールしないとロゴの英字 FOCUS しか情報がない」）。案A（推奨）: ヘッダーのロゴの右に小さく「学習塾フォーカス」＝全ページで効く。案B: トップ冒頭のラベルに塾名を入れる
 - [ ] ロボット判定（Cloudflare Turnstile）と受付全体の時間あたり上限（下の「bot対策の追加」）。Cloudflare に移すなら一緒に
-- [ ] Cloudflare への移行（DNS・本物の 301 転送・アクセス解析・Turnstile）。ムームーの更新前に検討
+- [ ] 旧 URL の転送を .htaccess の 301 にする（今は転送ページ＝meta refresh。ロリポップなので本物の 301 が書ける。src/data/legacyUrls.ts から作る）
 - [ ] パンフレットの保存用 PDF（配る予定があれば。focus/pamphlet/docs/production-notes.md）
 
 ### 時間があるとき

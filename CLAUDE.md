@@ -1,7 +1,7 @@
 # FOCUS公式HP（focus/website）
 
 勉強が苦手な中学生専門の個別指導塾「フォーカス」の集客サイト。Astro 5静的サイト。
-GitHub Pages公開（`focus584jp/website`、base `/website`、https://focus584jp.github.io/website/ 、公開前のためnoindex）。
+https://focus584.net で公開中（2026-10-16〜）。配信は**ロリポップ**（main に push すると `.github/workflows/deploy-lolipop.yml` が dist/ を FTPS で `focus584-hp/` へ送る。`public/.htaccess` で www・http を https://focus584.net にそろえる）。GitHub Pages（`focus584jp/website`）も同じものを出し続け、旧 https://focus584jp.github.io/website/ からの転送に使う。
 
 ## いまの段階
 
@@ -68,7 +68,7 @@ src/
 
 ## 運用
 
-- 基本ローカル確認（`npm run dev`）。**pushはユーザーの指示があったときのみ**（push→GitHub Actionsで自動デプロイ）
+- 基本ローカル確認（`npm run dev`）。**pushはユーザーの指示があったときのみ**（push→GitHub Actionsでロリポップと GitHub Pages に自動デプロイ）
 - 公開ローンチ時: noindex解除（`SiteLayout.astro` の `<meta name="robots" content="noindex, nofollow" />` の1行を消す）・仮データ差し替え・法務表記（当社調べ等）を確認
 - **本番ドメインへの切り替えは astro.config の `site` と `base` だけ**（URL・canonical・og:url・JSON-LD の @id・sitemap・robots.txt はすべてここから作る。URLは末尾スラッシュ付きに統一＝`trailingSlash: 'always'`）
 - SEO: 構造化データは `src/lib/structuredData.ts`（値は src/data から。部品に直書きしない）。サイト名・フッターの一文・パンくずのページ名は `src/data/site.ts`。新しいページを足したら `pageNames` に名前を足す
