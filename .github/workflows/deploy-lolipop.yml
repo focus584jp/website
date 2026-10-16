@@ -23,7 +23,7 @@ jobs:
       FTP_HOST: ${{ secrets.LOLIPOP_FTP_HOST }}
       FTP_USER: ${{ secrets.LOLIPOP_FTP_USER }}
       FTP_PASSWORD: ${{ secrets.LOLIPOP_FTP_PASSWORD }}
-      REMOTE_DIR: /focus584-hp
+      REMOTE_DIR: focus584-hp # FTP のログイン先（アカウントの一番上）からの相対パス
     steps:
       - name: Secrets の確認
         id: check
@@ -47,5 +47,5 @@ jobs:
         run: |
           lftp -c "set ftp:ssl-force true; set ftp:ssl-protect-data true; set net:max-retries 3; \
             open -u \"$FTP_USER\",\"$FTP_PASSWORD\" \"$FTP_HOST\"; \
-            mkdir -p -f $REMOTE_DIR; \
+            pwd; cls -1; mkdir -p -f $REMOTE_DIR; \
             mirror -R --delete --parallel=4 --verbose=1 dist/ $REMOTE_DIR"
