@@ -8,8 +8,8 @@
 
 ### 今すぐ（https 待ち）
 - [x] **https** — 2026-10-16 GitHub Pages の証明書が 9 時間たっても配られず（GitHub のヘルスチェックでも設定は正常・https だけ peer_failed_verification）、**配信をロリポップに切り替えた**: `.github/workflows/deploy-lolipop.yml` が push のたびに dist/ を FTPS でロリポップの `focus584-hp/` へ送る（Secrets `LOLIPOP_FTP_*`）。独自ドメイン設定で focus584.net の公開フォルダを `focus584-hp` に（旧 WordPress は `focus584.net/` フォルダに残っている＝戻すときは公開フォルダを戻すだけ）。ムームーDNS は設定1 を「ロリポップ！」に戻し、設定2 の A・CNAME を削除（12:20 ごろ）。証明書はロリポップの無料 SSL（www・homework・online・recruit 込み）。GitHub Pages はカスタムドメイン focus584.net のまま残し、旧 github.io の URL からの転送に使う
-- [ ] lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（今は github.io の URL → 転送で届いている）
-- [ ] 冬期チラシの QR（`docs/qr/2026win/`）を配る
+- [x] 2026-10-16 済み（ユーザー） lead-api の Script Property `SMS_PAMPHLET_URL` を `https://focus584.net/p/focus-pamphlet-2609/` に（今は github.io の URL → 転送で届いている）
+- [x] 2026-10-16 配布してよい状態に 冬期チラシの QR（`docs/qr/2026win/`）を配る
 - [ ] 中央管理表「見込み顧客」と「見込み顧客管理_都賀」のテスト行（2026-10-16 07:21・07:22「テスト 動作確認」）と、「見込み顧客（テスト）」タブのテスト行を削除（ユーザー）
 
 ### 公開後にやること（HP の外。手順は docs/公開とSEOの手順.md「外」）
@@ -123,7 +123,7 @@
 - [x] 2026-10-16 GitHub Pages にカスタムドメイン focus584.net を設定・DNS 切り替え済み（手順と記録は docs/公開とSEOの手順.md）。旧メモ: GitHub Pages にカスタムドメイン focus584.net を設定（リポジトリ Settings > Pages。DNS: apexのAレコード4本を GitHub Pages のIPへ、www は CNAME。HTTPSはLet's Encryptが自動発行）
 - [x] 2026-10-16 済み **astro.config の `base: '/website'` を `/` に変更＋`site` を https://focus584.net に設定** — 内部リンクは全て `u()` 経由なので追従する設計（canonical・og:url・JSON-LD の @id・sitemap・robots.txt の Sitemap 行も site と base から作っている）。ビルド後に全ページの視覚回帰チェック（scripts/）を実施
 - [x] 2026-10-16 済み **フォームの本番判定を更新** — `src/data/forms.ts` の `PRODUCTION_HOSTS`（現在 `['focus584jp.github.io']`）に focus584.net を追加（**忘れるとフォームが全部staging扱いになる**）
-- [ ] lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/p/focus-pamphlet-2609/ へ変更（Script Property・デプロイ不要）— **https が使えてから**（上の「公開後の残り」）
+- [x] 2026-10-16 済み lead-api の `SMS_PAMPHLET_URL` を https://focus584.net/p/focus-pamphlet-2609/ へ変更
 - [x] 旧サイトのURL構造の扱いを決める — 2026-10-16 旧 URL 19 本に転送ページを置いた（`src/data/legacyUrls.ts`・`src/pages/[...legacy].astro`。meta refresh＋canonical、`?`・`#` を引き継ぐ。`/about/`・`/2026sum-campaign/` はトップへ）。旧メモ:（/school 等の旧URLは新サイトに存在しない。GitHub Pagesはサーバーリダイレクト不可のため、被リンクの多い旧URLがあればmetaリフレッシュのページを用意 or 404カスタムで誘導）
   - 2026-10-08 旧サイト全21ページの対応表を作成: `docs/旧サイトURL対応表.md`（`/about/`・`/2026sum-campaign/` の行き先は要確認）。ロリポップ（Apache）なら `.htaccess` の Redirect 301 で転送し、`ErrorDocument 404 /404.html` も書く
 - [x] 2026-10-16 確認済み（301 で http://focus584.net/… へ） 旧Pages URL（focus584jp.github.io/website）はカスタムドメイン設定後、自動で focus584.net へリダイレクトされることを確認（SMS等で配布済みURLの継続性）
