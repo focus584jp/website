@@ -1,0 +1,10 @@
+# ロリポップ（Apache）で配信するときの設定。GitHub Pages では使われない（2026-10-16）
+ErrorDocument 404 /404.html
+
+RewriteEngine On
+# www.focus584.net と http は https://focus584.net に 301 でそろえる
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^(.*)$ https://focus584.net/$1 [R=301,L]
+RewriteCond %{HTTPS} !on
+RewriteRule ^(.*)$ https://focus584.net/$1 [R=301,L]
+

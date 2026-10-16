@@ -1,7 +1,8 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// GitHub Pages（カスタムドメイン）配信。URL: https://focus584.net/（2026-10 に旧サイトから切り替え。旧 https://focus584jp.github.io/website/ は GitHub が自動でここへ転送）
+// URL: https://focus584.net/（2026-10-16 に旧サイトから切り替え）。配信はロリポップ（.github/workflows/deploy-lolipop.yml が focus584-hp/ へ送る）。
+// GitHub Pages も同じものを出し続け、カスタムドメインを focus584.net のままにして、旧 https://focus584jp.github.io/website/ からの転送に使う
 // canonical・og:url・JSON-LD の @id・sitemap・robots.txt の Sitemap 行は、すべて site と base から作っている。
 export default defineConfig({
   site: 'https://focus584.net',

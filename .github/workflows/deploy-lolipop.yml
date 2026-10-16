@@ -1,0 +1,51 @@
+name: Deploy to Lolipop
+
+# main に push すると、ビルドした dist/ をロリポップの focus584-hp/ フォルダへ FTPS で送る（2026-10-16〜）。
+# ロリポップの独自ドメイン設定で focus584.net の公開フォルダを focus584-hp/ にしてある。旧サイト（WordPress）や
+# homework・online・recruit のフォルダには触らない（--delete は focus584-hp/ の中だけに効く）。
+# FTP の情報はリポジトリの Secrets（LOLIPOP_FTP_HOST・LOLIPOP_FTP_USER・LOLIPOP_FTP_PASSWORD）。未登録なら何もしない。
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lolipop
+  cancel-in-progress: false # 送っている途中で止めると、半分だけ新しい状態になるので止めない
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: ${{ secrets.LOLIPOP_FTP_HOST }}
+      FTP_USER: ${{ secrets.LOLIPOP_FTP_USER }}
+      FTP_PASSWORD: ${{ secrets.LOLIPOP_FTP_PASSWORD }}
+      REMOTE_DIR: /focus584-hp
+    steps:
+      - name: Secrets の確認
+        id: check
+        run: |
+          if [ -z "$FTP_HOST" ] || [ -z "$FTP_USER" ] || [ -z "$FTP_PASSWORD" ]; then
+            echo "ロリポップの FTP 情報が未登録なので送らない"; echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.check.outputs.skip != 'true'
+        uses: actions/checkout@v4
+      - if: steps.check.outputs.skip != 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - if: steps.check.outputs.skip != 'true'
+        run: npm ci && npm run build && test -f dist/.htaccess
+      - if: steps.check.outputs.skip != 'true'
+        run: sudo apt-get install -y -qq lftp
+      - name: ロリポップへ送る
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          lftp -c "set ftp:ssl-force true; set ftp:ssl-protect-data true; set net:max-retries 3; \
+            open -u \"$FTP_USER\",\"$FTP_PASSWORD\" \"$FTP_HOST\"; \
+            mkdir -p -f $REMOTE_DIR; \
+            mirror -R --delete --parallel=4 --verbose=1 dist/ $REMOTE_DIR"
